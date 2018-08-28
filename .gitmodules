@@ -1,0 +1,24 @@
+[submodule "extlibs/Catch2"]
+	path = extlibs/Catch2
+	url = https://github.com/catchorg/Catch2.git
+[submodule "extlibs/cppcodec"]
+	path = extlibs/cppcodec
+	url = https://github.com/tplgy/cppcodec.git
+[submodule "extlibs/enet"]
+	path = extlibs/enet
+	url = https://github.com/lsalzman/enet.git
+[submodule "extlibs/json"]
+	path = extlibs/json
+	url = https://github.com/nlohmann/json.git
+[submodule "extlibs/lua"]
+	path = extlibs/lua
+	url = https://github.com/lua/lua.git
+[submodule "extlibs/plibsys"]
+	path = extlibs/plibsys
+	url = https://github.com/saprykin/plibsys
+[submodule "extlibs/plog"]
+	path = extlibs/plog
+	url = https://github.com/SergiusTheBest/plog.git
+[submodule "extlibs/sol2"]
+	path = extlibs/sol2
+	url = https://github.com/ThePhD/sol2.git

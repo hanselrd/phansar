@@ -1,0 +1,33 @@
+language: cpp
+
+compiler:
+    - gcc
+
+notifications:
+    email: false
+
+env:
+    - BUILD_TYPE=Debug
+    - BUILD_TYPE=Release
+
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+            - g++-8
+            - libsdl2-dev
+            - libsdl2-image-dev
+            - libsdl2-mixer-dev
+            - libsdl2-ttf-dev
+
+before_install:
+    - "[ $CXX = g++ ] && export CXX=g++-8 || true"
+    - "[ $CC = gcc ] && export CC=gcc-8 || true"
+
+script:
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+    - make
+    - ctest -V
