@@ -1,6 +1,7 @@
 project(${CMAKE_PROJECT_NAME})
 
 set(sources
+    managers/input_manager.cpp
     managers/system_manager.cpp)
 
 set(libs
