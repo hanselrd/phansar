@@ -37,7 +37,7 @@ if(SDL2_FOUND)
 endif()
 
 # Used in the logger to get relative path
-string(LENGTH ${CMAKE_SOURCE_DIR}/ SOURCE_PATH_SIZE)
+string(LENGTH ${CMAKE_SOURCE_DIR}/src/ SOURCE_PATH_SIZE)
 add_definitions(-D__SOURCE_PATH_SIZE__=${SOURCE_PATH_SIZE})
 
 # Build project

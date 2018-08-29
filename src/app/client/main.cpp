@@ -1,4 +1,4 @@
-#include "gui/window.hpp"
+#include "managers/system_manager.hpp"
 #include <SDL2/SDL.h>
 #include <common/common.hpp>
 #include <cstdint>
@@ -8,26 +8,15 @@
 
 using namespace common;
 using namespace common::core;
+using namespace client;
 
 int main(int argc, char *argv[]) {
     try {
-        core::log::init("phansar.log");
+        managers::system_manager::init();
 
-        scopes::plibsys guard1;
-        scopes::sdl guard2(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-        scopes::sdl_image guard3(IMG_INIT_PNG);
-        scopes::sdl_ttf guard4;
-        scopes::enet guard5;
+        auto window = managers::system_manager::get_window();
+        auto renderer = managers::system_manager::get_renderer();
 
-        auto window = SDL_CreateWindow("Phansar [SDL]",
-                                       SDL_WINDOWPOS_CENTERED,
-                                       SDL_WINDOWPOS_CENTERED,
-                                       800,
-                                       600,
-                                       SDL_WINDOW_SHOWN);
-        auto renderer = std::shared_ptr<SDL_Renderer>(
-            SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC),
-            &SDL_DestroyRenderer);
         volatile bool running = true;
 
         ENetAddress address;
@@ -55,12 +44,10 @@ int main(int argc, char *argv[]) {
                           16,
                           16};
         SDL_Rect box{0, 0, 64, 64};
-        auto pos = std::make_pair<double, double>(0., 0.);
-
-        auto gui_window = client::gui::window(SDL_Rect{10, 10, 30, 50});
+        auto pos = std::make_pair<float, float>(0., 0.);
 
         std::uint64_t now_time = SDL_GetPerformanceCounter(), last_time = 0;
-        double delta_time = 0., fps = 0.;
+        float delta_time = 0.f, fps = 0.f;
 
         json outj;
 
@@ -113,10 +100,10 @@ int main(int argc, char *argv[]) {
 
             last_time = now_time;
             now_time = SDL_GetPerformanceCounter();
-            delta_time = static_cast<double>((now_time - last_time)) /
-                         static_cast<double>(SDL_GetPerformanceFrequency());
-            fps = static_cast<double>(SDL_GetPerformanceFrequency()) /
-                  static_cast<double>(now_time - last_time);
+            delta_time = static_cast<float>((now_time - last_time)) /
+                         static_cast<float>(SDL_GetPerformanceFrequency());
+            fps = static_cast<float>(SDL_GetPerformanceFrequency()) /
+                  static_cast<float>(now_time - last_time);
             LOGI << "fps: " << static_cast<std::uint32_t>(fps) << " \u0394: " << delta_time;
 
             auto key_states = SDL_GetKeyboardState(nullptr);
@@ -141,20 +128,15 @@ int main(int argc, char *argv[]) {
                 // client.send(server_ip, outj);
             }
 
-            gui_window.update(delta_time);
-
             SDL_SetRenderDrawColor(renderer.get(), 0x00, 0x00, 0x00, 0x00);
             SDL_RenderClear(renderer.get());
             box.x = pos.first;
             box.y = pos.second;
             SDL_RenderCopy(renderer.get(), texture, &src_rect, &box);
-            gui_window.draw(renderer);
             SDL_RenderPresent(renderer.get());
         }
 
         SDL_DestroyTexture(texture);
-        SDL_DestroyWindow(window);
-
     } catch (...) {
     }
 

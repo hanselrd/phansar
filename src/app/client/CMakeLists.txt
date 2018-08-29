@@ -1,8 +1,7 @@
 project(${CMAKE_PROJECT_NAME})
 
 set(sources
-    gui/widget.cpp
-    gui/window.cpp)
+    managers/system_manager.cpp)
 
 set(libs
     common)
