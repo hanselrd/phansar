@@ -29,7 +29,12 @@ template <class T> struct vector3 {
     T z;
 };
 
+using vector2i = vector2<std::int32_t>;
+using vector2u = vector2<std::uint32_t>;
 using vector2f = vector2<float>;
+
+using vector3i = vector3<std::int32_t>;
+using vector3u = vector3<std::uint32_t>;
 using vector3f = vector3<float>;
 
 namespace lua_api {

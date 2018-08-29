@@ -1,3 +1,4 @@
+#include "managers/input_manager.hpp"
 #include "managers/system_manager.hpp"
 #include <SDL2/SDL.h>
 #include <common/common.hpp>
@@ -44,17 +45,16 @@ int main(int argc, char *argv[]) {
                           16,
                           16};
         SDL_Rect box{0, 0, 64, 64};
-        auto pos = std::make_pair<float, float>(0., 0.);
+        auto pos = std::make_pair<float, float>(0.f, 0.f);
 
-        std::uint64_t now_time = SDL_GetPerformanceCounter(), last_time = 0;
         float delta_time = 0.f, fps = 0.f;
 
         json outj;
 
-        dispatch_queue dq(std::thread::hardware_concurrency() - 1);
+        auto dq = managers::system_manager::get_dispatch_queue();
 
         // ENet event loop (worker thread)
-        dq.dispatch([&] {
+        dq->dispatch([&] {
             while (running) {
                 ENetEvent enet_event;
                 while (enet_host_service(client.get(), &enet_event, 1000)) {
@@ -78,8 +78,11 @@ int main(int argc, char *argv[]) {
         });
 
         while (running) {
+            managers::system_manager::update();
+
             SDL_Event sdl_event;
             while (SDL_PollEvent(&sdl_event)) {
+                managers::input_manager::handle_event(sdl_event);
                 switch (sdl_event.type) {
                 case SDL_QUIT:
                     running = false;
@@ -98,15 +101,11 @@ int main(int argc, char *argv[]) {
                 }
             }
 
-            last_time = now_time;
-            now_time = SDL_GetPerformanceCounter();
-            delta_time = static_cast<float>((now_time - last_time)) /
-                         static_cast<float>(SDL_GetPerformanceFrequency());
-            fps = static_cast<float>(SDL_GetPerformanceFrequency()) /
-                  static_cast<float>(now_time - last_time);
+            delta_time = managers::system_manager::get_delta_time();
+            fps = managers::system_manager::get_fps();
             LOGI << "fps: " << static_cast<std::uint32_t>(fps) << " \u0394: " << delta_time;
 
-            auto key_states = SDL_GetKeyboardState(nullptr);
+            auto key_states = managers::input_manager::get_keyboard_state();
             if (key_states[SDL_SCANCODE_LEFT]) {
                 pos.first -= 200 * delta_time;
                 // outj = {{"move", {{"left", 200}}}};
