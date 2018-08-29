@@ -10,15 +10,15 @@ namespace core {
 namespace log {
 namespace {
 void _log_generic(sol::this_state s, plog::Severity severity, const std::string &message) {
-    lua_State *L = s;
-    lua_Debug ar;
-    lua_getstack(L, 1, &ar);
-    lua_getinfo(L, "nSl", &ar);
-
     if (!plog::get<PLOG_DEFAULT_INSTANCE>() ||
         !plog::get<PLOG_DEFAULT_INSTANCE>()->checkSeverity(severity)) {
         return;
     }
+
+    lua_State *L = s;
+    lua_Debug ar;
+    lua_getstack(L, 1, &ar);
+    lua_getinfo(L, "nSl", &ar);
 
     (*plog::get<PLOG_DEFAULT_INSTANCE>()) +=
         plog::Record(severity, ar.source + 1, ar.currentline, "", PLOG_GET_THIS()).ref() << message;
@@ -60,7 +60,7 @@ void init(const std::string &filename) {
         "debug";
 #endif
 
-    std::atexit([]() {
+    std::atexit([] {
         LOGD << "Logger shutdown";
         LOGI << "";
     });
