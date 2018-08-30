@@ -4,6 +4,7 @@
 #include "bitmasks/bitmasks.hpp"
 #include "core/core.hpp"
 #include "models/models.hpp"
+#include "network/network.hpp"
 #include "scopes/scopes.hpp"
 
 namespace common {
