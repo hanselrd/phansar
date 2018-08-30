@@ -55,6 +55,8 @@ void init() {
         &SDL_DestroyRenderer);
     MASSERT_ALWAYS(renderer, SDL_GetError());
 
+    SDL_SetRenderDrawBlendMode(renderer.get(), SDL_BLENDMODE_BLEND);
+
     now_time = SDL_GetPerformanceCounter();
 
     std::atexit([] {
