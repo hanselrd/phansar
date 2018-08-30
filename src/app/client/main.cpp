@@ -1,5 +1,6 @@
 #include "managers/input_manager.hpp"
 #include "managers/system_manager.hpp"
+#include "ui/window.hpp"
 #include <SDL2/SDL.h>
 #include <common/common.hpp>
 #include <cstdint>
@@ -20,17 +21,9 @@ int main(int argc, char *argv[]) {
 
         volatile bool running = true;
 
-        // ENetAddress address;
-        // enet_address_set_host(&address, "localhost");
-        // address.port = 5000;
-        // auto client = std::unique_ptr<ENetHost, decltype(&enet_host_destroy)>(
-        //     enet_host_create(nullptr, 1, 2, 57600 / 8, 14400 / 8), &enet_host_destroy);
-        // auto server = enet_host_connect(client.get(), &address, 2, 0);
-        // enet_peer_timeout(server, 0, 0, 5000);
-        // ASSERT(server != nullptr);
-        network::socket client(0, 1, 2, 57600 / 8, 14400 / 8);
-        client.connect(network::address("localhost", 5000));
-        network::socket::peer_id server = 0;
+        // network::socket client(0, 1, 2, 57600 / 8, 14400 / 8);
+        // client.connect(network::address("localhost", 5000));
+        // network::socket::peer_id server = 0;
 
         std::ifstream ifs("assets.psar", std::ios::binary);
         auto j = json::from_cbor(ifs);
@@ -58,37 +51,41 @@ int main(int argc, char *argv[]) {
         auto dq = managers::system_manager::get_dispatch_queue();
 
         // ENet event loop (worker thread)
-        dq->dispatch([&] {
-            while (running) {
-                while (client.listen(1000)) {
-                    if (client.accept(id)) {
-                        LOGI << "Hey, connected to server";
-                    }
-                    if (client.receive(id, inj)) {
-                        LOGI << "Hey, received something from server";
-                    }
-                }
-                // ENetEvent enet_event;
-                // while (enet_host_service(client.get(), &enet_event, 1000)) {
-                //     switch (enet_event.type) {
-                //     case ENET_EVENT_TYPE_CONNECT:
-                //         LOGI << "Connected to server: " << std::hex <<
-                //         enet_event.peer->address.host
-                //              << ":" << std::dec << enet_event.peer->address.port;
-                //         break;
-                //     case ENET_EVENT_TYPE_RECEIVE:
-                //         LOGI << "Received a packet";
-                //         enet_packet_destroy(enet_event.packet);
-                //         break;
-                //     case ENET_EVENT_TYPE_DISCONNECT:
-                //         LOGI << "Disconnected from server";
-                //         break;
-                //     default:
-                //         break;
-                //     }
-                // }
-            }
-        });
+        // dq->dispatch([&] {
+        //     while (running) {
+        //         while (client.listen(1000)) {
+        //             if (client.accept(id)) {
+        //                 LOGI << "Hey, connected to server";
+        //             }
+        //             if (client.receive(id, inj)) {
+        //                 LOGI << "Hey, received something from server";
+        //             }
+        //         }
+        //         // ENetEvent enet_event;
+        //         // while (enet_host_service(client.get(), &enet_event, 1000)) {
+        //         //     switch (enet_event.type) {
+        //         //     case ENET_EVENT_TYPE_CONNECT:
+        //         //         LOGI << "Connected to server: " << std::hex <<
+        //         //         enet_event.peer->address.host
+        //         //              << ":" << std::dec << enet_event.peer->address.port;
+        //         //         break;
+        //         //     case ENET_EVENT_TYPE_RECEIVE:
+        //         //         LOGI << "Received a packet";
+        //         //         enet_packet_destroy(enet_event.packet);
+        //         //         break;
+        //         //     case ENET_EVENT_TYPE_DISCONNECT:
+        //         //         LOGI << "Disconnected from server";
+        //         //         break;
+        //         //     default:
+        //         //         break;
+        //         //     }
+        //         // }
+        //     }
+        // });
+
+        auto ui_window = ui::window(types::vector2f(20.f, 20.f),
+                                    types::vector2u(150, 250),
+                                    SDL_Color{0x00, 0x99, 0x99, 0xFF});
 
         while (running) {
             managers::system_manager::update();
@@ -99,21 +96,15 @@ int main(int argc, char *argv[]) {
                 switch (sdl_event.type) {
                 case SDL_QUIT:
                     running = false;
-                    outj = {{"disconnect", true}};
-                    client.send(server, outj);
-                    // {
-                    //     std::string message = "disconnect me";
-                    //     auto packet = enet_packet_create(
-                    //         message.c_str(), message.size() + 1, ENET_PACKET_FLAG_RELIABLE);
-                    //     enet_peer_send(server, 0, packet);
-                    //     enet_host_flush(client.get());
-                    // }
+                    // outj = {{"disconnect", true}};
+                    // client.send(server, outj);
                     break;
                 default:
                     break;
                 }
             }
 
+            ui_window.update();
             delta_time = managers::system_manager::get_delta_time();
             fps = managers::system_manager::get_fps();
             // LOGI << "fps: " << static_cast<std::uint32_t>(fps) << " \u0394: " << delta_time;
@@ -121,19 +112,19 @@ int main(int argc, char *argv[]) {
             auto key_states = managers::input_manager::get_keyboard_state();
             if (key_states[SDL_SCANCODE_LEFT]) {
                 pos.first -= 200 * delta_time;
-                client.send(id, {{"move", {{"left", 200}}}});
+                // client.send(id, {{"move", {{"left", 200}}}});
             }
             if (key_states[SDL_SCANCODE_UP]) {
                 pos.second -= 200 * delta_time;
-                client.send(id, {{"move", {{"up", 200}}}});
+                // client.send(id, {{"move", {{"up", 200}}}});
             }
             if (key_states[SDL_SCANCODE_RIGHT]) {
                 pos.first += 200 * delta_time;
-                client.send(id, {{"move", {{"right", 200}}}});
+                // client.send(id, {{"move", {{"right", 200}}}});
             }
             if (key_states[SDL_SCANCODE_DOWN]) {
                 pos.second += 200 * delta_time;
-                client.send(id, {{"move", {{"down", 200}}}});
+                // client.send(id, {{"move", {{"down", 200}}}});
             }
 
             SDL_SetRenderDrawColor(renderer.get(), 0x00, 0x00, 0x00, 0x00);
@@ -141,6 +132,7 @@ int main(int argc, char *argv[]) {
             box.x = pos.first;
             box.y = pos.second;
             SDL_RenderCopy(renderer.get(), texture, &src_rect, &box);
+            ui_window.render();
             SDL_RenderPresent(renderer.get());
         }
 
