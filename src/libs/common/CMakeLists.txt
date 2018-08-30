@@ -10,6 +10,8 @@ set(sources
     core/serialize.cpp
     core/types.cpp
     models/models.cpp
+    network/address.cpp
+    network/socket.cpp
     scopes/enet.cpp
     scopes/plibsys.cpp
     scopes/sdl.cpp
