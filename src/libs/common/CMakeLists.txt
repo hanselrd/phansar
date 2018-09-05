@@ -1,6 +1,7 @@
 project(common)
 
 set(sources
+    archives/psar_archive.cpp
     bitmasks/bitmasks.cpp
     core/core.cpp
     core/crypto.cpp

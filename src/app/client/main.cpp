@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
         // network::socket::peer_id server = 0;
 
         std::ifstream ifs("assets.psar", std::ios::binary);
-        auto j = json::from_cbor(ifs);
+        auto j = archives::psar_archive::load(ifs);
         auto bytes = codec::base64::decode(j["tilesets"]["rural.png"].get<std::string>());
         LOGI << "rural.png: " << bytes.size() << " B";
 

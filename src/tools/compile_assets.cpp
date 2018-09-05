@@ -1,3 +1,4 @@
+#include <common/archives/archives.hpp>
 #include <common/core/core.hpp>
 #include <common/scopes/scopes.hpp>
 #include <cstdint>
@@ -74,9 +75,7 @@ int main(int argc, char *argv[]) {
     LOGI << "Compiling assets...";
     auto j = _compile_assets("assets");
     std::ofstream ofs("assets.psar", std::ios::binary);
-    auto cbor = json::to_cbor(j);
-    ofs.write(reinterpret_cast<const char *>(cbor.data()), cbor.size());
-    LOGI << "Compiled " << cbor.size() << " B";
+    archives::psar_archive::save(ofs, j);
 
     return 0;
 }
