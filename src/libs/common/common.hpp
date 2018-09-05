@@ -1,6 +1,7 @@
 #ifndef COMMON_COMMON_HPP
 #define COMMON_COMMON_HPP
 
+#include "archives/archives.hpp"
 #include "bitmasks/bitmasks.hpp"
 #include "core/core.hpp"
 #include "models/models.hpp"
