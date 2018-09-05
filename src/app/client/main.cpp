@@ -25,6 +25,12 @@ int main(int argc, char *argv[]) {
         // client.connect(network::address("localhost", 5000));
         // network::socket::peer_id server = 0;
 
+        std::ofstream test_ofs("test.json");
+        archives::json_archive::save(
+            test_ofs,
+            {{"window", {{"x", "_CENTERED"}, {"y", "_CENTERED"}, {"width", 800}, {"height", 600}}},
+             {"fullscreen", true}});
+
         std::ifstream ifs("assets.psar", std::ios::binary);
         auto j = archives::psar_archive::load(ifs);
         auto bytes = codec::base64::decode(j["tilesets"]["rural.png"].get<std::string>());
