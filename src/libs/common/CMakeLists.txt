@@ -1,6 +1,8 @@
 project(common)
 
 set(sources
+    allocators/base.cpp
+    allocators/pool_allocator.cpp
     archives/json_archive.cpp
     archives/psar_archive.cpp
     bitmasks/bitmasks.cpp
