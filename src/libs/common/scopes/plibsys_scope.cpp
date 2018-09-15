@@ -1,10 +1,10 @@
-#include "plibsys.hpp"
+#include "plibsys_scope.hpp"
 #include "../core/log.hpp"
 
 namespace common {
 namespace scopes {
-plibsys::plibsys(const PMemVTable *vtable) {
-    if (_guards > 1) {
+plibsys_scope::plibsys_scope(const PMemVTable *vtable) {
+    if (get_guards() > 1) {
         return;
     }
 
@@ -17,8 +17,8 @@ plibsys::plibsys(const PMemVTable *vtable) {
     }
 }
 
-plibsys::~plibsys() {
-    if (_guards > 1) {
+plibsys_scope::~plibsys_scope() {
+    if (get_guards() > 1) {
         return;
     }
 

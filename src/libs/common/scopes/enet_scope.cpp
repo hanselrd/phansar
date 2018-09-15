@@ -1,11 +1,11 @@
-#include "enet.hpp"
+#include "enet_scope.hpp"
 #include "../core/assert.hpp"
 #include "../core/log.hpp"
 
 namespace common {
 namespace scopes {
-enet::enet() {
-    if (_guards > 1) {
+enet_scope::enet_scope() {
+    if (get_guards() > 1) {
         return;
     }
 
@@ -13,8 +13,8 @@ enet::enet() {
     LOGI << "ENet initialized";
 }
 
-enet::~enet() {
-    if (_guards > 1) {
+enet_scope::~enet_scope() {
+    if (get_guards() > 1) {
         return;
     }
 

@@ -3,7 +3,7 @@
 
 using namespace common::core::serialize;
 
-TEST_CASE("can convert between host and network byte order", "[common]") {
+TEST_CASE("can convert between host and network byte order", "[libs][common][core][serialize]") {
     SECTION("using uint16_t") {
         std::uint16_t u16 = 0x1234;
         u16 = hton16(u16);

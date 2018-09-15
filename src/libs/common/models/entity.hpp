@@ -31,6 +31,7 @@ public:
         return _position;
     }
 
+    // don't use protected members
 protected:
     std::uint16_t _map_id;
     core::types::vector3f _position;

@@ -6,8 +6,8 @@
 using namespace common;
 
 int main(int argc, char *argv[]) {
-    scopes::plibsys guard1;
-    scopes::enet guard2;
+    scopes::plibsys_scope guard1;
+    scopes::enet_scope guard2;
 
     return Catch::Session().run(argc, argv);
 }

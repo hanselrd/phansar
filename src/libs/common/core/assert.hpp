@@ -74,4 +74,14 @@
 #    define EXPECT_FALSE(condition) (condition)
 #endif
 
+#ifndef NDEBUG
+#    define UNUSED_ARG(arg)                                                                        \
+        [&] {                                                                                      \
+            LOGW << "Unused argument `" #arg "'";                                                  \
+            (void)arg;                                                                             \
+        }()
+#else
+#    define UNUSED_ARG(arg) ((void)arg)
+#endif
+
 #endif

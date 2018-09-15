@@ -1,7 +1,7 @@
 #include <catch2/catch.hpp>
 #include <common/common.hpp>
 
-TEST_CASE("can use lua API", "[server]") {
+TEST_CASE("can use lua API", "[app][server][lua_api]") {
     sol::state lua;
     lua.open_libraries(sol::lib::base, sol::lib::string);
     sol::table phansar = lua.create_named_table("phansar");

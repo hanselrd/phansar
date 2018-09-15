@@ -6,10 +6,10 @@
 
 namespace common {
 namespace scopes {
-class plibsys : private internal::base<plibsys> {
+class plibsys_scope : public internal::base<plibsys_scope> {
 public:
-    explicit plibsys(const PMemVTable *vtable = nullptr);
-    ~plibsys();
+    explicit plibsys_scope(const PMemVTable *vtable = nullptr);
+    ~plibsys_scope();
 };
 } // namespace scopes
 } // namespace common

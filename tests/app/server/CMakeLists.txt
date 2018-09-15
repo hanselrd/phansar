@@ -1,8 +1,8 @@
 project(test-${CMAKE_PROJECT_NAME}-server)
 
 set(sources
-    ../../main.cpp
-    lua_api.unit.cpp)
+    lua_api.unit.cpp
+    ../../main.cpp)
 
 set(libs
     ${CMAKE_PROJECT_NAME}-server-test)

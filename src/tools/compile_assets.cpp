@@ -70,7 +70,7 @@ json _compile_assets(const std::string &path) {
 int main(int argc, char *argv[]) {
     log::init("compile_assets.log");
 
-    scopes::plibsys guard;
+    scopes::plibsys_scope guard;
 
     LOGI << "Compiling assets...";
     auto j = _compile_assets("assets");
