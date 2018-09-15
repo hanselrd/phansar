@@ -32,5 +32,4 @@
 *.app
 
 # Custom
-.vscode
 build

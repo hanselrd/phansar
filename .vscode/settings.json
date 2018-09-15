@@ -1,0 +1,7 @@
+{
+    "licenser.author": "Hansel De La Cruz",
+    "licenser.projectName": "Phansar",
+    "licenser.useSingleLineStyle": false,
+    "licenser.license": "Custom",
+    "licenser.customHeader": " This file is part of @PROJECT@.\n\n Copyright (C) @YEAR@  @AUTHOR@\n\n @PROJECT@ is free software: you can redistribute it and/or modify\n it under the terms of the GNU Affero General Public License as published by\n the Free Software Foundation, either version 3 of the License, or\n (at your option) any later version.\n\n @PROJECT@ is distributed in the hope that it will be useful,\n but WITHOUT ANY WARRANTY; without even the implied warranty of\n MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n GNU Affero General Public License for more details.\n\n You should have received a copy of the GNU Affero General Public License\n along with @PROJECT@.  If not, see <http://www.gnu.org/licenses/>."
+}
