@@ -9,11 +9,12 @@ namespace client {
 namespace managers {
 namespace system_manager {
 namespace {
-std::unique_ptr<common::scopes::plibsys> plibsys_guard;
-std::unique_ptr<common::scopes::sdl> sdl_guard;
-std::unique_ptr<common::scopes::sdl_image> sdl_image_guard;
-std::unique_ptr<common::scopes::sdl_ttf> sdl_ttf_guard;
-std::unique_ptr<common::scopes::enet> enet_guard;
+std::unique_ptr<common::scopes::plibsys_scope> plibsys_guard;
+std::unique_ptr<common::scopes::sdl_scope> sdl_guard;
+std::unique_ptr<common::scopes::sdl_image_scope> sdl_image_guard;
+std::unique_ptr<common::scopes::sdl_mixer_scope> sdl_mixer_guard;
+std::unique_ptr<common::scopes::sdl_ttf_scope> sdl_ttf_guard;
+std::unique_ptr<common::scopes::enet_scope> enet_guard;
 
 std::shared_ptr<common::core::dispatch_queue> dq;
 
@@ -27,16 +28,17 @@ float fps = 0.f;
 } // namespace
 
 void init() {
-    ASSERT(!plibsys_guard && !sdl_guard && !sdl_image_guard && !sdl_ttf_guard && !enet_guard &&
-           !dq && !window && !renderer);
+    ASSERT(!plibsys_guard && !sdl_guard && !sdl_image_guard && !sdl_mixer_guard && !sdl_ttf_guard &&
+           !enet_guard && !dq && !window && !renderer);
 
     common::core::log::init("phansar.log");
 
-    plibsys_guard = std::make_unique<common::scopes::plibsys>();
-    sdl_guard = std::make_unique<common::scopes::sdl>(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    sdl_image_guard = std::make_unique<common::scopes::sdl_image>(IMG_INIT_PNG);
-    sdl_ttf_guard = std::make_unique<common::scopes::sdl_ttf>();
-    enet_guard = std::make_unique<common::scopes::enet>();
+    plibsys_guard = std::make_unique<common::scopes::plibsys_scope>();
+    sdl_guard = std::make_unique<common::scopes::sdl_scope>(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    sdl_image_guard = std::make_unique<common::scopes::sdl_image_scope>(IMG_INIT_PNG);
+    sdl_mixer_guard = std::make_unique<common::scopes::sdl_mixer_scope>(MIX_INIT_OGG);
+    sdl_ttf_guard = std::make_unique<common::scopes::sdl_ttf_scope>();
+    enet_guard = std::make_unique<common::scopes::enet_scope>();
 
     dq = std::make_shared<common::core::dispatch_queue>(std::thread::hardware_concurrency() - 1);
     ASSERT_ALWAYS(dq);
@@ -67,6 +69,7 @@ void init() {
 
         enet_guard.reset();
         sdl_ttf_guard.reset();
+        sdl_mixer_guard.reset();
         sdl_image_guard.reset();
         sdl_guard.reset();
         plibsys_guard.reset();

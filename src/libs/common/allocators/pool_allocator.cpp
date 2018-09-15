@@ -1,4 +1,5 @@
 #include "pool_allocator.hpp"
+#include "../core/log.hpp"
 
 namespace common {
 namespace allocators {
@@ -22,11 +23,13 @@ void *pool_allocator::allocate(std::size_t size) {
         }
     }
 
+    LOGE << "Could not allocate " << size << " bytes";
     return nullptr;
 }
 
 void pool_allocator::deallocate(void *ptr) {
     if ((ptr < _buffer.get()) || (ptr >= _buffer.get() + _size)) {
+        LOGD << ptr << " does not belong to this allocator";
         return;
     }
 
@@ -37,6 +40,8 @@ void pool_allocator::deallocate(void *ptr) {
             return;
         }
     }
+
+    LOGE << "Could not deallocate " << ptr;
 }
 } // namespace allocators
 } // namespace common

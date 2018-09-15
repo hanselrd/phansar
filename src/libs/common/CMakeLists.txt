@@ -16,9 +16,9 @@ set(sources
     models/models.cpp
     network/address.cpp
     network/socket.cpp
-    scopes/enet.cpp
-    scopes/plibsys.cpp
-    scopes/sdl.cpp
+    scopes/enet_scope.cpp
+    scopes/plibsys_scope.cpp
+    scopes/sdl_scope.cpp
     common.cpp)
 
 set(libs

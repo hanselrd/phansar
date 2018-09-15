@@ -6,10 +6,10 @@
 
 namespace common {
 namespace scopes {
-class enet : private internal::base<enet> {
+class enet_scope : public internal::base<enet_scope> {
 public:
-    enet();
-    ~enet();
+    enet_scope();
+    ~enet_scope();
 };
 } // namespace scopes
 } // namespace common

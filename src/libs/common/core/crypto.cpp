@@ -9,15 +9,10 @@ namespace {
 std::string _hash(hash_type type, const std::uint8_t *data, std::size_t len) {
     std::shared_ptr<PCryptoHash> ch(p_crypto_hash_new(static_cast<PCryptoHashType>(type)),
                                     p_crypto_hash_free);
-
     p_crypto_hash_update(ch.get(), data, len);
-
     auto digest = p_crypto_hash_get_string(ch.get());
-
     std::string retval(digest);
-
     p_free(digest);
-
     return retval;
 }
 } // namespace

@@ -10,8 +10,8 @@ volatile bool running = true;
 int main(int argc, char *argv[]) {
     core::log::init("phansar-server.log");
 
-    scopes::plibsys guard1;
-    scopes::enet guard2;
+    scopes::plibsys_scope guard1;
+    scopes::enet_scope guard2;
 
     sol::state lua;
     lua.open_libraries(sol::lib::base, sol::lib::string);

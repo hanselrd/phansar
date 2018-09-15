@@ -1,26 +1,25 @@
 #ifndef COMMON_SCOPES_BASE_HPP
 #define COMMON_SCOPES_BASE_HPP
 
+#include <cstdint>
+
 namespace common {
 namespace scopes {
 namespace internal {
 template <class T> class base {
 public:
-    base() {
-        ++_guards;
-    }
+    base();
+    virtual ~base();
 
-    virtual ~base() {
-        --_guards;
-    }
+    std::uint32_t get_guards() const;
 
-protected:
-    static unsigned _guards;
+private:
+    static std::uint32_t _guards;
 };
-
-template <class T> unsigned base<T>::_guards = 0;
 } // namespace internal
 } // namespace scopes
 } // namespace common
+
+#include "base.tpp"
 
 #endif

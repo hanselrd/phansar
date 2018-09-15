@@ -25,6 +25,7 @@ public:
         return _permissions;
     }
 
+    // don't use protected members
 protected:
     std::string _name;
     bitmasks::permission_flags _permissions;
