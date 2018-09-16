@@ -62,13 +62,10 @@ void init() {
     dq = std::make_shared<common::core::dispatch_queue>(std::thread::hardware_concurrency() - 1);
     ASSERT_ALWAYS(dq);
 
-    window = std::shared_ptr<SDL_Window>(SDL_CreateWindow("Phansar [SDL]",
-                                                          SDL_WINDOWPOS_CENTERED,
-                                                          SDL_WINDOWPOS_CENTERED,
-                                                          800,
-                                                          600,
-                                                          SDL_WINDOW_SHOWN),
-                                         &SDL_DestroyWindow);
+    window = std::shared_ptr<SDL_Window>(
+        SDL_CreateWindow(
+            "Phansar", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN),
+        &SDL_DestroyWindow);
     MASSERT_ALWAYS(window, SDL_GetError());
 
     renderer = std::shared_ptr<SDL_Renderer>(
@@ -95,6 +92,19 @@ void init() {
     });
 }
 
+void update() {
+    last_time = now_time;
+    now_time = SDL_GetPerformanceCounter();
+    delta_time = static_cast<float>(now_time - last_time) /
+                 static_cast<float>(SDL_GetPerformanceFrequency());
+    fps = 1.f / delta_time;
+
+    ASSERT(window);
+    SDL_SetWindowTitle(
+        window.get(),
+        ("Phansar | " + std::to_string(fps) + " [" + std::to_string(delta_time) + "]").c_str());
+}
+
 std::shared_ptr<common::core::dispatch_queue> get_dispatch_queue() {
     ASSERT(dq);
     return dq;
@@ -108,14 +118,6 @@ std::shared_ptr<SDL_Window> get_window() {
 std::shared_ptr<SDL_Renderer> get_renderer() {
     ASSERT(renderer);
     return renderer;
-}
-
-void update() {
-    last_time = now_time;
-    now_time = SDL_GetPerformanceCounter();
-    delta_time = static_cast<float>(now_time - last_time) /
-                 static_cast<float>(SDL_GetPerformanceFrequency());
-    fps = 1.f / delta_time;
 }
 
 float get_delta_time() {
