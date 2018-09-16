@@ -18,6 +18,7 @@
  */
 
 #include "managers/input_manager.hpp"
+#include "managers/resource_manager.hpp"
 #include "managers/system_manager.hpp"
 #include "ui/window.hpp"
 #include <SDL2/SDL.h>
@@ -44,16 +45,8 @@ int main(int argc, char *argv[]) {
         // client.connect(network::address("localhost", 5000));
         // network::socket::peer_id server = 0;
 
-        std::ifstream ifs("assets.psar", std::ios::binary);
-        archives::psar_archive pa;
-        auto j = pa.load(ifs);
-        auto bytes = codec::base64::decode(j["tilesets"]["rural.png"].get<std::string>());
-        LOGI << "rural.png: " << bytes.size() << " B";
-
-        auto rw = SDL_RWFromMem(bytes.data(), bytes.size());
-        auto temp = IMG_Load_RW(rw, true);
-        auto texture = SDL_CreateTextureFromSurface(renderer.get(), temp);
-        SDL_FreeSurface(temp);
+        auto surface = managers::resource_manager::get<SDL_Surface>("/tilesets/rural.png");
+        auto texture = SDL_CreateTextureFromSurface(renderer.get(), surface.get());
 #define PADDING (1)
         SDL_Rect src_rect{// gid 6
                           (16 * 5) + (PADDING * 5),

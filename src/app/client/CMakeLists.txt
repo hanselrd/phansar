@@ -21,6 +21,7 @@ project(${CMAKE_PROJECT_NAME})
 
 set(sources
     managers/input_manager.cpp
+    managers/resource_manager.cpp
     managers/system_manager.cpp
     ui/element.cpp
     ui/panel.cpp
