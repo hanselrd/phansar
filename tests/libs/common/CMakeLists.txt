@@ -21,6 +21,8 @@ project(test-common)
 
 set(sources
     allocators/pool_allocator.unit.cpp
+    archives/json_archive.unit.cpp
+    archives/psar_archive.unit.cpp
     core/crypto.unit.cpp
     core/dispatch_queue.unit.cpp
     core/filesystem.unit.cpp

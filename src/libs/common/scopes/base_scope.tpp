@@ -17,10 +17,29 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "base.hpp"
-#include "../core/log.hpp"
+#ifndef COMMON_SCOPES_BASE_SCOPE_TPP
+#define COMMON_SCOPES_BASE_SCOPE_TPP
 
-void *operator new(std::size_t size, common::allocators::internal::base &b) {
-    LOGD << "Allocated " << size << " bytes";
-    return b.allocate(size);
+#include "base_scope.hpp"
+
+namespace common {
+namespace scopes {
+namespace internal {
+template <class T> base_scope<T>::base_scope() {
+    ++_guards;
 }
+
+template <class T> base_scope<T>::~base_scope() {
+    --_guards;
+}
+
+template <class T> std::uint32_t base_scope<T>::get_guards() const {
+    return _guards;
+}
+
+template <class T> std::uint32_t base_scope<T>::_guards = 0;
+} // namespace internal
+} // namespace scopes
+} // namespace common
+
+#endif

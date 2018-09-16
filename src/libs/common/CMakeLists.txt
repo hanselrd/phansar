@@ -20,7 +20,7 @@
 project(common)
 
 set(sources
-    allocators/base.cpp
+    allocators/base_allocator.cpp
     allocators/pool_allocator.cpp
     archives/json_archive.cpp
     archives/psar_archive.cpp

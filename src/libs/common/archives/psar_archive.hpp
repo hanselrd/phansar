@@ -20,15 +20,15 @@
 #ifndef COMMON_ARCHIVES_PSAR_ARCHIVE_HPP
 #define COMMON_ARCHIVES_PSAR_ARCHIVE_HPP
 
-#include "../core/json.hpp"
-#include <iostream>
+#include "base_archive.hpp"
 
 namespace common {
 namespace archives {
-namespace psar_archive {
-core::json load(std::istream &is);
-void save(std::ostream &os, const core::json &j);
-} // namespace psar_archive
+class psar_archive : public internal::base_archive {
+public:
+    core::json load(std::istream &is) override;
+    void save(std::ostream &os, const core::json &j) override;
+};
 } // namespace archives
 } // namespace common
 

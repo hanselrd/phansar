@@ -20,14 +20,14 @@
 #ifndef COMMON_ALLOCATORS_POOL_ALLOCATOR_HPP
 #define COMMON_ALLOCATORS_POOL_ALLOCATOR_HPP
 
-#include "base.hpp"
+#include "base_allocator.hpp"
 #include <cstdint>
 #include <memory>
 #include <vector>
 
 namespace common {
 namespace allocators {
-class pool_allocator : public internal::base {
+class pool_allocator : public internal::base_allocator {
 public:
     explicit pool_allocator(std::size_t size);
 
