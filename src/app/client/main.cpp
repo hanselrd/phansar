@@ -50,12 +50,6 @@ int main(int argc, char *argv[]) {
             {{"window", {{"x", "_CENTERED"}, {"y", "_CENTERED"}, {"width", 800}, {"height", 600}}},
              {"fullscreen", true}});
 
-        allocators::pool_allocator pa(sizeof(int) * 2);
-        auto p_int1 = new (pa) int(12);
-        auto p_int2 = new (pa) int(13);
-        LOGI << "p_int1 " << *p_int1 << " " << std::hex << p_int1;
-        LOGI << "p_int2 " << *p_int2 << " " << std::hex << p_int2;
-
         std::ifstream ifs("assets.psar", std::ios::binary);
         auto j = archives::psar_archive::load(ifs);
         auto bytes = codec::base64::decode(j["tilesets"]["rural.png"].get<std::string>());
