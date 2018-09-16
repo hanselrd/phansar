@@ -45,26 +45,6 @@ dispatch_queue::~dispatch_queue() {
     LOGI << "Workers joined";
 }
 
-void dispatch_queue::dispatch(const job &j) {
-    std::unique_lock<std::mutex> lock(_mutex);
-    _queue.push(j);
-
-    // manually unlock before notifying to avoid waking up
-    // waiting threads only to block again
-    lock.unlock();
-    _cv.notify_all();
-}
-
-void dispatch_queue::dispatch(job &&j) {
-    std::unique_lock<std::mutex> lock(_mutex);
-    _queue.push(std::move(j));
-
-    // manually unlock before notifying to avoid waking up
-    // waiting threads only to block again
-    lock.unlock();
-    _cv.notify_all();
-}
-
 void dispatch_queue::_thread_handler() {
     std::unique_lock<std::mutex> lock(_mutex);
 

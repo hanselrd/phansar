@@ -22,22 +22,24 @@
 
 #include <condition_variable>
 #include <functional>
+#include <future>
 #include <mutex>
 #include <queue>
 #include <thread>
+#include <type_traits>
 #include <vector>
 
 namespace common {
 namespace core {
 class dispatch_queue {
-    using job = std::function<void(void)>;
-
 public:
     explicit dispatch_queue(std::size_t count = 1);
     ~dispatch_queue();
 
-    void dispatch(const job &j);
-    void dispatch(job &&j);
+    template <class F,
+              class... Args,
+              class R = std::result_of_t<std::decay_t<F>(std::decay_t<Args>...)>>
+    std::future<R> dispatch(F &&f, Args &&... args);
 
     dispatch_queue(const dispatch_queue &) = delete;
     dispatch_queue &operator=(const dispatch_queue &) = delete;
@@ -48,12 +50,14 @@ private:
     void _thread_handler();
 
     std::vector<std::thread> _threads;
-    std::queue<job> _queue;
+    std::queue<std::function<void()>> _queue;
     std::condition_variable _cv;
     std::mutex _mutex;
     volatile bool _running = true;
 };
 } // namespace core
 } // namespace common
+
+#include "dispatch_queue.tpp"
 
 #endif
