@@ -94,7 +94,8 @@ int main(int argc, char *argv[]) {
     LOGI << "Compiling assets...";
     auto j = _compile_assets("assets");
     std::ofstream ofs("assets.psar", std::ios::binary);
-    archives::psar_archive::save(ofs, j);
+    archives::psar_archive pa;
+    pa.save(ofs, j);
 
     return 0;
 }

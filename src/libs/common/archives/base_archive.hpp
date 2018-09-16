@@ -17,21 +17,24 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "psar_archive.hpp"
-#include "../core/log.hpp"
+#ifndef COMMON_ARCHIVES_BASE_ARCHIVE_HPP
+#define COMMON_ARCHIVES_BASE_ARCHIVE_HPP
+
+#include "../core/json.hpp"
+#include <iostream>
 
 namespace common {
 namespace archives {
-core::json psar_archive::load(std::istream &is) {
-    auto j = core::json::from_cbor(is);
-    LOGD << "Loaded " << core::json::to_cbor(j).size() << " bytes";
-    return j;
-}
+namespace internal {
+class base_archive {
+public:
+    virtual ~base_archive() = default;
 
-void psar_archive::save(std::ostream &os, const core::json &j) {
-    auto cbor = core::json::to_cbor(j);
-    os.write(reinterpret_cast<const char *>(cbor.data()), cbor.size());
-    LOGD << "Saved " << cbor.size() << " bytes";
-}
+    virtual core::json load(std::istream &is) = 0;
+    virtual void save(std::ostream &os, const core::json &j) = 0;
+};
+} // namespace internal
 } // namespace archives
 } // namespace common
+
+#endif

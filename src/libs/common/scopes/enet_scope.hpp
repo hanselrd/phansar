@@ -17,15 +17,15 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_SCOPES_ENET_HPP
-#define COMMON_SCOPES_ENET_HPP
+#ifndef COMMON_SCOPES_ENET_SCOPE_HPP
+#define COMMON_SCOPES_ENET_SCOPE_HPP
 
-#include "base.hpp"
+#include "base_scope.hpp"
 #include <enet/enet.h>
 
 namespace common {
 namespace scopes {
-class enet_scope : public internal::base<enet_scope> {
+class enet_scope : public internal::base_scope<enet_scope> {
 public:
     enet_scope();
     ~enet_scope();

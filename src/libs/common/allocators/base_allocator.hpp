@@ -17,28 +17,26 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_SCOPES_BASE_HPP
-#define COMMON_SCOPES_BASE_HPP
+#ifndef COMMON_ALLOCATORS_BASE_ALLOCATOR_HPP
+#define COMMON_ALLOCATORS_BASE_ALLOCATOR_HPP
 
 #include <cstdint>
+#include <new>
 
 namespace common {
-namespace scopes {
+namespace allocators {
 namespace internal {
-template <class T> class base {
+class base_allocator {
 public:
-    base();
-    virtual ~base();
+    virtual ~base_allocator() = default;
 
-    std::uint32_t get_guards() const;
-
-private:
-    static std::uint32_t _guards;
+    virtual void *allocate(std::size_t size) = 0;
+    virtual void deallocate(void *ptr) = 0;
 };
 } // namespace internal
-} // namespace scopes
+} // namespace allocators
 } // namespace common
 
-#include "base.tpp"
+void *operator new(std::size_t size, common::allocators::internal::base_allocator &b);
 
 #endif
