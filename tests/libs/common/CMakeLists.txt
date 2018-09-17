@@ -25,6 +25,7 @@ set(sources
     archives/psar_archive.unit.cpp
     core/crypto.unit.cpp
     core/dispatch_queue.unit.cpp
+    core/event_queue.unit.cpp
     core/filesystem.unit.cpp
     core/serialize.unit.cpp
     scopes/enet_scope.unit.cpp
