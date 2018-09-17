@@ -17,27 +17,38 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_CORE_CORE_HPP
-#define COMMON_CORE_CORE_HPP
+#ifndef COMMON_CORE_EVENT_QUEUE_HPP
+#define COMMON_CORE_EVENT_QUEUE_HPP
 
-#include "assert.hpp"
-#include "codec.hpp"
-#include "crypto.hpp"
-#include "dispatch_queue.hpp"
-#include "event_queue.hpp"
-#include "filesystem.hpp"
-#include "json.hpp"
-#include "log.hpp"
-#include "serialize.hpp"
-#include "sol.hpp"
-#include "types.hpp"
+#include <functional>
+#include <mutex>
+#include <queue>
+#include <type_traits>
+#include <vector>
 
 namespace common {
 namespace core {
-namespace lua_api {
-void init(sol::table &t);
-}
+template <class E, class T> class event_queue {
+    using subscribe_function = std::function<void(const E &)>;
+    template <class...> using void_t = void;
+
+public:
+    template <class... Args,
+              class = void_t<std::enable_if_t<std::is_convertible<Args, T>::value>...>>
+    explicit event_queue(Args &&... args);
+
+    void event(const E &e, T t);
+    void subscribe(subscribe_function f);
+    void update();
+
+private:
+    std::vector<subscribe_function> _subscribers;
+    std::vector<T> _whitelist;
+    std::queue<E> _queue;
+};
 } // namespace core
 } // namespace common
+
+#include "event_queue.tpp"
 
 #endif
