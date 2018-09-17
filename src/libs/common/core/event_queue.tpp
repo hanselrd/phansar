@@ -26,7 +26,7 @@ namespace common {
 namespace core {
 template <class E, class T>
 template <class... Args, class>
-event_queue<E, T>::event_queue(Args &&... args) : _whitelist({std::forward<Args>(args)...}) {
+event_queue<E, T>::event_queue(Args &&... args) : _whitelist{std::forward<Args>(args)...} {
 }
 
 template <class E, class T> void event_queue<E, T>::event(const E &e, T t) {

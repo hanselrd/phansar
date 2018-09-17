@@ -42,7 +42,7 @@ TEST_CASE("can subscribe to all events", "[libs][common][core][event_queue]") {
 }
 
 TEST_CASE("can subscribe to filtered events", "[libs][common][core][event_queue]") {
-    event_queue<SDL_Event, std::uint32_t> eq(SDL_QUIT, SDL_KEYDOWN);
+    event_queue<SDL_Event, std::uint32_t> eq{SDL_QUIT, SDL_KEYDOWN};
     std::uint8_t count = 0;
 
     eq.subscribe([&](const SDL_Event &e) { ++count; });
