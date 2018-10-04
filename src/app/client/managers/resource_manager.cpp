@@ -29,29 +29,29 @@ namespace client {
 namespace managers {
 namespace resource_manager {
 namespace {
-common::core::json j;
-std::unordered_map<std::string, std::pair<internal::resource_type, std::shared_ptr<void>>> cache;
+common::core::json _json;
+std::unordered_map<std::string, std::pair<internal::resource_type, std::shared_ptr<void>>> _cache;
 
 void _load() {
-    if (!j.is_null()) {
+    if (!_json.is_null()) {
         return;
     }
 
     std::ifstream ifs("assets.psar", std::ios::binary);
     common::archives::psar_archive pa;
-    j = pa.load(ifs).flatten();
+    _json = pa.load(ifs).flatten();
 }
 
 std::vector<std::uint8_t> _get_bytes(const std::string &path) {
     _load();
-    auto bytes = common::core::codec::base64::decode(j[path].get<std::string>());
+    auto bytes = common::core::codec::base64::decode(_json[path].get<std::string>());
     LOGD << path << ": " << bytes.size() << " bytes";
     return bytes;
 }
 
 common::core::json _get_json(const std::string &path) {
     _load();
-    auto json = j[path];
+    auto json = _json[path];
     LOGD << path << ": " << json.dump(4) << " characters";
     return json;
 }
@@ -59,7 +59,7 @@ common::core::json _get_json(const std::string &path) {
 
 namespace internal {
 void load(const std::string &path, resource_type rt) {
-    if (cache.count(path) > 0) {
+    if (_cache.count(path) > 0) {
         LOGW << path << " has already been loaded";
         return;
     }
@@ -77,22 +77,20 @@ void load(const std::string &path, resource_type rt) {
         ASSERT(ptr);
     } break;
     case resource_type::MIX_MUSIC:
-        ASSERT(0);
-        break;
     case resource_type::TTF_FONT:
         ASSERT(0);
         break;
     }
 
-    cache[path] = std::make_pair(rt, ptr);
+    _cache[path] = std::make_pair(rt, ptr);
 }
 
 std::shared_ptr<void> get(const std::string &path, resource_type rt) {
-    if (cache.count(path) == 0) {
+    if (_cache.count(path) == 0) {
         load(path, rt);
     }
 
-    auto res = cache[path];
+    auto res = _cache[path];
     if (res.first == rt) {
         return res.second;
     }

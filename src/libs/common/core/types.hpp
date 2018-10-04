@@ -30,16 +30,12 @@ namespace types {
 template <class T> struct vector2 {
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
 
-    explicit vector2(T _x = T(), T _y = T());
-
     T x;
     T y;
 };
 
 template <class T> struct vector3 {
     static_assert(std::is_arithmetic<T>::value, "T must be an arithmetic type");
-
-    explicit vector3(T _x = T(), T _y = T(), T _z = T());
 
     T x;
     T y;
@@ -60,7 +56,5 @@ void init(sol::table &t);
 } // namespace types
 } // namespace core
 } // namespace common
-
-#include "types.tpp"
 
 #endif
