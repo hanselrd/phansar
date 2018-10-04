@@ -28,104 +28,104 @@ namespace client {
 namespace managers {
 namespace system_manager {
 namespace {
-std::unique_ptr<common::scopes::plibsys_scope> plibsys_guard;
-std::unique_ptr<common::scopes::sdl_scope> sdl_guard;
-std::unique_ptr<common::scopes::sdl_image_scope> sdl_image_guard;
-std::unique_ptr<common::scopes::sdl_mixer_scope> sdl_mixer_guard;
-std::unique_ptr<common::scopes::sdl_ttf_scope> sdl_ttf_guard;
-std::unique_ptr<common::scopes::enet_scope> enet_guard;
+std::unique_ptr<common::scopes::plibsys_scope> _plibsys_guard;
+std::unique_ptr<common::scopes::sdl_scope> _sdl_guard;
+std::unique_ptr<common::scopes::sdl_image_scope> _sdl_image_guard;
+std::unique_ptr<common::scopes::sdl_mixer_scope> _sdl_mixer_guard;
+std::unique_ptr<common::scopes::sdl_ttf_scope> _sdl_ttf_guard;
+std::unique_ptr<common::scopes::enet_scope> _enet_guard;
 
-std::shared_ptr<common::core::dispatch_queue> dq;
+std::shared_ptr<common::core::dispatch_queue> _dq;
 
-std::shared_ptr<SDL_Window> window;
-std::shared_ptr<SDL_Renderer> renderer;
+std::shared_ptr<SDL_Window> _window;
+std::shared_ptr<SDL_Renderer> _renderer;
 
-std::uint64_t now_time = 0;
-std::uint64_t last_time = 0;
-float delta_time = 0.f;
-float fps = 0.f;
+std::uint64_t _now_time = 0;
+std::uint64_t _last_time = 0;
+float _delta_time = 0.f;
+float _fps = 0.f;
 } // namespace
 
 void init() {
-    ASSERT(!plibsys_guard && !sdl_guard && !sdl_image_guard && !sdl_mixer_guard && !sdl_ttf_guard &&
-           !enet_guard && !dq && !window && !renderer);
+    ASSERT(!_plibsys_guard && !_sdl_guard && !_sdl_image_guard && !_sdl_mixer_guard &&
+           !_sdl_ttf_guard && !_enet_guard && !_dq && !_window && !_renderer);
 
     common::core::log::init("phansar.log");
 
-    plibsys_guard = std::make_unique<common::scopes::plibsys_scope>();
-    sdl_guard = std::make_unique<common::scopes::sdl_scope>(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    sdl_image_guard = std::make_unique<common::scopes::sdl_image_scope>(IMG_INIT_PNG);
-    sdl_mixer_guard = std::make_unique<common::scopes::sdl_mixer_scope>(MIX_INIT_OGG);
-    sdl_ttf_guard = std::make_unique<common::scopes::sdl_ttf_scope>();
-    enet_guard = std::make_unique<common::scopes::enet_scope>();
+    _plibsys_guard = std::make_unique<common::scopes::plibsys_scope>();
+    _sdl_guard = std::make_unique<common::scopes::sdl_scope>(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    _sdl_image_guard = std::make_unique<common::scopes::sdl_image_scope>(IMG_INIT_PNG);
+    _sdl_mixer_guard = std::make_unique<common::scopes::sdl_mixer_scope>(MIX_INIT_OGG);
+    _sdl_ttf_guard = std::make_unique<common::scopes::sdl_ttf_scope>();
+    _enet_guard = std::make_unique<common::scopes::enet_scope>();
 
-    dq = std::make_shared<common::core::dispatch_queue>(std::thread::hardware_concurrency() - 1);
-    ASSERT_ALWAYS(dq);
+    _dq = std::make_shared<common::core::dispatch_queue>(std::thread::hardware_concurrency() - 1);
+    ASSERT_ALWAYS(_dq);
 
-    window = std::shared_ptr<SDL_Window>(
+    _window = std::shared_ptr<SDL_Window>(
         SDL_CreateWindow(
             "Phansar", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN),
         &SDL_DestroyWindow);
-    MASSERT_ALWAYS(window, SDL_GetError());
+    MASSERT_ALWAYS(_window, SDL_GetError());
 
-    renderer = std::shared_ptr<SDL_Renderer>(
-        SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC),
+    _renderer = std::shared_ptr<SDL_Renderer>(
+        SDL_CreateRenderer(_window.get(), -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC),
         &SDL_DestroyRenderer);
-    MASSERT_ALWAYS(renderer, SDL_GetError());
+    MASSERT_ALWAYS(_renderer, SDL_GetError());
 
-    SDL_SetRenderDrawBlendMode(renderer.get(), SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawBlendMode(_renderer.get(), SDL_BLENDMODE_BLEND);
 
-    now_time = SDL_GetPerformanceCounter();
+    _now_time = SDL_GetPerformanceCounter();
 
     std::atexit([] {
-        renderer.reset();
-        window.reset();
+        _renderer.reset();
+        _window.reset();
 
-        dq.reset();
+        _dq.reset();
 
-        enet_guard.reset();
-        sdl_ttf_guard.reset();
-        sdl_mixer_guard.reset();
-        sdl_image_guard.reset();
-        sdl_guard.reset();
-        plibsys_guard.reset();
+        _enet_guard.reset();
+        _sdl_ttf_guard.reset();
+        _sdl_mixer_guard.reset();
+        _sdl_image_guard.reset();
+        _sdl_guard.reset();
+        _plibsys_guard.reset();
     });
 }
 
 void update() {
-    last_time = now_time;
-    now_time = SDL_GetPerformanceCounter();
-    delta_time = static_cast<float>(now_time - last_time) /
-                 static_cast<float>(SDL_GetPerformanceFrequency());
-    fps = 1.f / delta_time;
+    _last_time = _now_time;
+    _now_time = SDL_GetPerformanceCounter();
+    _delta_time = static_cast<float>(_now_time - _last_time) /
+                  static_cast<float>(SDL_GetPerformanceFrequency());
+    _fps = 1.f / _delta_time;
 
-    ASSERT(window);
+    ASSERT(_window);
     SDL_SetWindowTitle(
-        window.get(),
-        ("Phansar | " + std::to_string(fps) + " [" + std::to_string(delta_time) + "]").c_str());
+        _window.get(),
+        ("Phansar | " + std::to_string(_fps) + " [" + std::to_string(_delta_time) + "]").c_str());
 }
 
 std::shared_ptr<common::core::dispatch_queue> get_dispatch_queue() {
-    ASSERT(dq);
-    return dq;
+    ASSERT(_dq);
+    return _dq;
 }
 
 std::shared_ptr<SDL_Window> get_window() {
-    ASSERT(window);
-    return window;
+    ASSERT(_window);
+    return _window;
 }
 
 std::shared_ptr<SDL_Renderer> get_renderer() {
-    ASSERT(renderer);
-    return renderer;
+    ASSERT(_renderer);
+    return _renderer;
 }
 
 float get_delta_time() {
-    return delta_time;
+    return _delta_time;
 }
 
 float get_fps() {
-    return fps;
+    return _fps;
 }
 } // namespace system_manager
 } // namespace managers

@@ -23,15 +23,15 @@ namespace client {
 namespace managers {
 namespace input_manager {
 namespace {
-SDL_Event e;
+SDL_Event _event;
 } // namespace
 
 void handle_event(const SDL_Event &event) {
-    e = event;
+    _event = event;
 }
 
 const SDL_Event &get_event() {
-    return e;
+    return _event;
 }
 
 const std::uint8_t *get_keyboard_state() {

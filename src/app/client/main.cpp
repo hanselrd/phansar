@@ -99,8 +99,8 @@ int main(int argc, char *argv[]) {
         auto eq = core::event_queue<SDL_Event, std::uint32_t>(SDL_QUIT, SDL_KEYDOWN);
         eq.subscribe([](const SDL_Event &e) { LOGD << "Subscriber: event " << e.type; });
 
-        auto ui_window = ui::window(types::vector2f(20.f, 20.f),
-                                    types::vector2u(150, 250),
+        auto ui_window = ui::window(types::vector2f{20.f, 20.f},
+                                    types::vector2u{150, 250},
                                     SDL_Color{0x00, 0x99, 0x99, 0xFF});
 
         while (running) {

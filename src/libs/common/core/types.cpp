@@ -27,14 +27,28 @@ void init(sol::table &t) {
     sol::table types = t.create_named("types");
 
     types.new_usertype<vector2f>("Vector2f",
-                                 sol::constructors<vector2f(), vector2f(float, float)>(),
+                                 "new",
+                                 sol::factories(
+                                     [] {
+                                         return vector2f{0, 0};
+                                     },
+                                     [](float x, float y) {
+                                         return vector2f{x, y};
+                                     }),
                                  "x",
                                  &vector2f::x,
                                  "y",
                                  &vector2f::y);
 
     types.new_usertype<vector3f>("Vector3f",
-                                 sol::constructors<vector3f(), vector3f(float, float, float)>(),
+                                 "new",
+                                 sol::factories(
+                                     [] {
+                                         return vector3f{0, 0};
+                                     },
+                                     [](float x, float y, float z) {
+                                         return vector3f{x, y, z};
+                                     }),
                                  "x",
                                  &vector3f::x,
                                  "y",
