@@ -35,13 +35,13 @@ namespace resource_manager {
 template <class T> void load(const std::string &path) {
     using U = std::shared_ptr<T>;
 
-    static_assert(std::is_same<T, common::core::json>::value ||
+    static_assert(std::is_same<U, std::shared_ptr<common::core::json>>::value ||
                       std::is_same<U, std::shared_ptr<SDL_Surface>>::value ||
                       std::is_same<U, std::shared_ptr<Mix_Music>>::value ||
                       std::is_same<U, std::shared_ptr<TTF_Font>>::value,
                   "T must be a resource type");
 
-    if (typeid(T) == typeid(common::core::json)) {
+    if (typeid(U) == typeid(std::shared_ptr<common::core::json>)) {
         internal::load(path, internal::resource_type::JSON);
     } else if (typeid(U) == typeid(std::shared_ptr<SDL_Surface>)) {
         internal::load(path, internal::resource_type::SDL_SURFACE);
@@ -55,13 +55,13 @@ template <class T> void load(const std::string &path) {
 template <class T> std::shared_ptr<T> get(const std::string &path) {
     using U = std::shared_ptr<T>;
 
-    static_assert(std::is_same<T, common::core::json>::value ||
+    static_assert(std::is_same<U, std::shared_ptr<common::core::json>>::value ||
                       std::is_same<U, std::shared_ptr<SDL_Surface>>::value ||
                       std::is_same<U, std::shared_ptr<Mix_Music>>::value ||
                       std::is_same<U, std::shared_ptr<TTF_Font>>::value,
                   "T must be a resource type");
 
-    if (typeid(T) == typeid(common::core::json)) {
+    if (typeid(U) == typeid(std::shared_ptr<common::core::json>)) {
         return std::static_pointer_cast<T>(internal::get(path, internal::resource_type::JSON));
     } else if (typeid(U) == typeid(std::shared_ptr<SDL_Surface>)) {
         return std::static_pointer_cast<T>(
