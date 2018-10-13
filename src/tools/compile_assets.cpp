@@ -17,85 +17,51 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <common/archives/archives.hpp>
-#include <common/core/core.hpp>
-#include <common/scopes/scopes.hpp>
+#include <common/archives/psar_archive/psar_archive.hpp>
+#include <common/extlibs/codec/codec.hpp>
+#include <common/extlibs/json/json.hpp>
+#include <common/utils/log/log.hpp>
 #include <cstdint>
+#include <filesystem>
 #include <fstream>
 #include <iterator>
-#include <memory>
-#include <string>
+#include <string_view>
 #include <vector>
 
+namespace fs = std::filesystem;
 using namespace common;
-using namespace common::core;
-namespace fs = common::core::filesystem;
 
-json _compile_assets(const std::string &path) {
-    json j;
+extlibs::json _compile_assets(std::string_view path) {
+    auto json = extlibs::json{};
 
-    fs::directory dir(path);
-    while (auto entry = dir.next_entry()) {
-        auto name = entry->get_name();
-        if (name == ".." || name == "." || name[0] == '.') {
-            continue;
-        }
-
-        std::string extension = "";
-        std::ifstream ifs;
-        std::streampos fsize;
-
-        switch (entry->get_type()) {
-        case fs::directory_entry::type::DIRECTORY:
-            LOGI << "[" << entry->get_name() << "]";
-
-            j[entry->get_name()] = _compile_assets(path + P_DIR_SEPARATOR + entry->get_name());
-            break;
-        case fs::directory_entry::type::FILE:
-            LOGI << "  Found: " << entry->get_name();
-
-            extension = (entry->get_name().find_last_of('.') != std::string::npos)
-                            ? entry->get_name().substr(entry->get_name().find_last_of('.') + 1)
-                            : "";
-
-            if (extension == "json") {
-                ifs.open(path + P_DIR_SEPARATOR + entry->get_name());
-
-                ifs >> j[entry->get_name()];
+    for (const auto &p : fs::directory_iterator(path)) {
+        LOGI << "  " << p.path().c_str();
+        if (p.is_directory()) {
+            json[p.path().filename()] = _compile_assets(p.path().c_str());
+        } else if (p.is_regular_file()) {
+            if (p.path().extension() == ".json") {
+                auto ifs = std::ifstream{p.path()};
+                ifs >> json[p.path().filename()];
             } else {
-                ifs.open(path + P_DIR_SEPARATOR + entry->get_name(), std::ios::binary);
-
-                std::vector<std::uint8_t> buffer((std::istreambuf_iterator<char>(ifs)),
-                                                 (std::istreambuf_iterator<char>()));
-
-                j[entry->get_name()] = codec::base64::encode(buffer);
+                auto ifs = std::ifstream{p.path(), std::ios::binary};
+                auto buffer = std::vector<std::uint8_t>{(std::istreambuf_iterator<char>(ifs)),
+                                                        (std::istreambuf_iterator<char>())};
+                json[p.path().filename()] = extlibs::codec::base64::encode(buffer);
             }
-
-            ifs.seekg(0, std::ios::beg);
-            fsize = ifs.tellg();
-            ifs.seekg(0, std::ios::end);
-            fsize = ifs.tellg() - fsize;
-
-            LOGI << "    size: " << fsize << " B";
-            break;
-        default:
-            ASSERT(0);
         }
     }
 
-    return j;
+    return json;
 }
 
 int main(int argc, char *argv[]) {
-    log::init("compile_assets.log");
-
-    scopes::plibsys_scope guard;
+    common::utils::log::init("compile_assets.log");
 
     LOGI << "Compiling assets...";
-    auto j = _compile_assets("assets");
-    std::ofstream ofs("assets.psar", std::ios::binary);
-    archives::psar_archive pa;
-    pa.save(ofs, j);
+    auto json = _compile_assets("assets");
+    auto ofs = std::ofstream{"assets.psar", std::ios::binary};
+    auto pa = archives::psar_archive{};
+    pa.save(ofs, json);
 
     return 0;
 }
