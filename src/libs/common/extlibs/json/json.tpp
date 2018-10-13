@@ -17,17 +17,30 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_EXTLIBS_JSON_HPP
-#define COMMON_EXTLIBS_JSON_HPP
+#ifndef COMMON_EXTLIBS_JSON_TPP
+#define COMMON_EXTLIBS_JSON_TPP
 
-#include <nlohmann/json.hpp>
+#include "json.hpp"
+#include <optional>
 
-namespace common {
-namespace extlibs {
-using namespace nlohmann;
-}
-} // namespace common
+namespace nlohmann {
+template <typename T> struct adl_serializer<std::optional<T>> {
+    static void to_json(json &j, const std::optional<T> &opt) {
+        if (opt.has_value()) {
+            j = *opt;
+        } else {
+            j = nullptr;
+        }
+    }
 
-#include "json.tpp"
+    static void from_json(const json &j, std::optional<T> &opt) {
+        if (j.is_null()) {
+            opt = std::nullopt;
+        } else {
+            opt = j.get<T>();
+        }
+    }
+};
+} // namespace nlohmann
 
 #endif
