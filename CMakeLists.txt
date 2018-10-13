@@ -30,7 +30,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/extlibs/Catch2/co
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif()
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -59,15 +59,14 @@ endif()
 string(LENGTH ${CMAKE_SOURCE_DIR}/src/ SOURCE_PATH_SIZE)
 add_definitions(-D__SOURCE_PATH_SIZE__=${SOURCE_PATH_SIZE})
 
-# Build project
-add_subdirectory(extlibs)
-add_subdirectory(src)
-
-# Build tests
+# Setup testing
 enable_testing()
 include(CTest)
 include(Catch)
-add_subdirectory(tests)
+
+# Build project
+add_subdirectory(extlibs)
+add_subdirectory(src)
 
 # Compile assets
 add_custom_target(assets ALL

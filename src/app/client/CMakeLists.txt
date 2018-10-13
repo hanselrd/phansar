@@ -20,28 +20,42 @@
 project(${CMAKE_PROJECT_NAME})
 
 set(sources
-    managers/input_manager.cpp
-    managers/resource_manager.cpp
-    managers/system_manager.cpp
-    ui/element.cpp
-    ui/panel.cpp
-    ui/window.cpp)
+    managers/input_manager/input_manager.cpp
+    managers/resource_manager/resource_manager.cpp
+    managers/system_manager/system_manager.cpp
+    ui/element/element.cpp
+    ui/panel/panel.cpp
+    ui/window/window.cpp)
+
+set(lua_api_sources
+    lua_api/lua_api.cpp)
+
+set(unittest_sources
+    lua_api/lua_api.unittest.cpp)
 
 set(libs
     common)
 
 add_executable(${PROJECT_NAME}
     ${sources}
+    ${lua_api_sources}
     main.cpp)
 
 target_link_libraries(${PROJECT_NAME}
     ${libs})
 
-add_library(${PROJECT_NAME}-test STATIC
-    ${sources})
+# Testing
+add_executable(test-${PROJECT_NAME}
+    ${sources}
+    ${lua_api_sources}
+    ${unittest_sources}
+    ../../../tests/main.cpp)
 
-target_include_directories(${PROJECT_NAME}-test PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR})
-
-target_link_libraries(${PROJECT_NAME}-test PUBLIC
+target_link_libraries(test-${PROJECT_NAME} PUBLIC
     ${libs})
+
+target_compile_definitions(test-${PROJECT_NAME} PRIVATE
+    TESTING_CLIENT)
+
+catch_discover_tests(test-${PROJECT_NAME}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR})

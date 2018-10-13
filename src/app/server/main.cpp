@@ -17,38 +17,40 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <common/common.hpp>
+#include <common/containers/dispatch_queue/dispatch_queue.hpp>
+#include <common/extlibs/json/json.hpp>
+#include <common/extlibs/sol/sol.hpp>
+#include <common/lua_api/lua_api.hpp>
+#include <common/network/address/address.hpp>
+#include <common/network/socket/socket.hpp>
+#include <common/scopes/enet_scope/enet_scope.hpp>
+#include <common/utils/log/log.hpp>
 #include <csignal>
-#include <memory>
 
-using namespace common;
-using namespace common::core;
-
-volatile bool running = true;
+volatile auto running = bool{true};
 
 int main(int argc, char *argv[]) {
-    core::log::init("phansar-server.log");
+    common::utils::log::init("phansar-server.log");
 
-    scopes::plibsys_scope guard1;
-    scopes::enet_scope guard2;
+    auto guard = common::scopes::enet_scope{};
 
-    sol::state lua;
+    auto lua = sol::state{};
     lua.open_libraries(sol::lib::base, sol::lib::string);
-    sol::table phansar = lua.create_named_table("phansar");
-    common::lua_api::init(phansar);
+    auto phansar = lua.create_named_table("phansar");
+    lua_api::init_common(phansar);
 
     lua.script_file("scripts/lua_api/common.lua");
     lua.script_file("scripts/lua_api/server.lua");
 
     std::signal(SIGINT, [](int signal) { running = false; });
 
-    dispatch_queue dq(3);
+    common::containers::dispatch_queue dq(3);
     dq.dispatch([] {
         while (running) {
-            SDL_Delay(1000);
+            std::this_thread::sleep_for(std::chrono::seconds{1});
         }
     });
-    for (int i = 0; i < 10; ++i) {
+    for (auto i = std::uint32_t{0}; i < 10; ++i) {
         dq.dispatch([i] {
             LOGI << "[" << i << "]:"
                  << " dispatch";
@@ -59,13 +61,13 @@ int main(int argc, char *argv[]) {
     // address.host = ENET_HOST_ANY;
     // address.port = 5000;
 
-    network::socket server(5000, 64, 2);
+    auto server = common::network::socket{5000, 64, 2};
 
     // auto server = std::unique_ptr<ENetHost, decltype(&enet_host_destroy)>(
     //     enet_host_create(address, 64, 2, 0, 0), &enet_host_destroy);
 
-    network::socket::peer_id id;
-    core::json j;
+    auto id = common::network::socket::peer_id{};
+    auto json = common::extlibs::json{};
 
     while (running) {
         // accept all peer connections
@@ -73,10 +75,10 @@ int main(int argc, char *argv[]) {
         }
 
         while (server.listen(1000)) {
-            if (server.receive(id, j)) {
+            if (server.receive(id, json)) {
                 // LOGI << "Hey, I received something from peer: " << id;
-                j["peer"] = id;
-                server.broadcast(j);
+                json["peer"] = id;
+                server.broadcast(json);
             }
         }
 

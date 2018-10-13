@@ -19,6 +19,6 @@
 
 -- This script serves as documentation for the game's phansar.client API
 
-local log = phansar.common.core.log
+local log = phansar.common.utils.log
 
 log.warning("not implemented")

@@ -17,19 +17,23 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "managers/input_manager.hpp"
-#include "managers/resource_manager.hpp"
-#include "managers/system_manager.hpp"
-#include "ui/window.hpp"
+#include "managers/input_manager/input_manager.hpp"
+#include "managers/resource_manager/resource_manager.hpp"
+#include "managers/system_manager/system_manager.hpp"
+#include "ui/window/window.hpp"
 #include <SDL2/SDL.h>
-#include <common/common.hpp>
+#include <common/containers/dispatch_queue/dispatch_queue.hpp>
+#include <common/containers/event_queue/event_queue.hpp>
+#include <common/extlibs/json/json.hpp>
+#include <common/network/address/address.hpp>
+#include <common/network/socket/socket.hpp>
+#include <common/utils/log/log.hpp>
 #include <cstdint>
+#include <enet/enet.h>
 #include <fstream>
 #include <memory>
 #include <vector>
 
-using namespace common;
-using namespace common::core;
 using namespace client;
 
 int main(int argc, char *argv[]) {
@@ -39,7 +43,7 @@ int main(int argc, char *argv[]) {
         auto window = managers::system_manager::get_window();
         auto renderer = managers::system_manager::get_renderer();
 
-        volatile bool running = true;
+        volatile auto running = bool{true};
 
         // network::socket client(0, 1, 2, 57600 / 8, 14400 / 8);
         // client.connect(network::address("localhost", 5000));
@@ -48,18 +52,20 @@ int main(int argc, char *argv[]) {
         auto surface = managers::resource_manager::get<SDL_Surface>("/tilesets/rural.png");
         auto texture = SDL_CreateTextureFromSurface(renderer.get(), surface.get());
 #define PADDING (1)
-        SDL_Rect src_rect{// gid 6
-                          (16 * 5) + (PADDING * 5),
-                          (16 * 0) + (PADDING * 0),
-                          16,
-                          16};
-        SDL_Rect box{0, 0, 64, 64};
+        auto src_rect = SDL_Rect{// gid 6
+                                 (16 * 5) + (PADDING * 5),
+                                 (16 * 0) + (PADDING * 0),
+                                 16,
+                                 16};
+        auto box = SDL_Rect{0, 0, 64, 64};
         auto pos = std::make_pair<float, float>(0.f, 0.f);
 
-        float delta_time = 0.f, fps = 0.f;
+        auto delta_time = float{0.f};
+        auto fps = float{0.f};
 
-        json inj, outj;
-        network::socket::peer_id id;
+        auto in_json = common::extlibs::json{};
+        auto out_json = common::extlibs::json{};
+        auto peer_id = common::network::socket::peer_id{};
 
         auto dq = managers::system_manager::get_dispatch_queue();
 
@@ -96,11 +102,11 @@ int main(int argc, char *argv[]) {
         //     }
         // });
 
-        auto eq = core::event_queue<SDL_Event, std::uint32_t>(SDL_QUIT, SDL_KEYDOWN);
+        auto eq = common::containers::event_queue<SDL_Event, std::uint32_t>(SDL_QUIT, SDL_KEYDOWN);
         eq.subscribe([](const SDL_Event &e) { LOGD << "Subscriber: event " << e.type; });
 
-        auto ui_window = ui::window(types::vector2f{20.f, 20.f},
-                                    types::vector2u{150, 250},
+        auto ui_window = ui::window(common::components::vector2f{20.f, 20.f},
+                                    common::components::vector2u{150, 250},
                                     SDL_Color{0x00, 0x99, 0x99, 0xFF});
 
         while (running) {

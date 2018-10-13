@@ -19,14 +19,27 @@
 
 #define CATCH_CONFIG_RUNNER
 #include <catch2/catch.hpp>
-#include <common/core/core.hpp>
-#include <common/scopes/scopes.hpp>
+#include <string>
+
+#ifdef TESTING_COMMON
+#    include "../src/libs/common/scopes/enet_scope/enet_scope.hpp"
+#    include "../src/libs/common/scopes/plibsys_scope/plibsys_scope.hpp"
+#    include "../src/libs/common/utils/log/log.hpp"
+#else
+#    include <common/scopes/enet_scope/enet_scope.hpp>
+#    include <common/scopes/plibsys_scope/plibsys_scope.hpp>
+#    include <common/utils/log/log.hpp>
+#endif
 
 using namespace common;
 
 int main(int argc, char *argv[]) {
-    scopes::plibsys_scope guard1;
-    scopes::enet_scope guard2;
+    auto bin = std::string{argv[0]};
+
+    utils::log::init(bin.substr(bin.find_last_of('/') + 1) + ".log");
+
+    auto guard1 = scopes::plibsys_scope{};
+    auto guard2 = scopes::enet_scope{};
 
     return Catch::Session().run(argc, argv);
 }
