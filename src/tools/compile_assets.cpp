@@ -29,10 +29,9 @@
 #include <vector>
 
 namespace fs = std::filesystem;
-using namespace common;
 
-extlibs::json _compile_assets(std::string_view path) {
-    auto json = extlibs::json{};
+common::extlibs::json _compile_assets(std::string_view path) {
+    auto json = common::extlibs::json{};
 
     for (const auto &p : fs::directory_iterator(path)) {
         LOGI << "  " << p.path().c_str();
@@ -46,7 +45,7 @@ extlibs::json _compile_assets(std::string_view path) {
                 auto ifs = std::ifstream{p.path(), std::ios::binary};
                 auto buffer = std::vector<std::uint8_t>{(std::istreambuf_iterator<char>(ifs)),
                                                         (std::istreambuf_iterator<char>())};
-                json[p.path().filename()] = extlibs::codec::base64::encode(buffer);
+                json[p.path().filename()] = common::extlibs::codec::base64::encode(buffer);
             }
         }
     }
@@ -60,7 +59,7 @@ int main(int argc, char *argv[]) {
     LOGI << "Compiling assets...";
     auto json = _compile_assets("assets");
     auto ofs = std::ofstream{"assets.psar", std::ios::binary};
-    auto pa = archives::psar_archive{};
+    auto pa = common::archives::psar_archive{};
     pa.save(ofs, json);
 
     return 0;
