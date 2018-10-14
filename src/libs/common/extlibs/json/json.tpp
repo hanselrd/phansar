@@ -22,6 +22,7 @@
 
 #include "json.hpp"
 #include <optional>
+#include <variant>
 
 namespace nlohmann {
 template <typename T> struct adl_serializer<std::optional<T>> {
@@ -39,6 +40,42 @@ template <typename T> struct adl_serializer<std::optional<T>> {
         } else {
             opt = j.get<T>();
         }
+    }
+};
+
+namespace detail {
+template <std::size_t N> struct variant_switch {
+    template <class V> void operator()(std::size_t index, const json &value, V &v) const {
+        if (index == N) {
+            v = value.get<std::variant_alternative_t<N, V>>();
+        } else {
+            variant_switch<N - 1>{}(index, value, v);
+        }
+    }
+};
+
+template <> struct variant_switch<0> {
+    template <class V> void operator()(std::size_t index, const json &value, V &v) const {
+        if (index == 0) {
+            v = value.get<std::variant_alternative_t<0, V>>();
+        }
+    }
+};
+} // namespace detail
+
+template <class... Ts> struct adl_serializer<std::variant<Ts...>> {
+    static void to_json(json &j, const std::variant<Ts...> &var) {
+        std::visit(
+            [&](auto &&value) {
+                j["index"] = var.index();
+                j["value"] = std::forward<decltype(value)>(value);
+            },
+            var);
+    }
+
+    static void from_json(const json &j, std::variant<Ts...> &var) {
+        const auto index = j["index"].get<int>();
+        detail::variant_switch<sizeof...(Ts) - 1>{}(index, j["value"], var);
     }
 };
 } // namespace nlohmann
