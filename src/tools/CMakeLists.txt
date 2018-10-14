@@ -34,3 +34,4 @@ endfunction()
 
 add_tool(compile_assets)
 add_tool(optional_json)
+add_tool(variant_json)
