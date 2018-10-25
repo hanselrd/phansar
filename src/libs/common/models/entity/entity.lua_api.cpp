@@ -28,7 +28,7 @@ namespace common {
 namespace models {
 void init_entity(sol::table &t) {
     t.new_usertype<entity>("Entity",
-                           sol::constructors<entity(), entity(const components::vector3f &)>(),
+                           sol::constructors<entity(), entity(const components::vec3f &)>(),
                            "move",
                            &entity::move,
                            "map_id",

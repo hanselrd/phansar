@@ -26,8 +26,8 @@ namespace client {
 namespace ui {
 class panel : public element {
 public:
-    explicit panel(const common::components::vector2f &position,
-                   const common::components::vector2u &size,
+    explicit panel(const common::components::vec2f &position,
+                   const common::components::vec2u &size,
                    const SDL_Color &color);
 
     void update() override;

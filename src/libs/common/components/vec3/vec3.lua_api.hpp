@@ -17,15 +17,15 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_COMPONENTS_VECTOR2_LUA_API_HPP
-#define COMMON_COMPONENTS_VECTOR2_LUA_API_HPP
+#ifndef COMMON_COMPONENTS_VEC3_LUA_API_HPP
+#define COMMON_COMPONENTS_VEC3_LUA_API_HPP
 
 #include "../../extlibs/sol/sol.hpp"
 
 namespace lua_api {
 namespace common {
 namespace components {
-void init_vector2(sol::table &t);
+void init_vec3(sol::table &t);
 }
 } // namespace common
 } // namespace lua_api

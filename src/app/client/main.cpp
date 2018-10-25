@@ -105,8 +105,8 @@ int main(int argc, char *argv[]) {
         auto eq = common::containers::event_queue<SDL_Event, std::uint32_t>(SDL_QUIT, SDL_KEYDOWN);
         eq.subscribe([](const SDL_Event &e) { LOGD << "Subscriber: event " << e.type; });
 
-        auto ui_window = ui::window(common::components::vector2f{20.f, 20.f},
-                                    common::components::vector2u{150, 250},
+        auto ui_window = ui::window(common::components::vec2f{20.f, 20.f},
+                                    common::components::vec2u{150, 250},
                                     SDL_Color{0x00, 0x99, 0x99, 0xFF});
 
         while (running) {

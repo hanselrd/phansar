@@ -17,31 +17,26 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "vector3.lua_api.hpp"
-#include "vector3.hpp"
+#ifndef COMMON_COMPONENTS_VEC2_HPP
+#define COMMON_COMPONENTS_VEC2_HPP
 
-using namespace common::components;
+#include <cstdint>
+#include <type_traits>
 
-namespace lua_api {
 namespace common {
 namespace components {
-void init_vector3(sol::table &t) {
-    t.new_usertype<vector3f>("Vector3f",
-                             "new",
-                             sol::factories(
-                                 [] {
-                                     return vector3f{0, 0, 0};
-                                 },
-                                 [](float x, float y, float z) {
-                                     return vector3f{x, y, z};
-                                 }),
-                             "x",
-                             &vector3f::x,
-                             "y",
-                             &vector3f::y,
-                             "z",
-                             &vector3f::z);
-}
+template <class T> struct vec2 {
+    static_assert(std::is_arithmetic_v<T>);
+
+    T x{};
+    T y{};
+};
+
+using vec2i = vec2<std::int32_t>;
+using vec2u = vec2<std::uint32_t>;
+using vec2f = vec2<float>;
+using vec2d = vec2<double>;
 } // namespace components
 } // namespace common
-} // namespace lua_api
+
+#endif

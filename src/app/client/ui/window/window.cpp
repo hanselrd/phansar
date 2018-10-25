@@ -21,12 +21,12 @@
 
 namespace client {
 namespace ui {
-window::window(const common::components::vector2f &position,
-               const common::components::vector2u &size,
+window::window(const common::components::vec2f &position,
+               const common::components::vec2u &size,
                const SDL_Color &color)
     : _titlebar{position, size, color}, _body{position, size, SDL_Color{0xAA, 0xAA, 0xAA, 0xDD}} {
-    _titlebar.set_size(common::components::vector2u{size.x, 20});
-    _body.set_position(common::components::vector2f{position.x, position.y + 20});
+    _titlebar.set_size(common::components::vec2u{size.x, 20});
+    _body.set_position(common::components::vec2f{position.x, position.y + 20});
 }
 
 void window::update() {

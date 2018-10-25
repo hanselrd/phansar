@@ -23,30 +23,30 @@
 namespace client {
 namespace ui {
 element::element()
-    : element(common::components::vector2f{0.f, 0.f},
-              common::components::vector2u{0, 0},
+    : element(common::components::vec2f{0.f, 0.f},
+              common::components::vec2u{0, 0},
               SDL_Color{0xFF, 0xFF, 0xFF, 0xFF}) {
 }
 
-element::element(const common::components::vector2f &position,
-                 const common::components::vector2u &size,
+element::element(const common::components::vec2f &position,
+                 const common::components::vec2u &size,
                  const SDL_Color &color)
     : _position{position}, _size{size}, _color{color} {
 }
 
-const common::components::vector2f &element::get_position() const {
+const common::components::vec2f &element::get_position() const {
     return _position;
 }
 
-void element::set_position(const common::components::vector2f &position) {
+void element::set_position(const common::components::vec2f &position) {
     _position = position;
 }
 
-const common::components::vector2u &element::get_size() const {
+const common::components::vec2u &element::get_size() const {
     return _size;
 }
 
-void element::set_size(const common::components::vector2u &size) {
+void element::set_size(const common::components::vec2u &size) {
     _size = size;
 }
 

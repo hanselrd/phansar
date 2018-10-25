@@ -22,8 +22,8 @@
 
 namespace client {
 namespace ui {
-panel::panel(const common::components::vector2f &position,
-             const common::components::vector2u &size,
+panel::panel(const common::components::vec2f &position,
+             const common::components::vec2u &size,
              const SDL_Color &color)
     : element{position, size, color} {
 }

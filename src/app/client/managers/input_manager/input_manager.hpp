@@ -21,7 +21,7 @@
 #define CLIENT_MANAGERS_INPUT_MANAGER_HPP
 
 #include <SDL2/SDL.h>
-#include <common/components/vector2/vector2.hpp>
+#include <common/components/vec2/vec2.hpp>
 #include <cstdint>
 
 namespace client {
@@ -30,7 +30,7 @@ namespace input_manager {
 void handle_event(const SDL_Event &event);
 const SDL_Event &get_event();
 const std::uint8_t *get_keyboard_state();
-std::uint32_t get_mouse_state(common::components::vector2u &position);
+std::uint32_t get_mouse_state(common::components::vec2u &position);
 } // namespace input_manager
 } // namespace managers
 } // namespace client

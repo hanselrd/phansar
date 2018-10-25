@@ -17,23 +17,26 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_COMPONENTS_VECTOR2_HPP
-#define COMMON_COMPONENTS_VECTOR2_HPP
+#ifndef COMMON_COMPONENTS_VEC3_HPP
+#define COMMON_COMPONENTS_VEC3_HPP
 
 #include <cstdint>
 #include <type_traits>
 
 namespace common {
 namespace components {
-template <class T, class = std::enable_if_t<std::is_arithmetic_v<T>>> struct vector2 {
+template <class T> struct vec3 {
+    static_assert(std::is_arithmetic_v<T>);
+
     T x{};
     T y{};
+    T z{};
 };
 
-using vector2i = vector2<std::int32_t>;
-using vector2u = vector2<std::uint32_t>;
-using vector2f = vector2<float>;
-using vector2d = vector2<double>;
+using vec3i = vec3<std::int32_t>;
+using vec3u = vec3<std::uint32_t>;
+using vec3f = vec3<float>;
+using vec3d = vec3<double>;
 } // namespace components
 } // namespace common
 
