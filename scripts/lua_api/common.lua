@@ -42,17 +42,25 @@ log.debug("(MODERATOR | DONOR): "..(bitmasks.Permissions.MODERATOR | bitmasks.Pe
 
 -- components
 
+-- Rectf
+local rf = components.Rectf.new()
+rf.x = 1.1
+rf.y = 1.2
+rf.w = 1.3
+rf.h = 1.4
+log.debug(string.format("rf: (%g, %g, %g, %g) [%s]", rf.x, rf.y, rf.w, rf.h, rf))
+
 -- Vec2f
 local v2f = components.Vec2f.new()
-v2f.x = 1.2
-v2f.y = 1.3
+v2f.x = 1.5
+v2f.y = 1.6
 log.debug(string.format("v2f: (%g, %g) [%s]", v2f.x, v2f.y, v2f))
 
 -- Vec3f
 local v3f = components.Vec3f.new()
-v3f.x = 1.4
-v3f.y = 1.5
-v3f.z = 1.6
+v3f.x = 1.7
+v3f.y = 1.8
+v3f.z = 1.9
 log.debug(string.format("v3f: (%g, %g, %g) [%s]", v3f.x, v3f.y, v3f.z, v3f))
 
 -- models
