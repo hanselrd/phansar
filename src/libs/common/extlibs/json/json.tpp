@@ -42,39 +42,31 @@ void adl_serializer<std::optional<T>>::from_json(const json &j, std::optional<T>
 }
 
 namespace detail {
-template <std::size_t N> struct variant_switch {
-    template <class V> void operator()(std::size_t index, const json &value, V &v) const {
-        if (index == N) {
-            v = value.get<std::variant_alternative_t<N, V>>();
-        } else {
-            variant_switch<N - 1>{}(index, value, v);
+template <std::size_t N, std::size_t I> struct variant_switch {
+    template <class V> void operator()(const json &value, V &v) const {
+        try {
+            v = value.get<std::variant_alternative_t<I, V>>();
+        } catch (const json::type_error &e) {
+            variant_switch<N, I + 1>{}(value, v);
         }
     }
 };
 
-template <> struct variant_switch<0> {
-    template <class V> void operator()(std::size_t index, const json &value, V &v) const {
-        if (index == 0) {
-            v = value.get<std::variant_alternative_t<0, V>>();
-        }
+template <std::size_t N> struct variant_switch<N, N> {
+    template <class V> void operator()(const json &value, V &v) const {
+        v = value.get<std::variant_alternative_t<N, V>>();
     }
 };
 } // namespace detail
 
 template <class... Ts>
 void adl_serializer<std::variant<Ts...>>::to_json(json &j, const std::variant<Ts...> &var) {
-    std::visit(
-        [&](auto &&value) {
-            j["index"] = var.index();
-            j["value"] = std::forward<decltype(value)>(value);
-        },
-        var);
+    std::visit([&](auto &&value) { j = std::forward<decltype(value)>(value); }, var);
 }
 
 template <class... Ts>
 void adl_serializer<std::variant<Ts...>>::from_json(const json &j, std::variant<Ts...> &var) {
-    const auto index = j["index"].get<int>();
-    detail::variant_switch<sizeof...(Ts) - 1>{}(index, j["value"], var);
+    detail::variant_switch<sizeof...(Ts) - 1, 0>{}(j, var);
 }
 } // namespace nlohmann
 

@@ -34,9 +34,9 @@ void to_json(common::extlibs::json &j, const person &p) {
 }
 
 void from_json(const common::extlibs::json &j, person &p) {
-    j["name"].get_to(p.name);
-    j["age"].get_to(p.age);
-    j["variant"].get_to(p.variant);
+    j.at("name").get_to(p.name);
+    j.at("age").get_to(p.age);
+    j.at("variant").get_to(p.variant);
 }
 
 int main(int argc, char *argv[]) {
