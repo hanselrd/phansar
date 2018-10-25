@@ -24,6 +24,21 @@ set(sources
     allocators/pool_allocator/pool_allocator.cpp
     archives/json_archive/json_archive.cpp
     archives/psar_archive/psar_archive.cpp
+    components/map/format/chunk/chunk.cpp
+    components/map/format/frame/frame.cpp
+    components/map/format/grid/grid.cpp
+    components/map/format/layer/layer.cpp
+    components/map/format/map/map.cpp
+    components/map/format/object/object.cpp
+    components/map/format/point2/point2.cpp
+    components/map/format/property/property.cpp
+    components/map/format/terrain/terrain.cpp
+    components/map/format/text/text.cpp
+    components/map/format/tile/tile.cpp
+    components/map/format/tileset/tileset.cpp
+    components/map/format/wang_color/wang_color.cpp
+    components/map/format/wang_set/wang_set.cpp
+    components/map/format/wang_tile/wang_tile.cpp
     containers/dispatch_queue/dispatch_queue.cpp
     network/address/address.cpp
     network/socket/socket.cpp
@@ -49,6 +64,7 @@ set(unittest_sources
     allocators/pool_allocator/pool_allocator.unittest.cpp
     archives/json_archive/json_archive.unittest.cpp
     archives/psar_archive/psar_archive.unittest.cpp
+    components/map/format/format.unittest.cpp
     containers/dispatch_queue/dispatch_queue.unittest.cpp
     containers/event_queue/event_queue.unittest.cpp
     lua_api/lua_api.unittest.cpp
