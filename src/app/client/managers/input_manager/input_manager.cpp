@@ -38,7 +38,7 @@ const std::uint8_t *get_keyboard_state() {
     return SDL_GetKeyboardState(nullptr);
 }
 
-std::uint32_t get_mouse_state(common::components::vector2u &position) {
+std::uint32_t get_mouse_state(common::components::vec2u &position) {
     auto x = int{};
     auto y = int{};
     auto state = SDL_GetMouseState(&x, &y);

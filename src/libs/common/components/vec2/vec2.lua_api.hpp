@@ -17,25 +17,17 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_COMPONENTS_VECTOR3_HPP
-#define COMMON_COMPONENTS_VECTOR3_HPP
+#ifndef COMMON_COMPONENTS_VEC2_LUA_API_HPP
+#define COMMON_COMPONENTS_VEC2_LUA_API_HPP
 
-#include <cstdint>
-#include <type_traits>
+#include "../../extlibs/sol/sol.hpp"
 
+namespace lua_api {
 namespace common {
 namespace components {
-template <class T, class = std::enable_if_t<std::is_arithmetic_v<T>>> struct vector3 {
-    T x{};
-    T y{};
-    T z{};
-};
-
-using vector3i = vector3<std::int32_t>;
-using vector3u = vector3<std::uint32_t>;
-using vector3f = vector3<float>;
-using vector3d = vector3<double>;
-} // namespace components
+void init_vec2(sol::table &t);
+}
 } // namespace common
+} // namespace lua_api
 
 #endif

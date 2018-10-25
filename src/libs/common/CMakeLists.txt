@@ -50,8 +50,8 @@ set(sources
 set(lua_api_sources
     bitmasks/permissions/permissions.lua_api.cpp
     bitmasks/bitmasks.lua_api.cpp
-    components/vector2/vector2.lua_api.cpp
-    components/vector3/vector3.lua_api.cpp
+    components/vec2/vec2.lua_api.cpp
+    components/vec3/vec3.lua_api.cpp
     components/components.lua_api.cpp
     lua_api/lua_api.cpp
     models/entity/entity.lua_api.cpp

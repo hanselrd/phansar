@@ -42,14 +42,14 @@ log.debug("(MODERATOR | DONOR): "..(bitmasks.Permissions.MODERATOR | bitmasks.Pe
 
 -- components
 
--- Vector2f
-local v2f = components.Vector2f.new()
+-- Vec2f
+local v2f = components.Vec2f.new()
 v2f.x = 1.2
 v2f.y = 1.3
 log.debug(string.format("v2f: (%g, %g) [%s]", v2f.x, v2f.y, v2f))
 
--- Vector3f
-local v3f = components.Vector3f.new()
+-- Vec3f
+local v3f = components.Vec3f.new()
 v3f.x = 1.4
 v3f.y = 1.5
 v3f.z = 1.6
@@ -65,8 +65,8 @@ log.debug(string.format("e1: position: (%g, %g, %g), map_id: %d [%s]",
     e1.map_id,
     e1))
 
-e2 = models.Entity.new(components.Vector3f.new(1.1, 2.2, 3.3))
-e2:move(components.Vector3f.new(-2.2, -4.4, -6.6))
+e2 = models.Entity.new(components.Vec3f.new(1.1, 2.2, 3.3))
+e2:move(components.Vec3f.new(-2.2, -4.4, -6.6))
 e2.map_id = 20
 log.debug(string.format("e2: position: (%g, %g, %g), map_id: %d [%s]",
     e2.position.x, e2.position.y, e2.position.z,
@@ -76,8 +76,8 @@ log.debug(string.format("e2: position: (%g, %g, %g), map_id: %d [%s]",
 -- Player
 p = models.Player.new()
 p.name = "player"
-p.position = components.Vector3f.new(4.4, 5.5, 6.6)
-p:move(components.Vector3f.new(-8.8, -11.0, -13.2))
+p.position = components.Vec3f.new(4.4, 5.5, 6.6)
+p:move(components.Vec3f.new(-8.8, -11.0, -13.2))
 p.map_id = 30
 log.debug(string.format("p: name: %s, permissions: %d, position: (%g, %g, %g), map_id: %d [%s]",
     p.name,

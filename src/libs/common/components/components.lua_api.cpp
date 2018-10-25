@@ -18,16 +18,16 @@
  */
 
 #include "components.lua_api.hpp"
-#include "vector2/vector2.lua_api.hpp"
-#include "vector3/vector3.lua_api.hpp"
+#include "vec2/vec2.lua_api.hpp"
+#include "vec3/vec3.lua_api.hpp"
 
 namespace lua_api {
 namespace common {
 void init_components(sol::table &t) {
     auto components = t.create_named("components");
 
-    components::init_vector2(components);
-    components::init_vector3(components);
+    components::init_vec2(components);
+    components::init_vec3(components);
 }
 } // namespace common
 } // namespace lua_api
