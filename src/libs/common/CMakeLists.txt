@@ -50,6 +50,7 @@ set(sources
 set(lua_api_sources
     bitmasks/permissions/permissions.lua_api.cpp
     bitmasks/bitmasks.lua_api.cpp
+    components/color/color.lua_api.cpp
     components/rect/rect.lua_api.cpp
     components/vec2/vec2.lua_api.cpp
     components/vec3/vec3.lua_api.cpp

@@ -42,6 +42,14 @@ log.debug("(MODERATOR | DONOR): "..(bitmasks.Permissions.MODERATOR | bitmasks.Pe
 
 -- components
 
+-- Color
+local c = components.Color.new()
+c.r = 10
+c.g = 20
+c.b = 30
+c.a = 40
+log.debug(string.format("c: (%g, %g, %g, %g) [%s]", c.r, c.g, c.b, c.a, c))
+
 -- Rectf
 local rf = components.Rectf.new()
 rf.x = 1.1
