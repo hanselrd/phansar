@@ -17,21 +17,20 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "components.lua_api.hpp"
-#include "color/color.lua_api.hpp"
-#include "rect/rect.lua_api.hpp"
-#include "vec2/vec2.lua_api.hpp"
-#include "vec3/vec3.lua_api.hpp"
+#ifndef COMMON_COMPONENTS_COLOR_HPP
+#define COMMON_COMPONENTS_COLOR_HPP
 
-namespace lua_api {
+#include <cstdint>
+
 namespace common {
-void init_components(sol::table &t) {
-    auto components = t.create_named("components");
-
-    components::init_color(components);
-    components::init_rect(components);
-    components::init_vec2(components);
-    components::init_vec3(components);
-}
+namespace components {
+struct color {
+    std::uint8_t r{};
+    std::uint8_t g{};
+    std::uint8_t b{};
+    std::uint8_t a{};
+};
+} // namespace components
 } // namespace common
-} // namespace lua_api
+
+#endif
