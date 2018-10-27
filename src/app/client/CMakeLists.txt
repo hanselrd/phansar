@@ -20,6 +20,11 @@
 project(${CMAKE_PROJECT_NAME})
 
 set(sources
+    graphics/circle/circle.cpp
+    graphics/polygon/polygon.cpp
+    graphics/rectangle/rectangle.cpp
+    graphics/shape/shape.cpp
+    graphics/triangle/triangle.cpp
     managers/input_manager/input_manager.cpp
     managers/resource_manager/resource_manager.cpp
     managers/system_manager/system_manager.cpp
