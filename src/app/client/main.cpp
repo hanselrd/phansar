@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
                                             common::components::color{0xFF, 0x00, 0x00, 0xBB},
                                             true};
 
-        auto yellow_circle = graphics::circle{common::components::vec2f{400, 300},
+        auto yellow_circle = graphics::circle{common::components::vec2f{200, 100},
                                               200,
                                               common::components::color{0xFF, 0xFF, 0x00, 0xCC},
                                               true};

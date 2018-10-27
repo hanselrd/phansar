@@ -44,27 +44,39 @@ void circle::draw() {
 
     while (x >= y) {
         if (!get_filled()) {
-            SDL_RenderDrawPoint(renderer.get(), position.x + x, position.y + y);
-            SDL_RenderDrawPoint(renderer.get(), position.x + y, position.y + x);
-            SDL_RenderDrawPoint(renderer.get(), position.x - y, position.y + x);
-            SDL_RenderDrawPoint(renderer.get(), position.x - x, position.y + y);
-            SDL_RenderDrawPoint(renderer.get(), position.x - x, position.y - y);
-            SDL_RenderDrawPoint(renderer.get(), position.x - y, position.y - x);
-            SDL_RenderDrawPoint(renderer.get(), position.x + y, position.y - x);
-            SDL_RenderDrawPoint(renderer.get(), position.x + x, position.y - y);
+            SDL_RenderDrawPoint(renderer.get(), _radius + position.x + x, _radius + position.y + y);
+            SDL_RenderDrawPoint(renderer.get(), _radius + position.x + y, _radius + position.y + x);
+            SDL_RenderDrawPoint(renderer.get(), _radius + position.x - y, _radius + position.y + x);
+            SDL_RenderDrawPoint(renderer.get(), _radius + position.x - x, _radius + position.y + y);
+            SDL_RenderDrawPoint(renderer.get(), _radius + position.x - x, _radius + position.y - y);
+            SDL_RenderDrawPoint(renderer.get(), _radius + position.x - y, _radius + position.y - x);
+            SDL_RenderDrawPoint(renderer.get(), _radius + position.x + y, _radius + position.y - x);
+            SDL_RenderDrawPoint(renderer.get(), _radius + position.x + x, _radius + position.y - y);
         } else {
             if (x_dec && x != y)
-                SDL_RenderDrawLine(
-                    renderer.get(), position.x - y, position.y - x, position.x + y, position.y - x);
+                SDL_RenderDrawLine(renderer.get(),
+                                   _radius + position.x - y,
+                                   _radius + position.y - x,
+                                   _radius + position.x + y,
+                                   _radius + position.y - x);
             if (y != 0)
-                SDL_RenderDrawLine(
-                    renderer.get(), position.x - x, position.y - y, position.x + x, position.y - y);
+                SDL_RenderDrawLine(renderer.get(),
+                                   _radius + position.x - x,
+                                   _radius + position.y - y,
+                                   _radius + position.x + x,
+                                   _radius + position.y - y);
             if (x != y)
-                SDL_RenderDrawLine(
-                    renderer.get(), position.x - x, position.y + y, position.x + x, position.y + y);
+                SDL_RenderDrawLine(renderer.get(),
+                                   _radius + position.x - x,
+                                   _radius + position.y + y,
+                                   _radius + position.x + x,
+                                   _radius + position.y + y);
             if (x_dec)
-                SDL_RenderDrawLine(
-                    renderer.get(), position.x - y, position.y + x, position.x + y, position.y + x);
+                SDL_RenderDrawLine(renderer.get(),
+                                   _radius + position.x - y,
+                                   _radius + position.y + x,
+                                   _radius + position.x + y,
+                                   _radius + position.y + x);
         }
 
         if (err <= 0) {
