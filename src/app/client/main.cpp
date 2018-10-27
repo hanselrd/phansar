@@ -17,6 +17,10 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "graphics/circle/circle.hpp"
+#include "graphics/polygon/polygon.hpp"
+#include "graphics/rectangle/rectangle.hpp"
+#include "graphics/triangle/triangle.hpp"
 #include "managers/input_manager/input_manager.hpp"
 #include "managers/resource_manager/resource_manager.hpp"
 #include "managers/system_manager/system_manager.hpp"
@@ -105,9 +109,51 @@ int main(int argc, char *argv[]) {
         auto eq = common::containers::event_queue<SDL_Event, std::uint32_t>(SDL_QUIT, SDL_KEYDOWN);
         eq.subscribe([](const SDL_Event &e) { LOGD << "Subscriber: event " << e.type; });
 
-        auto ui_window = ui::window(common::components::vec2f{20.f, 20.f},
+        auto ui_window = ui::window{common::components::vec2f{20.f, 20.f},
                                     common::components::vec2u{150, 250},
-                                    SDL_Color{0x00, 0x99, 0x99, 0xFF});
+                                    SDL_Color{0x00, 0x99, 0x99, 0xFF}};
+
+        auto red_rect = graphics::rectangle{common::components::vec2f{200, 50},
+                                            common::components::vec2u{100, 100},
+                                            common::components::color{0xFF, 0x00, 0x00, 0xBB},
+                                            true};
+
+        auto yellow_circle = graphics::circle{common::components::vec2f{400, 300},
+                                              200,
+                                              common::components::color{0xFF, 0xFF, 0x00, 0xCC},
+                                              true};
+
+        auto green_polygon = graphics::polygon{common::components::vec2f{10, 400},
+                                               80,
+                                               5,
+                                               common::components::color{0x00, 0xFF, 0x00, 0xCC},
+                                               false};
+
+        auto orange_polygon_filled =
+            graphics::polygon{common::components::vec2f{50, 250},
+                              160,
+                              6,
+                              common::components::color{0xFF, 0xA5, 0x00, 0xCC},
+                              true};
+
+        auto pink_triangle = graphics::triangle{common::components::vec2f{600, 400},
+                                                40,
+                                                common::components::color{0xFF, 0x00, 0xFF, 0xCC},
+                                                true};
+
+        eq.subscribe([&](const SDL_Event &e) {
+            switch (e.type) {
+            case SDL_KEYDOWN:
+                switch (e.key.keysym.sym) {
+                case SDLK_TAB:
+                    red_rect.set_filled(!red_rect.get_filled());
+                    break;
+                case SDLK_o:
+                    red_rect.color_shift(common::components::color{0, 0, 0, 1});
+                    break;
+                }
+            }
+        });
 
         while (running) {
             managers::system_manager::update();
@@ -136,19 +182,23 @@ int main(int argc, char *argv[]) {
 
             auto key_states = managers::input_manager::get_keyboard_state();
             if (key_states[SDL_SCANCODE_LEFT]) {
-                pos.first -= 200 * delta_time;
+                red_rect.move(common::components::vec2f{-200 * delta_time, 0});
+                // pos.first -= 200 * delta_time;
                 // client.send(id, {{"move", {{"left", 200}}}});
             }
             if (key_states[SDL_SCANCODE_UP]) {
-                pos.second -= 200 * delta_time;
+                red_rect.move(common::components::vec2f{0, -200 * delta_time});
+                // pos.second -= 200 * delta_time;
                 // client.send(id, {{"move", {{"up", 200}}}});
             }
             if (key_states[SDL_SCANCODE_RIGHT]) {
-                pos.first += 200 * delta_time;
+                red_rect.move(common::components::vec2f{200 * delta_time, 0});
+                // pos.first += 200 * delta_time;
                 // client.send(id, {{"move", {{"right", 200}}}});
             }
             if (key_states[SDL_SCANCODE_DOWN]) {
-                pos.second += 200 * delta_time;
+                red_rect.move(common::components::vec2f{0, 200 * delta_time});
+                // pos.second += 200 * delta_time;
                 // client.send(id, {{"move", {{"down", 200}}}});
             }
 
@@ -158,6 +208,11 @@ int main(int argc, char *argv[]) {
             box.y = pos.second;
             SDL_RenderCopy(renderer.get(), texture, &src_rect, &box);
             ui_window.render();
+            yellow_circle.draw();
+            green_polygon.draw();
+            orange_polygon_filled.draw();
+            pink_triangle.draw();
+            red_rect.draw();
             SDL_RenderPresent(renderer.get());
         }
 
