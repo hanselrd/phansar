@@ -32,7 +32,7 @@ protected:
                    bool filled);
 
 public:
-    ~shape() = default;
+    virtual ~shape() = default;
 
     common::components::vec2f get_position() const;
     void set_position(common::components::vec2f position);
