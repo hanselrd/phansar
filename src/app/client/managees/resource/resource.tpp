@@ -17,27 +17,28 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MANAGERS_RESOURCE_MANAGER_HPP
-#define CLIENT_MANAGERS_RESOURCE_MANAGER_HPP
+#ifndef CLIENT_MANAGEES_RESOURCE_TPP
+#define CLIENT_MANAGEES_RESOURCE_TPP
 
-#include "../../managees/resource/resource.hpp"
-#include <any>
-#include <optional>
-#include <string_view>
+#include "loader/loader.hpp"
+#include "resource.hpp"
 
 namespace client {
-namespace managers {
-namespace resource_manager {
-namespace detail {
-void store(std::string_view path, std::any res);
-std::optional<std::any> get(std::string_view path);
-} // namespace detail
+namespace managees {
+template <class T>
+template <class... Args>
+void resource<T>::load(std::string_view path, Args &&... args) {
+    _res = std::shared_ptr<T>{resource_detail::loader<T>::load(path, std::forward<Args>(args)...)};
+}
 
-template <class T> std::optional<managees::resource<T>> get(std::string_view path);
-} // namespace resource_manager
-} // namespace managers
+template <class T> template <class... Args> void resource<T>::store(T *res, Args &&... args) {
+    _res = std::shared_ptr<T>{res, std::forward<Args>(args)...};
+}
+
+template <class T> T *resource<T>::get() const {
+    return _res.get();
+}
+} // namespace managees
 } // namespace client
-
-#include "resource_manager.tpp"
 
 #endif
