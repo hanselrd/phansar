@@ -17,27 +17,26 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MANAGERS_RESOURCE_MANAGER_HPP
-#define CLIENT_MANAGERS_RESOURCE_MANAGER_HPP
+#ifndef CLIENT_MANAGEES_RESOURCE_HPP
+#define CLIENT_MANAGEES_RESOURCE_HPP
 
-#include "../../managees/resource/resource.hpp"
-#include <any>
-#include <optional>
+#include <memory>
 #include <string_view>
 
 namespace client {
-namespace managers {
-namespace resource_manager {
-namespace detail {
-void store(std::string_view path, std::any res);
-std::optional<std::any> get(std::string_view path);
-} // namespace detail
+namespace managees {
+template <class T> class resource {
+public:
+    template <class... Args> void load(std::string_view path, Args &&... args);
+    template <class... Args> void store(T *res, Args &&... args);
+    T *get() const;
 
-template <class T> std::optional<managees::resource<T>> get(std::string_view path);
-} // namespace resource_manager
-} // namespace managers
+private:
+    std::shared_ptr<T> _res;
+};
+} // namespace managees
 } // namespace client
 
-#include "resource_manager.tpp"
+#include "resource.tpp"
 
 #endif

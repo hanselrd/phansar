@@ -53,8 +53,14 @@ int main(int argc, char *argv[]) {
         // client.connect(network::address("localhost", 5000));
         // network::socket::peer_id server = 0;
 
-        auto surface = managers::resource_manager::get<SDL_Surface>("/tilesets/rural.png");
-        auto texture = SDL_CreateTextureFromSurface(renderer.get(), surface.get());
+        auto surface = managers::resource_manager::get<SDL_Surface>("assets/tilesets/rural.png");
+        auto font = managees::resource<TTF_Font>{};
+        font.load("assets/fonts/K2D-Bold.ttf", 25);
+        auto text_surface =
+            TTF_RenderText_Solid(font.get(), "Phansar", SDL_Color{0xFF, 0xFF, 0xFF, 0xFF});
+        auto text = SDL_CreateTextureFromSurface(renderer.get(), text_surface);
+        SDL_FreeSurface(text_surface);
+        auto texture = SDL_CreateTextureFromSurface(renderer.get(), surface->get());
 #define PADDING (1)
         auto src_rect = SDL_Rect{// gid 6
                                  (16 * 5) + (PADDING * 5),
@@ -206,6 +212,7 @@ int main(int argc, char *argv[]) {
             SDL_RenderClear(renderer.get());
             box.x = pos.first;
             box.y = pos.second;
+            SDL_RenderCopy(renderer.get(), text, nullptr, nullptr);
             SDL_RenderCopy(renderer.get(), texture, &src_rect, &box);
             ui_window.render();
             yellow_circle.draw();
@@ -217,6 +224,7 @@ int main(int argc, char *argv[]) {
         }
 
         SDL_DestroyTexture(texture);
+        SDL_DestroyTexture(text);
     } catch (...) {
     }
 

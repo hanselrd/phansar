@@ -25,6 +25,7 @@ set(sources
     graphics/rectangle/rectangle.cpp
     graphics/shape/shape.cpp
     graphics/triangle/triangle.cpp
+    managees/resource/loader/loader.cpp
     managers/input_manager/input_manager.cpp
     managers/resource_manager/resource_manager.cpp
     managers/system_manager/system_manager.cpp
