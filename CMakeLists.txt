@@ -72,9 +72,9 @@ add_subdirectory(src)
 add_custom_target(assets ALL
     COMMAND ${CMAKE_COMMAND} -E remove_directory assets
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/assets assets
-    # COMMAND tools/compile_assets
+    COMMAND tools/compile_assets
     # COMMAND ${CMAKE_COMMAND} -E remove_directory assets
-    # DEPENDS src/tools/compile_assets
+    DEPENDS src/tools/compile_assets
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
 
 # Copy scripts
