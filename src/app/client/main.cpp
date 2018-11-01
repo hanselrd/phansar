@@ -20,6 +20,7 @@
 #include "graphics/circle/circle.hpp"
 #include "graphics/polygon/polygon.hpp"
 #include "graphics/rectangle/rectangle.hpp"
+#include "graphics/text/text.hpp"
 #include "graphics/triangle/triangle.hpp"
 #include "managers/input_manager/input_manager.hpp"
 #include "managers/resource_manager/resource_manager.hpp"
@@ -56,12 +57,8 @@ int main(int argc, char *argv[]) {
 
         managers::resource_manager::load<SDL_Surface>("assets/tilesets/rural.png");
         auto surface = managers::resource_manager::get<SDL_Surface>("assets/tilesets/rural.png");
-        managers::resource_manager::load<TTF_Font>("assets/fonts/K2D-Bold.ttf", 25);
+        managers::resource_manager::load<TTF_Font>("assets/fonts/K2D-Bold.ttf", 40);
         auto font = managers::resource_manager::get<TTF_Font>("assets/fonts/K2D-Bold.ttf");
-        auto text_surface =
-            TTF_RenderText_Solid(font->get(), "Phansar", SDL_Color{0xFF, 0xFF, 0xFF, 0xFF});
-        auto text = SDL_CreateTextureFromSurface(renderer.get(), text_surface);
-        SDL_FreeSurface(text_surface);
         auto texture = SDL_CreateTextureFromSurface(renderer.get(), surface->get());
 #define PADDING (1)
         auto src_rect = SDL_Rect{// gid 6
@@ -149,6 +146,12 @@ int main(int argc, char *argv[]) {
                                                 common::components::color{0xFF, 0x00, 0xFF, 0xCC},
                                                 true};
 
+        auto white_text = graphics::text{common::components::vec2f{500, 40},
+                                         font->get(),
+                                         graphics::text::type::BLENDED,
+                                         common::components::color{0xFF, 0xFF, 0xFF, 0xBB}};
+        white_text.set_string("Phansar");
+
         eq.subscribe([&](const SDL_Event &e) {
             switch (e.type) {
             case SDL_KEYDOWN:
@@ -214,8 +217,8 @@ int main(int argc, char *argv[]) {
             SDL_RenderClear(renderer.get());
             box.x = pos.first;
             box.y = pos.second;
-            SDL_RenderCopy(renderer.get(), text, nullptr, nullptr);
             SDL_RenderCopy(renderer.get(), texture, &src_rect, &box);
+            white_text.draw();
             ui_window.render();
             yellow_circle.draw();
             green_polygon.draw();
@@ -226,7 +229,6 @@ int main(int argc, char *argv[]) {
         }
 
         SDL_DestroyTexture(texture);
-        SDL_DestroyTexture(text);
     } catch (...) {
     }
 

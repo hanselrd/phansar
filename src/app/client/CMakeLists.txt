@@ -24,6 +24,7 @@ set(sources
     graphics/polygon/polygon.cpp
     graphics/rectangle/rectangle.cpp
     graphics/shape/shape.cpp
+    graphics/text/text.cpp
     graphics/triangle/triangle.cpp
     managees/resource/loader/loader.cpp
     managers/input_manager/input_manager.cpp
