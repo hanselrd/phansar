@@ -31,8 +31,8 @@ void resource<T>::load(std::string_view path, Args &&... args) {
     _res = std::shared_ptr<T>{resource_detail::loader<T>::load(path, std::forward<Args>(args)...)};
 }
 
-template <class T> template <class... Args> void resource<T>::store(T *res, Args &&... args) {
-    _res = std::shared_ptr<T>{res, std::forward<Args>(args)...};
+template <class T> void resource<T>::store(std::shared_ptr<T> res) {
+    _res = std::move(res);
 }
 
 template <class T> T *resource<T>::get() const {

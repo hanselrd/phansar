@@ -19,24 +19,38 @@
 
 #include "resource_manager.hpp"
 #include <common/containers/cache/cache.hpp>
+#include <common/utils/assert/assert.hpp>
+#include <common/utils/log/log.hpp>
+#include <cstdlib>
+#include <memory>
 #include <string>
 
 namespace client {
 namespace managers {
 namespace resource_manager {
 namespace {
-auto _cache = common::containers::cache<std::string, std::any>{};
+auto _cache = std::unique_ptr<common::containers::cache<std::string, std::any>>{};
 } // namespace
 
 namespace detail {
 void store(std::string_view path, std::any res) {
-    _cache.store(std::string{path}, res);
+    _cache->store(std::string{path}, res);
 }
 
 std::optional<std::any> get(std::string_view path) {
-    return _cache.load(std::string{path});
+    return _cache->load(std::string{path});
 }
 } // namespace detail
+
+void init() {
+    ASSERT(!_cache);
+
+    _cache = std::make_unique<common::containers::cache<std::string, std::any>>();
+    ASSERT_ALWAYS(_cache);
+
+    std::atexit([] { _cache.reset(); });
+    LOGI << "Resource manager initialized";
+}
 } // namespace resource_manager
 } // namespace managers
 } // namespace client

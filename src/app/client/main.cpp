@@ -43,6 +43,7 @@ using namespace client;
 int main(int argc, char *argv[]) {
     try {
         managers::system_manager::init();
+        managers::resource_manager::init();
 
         auto window = managers::system_manager::get_window();
         auto renderer = managers::system_manager::get_renderer();
@@ -53,11 +54,12 @@ int main(int argc, char *argv[]) {
         // client.connect(network::address("localhost", 5000));
         // network::socket::peer_id server = 0;
 
+        managers::resource_manager::load<SDL_Surface>("assets/tilesets/rural.png");
         auto surface = managers::resource_manager::get<SDL_Surface>("assets/tilesets/rural.png");
-        auto font = managees::resource<TTF_Font>{};
-        font.load("assets/fonts/K2D-Bold.ttf", 25);
+        managers::resource_manager::load<TTF_Font>("assets/fonts/K2D-Bold.ttf", 25);
+        auto font = managers::resource_manager::get<TTF_Font>("assets/fonts/K2D-Bold.ttf");
         auto text_surface =
-            TTF_RenderText_Solid(font.get(), "Phansar", SDL_Color{0xFF, 0xFF, 0xFF, 0xFF});
+            TTF_RenderText_Solid(font->get(), "Phansar", SDL_Color{0xFF, 0xFF, 0xFF, 0xFF});
         auto text = SDL_CreateTextureFromSurface(renderer.get(), text_surface);
         SDL_FreeSurface(text_surface);
         auto texture = SDL_CreateTextureFromSurface(renderer.get(), surface->get());
@@ -184,7 +186,7 @@ int main(int argc, char *argv[]) {
             ui_window.update();
             delta_time = managers::system_manager::get_delta_time();
             fps = managers::system_manager::get_fps();
-            // LOGI << "fps: " << static_cast<std::uint32_t>(fps) << " \u0394: " << delta_time;
+            LOGI << "fps: " << static_cast<std::uint32_t>(fps) << " \u0394: " << delta_time;
 
             auto key_states = managers::input_manager::get_keyboard_state();
             if (key_states[SDL_SCANCODE_LEFT]) {

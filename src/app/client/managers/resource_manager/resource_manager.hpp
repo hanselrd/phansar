@@ -33,6 +33,9 @@ void store(std::string_view path, std::any res);
 std::optional<std::any> get(std::string_view path);
 } // namespace detail
 
+void init();
+template <class T, class... Args> void load(std::string_view path, Args &&... args);
+template <class T> void store(std::string_view path, managees::resource<T> res);
 template <class T> std::optional<managees::resource<T>> get(std::string_view path);
 } // namespace resource_manager
 } // namespace managers

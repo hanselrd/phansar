@@ -28,7 +28,9 @@ namespace containers {
 template <class K, class T> class cache {
 public:
     std::optional<T> load(K key);
+    void unload(K key);
     void store(K key, T data);
+    void clear();
 
 private:
     std::unordered_map<K, T> _cache;

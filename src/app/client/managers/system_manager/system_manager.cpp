@@ -69,7 +69,8 @@ void init() {
     MASSERT_ALWAYS(_window, SDL_GetError());
 
     _renderer = std::shared_ptr<SDL_Renderer>{
-        SDL_CreateRenderer(_window.get(), -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC),
+        SDL_CreateRenderer(
+            _window.get(), -1, SDL_RENDERER_ACCELERATED /* | SDL_RENDERER_PRESENTVSYNC*/),
         &SDL_DestroyRenderer};
     MASSERT_ALWAYS(_renderer, SDL_GetError());
 
@@ -88,6 +89,7 @@ void init() {
         _sdl_guard.reset();
         _plibsys_guard.reset();
     });
+    LOGI << "System manager initialized";
 }
 
 void update() {
