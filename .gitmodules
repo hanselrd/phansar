@@ -1,3 +1,6 @@
+[submodule "extlibs/Box2D"]
+	path = extlibs/Box2D
+	url = https://github.com/erincatto/Box2D.git
 [submodule "extlibs/Catch2"]
 	path = extlibs/Catch2
 	url = https://github.com/catchorg/Catch2.git
