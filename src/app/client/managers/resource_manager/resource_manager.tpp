@@ -25,16 +25,22 @@
 namespace client {
 namespace managers {
 namespace resource_manager {
+template <class T, class... Args> void load(std::string_view path, Args &&... args) {
+    auto res = managees::resource<T>{};
+    res.load(path, std::forward<Args>(args)...);
+    store(path, res);
+}
+
+template <class T> void store(std::string_view path, managees::resource<T> res) {
+    detail::store(path, std::make_any<managees::resource<T>>(res));
+}
+
 template <class T> std::optional<managees::resource<T>> get(std::string_view path) {
     auto res = detail::get(path);
-    if (res != std::nullopt) {
-        return std::any_cast<managees::resource<T>>(*res);
+    if (!res) {
+        return std::nullopt;
     }
-
-    auto rsrc = managees::resource<T>{};
-    rsrc.load(path);
-    detail::store(path, std::make_any<managees::resource<T>>(rsrc));
-    return rsrc;
+    return std::any_cast<managees::resource<T>>(*res);
 }
 } // namespace resource_manager
 } // namespace managers

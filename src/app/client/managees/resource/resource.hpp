@@ -28,7 +28,7 @@ namespace managees {
 template <class T> class resource {
 public:
     template <class... Args> void load(std::string_view path, Args &&... args);
-    template <class... Args> void store(T *res, Args &&... args);
+    void store(std::shared_ptr<T> res);
     T *get() const;
 
 private:

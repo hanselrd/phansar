@@ -31,8 +31,16 @@ template <class K, class T> std::optional<T> cache<K, T>::load(K key) {
     return _cache[key];
 }
 
+template <class K, class T> void cache<K, T>::unload(K key) {
+    _cache.erase(key);
+}
+
 template <class K, class T> void cache<K, T>::store(K key, T data) {
     _cache[key] = data;
+}
+
+template <class K, class T> void cache<K, T>::clear() {
+    _cache.clear();
 }
 } // namespace containers
 } // namespace common
