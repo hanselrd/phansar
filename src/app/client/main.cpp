@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
                                                 common::components::color{0xFF, 0x00, 0xFF, 0xCC},
                                                 true};
 
-        auto white_text = graphics::text{common::components::vec2f{500, 40},
+        auto white_text = graphics::text{common::components::vec2f{200, 40},
                                          font->get(),
                                          graphics::text::type::BLENDED,
                                          common::components::color{0xFF, 0xFF, 0xFF, 0xBB}};
@@ -189,7 +189,10 @@ int main(int argc, char *argv[]) {
             ui_window.update();
             delta_time = managers::system_manager::get_delta_time();
             fps = managers::system_manager::get_fps();
-            LOGI << "fps: " << static_cast<std::uint32_t>(fps) << " \u0394: " << delta_time;
+            // LOGI << "fps: " << static_cast<std::uint32_t>(fps) << " \u0394: " << delta_time;
+            white_text.set_string(std::string{"fps: "} +
+                                  std::to_string(static_cast<std::uint32_t>(fps)) +
+                                  " dt: " + std::to_string(delta_time));
 
             auto key_states = managers::input_manager::get_keyboard_state();
             if (key_states[SDL_SCANCODE_LEFT]) {
