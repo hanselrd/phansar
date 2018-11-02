@@ -20,6 +20,39 @@
 #ifndef COMMON_UTILS_MACROS_HPP
 #define COMMON_UTILS_MACROS_HPP
 
+#include "../log/log.hpp"
+
 #define STRINGIFY(x) #x
+
+#ifndef NDEBUG
+#    define EXPECT_TRUE(condition)                                                                 \
+        [&] {                                                                                      \
+            if (!(condition)) {                                                                    \
+                LOGW << "Expected `" #condition "' to be true";                                    \
+            }                                                                                      \
+            return condition;                                                                      \
+        }()
+
+#    define EXPECT_FALSE(condition)                                                                \
+        [&] {                                                                                      \
+            if (condition) {                                                                       \
+                LOGW << "Expected `" #condition "' to be false";                                   \
+            }                                                                                      \
+            return condition;                                                                      \
+        }()
+#else
+#    define EXPECT_TRUE(condition) (condition)
+#    define EXPECT_FALSE(condition) (condition)
+#endif
+
+#ifndef NDEBUG
+#    define UNUSED_ARG(arg)                                                                        \
+        [&] {                                                                                      \
+            LOGW << "Unused argument `" #arg "'";                                                  \
+            (void)arg;                                                                             \
+        }()
+#else
+#    define UNUSED_ARG(arg) ((void)arg)
+#endif
 
 #endif
