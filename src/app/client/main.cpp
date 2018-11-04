@@ -125,7 +125,7 @@ int main(int argc, char *argv[]) {
 
         auto yellow_circle = graphics::circle{common::components::vec2f{200, 100},
                                               200,
-                                              common::components::color{0xFF, 0xFF, 0x00, 0xCC},
+                                              common::components::color{0xFF, 0xFF, 0x00, 0x77},
                                               true};
 
         auto green_polygon = graphics::polygon{common::components::vec2f{10, 400},
@@ -148,8 +148,7 @@ int main(int argc, char *argv[]) {
 
         auto white_text = graphics::text{common::components::vec2f{200, 40},
                                          font->get(),
-                                         graphics::text::type::BLENDED,
-                                         common::components::color{0xFF, 0xFF, 0xFF, 0xBB}};
+                                         common::components::color{0xFF, 0xFF, 0xFF, 0xCC}};
         white_text.set_string("Phansar");
 
         eq.subscribe([&](const SDL_Event &e) {

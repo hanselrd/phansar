@@ -24,30 +24,32 @@
 #include <SDL2/SDL_ttf.h>
 #include <common/components/color/color.hpp>
 #include <common/components/vec2/vec2.hpp>
+#include <cstdint>
 #include <memory>
+#include <string>
 #include <string_view>
 
 namespace client {
 namespace graphics {
 class text {
 public:
-    enum class type { BLENDED, BLENDED_WRAPPED, SHADED, SOLID };
-
     explicit text(common::components::vec2f position,
                   TTF_Font *font,
-                  type type,
                   common::components::color color);
 
     void set_string(std::string_view str);
     void draw();
 
 private:
+    void _update();
+
     common::components::vec2f _position;
     common::components::vec2i _size;
+    common::components::vec2i _text_size;
     TTF_Font *_font;
-    type _type;
     common::components::color _color;
     std::shared_ptr<SDL_Texture> _texture;
+    std::string _str;
 };
 } // namespace graphics
 } // namespace client

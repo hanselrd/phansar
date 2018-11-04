@@ -20,6 +20,7 @@
 project(${CMAKE_PROJECT_NAME})
 
 set(sources
+    graphics/canvas/canvas.cpp
     graphics/circle/circle.cpp
     graphics/polygon/polygon.cpp
     graphics/rectangle/rectangle.cpp
