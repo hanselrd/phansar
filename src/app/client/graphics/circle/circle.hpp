@@ -20,6 +20,7 @@
 #ifndef CLIENT_GRAPHICS_CIRCLE_HPP
 #define CLIENT_GRAPHICS_CIRCLE_HPP
 
+#include "../canvas/canvas.hpp"
 #include "../shape/shape.hpp"
 #include <common/components/color/color.hpp>
 #include <common/components/vec2/vec2.hpp>
@@ -38,6 +39,7 @@ public:
 
 private:
     std::uint32_t _radius;
+    canvas _canvas;
 };
 } // namespace graphics
 } // namespace client

@@ -20,58 +20,71 @@
 #include "text.hpp"
 #include "../../managers/system_manager/system_manager.hpp"
 #include <SDL2/SDL.h>
+#include <algorithm>
 #include <common/utils/assert/assert.hpp>
+#include <common/utils/log/log.hpp>
 #include <type_traits>
 
 namespace client {
 namespace graphics {
-text::text(common::components::vec2f position,
-           TTF_Font *font,
-           type type,
-           common::components::color color)
-    : _position{position}, _font{font}, _type{type}, _color{color} {
+text::text(common::components::vec2f position, TTF_Font *font, common::components::color color)
+    : _position{position}, _font{font}, _color{color} {
 }
 
 void text::set_string(std::string_view str) {
-    auto surface = std::add_pointer_t<SDL_Surface>{nullptr};
-
-    switch (_type) {
-    case type::BLENDED:
-        surface = TTF_RenderText_Blended(
-            _font, str.data(), SDL_Color{_color.r, _color.g, _color.b, _color.a});
-        break;
-    case type::BLENDED_WRAPPED:
-        ASSERT(0);
-        break;
-    case type::SHADED:
-        surface = TTF_RenderText_Shaded(_font,
-                                        str.data(),
-                                        SDL_Color{_color.r, _color.g, _color.b, _color.a},
-                                        SDL_Color{0x00, 0x00, 0x00, 0xFF});
-        break;
-    case type::SOLID:
-        surface = TTF_RenderText_Solid(
-            _font, str.data(), SDL_Color{_color.r, _color.g, _color.b, _color.a});
-        break;
-    }
-
-    ASSERT(surface);
-    auto renderer = managers::system_manager::get_renderer();
-    _texture = std::shared_ptr<SDL_Texture>{SDL_CreateTextureFromSurface(renderer.get(), surface),
-                                            &SDL_DestroyTexture};
-    ASSERT(_texture);
-    SDL_FreeSurface(surface);
-
-    TTF_SizeText(_font, str.data(), &_size.x, &_size.y);
+    _str = str;
+    _update();
 }
 
 void text::draw() {
     auto renderer = managers::system_manager::get_renderer();
-    SDL_Rect rect{static_cast<std::int32_t>(_position.x),
-                  static_cast<std::int32_t>(_position.y),
-                  _size.x,
-                  _size.y};
-    SDL_RenderCopy(renderer.get(), _texture.get(), nullptr, &rect);
+    SDL_Rect src_rect{0, 0, _text_size.x, _text_size.y};
+    SDL_Rect dst_rect{static_cast<std::int32_t>(_position.x),
+                      static_cast<std::int32_t>(_position.y),
+                      _text_size.x,
+                      _text_size.y};
+    SDL_RenderCopy(renderer.get(), _texture.get(), &src_rect, &dst_rect);
+}
+
+void text::_update() {
+    if (_str.empty()) {
+        return;
+    }
+
+    auto renderer = managers::system_manager::get_renderer();
+
+    auto surface = TTF_RenderText_Blended(
+        _font, _str.c_str(), SDL_Color{_color.r, _color.g, _color.b, _color.a});
+    ASSERT(surface);
+
+    TTF_SizeText(_font, _str.c_str(), &_text_size.x, &_text_size.y);
+
+    if (!_texture || surface->w > _size.x || surface->h > _size.y) {
+        _size.x = std::max(_size.x, surface->w);
+        _size.y = std::max(_size.y, surface->h);
+        LOGD << "Resizing text to: " << _size.x << " x " << _size.y;
+        _texture = std::shared_ptr<SDL_Texture>{SDL_CreateTexture(renderer.get(),
+                                                                  surface->format->format,
+                                                                  SDL_TEXTUREACCESS_STREAMING,
+                                                                  _size.x,
+                                                                  _size.y),
+                                                &SDL_DestroyTexture};
+        SDL_SetTextureAlphaMod(_texture.get(), _color.a);
+        auto blend_mode = SDL_BlendMode{};
+        SDL_GetRenderDrawBlendMode(renderer.get(), &blend_mode);
+        SDL_SetTextureBlendMode(_texture.get(), blend_mode);
+    }
+    ASSERT(_texture);
+
+    if (SDL_MUSTLOCK(surface)) {
+        SDL_LockSurface(surface);
+        SDL_UpdateTexture(_texture.get(), nullptr, surface->pixels, surface->pitch);
+        SDL_UnlockSurface(surface);
+    } else {
+        SDL_UpdateTexture(_texture.get(), nullptr, surface->pixels, surface->pitch);
+    }
+
+    SDL_FreeSurface(surface);
 }
 } // namespace graphics
 } // namespace client

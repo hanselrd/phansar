@@ -20,6 +20,7 @@
 #ifndef CLIENT_GRAPHICS_POLYGON_HPP
 #define CLIENT_GRAPHICS_POLYGON_HPP
 
+#include "../canvas/canvas.hpp"
 #include "../shape/shape.hpp"
 #include <common/components/color/color.hpp>
 #include <common/components/vec2/vec2.hpp>
@@ -34,14 +35,15 @@ public:
                      std::uint32_t radius,
                      std::uint32_t point_count,
                      common::components::color color,
-                     bool filled /*buggy*/);
+                     bool filled);
     virtual ~polygon() = default;
 
-    std::vector<common::components::vec2f> get_points() const;
+    // std::vector<common::components::vec2f> get_points() const;
     virtual void draw() override;
 
 private:
     std::uint32_t _radius;
+    canvas _canvas;
     std::vector<common::components::vec2f> _points;
 };
 } // namespace graphics
