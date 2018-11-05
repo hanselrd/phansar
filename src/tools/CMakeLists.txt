@@ -30,6 +30,10 @@ function(add_tool tool)
 
     target_link_libraries(${tool}
         ${libs})
+
+    target_compile_options(${tool} PRIVATE
+        $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-Wall -Wextra>
+        $<$<CXX_COMPILER_ID:MSVC>:/Wall>)
 endfunction()
 
 add_tool(box2d_test)

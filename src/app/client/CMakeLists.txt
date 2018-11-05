@@ -52,6 +52,10 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     ${libs})
 
+target_compile_options(${PROJECT_NAME} PRIVATE
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-Wall -Wextra>
+    $<$<CXX_COMPILER_ID:MSVC>:/Wall>)
+
 # Testing
 add_executable(test-${PROJECT_NAME}
     ${sources}
