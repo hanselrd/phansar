@@ -34,17 +34,16 @@ namespace containers {
 class dispatch_queue {
 public:
     explicit dispatch_queue(std::size_t count = 1);
+    dispatch_queue(const dispatch_queue &) = delete;
+    dispatch_queue &operator=(const dispatch_queue &) = delete;
+    dispatch_queue(dispatch_queue &&) = delete;
+    dispatch_queue &operator=(dispatch_queue &&) = delete;
     ~dispatch_queue();
 
     template <class F,
               class... Args,
               class R = std::invoke_result_t<std::decay_t<F>, std::decay_t<Args>...>>
     std::future<R> dispatch(F &&f, Args &&... args);
-
-    dispatch_queue(const dispatch_queue &) = delete;
-    dispatch_queue &operator=(const dispatch_queue &) = delete;
-    dispatch_queue(dispatch_queue &&) = delete;
-    dispatch_queue &operator=(dispatch_queue &&) = delete;
 
 private:
     void _thread_handler();
