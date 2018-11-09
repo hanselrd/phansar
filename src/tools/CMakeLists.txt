@@ -22,7 +22,7 @@ project(tools)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tools)
 
 set(libs
-    common)
+    ${CMAKE_PROJECT_NAME}-common)
 
 function(add_tool tool)
     add_executable(${tool}

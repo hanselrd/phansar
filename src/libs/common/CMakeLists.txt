@@ -17,7 +17,7 @@
 # along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-project(common)
+project(${CMAKE_PROJECT_NAME}-common)
 
 set(sources
     allocators/base_allocator/base_allocator.cpp
