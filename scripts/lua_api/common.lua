@@ -74,14 +74,14 @@ log.debug(string.format("v3f: (%g, %g, %g) [%s]", v3f.x, v3f.y, v3f.z, v3f))
 -- models
 
 -- Entity
-e1 = models.Entity.new()
+local e1 = models.Entity.new()
 e1.map_id = 10
 log.debug(string.format("e1: position: (%g, %g, %g), map_id: %d [%s]",
     e1.position.x, e1.position.y, e1.position.z,
     e1.map_id,
     e1))
 
-e2 = models.Entity.new(components.Vec3f.new(1.1, 2.2, 3.3))
+local e2 = models.Entity.new(components.Vec3f.new(1.1, 2.2, 3.3))
 e2:move(components.Vec3f.new(-2.2, -4.4, -6.6))
 e2.map_id = 20
 log.debug(string.format("e2: position: (%g, %g, %g), map_id: %d [%s]",
@@ -90,7 +90,7 @@ log.debug(string.format("e2: position: (%g, %g, %g), map_id: %d [%s]",
     e2))
 
 -- Player
-p = models.Player.new()
+local p = models.Player.new()
 p.name = "player"
 p.position = components.Vec3f.new(4.4, 5.5, 6.6)
 p:move(components.Vec3f.new(-8.8, -11.0, -13.2))
