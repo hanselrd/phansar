@@ -42,7 +42,7 @@ set(unittest_sources
     lua_api/lua_api.unittest.cpp)
 
 set(libs
-    common)
+    ${CMAKE_PROJECT_NAME}-common)
 
 add_executable(${PROJECT_NAME}
     ${sources}
