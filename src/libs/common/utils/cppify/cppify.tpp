@@ -31,6 +31,10 @@ cppify<T, D>::cppify(C c, D d, Args &&... args) : _ptr{c(std::forward<Args>(args
     ASSERT(_ptr);
 }
 
+template <class T, class D> cppify<T, D>::cppify(T *t, D d) : _ptr{t, d} {
+    ASSERT(_ptr);
+}
+
 template <class T, class D> cppify<T, D>::operator T *() const {
     ASSERT(_ptr);
     return _ptr.get();
