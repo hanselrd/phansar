@@ -33,6 +33,7 @@ public:
                   std::is_same_v<std::invoke_result_t<std::decay_t<C>, std::decay_t<Args>...>,
                                  std::add_pointer_t<T>>>>>
     explicit cppify(C c, D d, Args &&... args);
+    explicit cppify(T *t, D d);
 
     operator T *() const;
 
