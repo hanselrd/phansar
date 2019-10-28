@@ -72,7 +72,8 @@ set(unittest_sources
     lua_api/lua_api.unittest.cpp
     scopes/enet_scope/enet_scope.unittest.cpp
     scopes/plibsys_scope/plibsys_scope.unittest.cpp
-    scopes/sdl_scope/sdl_scope.unittest.cpp)
+    scopes/sdl_scope/sdl_scope.unittest.cpp
+    utils/atomic/atomic.unittest.cpp)
 
 set(libs
     Threads::Threads
