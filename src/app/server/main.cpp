@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 
     std::signal(SIGINT, [](int signal) { running = false; });
 
-    common::containers::dispatch_queue dq(3);
+    auto dq = common::containers::dispatch_queue{3};
     dq.dispatch([] {
         while (running) {
             std::this_thread::sleep_for(std::chrono::seconds{1});
