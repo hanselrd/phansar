@@ -24,7 +24,6 @@ project(phansar VERSION 1.0.0 LANGUAGES CXX)
 
 # Include CMake Modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/Modules)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/extlibs/Catch2/contrib)
 
 # Set configuration and output
 if(NOT CMAKE_BUILD_TYPE)
@@ -36,6 +35,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# Find Git
+find_package(Git REQUIRED)
 
 # Find Threads
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
@@ -62,10 +64,10 @@ add_definitions(-D__SOURCE_PATH_SIZE__=${SOURCE_PATH_SIZE})
 # Setup testing
 enable_testing()
 include(CTest)
-include(Catch)
 
 # Build project
 add_subdirectory(extlibs)
+include(Catch)
 add_subdirectory(src)
 
 # Compile assets
