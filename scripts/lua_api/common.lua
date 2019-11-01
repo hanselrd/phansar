@@ -105,10 +105,9 @@ log.debug(string.format("p: name: %s, permissions: %d, position: (%g, %g, %g), m
 -- utils
 
 -- log
-log.verbose("verbose")
+log.trace("trace")
 log.debug("debug")
 log.info("info")
-log.warning("warning")
+log.warn("warn")
 log.error("error")
-log.fatal("fatal")
-log.none("none")
+log.critical("critical")

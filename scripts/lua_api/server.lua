@@ -21,4 +21,4 @@
 
 local log = phansar.common.utils.log
 
-log.warning("not implemented")
+log.warn("not implemented")

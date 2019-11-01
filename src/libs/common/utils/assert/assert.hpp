@@ -33,7 +33,7 @@
 #define MASSERT_ALWAYS(condition, message)                                                         \
     [&] {                                                                                          \
         if (!(condition)) {                                                                        \
-            LOGF << "Assertion `" #condition "' failed [" << message << "]";                       \
+            LOGC("Assertion `" #condition "' failed [{}]", message);                               \
             TERMINATE(message);                                                                    \
         }                                                                                          \
     }()
@@ -48,7 +48,7 @@
 #define ASSERT_ALWAYS(condition)                                                                   \
     [&] {                                                                                          \
         if (!(condition)) {                                                                        \
-            LOGF << "Assertion `" #condition "' failed";                                           \
+            LOGC("Assertion `" #condition "' failed");                                             \
             TERMINATE("");                                                                         \
         }                                                                                          \
     }()

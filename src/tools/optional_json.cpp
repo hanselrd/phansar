@@ -43,28 +43,26 @@ int main(int argc, char *argv[]) {
     common::utils::log::init("optional_json.log");
 
     auto json = common::extlibs::json{{"test", nullptr}};
-    LOGI << json.dump();
+    LOGI(json.dump());
     auto test = json["test"].get<std::optional<std::uint32_t>>();
-    LOGI << std::boolalpha << test.has_value();
-    LOGI_IF(test.has_value()) << test.value();
+    LOGI(test.has_value());
+    LOGI_IF(test.has_value(), test.value());
 
     auto p1 = person{"Bob", 18, "Google"};
     auto p2 = person{"Tod", 21};
     json["p1"] = p1;
     json["p2"] = p2;
-    LOGI << json.dump();
+    LOGI(json.dump());
 
     auto p1_copy = json["p1"].get<person>();
     auto p2_copy = json["p2"].get<person>();
 
-    LOGI << "p1.name: [" << p1.name << "," << p1_copy.name << "]";
-    LOGI << "p1.age: [" << p1.age << "," << p1_copy.age << "]";
-    LOGI << "p1.company: [" << p1.company.value_or("null") << ","
-         << p1_copy.company.value_or("null") << "]";
-    LOGI << "p2.name: [" << p2.name << "," << p2_copy.name << "]";
-    LOGI << "p2.age: [" << p2.age << "," << p2_copy.age << "]";
-    LOGI << "p2.company: [" << p2.company.value_or("null") << ","
-         << p2_copy.company.value_or("null") << "]";
+    LOGI("p1.name: [{},{}]", p1.name, p1_copy.name);
+    LOGI("p1.age: [{},{}]", p1.age, p1_copy.age);
+    LOGI("p1.company: [{},{}]", p1.company.value_or("null"), p1_copy.company.value_or("null"));
+    LOGI("p2.name: [{},{}]", p2.name, p2_copy.name);
+    LOGI("p2.age: [{},{}]", p2.age, p2_copy.age);
+    LOGI("p2.company: [{},{}]", p2.company.value_or("null"), p2_copy.company.value_or("null"));
 
     return 0;
 }

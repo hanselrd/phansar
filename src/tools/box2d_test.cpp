@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
         auto position = body->GetPosition();
         auto angle = body->GetAngle();
 
-        LOGI << position.x << " " << position.y << " " << angle;
+        LOGI("{} {} {}", position.x, position.y, angle);
     }
 
     return 0;

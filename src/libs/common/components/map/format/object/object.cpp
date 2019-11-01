@@ -51,7 +51,7 @@ void from_json(const extlibs::json &j, _object_ &o) {
         try {                                                                                      \
             j.at(key).get_to(o.field);                                                             \
         } catch (const extlibs::json::out_of_range &e) {                                           \
-            LOGW << e.what();                                                                      \
+            LOGW(e.what());                                                                        \
         }                                                                                          \
     }()
 #define EXTRACT(field) EXTRACT_HELPER(STRINGIFY(field), field)
