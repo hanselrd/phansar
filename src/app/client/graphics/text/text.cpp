@@ -62,7 +62,7 @@ void text::_update() {
     if (!_texture || surface->w > _size.x || surface->h > _size.y) {
         _size.x = std::max(_size.x, surface->w);
         _size.y = std::max(_size.y, surface->h);
-        LOGD << "Resizing text to: " << _size.x << " x " << _size.y;
+        LOGD("Resizing text to: {} * {}", _size.x, _size.y);
         _texture = std::shared_ptr<SDL_Texture>{SDL_CreateTexture(renderer.get(),
                                                                   surface->format->format,
                                                                   SDL_TEXTUREACCESS_STREAMING,

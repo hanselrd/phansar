@@ -65,7 +65,7 @@ bool socket::listen(std::uint32_t timeout) {
     case ENET_EVENT_TYPE_CONNECT:
         event.peer->data = nullptr;
         _connect_queue.push(event.peer);
-        LOGD << "Peer " << event.peer->incomingPeerID << " connected";
+        LOGD("Peer {} connected", event.peer->incomingPeerID);
         break;
     case ENET_EVENT_TYPE_RECEIVE:
         // filter packets from peers waiting to be accepted
@@ -74,13 +74,13 @@ bool socket::listen(std::uint32_t timeout) {
         }
         _receive_queue.emplace(event.peer->incomingPeerID,
                                packet_ptr{event.packet, &enet_packet_destroy});
-        LOGD << "Peer " << event.peer->incomingPeerID << " sent a packet";
+        LOGD("Peer {} sent a packet", event.peer->incomingPeerID);
         break;
     case ENET_EVENT_TYPE_DISCONNECT:
         _disconnect_queue.push(event.peer->incomingPeerID);
         _peers.erase(event.peer->incomingPeerID);
         event.peer->data = nullptr;
-        LOGD << "Peer " << event.peer->incomingPeerID << " disconnected";
+        LOGD("Peer {} disconnected", event.peer->incomingPeerID);
         break;
     default:
         break;
@@ -122,7 +122,7 @@ void socket::broadcast(const extlibs::json &val, packet_flags flags) {
         channel = 2;
     }
     enet_host_broadcast(_host.get(), channel, packet);
-    LOGD << "Broadcasted " << val.dump() << " to all peers";
+    LOGD("Broadcasted {} to all peers", val.dump());
 }
 
 void socket::send(peer_id id, const extlibs::json &val, packet_flags flags) {
@@ -139,7 +139,7 @@ void socket::send(peer_id id, const extlibs::json &val, packet_flags flags) {
         channel = 2;
     }
     enet_peer_send(peer, channel, packet);
-    LOGD << "Sent " << val.dump() << " to peer " << id;
+    LOGD("Sent {} to peer {}", val.dump(), id);
 }
 
 bool socket::receive(peer_id &id, extlibs::json &val) {
@@ -155,7 +155,7 @@ bool socket::receive(peer_id &id, extlibs::json &val) {
             std::string(packet.second->data, packet.second->data + packet.second->dataLength);
         auto decoded = extlibs::codec::base64::decode(encoded);
         val = extlibs::json::from_cbor(decoded);
-        LOGD << "Received " << val.dump() << " from peer " << id;
+        LOGD("Received {} from peer {}", val.dump(), id);
         return true;
     } catch (...) {
         return false;

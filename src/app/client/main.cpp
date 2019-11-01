@@ -83,26 +83,26 @@ int main(int argc, char *argv[]) {
         //     while (running) {
         //         while (client.listen(1000)) {
         //             if (client.accept(id)) {
-        //                 LOGI << "Hey, connected to server";
+        //                 LOGI("Hey, connected to server");
         //             }
         //             if (client.receive(id, inj)) {
-        //                 LOGI << "Hey, received something from server";
+        //                 LOGI("Hey, received something from server");
         //             }
         //         }
         //         // ENetEvent enet_event;
         //         // while (enet_host_service(client.get(), &enet_event, 1000)) {
         //         //     switch (enet_event.type) {
         //         //     case ENET_EVENT_TYPE_CONNECT:
-        //         //         LOGI << "Connected to server: " << std::hex <<
-        //         //         enet_event.peer->address.host
-        //         //              << ":" << std::dec << enet_event.peer->address.port;
+        //         //         LOGI("Connected to server: {}:{}",
+        //         //         enet_event.peer->address.host,
+        //         //         enet_event.peer->address.port);
         //         //         break;
         //         //     case ENET_EVENT_TYPE_RECEIVE:
-        //         //         LOGI << "Received a packet";
+        //         //         LOGI("Received a packet");
         //         //         enet_packet_destroy(enet_event.packet);
         //         //         break;
         //         //     case ENET_EVENT_TYPE_DISCONNECT:
-        //         //         LOGI << "Disconnected from server";
+        //         //         LOGI("Disconnected from server");
         //         //         break;
         //         //     default:
         //         //         break;
@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
         // });
 
         auto eq = common::containers::event_queue<SDL_Event, std::uint32_t>(SDL_QUIT, SDL_KEYDOWN);
-        eq.subscribe([](const SDL_Event &e) { LOGD << "Subscriber: event " << e.type; });
+        eq.subscribe([](const SDL_Event &e) { LOGD("Subscriber: event {}", e.type); });
 
         auto ui_window = ui::window{common::components::vec2f{20.f, 20.f},
                                     common::components::vec2u{150, 250},
@@ -188,7 +188,7 @@ int main(int argc, char *argv[]) {
             ui_window.update();
             delta_time = managers::system_manager::get_delta_time();
             fps = managers::system_manager::get_fps();
-            // LOGI << "fps: " << static_cast<std::uint32_t>(fps) << " \u0394: " << delta_time;
+            // LOGI("fps: {} \u0394: {}", static_cast<std::uint32_t>(fps), delta_time);
             white_text.set_string(std::string{"fps: "} +
                                   std::to_string(static_cast<std::uint32_t>(fps)) +
                                   " dt: " + std::to_string(delta_time));

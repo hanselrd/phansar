@@ -26,7 +26,8 @@ namespace lua_api {
 namespace common {
 namespace utils {
 void init_log(sol::table &t) {
-    auto log_generic = [](sol::this_state s, plog::Severity severity, std::string_view message) {
+    auto log_generic = [](sol::this_state s,
+                          /*plog::Severity severity,*/ std::string_view message) {
 #if 0
         if (!plog::get<PLOG_DEFAULT_INSTANCE>() ||
             !plog::get<PLOG_DEFAULT_INSTANCE>()->checkSeverity(severity)) {
@@ -46,26 +47,23 @@ void init_log(sol::table &t) {
 
     auto log = t.create_named("log");
 
-    log.set_function("verbose", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::verbose, message);
+    log.set_function("trace", [&](sol::this_state s, std::string_view message) {
+        /* log_generic(s, plog::verbose, message); */
     });
     log.set_function("debug", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::debug, message);
+        /* log_generic(s, plog::debug, message); */
     });
     log.set_function("info", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::info, message);
+        /* log_generic(s, plog::info, message); */
     });
-    log.set_function("warning", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::warning, message);
+    log.set_function("warn", [&](sol::this_state s, std::string_view message) {
+        /* log_generic(s, plog::warning, message); */
     });
     log.set_function("error", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::error, message);
+        /* log_generic(s, plog::error, message); */
     });
-    log.set_function("fatal", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::fatal, message);
-    });
-    log.set_function("none", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::none, message);
+    log.set_function("critical", [&](sol::this_state s, std::string_view message) {
+        /* log_generic(s, plog::fatal, message); */
     });
 }
 } // namespace utils

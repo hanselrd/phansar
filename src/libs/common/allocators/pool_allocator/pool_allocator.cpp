@@ -41,13 +41,13 @@ void *pool_allocator::allocate(std::size_t size) {
         }
     }
 
-    LOGE << "Could not allocate " << size << " bytes";
+    LOGE("Could not allocate {} bytes", size);
     return nullptr;
 }
 
 void pool_allocator::deallocate(void *ptr) {
     if ((ptr < _buffer.get()) || (ptr >= _buffer.get() + _size)) {
-        LOGD << ptr << " does not belong to this allocator";
+        LOGD("{} does not belong to this allocator", ptr);
         return;
     }
 
@@ -60,7 +60,7 @@ void pool_allocator::deallocate(void *ptr) {
         }
     }
 
-    LOGE << "Could not deallocate " << ptr;
+    LOGE("Could not deallocate {}", ptr);
 }
 } // namespace allocators
 } // namespace common

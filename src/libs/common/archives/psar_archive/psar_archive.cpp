@@ -24,14 +24,14 @@ namespace common {
 namespace archives {
 extlibs::json psar_archive::load(std::istream &is) {
     auto j = extlibs::json::from_cbor(is);
-    LOGD << "Loaded " << extlibs::json::to_cbor(j).size() << " bytes";
+    LOGD("Loaded {} bytes", extlibs::json::to_cbor(j).size());
     return j;
 }
 
 void psar_archive::save(std::ostream &os, const extlibs::json &j) {
     auto cbor = extlibs::json::to_cbor(j);
     os.write(reinterpret_cast<const char *>(cbor.data()), cbor.size());
-    LOGD << "Saved " << cbor.size() << " bytes";
+    LOGD("Saved {} bytes", cbor.size());
 }
 } // namespace archives
 } // namespace common

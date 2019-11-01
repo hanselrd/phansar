@@ -24,13 +24,13 @@ namespace common {
 namespace archives {
 extlibs::json json_archive::load(std::istream &is) {
     auto j = extlibs::json::parse(is);
-    LOGD << "Loaded " << j.dump(4).size() << " characters";
+    LOGD("Loaded {} characters", j.dump(4).size());
     return j;
 }
 
 void json_archive::save(std::ostream &os, const extlibs::json &j) {
     os << j.dump(4);
-    LOGD << "Saved " << j.dump(4).size() << " characters";
+    LOGD("Saved {} characters", j.dump(4).size());
 }
 } // namespace archives
 } // namespace common

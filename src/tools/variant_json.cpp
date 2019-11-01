@@ -47,30 +47,26 @@ int main(int argc, char *argv[]) {
     auto p2 = person{"Tod", 21, 1337};
     json["p1"] = p1;
     json["p2"] = p2;
-    LOGI << json.dump();
+    LOGI(json.dump());
 
     auto p1_copy = json["p1"].get<person>();
     auto p2_copy = json["p2"].get<person>();
 
-    LOGI << "p1.name: [" << p1.name << "," << p1_copy.name << "]";
-    LOGI << "p1.age: [" << p1.age << "," << p1_copy.age << "]";
+    LOGI("p1.name: [{},{}]", p1.name, p1_copy.name);
+    LOGI("p1.age: [{},{}]", p1.age, p1_copy.age);
     std::visit(
         [&](auto &&p1_value) {
             std::visit(
-                [&](auto &&p1_value_copy) {
-                    LOGI << "p1.variant: [" << p1_value << "," << p1_value_copy << "]";
-                },
+                [&](auto &&p1_value_copy) { LOGI("p1.variant: [{},{}]", p1_value, p1_value_copy); },
                 p1_copy.variant);
         },
         p1.variant);
-    LOGI << "p2.name: [" << p2.name << "," << p2_copy.name << "]";
-    LOGI << "p2.age: [" << p2.age << "," << p2_copy.age << "]";
+    LOGI("p2.name: [{},{}]", p2.name, p2_copy.name);
+    LOGI("p2.age: [{},{}]", p2.age, p2_copy.age);
     std::visit(
         [&](auto &&p2_value) {
             std::visit(
-                [&](auto &&p2_value_copy) {
-                    LOGI << "p2.variant: [" << p2_value << "," << p2_value_copy << "]";
-                },
+                [&](auto &&p2_value_copy) { LOGI("p2.variant: [{},{}]", p2_value, p2_value_copy); },
                 p2_copy.variant);
         },
         p2.variant);

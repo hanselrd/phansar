@@ -25,9 +25,9 @@ namespace containers {
 dispatch_queue::dispatch_queue(std::size_t count) : _threads{count} {
     for (auto i = std::size_t{0}; i < _threads.size(); ++i) {
         _threads[i] = std::thread([this, i] {
-            LOGI << "Worker " << i << " initialized";
+            LOGI("Worker {} initialized", i);
             _thread_handler();
-            LOGI << "Worker " << i << " shutdown";
+            LOGI("Worker {} shutdown", i);
         });
     }
 }
@@ -42,7 +42,7 @@ dispatch_queue::~dispatch_queue() {
         }
     }
 
-    LOGI << "Workers joined";
+    LOGI("Workers joined");
 }
 
 void dispatch_queue::_thread_handler() {
@@ -60,7 +60,7 @@ void dispatch_queue::_thread_handler() {
             // unlock now since we're done with the queue
             lock.unlock();
             job();
-            LOGD << "Job completed";
+            LOGD("Job completed");
             lock.lock();
         }
     } while (_running);

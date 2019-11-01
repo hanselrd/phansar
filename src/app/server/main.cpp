@@ -51,10 +51,7 @@ int main(int argc, char *argv[]) {
         }
     });
     for (auto i = std::uint32_t{0}; i < 10; ++i) {
-        dq.dispatch([i] {
-            LOGI << "[" << i << "]:"
-                 << " dispatch";
-        });
+        dq.dispatch([i] { LOGI("[{}]: dispatch", i); });
     }
 
     // ENetAddress address;
@@ -76,7 +73,7 @@ int main(int argc, char *argv[]) {
 
         while (server.listen(1000)) {
             if (server.receive(id, json)) {
-                // LOGI << "Hey, I received something from peer: " << id;
+                // LOGI("Hey, I received something from peer: {}", id);
                 json["peer"] = id;
                 server.broadcast(json);
             }
@@ -87,19 +84,19 @@ int main(int argc, char *argv[]) {
         //     switch (event.type) {
         //     case ENET_EVENT_TYPE_CONNECT: {
         //         network::address tmp(event.peer->address);
-        //         LOGI << "Client connected: " << tmp.get_host() << ":" << tmp.get_port();
+        //         LOGI("Client connected: {}:{}", tmp.get_host(), tmp.get_port());
         //     }
         //         event.peer->data = *reinterpret_cast<enet_uint16 **>(&event.peer->address.port);
         //         break;
         //     case ENET_EVENT_TYPE_RECEIVE:
         //         dq.dispatch([=] {
-        //             LOGI << "Received a packet: " << reinterpret_cast<char
-        //             *>(event.packet->data); enet_packet_destroy(event.packet);
+        //             LOGI("Received a packet: {}", reinterpret_cast<char
+        //             *>(event.packet->data)); enet_packet_destroy(event.packet);
         //         });
         //         break;
         //     case ENET_EVENT_TYPE_DISCONNECT: {
         //         network::address tmp(event.peer->address);
-        //         LOGI << "Client disconnected: " << tmp.get_host() << ":" << tmp.get_port();
+        //         LOGI("Client disconnected: {}:{}", tmp.get_host(), tmp.get_port());
         //     }
         //         event.peer->data = nullptr;
         //         break;
