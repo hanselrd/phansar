@@ -19,86 +19,105 @@
 
 project(extlibs)
 
+function(check_git_commit_hash name source_dir branch)
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
+        OUTPUT_VARIABLE head_hash
+        WORKING_DIRECTORY ${source_dir})
+
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} rev-parse origin/${branch}
+        OUTPUT_VARIABLE origin_hash
+        WORKING_DIRECTORY ${source_dir})
+
+    message(STATUS "${name}: ${box2d_git_SOURCE_DIR}")
+    message(STATUS "${name}: (HEAD) ${head_hash}")
+
+    if(NOT ${head_hash} STREQUAL ${origin_hash})
+        message(WARNING "${name}: (origin/${branch}) ${origin_hash}")
+    endif()
+endfunction()
+
 include(FetchContent)
 FetchContent_Declare(Box2D_git
     GIT_REPOSITORY https://github.com/erincatto/Box2D.git
-    GIT_TAG        master)
+    GIT_TAG        ef96a4f17f1c5527d20993b586b400c2617d6ae1)
 FetchContent_GetProperties(Box2D_git)
 if(NOT box2d_git_POPULATED)
     FetchContent_Populate(Box2D_git)
-    message(STATUS "extlibs/Box2D: ${box2d_git_SOURCE_DIR}")
+    check_git_commit_hash(Box2D ${box2d_git_SOURCE_DIR} master)
 endif()
 
 FetchContent_Declare(Catch2_git
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        master)
+    GIT_TAG        5ac348cd6e788abbf18139289ae8f4722ab1ebe8)
 FetchContent_GetProperties(Catch2_git)
 if(NOT catch2_git_POPULATED)
     FetchContent_Populate(Catch2_git)
-    message(STATUS "extlibs/Catch2: ${catch2_git_SOURCE_DIR}")
+    check_git_commit_hash(Catch2 ${catch2_git_SOURCE_DIR} master)
 endif()
 
 FetchContent_Declare(cppcodec_git
     GIT_REPOSITORY https://github.com/tplgy/cppcodec.git
-    GIT_TAG        master)
+    GIT_TAG        bd6ddf95129e769b50ef63e0f558fa21364f3f65)
 FetchContent_GetProperties(cppcodec_git)
 if(NOT cppcodec_git_POPULATED)
     FetchContent_Populate(cppcodec_git)
-    message(STATUS "extlibs/cppcodec: ${cppcodec_git_SOURCE_DIR}")
+    check_git_commit_hash(cppcodec ${cppcodec_git_SOURCE_DIR} master)
 endif()
 
 FetchContent_Declare(enet_git
     GIT_REPOSITORY https://github.com/lsalzman/enet.git
-    GIT_TAG        master)
+    GIT_TAG        0eaf48eeb0d94a18d079378d8b76d588832ce838)
 FetchContent_GetProperties(enet_git)
 if(NOT enet_git_POPULATED)
     FetchContent_Populate(enet_git)
-    message(STATUS "extlibs/enet: ${enet_git_SOURCE_DIR}")
+    check_git_commit_hash(enet ${enet_git_SOURCE_DIR} master)
 endif()
 
 FetchContent_Declare(json_git
     GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG        master)
+    GIT_TAG        ea60d40f4a60a47d3be9560d8f7bc37c163fe47b)
 FetchContent_GetProperties(json_git)
 if(NOT json_git_POPULATED)
     FetchContent_Populate(json_git)
-    message(STATUS "extlibs/json: ${json_git_SOURCE_DIR}")
+    check_git_commit_hash(json ${json_git_SOURCE_DIR} master)
 endif()
 
 FetchContent_Declare(lua_git
     GIT_REPOSITORY https://github.com/lua/lua.git
-    GIT_TAG        master)
+    GIT_TAG        6e1aec7a677a9891f2f8ca57e039d9984fdc69bc)
 FetchContent_GetProperties(lua_git)
 if(NOT lua_git_POPULATED)
     FetchContent_Populate(lua_git)
-    message(STATUS "extlibs/lua: ${lua_git_SOURCE_DIR}")
+    check_git_commit_hash(lua ${lua_git_SOURCE_DIR} master)
 endif()
 
 FetchContent_Declare(plibsys_git
     GIT_REPOSITORY https://github.com/saprykin/plibsys.git
-    GIT_TAG        master)
+    GIT_TAG        e57dfc613163989bb536d980bec142fd7e35271d)
 FetchContent_GetProperties(plibsys_git)
 if(NOT plibsys_git_POPULATED)
     FetchContent_Populate(plibsys_git)
-    message(STATUS "extlibs/plibsys: ${plibsys_git_SOURCE_DIR}")
+    check_git_commit_hash(plibsys ${plibsys_git_SOURCE_DIR} master)
 endif()
 
 FetchContent_Declare(plog_git
     GIT_REPOSITORY https://github.com/SergiusTheBest/plog.git
-    GIT_TAG        master)
+    GIT_TAG        f4c22b03d5d3aa753cca8e716636ac4eb29b0917)
 FetchContent_GetProperties(plog_git)
 if(NOT plog_git_POPULATED)
     FetchContent_Populate(plog_git)
-    message(STATUS "extlibs/plog: ${plog_git_SOURCE_DIR}")
+    check_git_commit_hash(plog ${plog_git_SOURCE_DIR} master)
 endif()
 
 FetchContent_Declare(sol2_git
     GIT_REPOSITORY https://github.com/ThePhD/sol2.git
-    GIT_TAG        develop)
+    GIT_TAG        88355fcdf85dfcf52c76e41f75b36cd6ba0b7954)
 FetchContent_GetProperties(sol2_git)
 if(NOT sol2_git_POPULATED)
     FetchContent_Populate(sol2_git)
-    message(STATUS "extlibs/sol2: ${sol2_git_SOURCE_DIR}")
+    check_git_commit_hash(sol2 ${sol2_git_SOURCE_DIR} develop)
 endif()
 
 if(WIN32)
@@ -114,12 +133,12 @@ elseif(APPLE)
         URL            http://opensource.spotify.com/cefbuilds/cef_binary_78.2.9%2Bg4907ec5%2Bchromium-78.0.3904.70_macosx64.tar.bz2
         URL_HASH       SHA1=f660ca33de62a576cf7b9f033b7e0966130f5580)
 else()
-    message(FATAL_ERROR "extlibs/cef: platform not supported")
+    message(FATAL_ERROR "cef: platform not supported")
 endif()
 FetchContent_GetProperties(cef_tarbz2)
 if(NOT cef_tarbz2_POPULATED)
     FetchContent_Populate(cef_tarbz2)
-    message(STATUS "extlibs/cef: ${cef_tarbz2_SOURCE_DIR}")
+    message(STATUS "cef: ${cef_tarbz2_SOURCE_DIR}")
 endif()
 
 add_library(Box2D STATIC
@@ -177,6 +196,7 @@ set(CATCH_BUILD_TESTING OFF CACHE BOOL "")
 set(CATCH_INSTALL_DOCS OFF CACHE BOOL "")
 set(CATCH_INSTALL_HELPERS OFF CACHE BOOL "")
 add_subdirectory(${catch2_git_SOURCE_DIR} ${catch2_git_BINARY_DIR} EXCLUDE_FROM_ALL)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${catch2_git_SOURCE_DIR}/contrib PARENT_SCOPE)
 
 add_subdirectory(${enet_git_SOURCE_DIR} ${enet_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
