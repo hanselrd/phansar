@@ -34,7 +34,7 @@ common::extlibs::json _compile_assets(std::string_view path) {
     auto json = common::extlibs::json{};
 
     for (const auto &p : fs::directory_iterator(path)) {
-        LOGI << "  " << p.path().c_str();
+        LOGI("  {}", p.path().c_str());
         if (p.is_directory()) {
             json[p.path().filename()] = _compile_assets(p.path().c_str());
         } else if (p.is_regular_file()) {
@@ -56,7 +56,7 @@ common::extlibs::json _compile_assets(std::string_view path) {
 int main(int argc, char *argv[]) {
     common::utils::log::init("compile_assets.log");
 
-    LOGI << "Compiling assets...";
+    LOGI("Compiling assets...");
     auto json = _compile_assets("assets");
     auto ofs = std::ofstream{"assets.psar", std::ios::binary};
     auto pa = common::archives::psar_archive{};

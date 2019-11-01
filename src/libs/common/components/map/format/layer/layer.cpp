@@ -55,7 +55,7 @@ void from_json(const extlibs::json &j, _layer_ &l) {
         try {                                                                                      \
             j.at(STRINGIFY(field)).get_to(l.field);                                                \
         } catch (const extlibs::json::out_of_range &e) {                                           \
-            LOGW << e.what();                                                                      \
+            LOGW(e.what());                                                                        \
         }                                                                                          \
     }()
 

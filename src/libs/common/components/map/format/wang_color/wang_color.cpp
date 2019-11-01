@@ -36,7 +36,7 @@ void from_json(const extlibs::json &j, _wang_color_ &wc) {
         try {                                                                                      \
             j.at(STRINGIFY(field)).get_to(wc.field);                                               \
         } catch (const extlibs::json::out_of_range &e) {                                           \
-            LOGW << e.what();                                                                      \
+            LOGW(e.what());                                                                        \
         }                                                                                          \
     }()
 

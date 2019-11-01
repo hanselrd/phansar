@@ -26,46 +26,39 @@ namespace lua_api {
 namespace common {
 namespace utils {
 void init_log(sol::table &t) {
-    auto log_generic = [](sol::this_state s, plog::Severity severity, std::string_view message) {
-#if 0
-        if (!plog::get<PLOG_DEFAULT_INSTANCE>() ||
-            !plog::get<PLOG_DEFAULT_INSTANCE>()->checkSeverity(severity)) {
-            return;
-        }
+    auto log_generic =
+        [](sol::this_state s, spdlog::level::level_enum level, std::string_view message) {
+            auto logger = spdlog::default_logger_raw();
 
-        lua_State *L = s;
-        lua_Debug ar;
-        lua_getstack(L, 1, &ar);
-        lua_getinfo(L, "nSl", &ar);
+            if (logger->should_log(level) || logger->should_backtrace()) {
+                lua_State *L = s;
+                lua_Debug ar;
+                lua_getstack(L, 1, &ar);
+                lua_getinfo(L, "nSl", &ar);
 
-        (*plog::get<PLOG_DEFAULT_INSTANCE>()) +=
-            plog::Record(severity, ar.source + 1, ar.currentline, "", PLOG_GET_THIS()).ref()
-            << message;
-#endif
-    };
+                logger->log(spdlog::source_loc{ar.source + 1, ar.currentline, ""}, level, message);
+            }
+        };
 
     auto log = t.create_named("log");
 
-    log.set_function("verbose", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::verbose, message);
+    log.set_function("trace", [&](sol::this_state s, std::string_view message) {
+        log_generic(s, spdlog::level::trace, message);
     });
     log.set_function("debug", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::debug, message);
+        log_generic(s, spdlog::level::debug, message);
     });
     log.set_function("info", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::info, message);
+        log_generic(s, spdlog::level::info, message);
     });
-    log.set_function("warning", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::warning, message);
+    log.set_function("warn", [&](sol::this_state s, std::string_view message) {
+        log_generic(s, spdlog::level::warn, message);
     });
     log.set_function("error", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::error, message);
+        log_generic(s, spdlog::level::err, message);
     });
-    log.set_function("fatal", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::fatal, message);
-    });
-    log.set_function("none", [&](sol::this_state s, std::string_view message) {
-        log_generic(s, plog::none, message);
+    log.set_function("critical", [&](sol::this_state s, std::string_view message) {
+        log_generic(s, spdlog::level::critical, message);
     });
 }
 } // namespace utils

@@ -30,7 +30,7 @@ function(check_git_commit_hash name source_dir branch)
         OUTPUT_VARIABLE origin_hash
         WORKING_DIRECTORY ${source_dir})
 
-    message(STATUS "${name}: ${box2d_git_SOURCE_DIR}")
+    message(STATUS "${name}: ${source_dir}")
     message(STATUS "${name}: (HEAD) ${head_hash}")
 
     if(NOT ${head_hash} STREQUAL ${origin_hash})
@@ -102,15 +102,6 @@ if(NOT plibsys_git_POPULATED)
     check_git_commit_hash(plibsys ${plibsys_git_SOURCE_DIR} master)
 endif()
 
-FetchContent_Declare(plog_git
-    GIT_REPOSITORY https://github.com/SergiusTheBest/plog.git
-    GIT_TAG        f4c22b03d5d3aa753cca8e716636ac4eb29b0917)
-FetchContent_GetProperties(plog_git)
-if(NOT plog_git_POPULATED)
-    FetchContent_Populate(plog_git)
-    check_git_commit_hash(plog ${plog_git_SOURCE_DIR} master)
-endif()
-
 FetchContent_Declare(sol2_git
     GIT_REPOSITORY https://github.com/ThePhD/sol2.git
     GIT_TAG        88355fcdf85dfcf52c76e41f75b36cd6ba0b7954)
@@ -118,6 +109,15 @@ FetchContent_GetProperties(sol2_git)
 if(NOT sol2_git_POPULATED)
     FetchContent_Populate(sol2_git)
     check_git_commit_hash(sol2 ${sol2_git_SOURCE_DIR} develop)
+endif()
+
+FetchContent_Declare(spdlog_git
+    GIT_REPOSITORY https://github.com/gabime/spdlog.git
+    GIT_TAG        6f6cadf31da0bc03f542ef3b84330d83fc97c854)
+FetchContent_GetProperties(spdlog_git)
+if(NOT spdlog_git_POPULATED)
+    FetchContent_Populate(spdlog_git)
+    check_git_commit_hash(spdlog ${spdlog_git_SOURCE_DIR} v1.x)
 endif()
 
 if(WIN32)
@@ -247,6 +247,8 @@ set(PLIBSYS_TESTS OFF CACHE BOOL "")
 set(PLIBSYS_BUILD_DOC OFF CACHE BOOL "")
 add_subdirectory(${plibsys_git_SOURCE_DIR} ${plibsys_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
+add_subdirectory(${spdlog_git_SOURCE_DIR} ${spdlog_git_BINARY_DIR} EXCLUDE_FROM_ALL)
+
 add_subdirectory(${cef_tarbz2_SOURCE_DIR} ${cef_tarbz2_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 add_library(${PROJECT_NAME} INTERFACE)
@@ -255,7 +257,6 @@ target_include_directories(${PROJECT_NAME} INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${cppcodec_git_SOURCE_DIR}
     ${enet_git_SOURCE_DIR}/include
-    ${plog_git_SOURCE_DIR}/include
     ${sol2_git_SOURCE_DIR}/single/include
     ${cef_tarbz2_SOURCE_DIR}
     ${cef_tarbz2_SOURCE_DIR}/include)
@@ -267,4 +268,5 @@ target_link_libraries(${PROJECT_NAME} INTERFACE
     nlohmann_json
     lua
     plibsysstatic
+    spdlog
     libcef_dll_wrapper)

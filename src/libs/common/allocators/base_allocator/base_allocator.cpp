@@ -21,6 +21,6 @@
 #include "../../utils/log/log.hpp"
 
 void *operator new(std::size_t size, common::allocators::detail::base_allocator &b) {
-    LOGD << "Allocated " << size << " bytes";
+    LOGD("Allocated {} bytes", size);
     return b.allocate(size);
 }

@@ -20,9 +20,12 @@
 #include "log.hpp"
 #include <SDL2/SDL_cpuinfo.h>
 #include <SDL2/SDL_endian.h>
+#include <algorithm>
+#include <cctype>
 #include <cstdlib>
-#include <plog/Appenders/ColorConsoleAppender.h>
-#include <plog/Appenders/RollingFileAppender.h>
+#include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
 
 namespace common {
 namespace utils {
@@ -32,40 +35,52 @@ void init(std::string_view filename) {
         return;
     }
 
-    static auto color_console_appender = plog::ColorConsoleAppender<plog::TxtFormatter>{};
-    static auto file_appender =
-        plog::RollingFileAppender<plog::TxtFormatter>{std::string{filename}.c_str(), 8000, 3};
-
-    plog::init(
+    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+    console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e %z] [%t] [%^%l%$] [%g:%#] %v");
+    console_sink->set_level(
 #ifdef NDEBUG
-        plog::info,
+        spdlog::level::info
 #else
-        plog::debug,
+        spdlog::level::debug
 #endif
-        &color_console_appender);
+    );
 
-    plog::get()->addAppender(&file_appender);
-
-    LOGI << "";
-    LOGD << "Logger initialized";
-    LOGD << "  log file: " << filename;
-    LOGI << "CPU count: " << SDL_GetCPUCount();
-    LOGI << "CPU cache line size: " << SDL_GetCPUCacheLineSize();
-    LOGI_IF(SDL_BYTEORDER) << "CPU endianness: "
-                           << ((SDL_BYTEORDER == SDL_LIL_ENDIAN) ? "little" : "big");
-    LOGI << "Platform: " << SDL_GetPlatform();
-    LOGI << "System RAM: " << SDL_GetSystemRAM() << " B";
-    LOGI << "Build type: "
-         <<
+    auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
+        std::string{filename}, 1048576 * 5, 3);
+    rotating_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e %z] [%t] [%^%l%$] [%g:%#] %v");
+    rotating_sink->set_level(
 #ifdef NDEBUG
-        "release";
+        spdlog::level::info
 #else
-        "debug";
+        spdlog::level::debug
 #endif
+    );
+
+    auto logger = std::make_shared<spdlog::logger>(
+        spdlog::logger{"multi_sink", {console_sink, rotating_sink}});
+    logger->set_level(spdlog::level::trace);
+    spdlog::set_default_logger(logger);
+
+    LOGI("");
+    LOGD("Logger initialized");
+    LOGD("  log file: {}", filename);
+    LOGI("CPU count: {}", SDL_GetCPUCount());
+    LOGI("CPU cache line size: {}", SDL_GetCPUCacheLineSize());
+    LOGI_IF(
+        SDL_BYTEORDER, "CPU endianness: {}", (SDL_BYTEORDER == SDL_LIL_ENDIAN) ? "little" : "big");
+    LOGI("Platform: {}", SDL_GetPlatform());
+    LOGI("System RAM: {} B", SDL_GetSystemRAM());
+    LOGI("Build type: {}",
+#ifdef NDEBUG
+         "release"
+#else
+         "debug"
+#endif
+    );
 
     std::atexit([] {
-        LOGD << "Logger shutdown";
-        LOGI << "";
+        LOGD("Logger shutdown");
+        LOGI("");
     });
 }
 } // namespace log
