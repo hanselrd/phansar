@@ -17,7 +17,7 @@
 # along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
 # Project settings
 project(phansar VERSION 1.0.0 LANGUAGES CXX)
