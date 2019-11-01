@@ -35,7 +35,7 @@ void from_json(const extlibs::json &j, _grid_ &g) {
         try {                                                                                      \
             j.at(STRINGIFY(field)).get_to(g.field);                                                \
         } catch (const extlibs::json::out_of_range &e) {                                           \
-            LOGW << e.what();                                                                      \
+            LOGW(e.what());                                                                        \
         }                                                                                          \
     }()
 

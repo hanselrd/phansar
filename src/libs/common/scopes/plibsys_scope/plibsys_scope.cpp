@@ -29,10 +29,10 @@ plibsys_scope::plibsys_scope(const PMemVTable *vtable) {
 
     if (vtable) {
         p_libsys_init_full(vtable);
-        LOGI << "plibsys initialized (full)";
+        LOGI("plibsys initialized (full)");
     } else {
         p_libsys_init();
-        LOGI << "plibsys initialized";
+        LOGI("plibsys initialized");
     }
 }
 
@@ -42,7 +42,7 @@ plibsys_scope::~plibsys_scope() {
     }
 
     p_libsys_shutdown();
-    LOGI << "plibsys shutdown";
+    LOGI("plibsys shutdown");
 }
 } // namespace scopes
 } // namespace common

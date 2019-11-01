@@ -49,7 +49,7 @@ void init() {
     ASSERT_ALWAYS(_cache);
 
     std::atexit([] { _cache.reset(); });
-    LOGI << "Resource manager initialized";
+    LOGI("Resource manager initialized");
 }
 } // namespace resource_manager
 } // namespace managers

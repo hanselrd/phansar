@@ -89,7 +89,7 @@ void init() {
         _sdl_guard.reset();
         _plibsys_guard.reset();
     });
-    LOGI << "System manager initialized";
+    LOGI("System manager initialized");
 }
 
 void update() {

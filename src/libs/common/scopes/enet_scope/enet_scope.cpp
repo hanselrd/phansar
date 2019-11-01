@@ -29,7 +29,7 @@ enet_scope::enet_scope() {
     }
 
     ASSERT_ALWAYS(enet_initialize() == 0);
-    LOGI << "ENet initialized";
+    LOGI("ENet initialized");
 }
 
 enet_scope::~enet_scope() {
@@ -38,7 +38,7 @@ enet_scope::~enet_scope() {
     }
 
     enet_deinitialize();
-    LOGI << "ENet shutdown";
+    LOGI("ENet shutdown");
 }
 } // namespace scopes
 } // namespace common
