@@ -23,6 +23,7 @@
 #include <plog/Log.h>
 #include <string_view>
 
+#if 0
 #if defined(__FILE__) && defined(__SOURCE_PATH_SIZE__)
 #    define __FILENAME__ (__FILE__ + __SOURCE_PATH_SIZE__)
 #else
@@ -184,6 +185,7 @@
 #define LOGE_IF_(instance, condition) LOG_ERROR_IF_(instance, condition)
 #define LOGF_IF_(instance, condition) LOG_FATAL_IF_(instance, condition)
 #define LOGN_IF_(instance, condition) LOG_NONE_IF_(instance, condition)
+#endif
 
 namespace common {
 namespace utils {

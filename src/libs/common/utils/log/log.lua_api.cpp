@@ -27,6 +27,7 @@ namespace common {
 namespace utils {
 void init_log(sol::table &t) {
     auto log_generic = [](sol::this_state s, plog::Severity severity, std::string_view message) {
+#if 0
         if (!plog::get<PLOG_DEFAULT_INSTANCE>() ||
             !plog::get<PLOG_DEFAULT_INSTANCE>()->checkSeverity(severity)) {
             return;
@@ -40,6 +41,7 @@ void init_log(sol::table &t) {
         (*plog::get<PLOG_DEFAULT_INSTANCE>()) +=
             plog::Record(severity, ar.source + 1, ar.currentline, "", PLOG_GET_THIS()).ref()
             << message;
+#endif
     };
 
     auto log = t.create_named("log");
