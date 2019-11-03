@@ -1,0 +1,36 @@
+name: Continuous Integration
+
+on: [push, pull_request]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+        - uses: actions/checkout@v1
+        - name: sudo apt update
+          run: sudo apt update
+        - name: sudo apt install build-essential
+          run: sudo apt install build-essential
+        - name: sudo apt install cmake
+          run: sudo apt install cmake
+        - name: sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+          run: sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+        - name: mkdir debug_build && cd debug_build
+          run: mkdir debug_build && cd debug_build
+        - name: cmake -DCMAKE_BUILD_TYPE=Debug ..
+          run: cmake -DCMAKE_BUILD_TYPE=Debug ..
+        - name: make -j2
+          run: make -j2
+        - name: make test
+          run: make test
+        - name: cd ..
+          run: cd ..
+        - name: mkdir release_build && cd release_build
+          run: mkdir release_build && cd release_build
+        - name: cmake -DCMAKE_BUILD_TYPE=Release ..
+          run: cmake -DCMAKE_BUILD_TYPE=Release ..
+        - name: make -j2
+          run: make -j2
+        - name: make test
+          run: make test
