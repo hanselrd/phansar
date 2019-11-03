@@ -16,7 +16,8 @@ jobs:
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-8 --slave /usr/bin/gcov gcov /usr/bin/gcov-8
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 --slave /usr/bin/g++ g++ /usr/bin/g++-7 --slave /usr/bin/gcov gcov /usr/bin/gcov-7
-            sudo apt install cmake clang-format-6.0 libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+            sudo apt install cmake clang-format libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+            sudo apt install -f clang-format
             mkdir build
         - name: Check code formatting
           working-directory: ./utils
