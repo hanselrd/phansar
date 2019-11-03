@@ -1,7 +1,10 @@
 #!/usr/bin/env sh
 
-tmpfile_unformatted=$(mktemp)
-tmpfile_formatted=$(mktemp)
-find src/ -regex '.*\.\(hpp\|cpp\|tpp\)' -exec cat {} \; > $tmpfile_unformatted
-find src/ -regex '.*\.\(hpp\|cpp\|tpp\)' -exec clang-format -style=file {} \; > $tmpfile_formatted
-diff -u $tmpfile_unformatted $tmpfile_formatted
+cd $(git rev-parse --show-toplevel)
+tmpd=$(mktemp) # diff
+tmpu=$(mktemp) # unformatted
+tmpf=$(mktemp) # formatted
+find src/ -type f -regex '.*\.\(hpp\|cpp\|tpp\)' -print0 \
+    | xargs -0 -I{} sh -c "echo {}; cat {} > $tmpu; clang-format -style=file {} > $tmpf; diff -u $tmpu $tmpf | tee -a $tmpd"
+cat $tmpd
+exit $(cat $tmpd | wc -l)
