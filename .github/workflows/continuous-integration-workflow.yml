@@ -12,22 +12,25 @@ jobs:
           run: |
             sudo add-apt-repository ppa:ubuntu-toolchain-r/test
             sudo apt update
-            sudo apt install build-essential cmake gcc-7 g++-7 gcc-8 g++-8 gcc-9 g++-9
+            sudo apt install -y wget build-essential cmake gcc-7 g++-7 gcc-8 g++-8 gcc-9 g++-9
+            wget "http://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
+            tar xf clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
+            cp -R ./clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/* /usr/local
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-8 --slave /usr/bin/gcov gcov /usr/bin/gcov-8
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 --slave /usr/bin/g++ g++ /usr/bin/g++-7 --slave /usr/bin/gcov gcov /usr/bin/gcov-7
-            sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+            sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
             mkdir build
-        # - name: Check code formatting
-        #   working-directory: ./utils
-        #   run: |
-        #     ./check-clang-format.sh
+        - name: Check code formatting
+          working-directory: ./utils
+          run: |
+            ./check-clang-format.sh
         - name: Build and test (debug)
           working-directory: ./build
           run: |
             cmake -DCMAKE_BUILD_TYPE=Debug ..
             make -j2
-            make test
+            ctest --timeout 30 -V
         - name: Clean build directory
           working-directory: ./build
           run: |
@@ -37,4 +40,4 @@ jobs:
           run: |
             cmake -DCMAKE_BUILD_TYPE=Release ..
             make -j2
-            make test
+            ctest --timeout 30 -V
