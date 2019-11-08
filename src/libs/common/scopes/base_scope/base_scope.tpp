@@ -17,9 +17,6 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_SCOPES_BASE_SCOPE_TPP
-#define COMMON_SCOPES_BASE_SCOPE_TPP
-
 #include "base_scope.hpp"
 
 namespace common {
@@ -41,5 +38,3 @@ template <class T> std::uint32_t base_scope<T>::_guards = 0;
 } // namespace detail
 } // namespace scopes
 } // namespace common
-
-#endif

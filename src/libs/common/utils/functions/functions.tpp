@@ -17,9 +17,6 @@
  *  along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_UTILS_FUNCTIONS_TPP
-#define COMMON_UTILS_FUNCTIONS_TPP
-
 #include "functions.hpp"
 #include <algorithm>
 #include <cmath>
@@ -72,5 +69,3 @@ std::vector<components::vec3<T>> interpolate(components::vec3<T> point1,
 } // namespace functions
 } // namespace utils
 } // namespace common
-
-#endif

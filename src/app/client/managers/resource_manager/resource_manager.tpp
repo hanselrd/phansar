@@ -17,9 +17,6 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MANAGERS_RESOURCE_MANAGER_TPP
-#define CLIENT_MANAGERS_RESOURCE_MANAGER_TPP
-
 #include "resource_manager.hpp"
 
 namespace client {
@@ -45,5 +42,3 @@ template <class T> std::optional<managees::resource<T>> get(std::string_view pat
 } // namespace resource_manager
 } // namespace managers
 } // namespace client
-
-#endif

@@ -17,9 +17,6 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MANAGEES_RESOURCE_TPP
-#define CLIENT_MANAGEES_RESOURCE_TPP
-
 #include "loader/loader.hpp"
 #include "resource.hpp"
 
@@ -40,5 +37,3 @@ template <class T> T *resource<T>::get() const {
 }
 } // namespace managees
 } // namespace client
-
-#endif

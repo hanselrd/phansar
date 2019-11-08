@@ -17,9 +17,6 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_CONTAINERS_CACHE_TPP
-#define COMMON_CONTAINERS_CACHE_TPP
-
 #include "cache.hpp"
 
 namespace common {
@@ -44,5 +41,3 @@ template <class K, class T> void cache<K, T>::clear() {
 }
 } // namespace containers
 } // namespace common
-
-#endif
