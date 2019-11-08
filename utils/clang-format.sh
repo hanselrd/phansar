@@ -2,8 +2,15 @@
 
 cd $(git rev-parse --show-toplevel)
 tmpd=$(mktemp) # diff
-tmpu=$(mktemp) # unformatted
-tmpf=$(mktemp) # formatted
-find src/ tests/ -type f -regex '.*\.\(hpp\|cpp\|tpp\)' -print0 \
-    | xargs -0 -I{} sh -c "echo {}; cat {} > $tmpu; clang-format -style=file {} > $tmpf; diff -u $tmpu $tmpf | tee -a $tmpd; clang-format --style=file -i {}"
+tmpb=$(mktemp) # before
+tmpa=$(mktemp) # after
+find src/ tests/ -type f -regex '.*\.\(hpp\|cpp\|tpp\)' -print0 |
+    while IFS= read -r -d '' file; do
+        echo $file
+        cat $file > $tmpb
+        clang-format -style=file $file > $tmpa
+        diff -u $tmpb $tmpa | tee -a $tmpd
+        clang-format --style=file -i $file
+    done
 cat $tmpd
+# exit $(cat $tmpd | wc -l)
