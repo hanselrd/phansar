@@ -17,9 +17,6 @@
  *  along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_UTILS_CPPIFY_TPP
-#define COMMON_UTILS_CPPIFY_TPP
-
 #include "../assert/assert.hpp"
 #include "cppify.hpp"
 
@@ -41,5 +38,3 @@ template <class T, class D> cppify<T, D>::operator T *() const {
 }
 } // namespace utils
 } // namespace common
-
-#endif

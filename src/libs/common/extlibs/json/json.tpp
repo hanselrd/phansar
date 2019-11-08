@@ -17,9 +17,6 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_EXTLIBS_JSON_TPP
-#define COMMON_EXTLIBS_JSON_TPP
-
 #include "json.hpp"
 
 namespace nlohmann {
@@ -69,5 +66,3 @@ void adl_serializer<std::variant<Ts...>>::from_json(const json &j, std::variant<
     detail::variant_switch<sizeof...(Ts) - 1, 0>{}(j, var);
 }
 } // namespace nlohmann
-
-#endif

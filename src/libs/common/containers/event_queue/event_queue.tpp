@@ -17,9 +17,6 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_CONTAINERS_EVENT_QUEUE_TPP
-#define COMMON_CONTAINERS_EVENT_QUEUE_TPP
-
 #include "event_queue.hpp"
 
 namespace common {
@@ -61,5 +58,3 @@ template <class E, class T> void event_queue<E, T>::update() {
 }
 } // namespace containers
 } // namespace common
-
-#endif

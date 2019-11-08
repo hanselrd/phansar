@@ -17,9 +17,6 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_CONTAINERS_DISPATCH_QUEUE_TPP
-#define COMMON_CONTAINERS_DISPATCH_QUEUE_TPP
-
 #include "dispatch_queue.hpp"
 #include <memory>
 
@@ -42,5 +39,3 @@ std::future<R> dispatch_queue::dispatch(F &&f, Args &&... args) {
 }
 } // namespace containers
 } // namespace common
-
-#endif

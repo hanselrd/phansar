@@ -17,9 +17,6 @@
  *  along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_UTILS_ATOMIC_TPP
-#define COMMON_UTILS_ATOMIC_TPP
-
 #include "../assert/assert.hpp"
 #include "atomic.hpp"
 
@@ -70,5 +67,3 @@ template <class T> inline T fetch_xor(std::atomic<T> &shared, T val) {
     return detail::cas_loop(shared, [val](auto old_val) { return old_val ^ val; });
 }
 } // namespace common::utils::atomic
-
-#endif
