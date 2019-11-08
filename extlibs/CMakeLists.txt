@@ -50,7 +50,7 @@ endif()
 
 FetchContent_Declare(Catch2_git
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        5ac348cd6e788abbf18139289ae8f4722ab1ebe8)
+    GIT_TAG        930f49a641aa6a495d264d7b5e7c007734da0b0c)
 FetchContent_GetProperties(Catch2_git)
 if(NOT catch2_git_POPULATED)
     FetchContent_Populate(Catch2_git)
@@ -77,7 +77,7 @@ endif()
 
 FetchContent_Declare(json_git
     GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG        ea60d40f4a60a47d3be9560d8f7bc37c163fe47b)
+    GIT_TAG        43e4db614130f4455ee1b543a26424d9f304b86f)
 FetchContent_GetProperties(json_git)
 if(NOT json_git_POPULATED)
     FetchContent_Populate(json_git)
@@ -102,6 +102,15 @@ if(NOT plibsys_git_POPULATED)
     check_git_commit_hash(plibsys ${plibsys_git_SOURCE_DIR} master)
 endif()
 
+FetchContent_Declare(rttr_git
+    GIT_REPOSITORY https://github.com/rttrorg/rttr.git
+    GIT_TAG        b16fccf0fbbbf94064bf2a6c7c47f2b910ab31f1)
+FetchContent_GetProperties(rttr_git)
+if(NOT rttr_git_POPULATED)
+    FetchContent_Populate(rttr_git)
+    check_git_commit_hash(rttr ${rttr_git_SOURCE_DIR} master)
+endif()
+
 FetchContent_Declare(sol2_git
     GIT_REPOSITORY https://github.com/ThePhD/sol2.git
     GIT_TAG        88355fcdf85dfcf52c76e41f75b36cd6ba0b7954)
@@ -113,7 +122,7 @@ endif()
 
 FetchContent_Declare(spdlog_git
     GIT_REPOSITORY https://github.com/gabime/spdlog.git
-    GIT_TAG        6f6cadf31da0bc03f542ef3b84330d83fc97c854)
+    GIT_TAG        653ec05c0e82eed9c758ee28ecf40128da92a221)
 FetchContent_GetProperties(spdlog_git)
 if(NOT spdlog_git_POPULATED)
     FetchContent_Populate(spdlog_git)
@@ -247,6 +256,21 @@ set(PLIBSYS_TESTS OFF CACHE BOOL "")
 set(PLIBSYS_BUILD_DOC OFF CACHE BOOL "")
 add_subdirectory(${plibsys_git_SOURCE_DIR} ${plibsys_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
+set(BUILD_RTTR_DYNAMIC OFF CACHE BOOL "")
+set(BUILD_UNIT_TESTS OFF CACHE BOOL "")
+set(BUILD_STATIC ON CACHE BOOL "")
+set(BUILD_WITH_STATIC_RUNTIME_LIBS OFF CACHE BOOL "")
+set(BUILD_WITH_RTTI ON CACHE BOOL "")
+set(BUILD_BENCHMARKS OFF CACHE BOOL "")
+set(BUILD_EXAMPLES OFF CACHE BOOL "")
+set(BUILD_DOCUMENTATION OFF CACHE BOOL "")
+set(BUILD_INSTALLER OFF CACHE BOOL "")
+set(BUILD_PACKAGE OFF CACHE BOOL "")
+set(USE_PCH OFF CACHE BOOL "")
+set(CUSTOM_DOXYGEN_STYLE OFF CACHE BOOL "")
+set(BUILD_WEBSITE_DOCU OFF CACHE BOOL "")
+add_subdirectory(${rttr_git_SOURCE_DIR} ${rttr_git_BINARY_DIR} EXCLUDE_FROM_ALL)
+
 add_subdirectory(${spdlog_git_SOURCE_DIR} ${spdlog_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 add_subdirectory(${cef_tarbz2_SOURCE_DIR} ${cef_tarbz2_BINARY_DIR} EXCLUDE_FROM_ALL)
@@ -268,5 +292,6 @@ target_link_libraries(${PROJECT_NAME} INTERFACE
     nlohmann_json
     lua
     plibsysstatic
+    rttr_core_lib
     spdlog
     libcef_dll_wrapper)
