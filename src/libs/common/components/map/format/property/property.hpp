@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_PROPERTY_PROPERTY_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_PROPERTY_PROPERTY_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include "../chunk/chunk.hpp"
 #include <string>
 #include <variant>
@@ -35,8 +35,8 @@ struct _property_ {
     std::variant<std::string, double, bool> value;
 };
 
-void to_json(extlibs::json &j, const _property_ &p);
-void from_json(const extlibs::json &j, _property_ &p);
+void to_json(vendor::json &j, const _property_ &p);
+void from_json(const vendor::json &j, _property_ &p);
 } // namespace format
 } // namespace map_detail
 } // namespace components

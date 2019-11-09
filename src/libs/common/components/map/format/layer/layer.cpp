@@ -25,36 +25,36 @@ namespace common {
 namespace components {
 namespace map_detail {
 namespace format {
-void to_json(extlibs::json &j, const _layer_ &l) {
-    j = extlibs::json{{"chunks", l.chunks},
-                      {"compression", l.compression},
-                      {"data", l.data},
-                      {"draworder", l.draworder},
-                      {"encoding", l.encoding},
-                      {"height", l.height},
-                      {"id", l.id},
-                      {"image", l.image},
-                      {"layers", l.layers},
-                      {"name", l.name},
-                      {"objects", l.objects},
-                      {"offsetx", l.offsetx},
-                      {"offsety", l.offsety},
-                      {"opacity", l.opacity},
-                      {"properties", l.properties},
-                      {"transparentcolor", l.transparentcolor},
-                      {"type", l.type},
-                      {"visible", l.visible},
-                      {"width", l.width},
-                      {"x", l.x},
-                      {"y", l.y}};
+void to_json(vendor::json &j, const _layer_ &l) {
+    j = vendor::json{{"chunks", l.chunks},
+                     {"compression", l.compression},
+                     {"data", l.data},
+                     {"draworder", l.draworder},
+                     {"encoding", l.encoding},
+                     {"height", l.height},
+                     {"id", l.id},
+                     {"image", l.image},
+                     {"layers", l.layers},
+                     {"name", l.name},
+                     {"objects", l.objects},
+                     {"offsetx", l.offsetx},
+                     {"offsety", l.offsety},
+                     {"opacity", l.opacity},
+                     {"properties", l.properties},
+                     {"transparentcolor", l.transparentcolor},
+                     {"type", l.type},
+                     {"visible", l.visible},
+                     {"width", l.width},
+                     {"x", l.x},
+                     {"y", l.y}};
 }
 
-void from_json(const extlibs::json &j, _layer_ &l) {
+void from_json(const vendor::json &j, _layer_ &l) {
 #define EXTRACT(field)                                                                             \
     [&] {                                                                                          \
         try {                                                                                      \
             j.at(STRINGIFY(field)).get_to(l.field);                                                \
-        } catch (const extlibs::json::out_of_range &e) {                                           \
+        } catch (const vendor::json::out_of_range &e) {                                            \
             LOGW(e.what());                                                                        \
         }                                                                                          \
     }()

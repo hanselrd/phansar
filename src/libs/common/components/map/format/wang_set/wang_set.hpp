@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_WANG_SET_WANG_SET_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_WANG_SET_WANG_SET_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include "../wang_color/wang_color.hpp"
 #include "../wang_tile/wang_tile.hpp"
 #include <cstdint>
@@ -39,8 +39,8 @@ struct _wang_set_ {
     std::vector<_wang_tile_> wangtiles;
 };
 
-void to_json(extlibs::json &j, const _wang_set_ &ws);
-void from_json(const extlibs::json &j, _wang_set_ &ws);
+void to_json(vendor::json &j, const _wang_set_ &ws);
+void from_json(const vendor::json &j, _wang_set_ &ws);
 } // namespace format
 } // namespace map_detail
 } // namespace components

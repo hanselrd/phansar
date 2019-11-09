@@ -24,9 +24,9 @@
 namespace client {
 namespace managees {
 namespace resource_detail {
-std::shared_ptr<common::extlibs::json> loader<common::extlibs::json>::load(std::string_view path) {
+std::shared_ptr<common::vendor::json> loader<common::vendor::json>::load(std::string_view path) {
     auto ifs = std::ifstream{std::string{path}};
-    auto json = std::make_shared<common::extlibs::json>();
+    auto json = std::make_shared<common::vendor::json>();
     ifs >> *json;
     return json;
 }

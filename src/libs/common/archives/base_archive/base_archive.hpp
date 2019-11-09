@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_ARCHIVES_BASE_ARCHIVE_BASE_ARCHIVE_HPP
 #define LIBS_COMMON_ARCHIVES_BASE_ARCHIVE_BASE_ARCHIVE_HPP
 
-#include "../../extlibs/json/json.hpp"
+#include "../../vendor/json/json.hpp"
 #include <iostream>
 
 namespace common {
@@ -30,8 +30,8 @@ class base_archive {
 public:
     virtual ~base_archive() = default;
 
-    virtual extlibs::json load(std::istream &is) = 0;
-    virtual void save(std::ostream &os, const extlibs::json &j) = 0;
+    virtual vendor::json load(std::istream &is) = 0;
+    virtual void save(std::ostream &os, const vendor::json &j) = 0;
 };
 } // namespace detail
 } // namespace archives

@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_LAYER_LAYER_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_LAYER_LAYER_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include "../chunk/chunk.hpp"
 #include "../object/object.hpp"
 #include "../property/property.hpp"
@@ -58,8 +58,8 @@ struct _layer_ {
     std::uint32_t y;
 };
 
-void to_json(extlibs::json &j, const _layer_ &l);
-void from_json(const extlibs::json &j, _layer_ &l);
+void to_json(vendor::json &j, const _layer_ &l);
+void from_json(const vendor::json &j, _layer_ &l);
 } // namespace format
 } // namespace map_detail
 } // namespace components

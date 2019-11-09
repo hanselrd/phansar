@@ -18,9 +18,9 @@
  */
 
 #include <common/archives/psar_archive/psar_archive.hpp>
-#include <common/extlibs/codec/codec.hpp>
-#include <common/extlibs/json/json.hpp>
 #include <common/utils/log/log.hpp>
+#include <common/vendor/codec/codec.hpp>
+#include <common/vendor/json/json.hpp>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
@@ -30,8 +30,8 @@
 
 namespace fs = std::filesystem;
 
-common::extlibs::json _compile_assets(std::string_view path) {
-    auto json = common::extlibs::json{};
+common::vendor::json _compile_assets(std::string_view path) {
+    auto json = common::vendor::json{};
 
     for (const auto &p : fs::directory_iterator(path)) {
         LOGI("  {}", p.path().c_str());
@@ -45,7 +45,7 @@ common::extlibs::json _compile_assets(std::string_view path) {
                 auto ifs = std::ifstream{p.path(), std::ios::binary};
                 auto buffer = std::vector<std::uint8_t>{(std::istreambuf_iterator<char>(ifs)),
                                                         (std::istreambuf_iterator<char>())};
-                json[p.path().filename()] = common::extlibs::codec::base64::encode(buffer);
+                json[p.path().filename()] = common::vendor::codec::base64::encode(buffer);
             }
         }
     }

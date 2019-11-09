@@ -25,34 +25,34 @@ namespace common {
 namespace components {
 namespace map_detail {
 namespace format {
-void to_json(extlibs::json &j, const _map_ &m) {
-    j = extlibs::json{{"backgroundcolor", m.backgroundcolor},
-                      {"height", m.height},
-                      {"hexsidelength", m.hexsidelength},
-                      {"infinite", m.infinite},
-                      {"layers", m.layers},
-                      {"nextlayerid", m.nextlayerid},
-                      {"nextobjectid", m.nextobjectid},
-                      {"orientation", m.orientation},
-                      {"properties", m.properties},
-                      {"renderorder", m.renderorder},
-                      {"staggeraxis", m.staggeraxis},
-                      {"staggerindex", m.staggerindex},
-                      {"tiledversion", m.tiledversion},
-                      {"tileheight", m.tileheight},
-                      {"tilesets", m.tilesets},
-                      {"tilewidth", m.tilewidth},
-                      {"type", m.type},
-                      {"version", m.version},
-                      {"width", m.width}};
+void to_json(vendor::json &j, const _map_ &m) {
+    j = vendor::json{{"backgroundcolor", m.backgroundcolor},
+                     {"height", m.height},
+                     {"hexsidelength", m.hexsidelength},
+                     {"infinite", m.infinite},
+                     {"layers", m.layers},
+                     {"nextlayerid", m.nextlayerid},
+                     {"nextobjectid", m.nextobjectid},
+                     {"orientation", m.orientation},
+                     {"properties", m.properties},
+                     {"renderorder", m.renderorder},
+                     {"staggeraxis", m.staggeraxis},
+                     {"staggerindex", m.staggerindex},
+                     {"tiledversion", m.tiledversion},
+                     {"tileheight", m.tileheight},
+                     {"tilesets", m.tilesets},
+                     {"tilewidth", m.tilewidth},
+                     {"type", m.type},
+                     {"version", m.version},
+                     {"width", m.width}};
 }
 
-void from_json(const extlibs::json &j, _map_ &m) {
+void from_json(const vendor::json &j, _map_ &m) {
 #define EXTRACT(field)                                                                             \
     [&] {                                                                                          \
         try {                                                                                      \
             j.at(STRINGIFY(field)).get_to(m.field);                                                \
-        } catch (const extlibs::json::out_of_range &e) {                                           \
+        } catch (const vendor::json::out_of_range &e) {                                            \
             LOGW(e.what());                                                                        \
         }                                                                                          \
     }()

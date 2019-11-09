@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <common/extlibs/json/json.hpp>
 #include <common/utils/log/log.hpp>
+#include <common/vendor/json/json.hpp>
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -29,11 +29,11 @@ struct person {
     std::optional<std::string> company;
 };
 
-void to_json(common::extlibs::json &j, const person &p) {
-    j = common::extlibs::json{{"name", p.name}, {"age", p.age}, {"company", p.company}};
+void to_json(common::vendor::json &j, const person &p) {
+    j = common::vendor::json{{"name", p.name}, {"age", p.age}, {"company", p.company}};
 }
 
-void from_json(const common::extlibs::json &j, person &p) {
+void from_json(const common::vendor::json &j, person &p) {
     j.at("name").get_to(p.name);
     j.at("age").get_to(p.age);
     j.at("company").get_to(p.company);
@@ -42,7 +42,7 @@ void from_json(const common::extlibs::json &j, person &p) {
 int main(int argc, char *argv[]) {
     common::utils::log::init("optional_json.log");
 
-    auto json = common::extlibs::json{{"test", nullptr}};
+    auto json = common::vendor::json{{"test", nullptr}};
     LOGI(json.dump());
     auto test = json["test"].get<std::optional<std::uint32_t>>();
     LOGI(test.has_value());

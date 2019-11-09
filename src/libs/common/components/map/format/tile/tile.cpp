@@ -25,24 +25,24 @@ namespace common {
 namespace components {
 namespace map_detail {
 namespace format {
-void to_json(extlibs::json &j, const _tile_ &t) {
-    j = extlibs::json{{"animation", t.animation},
-                      {"id", t.id},
-                      {"image", t.image},
-                      {"imageheight", t.imageheight},
-                      {"imagewidth", t.imagewidth},
-                      {"objectgroup", t.objectgroup},
-                      {"properties", t.properties},
-                      {"terrain", t.terrain},
-                      {"type", t.type}};
+void to_json(vendor::json &j, const _tile_ &t) {
+    j = vendor::json{{"animation", t.animation},
+                     {"id", t.id},
+                     {"image", t.image},
+                     {"imageheight", t.imageheight},
+                     {"imagewidth", t.imagewidth},
+                     {"objectgroup", t.objectgroup},
+                     {"properties", t.properties},
+                     {"terrain", t.terrain},
+                     {"type", t.type}};
 }
 
-void from_json(const extlibs::json &j, _tile_ &t) {
+void from_json(const vendor::json &j, _tile_ &t) {
 #define EXTRACT(field)                                                                             \
     [&] {                                                                                          \
         try {                                                                                      \
             j.at(STRINGIFY(field)).get_to(t.field);                                                \
-        } catch (const extlibs::json::out_of_range &e) {                                           \
+        } catch (const vendor::json::out_of_range &e) {                                            \
             LOGW(e.what());                                                                        \
         }                                                                                          \
     }()

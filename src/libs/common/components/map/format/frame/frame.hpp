@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_FRAME_FRAME_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_FRAME_FRAME_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include <cstdint>
 
 namespace common {
@@ -32,8 +32,8 @@ struct _frame_ {
     std::uint32_t tileid;
 };
 
-void to_json(extlibs::json &j, const _frame_ &f);
-void from_json(const extlibs::json &j, _frame_ &f);
+void to_json(vendor::json &j, const _frame_ &f);
+void from_json(const vendor::json &j, _frame_ &f);
 } // namespace format
 } // namespace map_detail
 } // namespace components

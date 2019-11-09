@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_GRID_GRID_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_GRID_GRID_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include <cstdint>
 #include <string>
 
@@ -34,8 +34,8 @@ struct _grid_ {
     std::uint32_t height;
 };
 
-void to_json(extlibs::json &j, const _grid_ &g);
-void from_json(const extlibs::json &j, _grid_ &g);
+void to_json(vendor::json &j, const _grid_ &g);
+void from_json(const vendor::json &j, _grid_ &g);
 } // namespace format
 } // namespace map_detail
 } // namespace components

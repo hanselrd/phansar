@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_MAP_MAP_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_MAP_MAP_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include "../layer/layer.hpp"
 #include "../property/property.hpp"
 #include "../tileset/tileset.hpp"
@@ -55,8 +55,8 @@ struct _map_ {
     std::uint32_t width;
 };
 
-void to_json(extlibs::json &j, const _map_ &m);
-void from_json(const extlibs::json &j, _map_ &m);
+void to_json(vendor::json &j, const _map_ &m);
+void from_json(const vendor::json &j, _map_ &m);
 } // namespace format
 } // namespace map_detail
 } // namespace components

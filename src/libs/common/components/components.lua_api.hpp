@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_COMPONENTS_LUA_API_HPP
 #define LIBS_COMMON_COMPONENTS_COMPONENTS_LUA_API_HPP
 
-#include "../extlibs/sol/sol.hpp"
+#include "../vendor/sol/sol.hpp"
 
 namespace lua_api {
 namespace common {

@@ -22,14 +22,14 @@
 
 namespace common {
 namespace archives {
-extlibs::json psar_archive::load(std::istream &is) {
-    auto j = extlibs::json::from_cbor(is);
-    LOGD("Loaded {} bytes", extlibs::json::to_cbor(j).size());
+vendor::json psar_archive::load(std::istream &is) {
+    auto j = vendor::json::from_cbor(is);
+    LOGD("Loaded {} bytes", vendor::json::to_cbor(j).size());
     return j;
 }
 
-void psar_archive::save(std::ostream &os, const extlibs::json &j) {
-    auto cbor = extlibs::json::to_cbor(j);
+void psar_archive::save(std::ostream &os, const vendor::json &j) {
+    auto cbor = vendor::json::to_cbor(j);
     os.write(reinterpret_cast<const char *>(cbor.data()), cbor.size());
     LOGD("Saved {} bytes", cbor.size());
 }

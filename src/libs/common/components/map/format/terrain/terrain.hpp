@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_TERRAIN_TERRAIN_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_TERRAIN_TERRAIN_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include <cstdint>
 #include <string>
 
@@ -33,8 +33,8 @@ struct _terrain_ {
     std::uint32_t tile;
 };
 
-void to_json(extlibs::json &j, const _terrain_ &t);
-void from_json(const extlibs::json &j, _terrain_ &t);
+void to_json(vendor::json &j, const _terrain_ &t);
+void from_json(const vendor::json &j, _terrain_ &t);
 } // namespace format
 } // namespace map_detail
 } // namespace components

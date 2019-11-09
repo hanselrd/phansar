@@ -26,8 +26,8 @@ namespace common {
 namespace archives {
 class psar_archive : public detail::base_archive {
 public:
-    extlibs::json load(std::istream &is) override;
-    void save(std::ostream &os, const extlibs::json &j) override;
+    vendor::json load(std::istream &is) override;
+    void save(std::ostream &os, const vendor::json &j) override;
 };
 } // namespace archives
 } // namespace common

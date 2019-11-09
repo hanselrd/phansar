@@ -17,21 +17,15 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBS_COMMON_EXTLIBS_CODEC_CODEC_HPP
-#define LIBS_COMMON_EXTLIBS_CODEC_CODEC_HPP
+#ifndef LIBS_COMMON_VENDOR_SOL_SOL_HPP
+#define LIBS_COMMON_VENDOR_SOL_SOL_HPP
 
-#include <cppcodec/base32_crockford.hpp>
-#include <cppcodec/base64_rfc4648.hpp>
-#include <cppcodec/hex_lower.hpp>
+#include <sol/sol.hpp>
 
 namespace common {
-namespace extlibs {
-namespace codec {
-using base64 = cppcodec::base64_rfc4648;
-using base32 = cppcodec::base32_crockford;
-using base16 = cppcodec::hex_lower;
-} // namespace codec
-} // namespace extlibs
+namespace vendor {
+namespace sol = sol;
+}
 } // namespace common
 
 #endif

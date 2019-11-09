@@ -20,7 +20,7 @@
 #ifndef APP_CLIENT_LUA_API_LUA_API_HPP
 #define APP_CLIENT_LUA_API_LUA_API_HPP
 
-#include <common/extlibs/sol/sol.hpp>
+#include <common/vendor/sol/sol.hpp>
 
 namespace lua_api {
 void init_client(sol::table &t);

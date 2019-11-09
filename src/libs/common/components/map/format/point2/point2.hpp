@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_POINT2_POINT2_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_POINT2_POINT2_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include <cstdint>
 
 namespace common {
@@ -32,8 +32,8 @@ struct _point2_ {
     std::uint32_t y;
 };
 
-void to_json(extlibs::json &j, const _point2_ &p);
-void from_json(const extlibs::json &j, _point2_ &p);
+void to_json(vendor::json &j, const _point2_ &p);
+void from_json(const vendor::json &j, _point2_ &p);
 } // namespace format
 } // namespace map_detail
 } // namespace components
