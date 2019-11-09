@@ -18,9 +18,9 @@
  */
 
 #include "socket.hpp"
-#include "../../extlibs/codec/codec.hpp"
 #include "../../utils/assert/assert.hpp"
 #include "../../utils/log/log.hpp"
+#include "../../vendor/codec/codec.hpp"
 #include <vector>
 
 namespace common {
@@ -110,10 +110,10 @@ bool socket::accept(peer_id &id) {
     return true;
 }
 
-void socket::broadcast(const extlibs::json &val, packet_flags flags) {
+void socket::broadcast(const vendor::json &val, packet_flags flags) {
     ASSERT(_host);
-    auto cbor = extlibs::json::to_cbor(val);
-    auto encoded = extlibs::codec::base64::encode(cbor);
+    auto cbor = vendor::json::to_cbor(val);
+    auto encoded = vendor::codec::base64::encode(cbor);
     auto packet = enet_packet_create(encoded.c_str(), encoded.size() + 1, flags);
     auto channel = std::uint8_t{0};
     if (flags & ENET_PACKET_FLAG_RELIABLE) {
@@ -125,12 +125,12 @@ void socket::broadcast(const extlibs::json &val, packet_flags flags) {
     LOGD("Broadcasted {} to all peers", val.dump());
 }
 
-void socket::send(peer_id id, const extlibs::json &val, packet_flags flags) {
+void socket::send(peer_id id, const vendor::json &val, packet_flags flags) {
     ASSERT(_host);
     auto peer = get_peer(id);
     ASSERT(peer != nullptr);
-    auto cbor = extlibs::json::to_cbor(val);
-    auto encoded = extlibs::codec::base64::encode(cbor);
+    auto cbor = vendor::json::to_cbor(val);
+    auto encoded = vendor::codec::base64::encode(cbor);
     auto packet = enet_packet_create(encoded.c_str(), encoded.size() + 1, flags);
     auto channel = std::uint8_t{0};
     if (flags & ENET_PACKET_FLAG_RELIABLE) {
@@ -142,7 +142,7 @@ void socket::send(peer_id id, const extlibs::json &val, packet_flags flags) {
     LOGD("Sent {} to peer {}", val.dump(), id);
 }
 
-bool socket::receive(peer_id &id, extlibs::json &val) {
+bool socket::receive(peer_id &id, vendor::json &val) {
     ASSERT(_host);
     if (_receive_queue.empty()) {
         return false;
@@ -153,8 +153,8 @@ bool socket::receive(peer_id &id, extlibs::json &val) {
     try {
         auto encoded =
             std::string(packet.second->data, packet.second->data + packet.second->dataLength);
-        auto decoded = extlibs::codec::base64::decode(encoded);
-        val = extlibs::json::from_cbor(decoded);
+        auto decoded = vendor::codec::base64::decode(encoded);
+        val = vendor::json::from_cbor(decoded);
         LOGD("Received {} from peer {}", val.dump(), id);
         return true;
     } catch (...) {

@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <common/extlibs/json/json.hpp>
 #include <common/utils/log/log.hpp>
+#include <common/vendor/json/json.hpp>
 #include <cstdint>
 #include <string>
 #include <variant>
@@ -29,11 +29,11 @@ struct person {
     std::variant<std::uint32_t, std::string> variant;
 };
 
-void to_json(common::extlibs::json &j, const person &p) {
-    j = common::extlibs::json{{"name", p.name}, {"age", p.age}, {"variant", p.variant}};
+void to_json(common::vendor::json &j, const person &p) {
+    j = common::vendor::json{{"name", p.name}, {"age", p.age}, {"variant", p.variant}};
 }
 
-void from_json(const common::extlibs::json &j, person &p) {
+void from_json(const common::vendor::json &j, person &p) {
     j.at("name").get_to(p.name);
     j.at("age").get_to(p.age);
     j.at("variant").get_to(p.variant);
@@ -42,7 +42,7 @@ void from_json(const common::extlibs::json &j, person &p) {
 int main(int argc, char *argv[]) {
     common::utils::log::init("variant_json.log");
 
-    auto json = common::extlibs::json{};
+    auto json = common::vendor::json{};
     auto p1 = person{"Bob", 18, "Google"};
     auto p2 = person{"Tod", 21, 1337};
     json["p1"] = p1;

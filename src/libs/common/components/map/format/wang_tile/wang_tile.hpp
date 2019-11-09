@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_WANG_TILE_WANG_TILE_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_WANG_TILE_WANG_TILE_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include <array>
 #include <cstdint>
 
@@ -36,8 +36,8 @@ struct _wang_tile_ {
     std::array<std::uint8_t, 8> wangid;
 };
 
-void to_json(extlibs::json &j, const _wang_tile_ &wt);
-void from_json(const extlibs::json &j, _wang_tile_ &wt);
+void to_json(vendor::json &j, const _wang_tile_ &wt);
+void from_json(const vendor::json &j, _wang_tile_ &wt);
 } // namespace format
 } // namespace map_detail
 } // namespace components

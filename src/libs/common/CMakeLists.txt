@@ -82,7 +82,7 @@ set(libs
     ${SDL2_IMAGE_LIBRARIES}
     ${SDL2_MIXER_LIBRARIES}
     ${SDL2_TTF_LIBRARIES}
-    extlibs)
+    vendor)
 
 add_library(${PROJECT_NAME} STATIC
     ${sources}

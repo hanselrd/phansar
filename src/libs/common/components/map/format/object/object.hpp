@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_OBJECT_OBJECT_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_OBJECT_OBJECT_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include "../point2/point2.hpp"
 #include "../property/property.hpp"
 #include "../text/text.hpp"
@@ -53,8 +53,8 @@ struct _object_ {
     double y;
 };
 
-void to_json(extlibs::json &j, const _object_ &o);
-void from_json(const extlibs::json &j, _object_ &o);
+void to_json(vendor::json &j, const _object_ &o);
+void from_json(const vendor::json &j, _object_ &o);
 } // namespace format
 } // namespace map_detail
 } // namespace components

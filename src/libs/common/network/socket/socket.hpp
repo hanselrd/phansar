@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_NETWORK_SOCKET_SOCKET_HPP
 #define LIBS_COMMON_NETWORK_SOCKET_SOCKET_HPP
 
-#include "../../extlibs/json/json.hpp"
+#include "../../vendor/json/json.hpp"
 #include "../address/address.hpp"
 #include <cstdint>
 #include <enet/enet.h>
@@ -47,9 +47,9 @@ public:
     bool listen(std::uint32_t timeout);
     ENetPeer *get_peer(peer_id id) const;
     bool accept(peer_id &id);
-    void broadcast(const extlibs::json &val, packet_flags flags = ENET_PACKET_FLAG_RELIABLE);
-    void send(peer_id id, const extlibs::json &val, packet_flags flags = ENET_PACKET_FLAG_RELIABLE);
-    bool receive(peer_id &id, extlibs::json &val);
+    void broadcast(const vendor::json &val, packet_flags flags = ENET_PACKET_FLAG_RELIABLE);
+    void send(peer_id id, const vendor::json &val, packet_flags flags = ENET_PACKET_FLAG_RELIABLE);
+    bool receive(peer_id &id, vendor::json &val);
     void disconnect(peer_id id, bool force = false, std::uint32_t disconnection_data = 0);
 
 private:

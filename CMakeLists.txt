@@ -66,7 +66,7 @@ enable_testing()
 include(CTest)
 
 # Build project
-add_subdirectory(extlibs)
+add_subdirectory(vendor)
 include(Catch)
 add_subdirectory(src)
 

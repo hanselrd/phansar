@@ -17,31 +17,21 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBS_COMMON_EXTLIBS_JSON_JSON_HPP
-#define LIBS_COMMON_EXTLIBS_JSON_JSON_HPP
+#ifndef LIBS_COMMON_VENDOR_CODEC_CODEC_HPP
+#define LIBS_COMMON_VENDOR_CODEC_CODEC_HPP
 
-#include <nlohmann/json.hpp>
-#include <optional>
-#include <variant>
-
-namespace nlohmann {
-template <class T> struct adl_serializer<std::optional<T>> {
-    static void to_json(json &j, const std::optional<T> &opt);
-    static void from_json(const json &j, std::optional<T> &opt);
-};
-
-template <class... Ts> struct adl_serializer<std::variant<Ts...>> {
-    static void to_json(json &j, const std::variant<Ts...> &var);
-    static void from_json(const json &j, std::variant<Ts...> &var);
-};
-} // namespace nlohmann
+#include <cppcodec/base32_crockford.hpp>
+#include <cppcodec/base64_rfc4648.hpp>
+#include <cppcodec/hex_lower.hpp>
 
 namespace common {
-namespace extlibs {
-using namespace nlohmann;
-}
+namespace vendor {
+namespace codec {
+using base64 = cppcodec::base64_rfc4648;
+using base32 = cppcodec::base32_crockford;
+using base16 = cppcodec::hex_lower;
+} // namespace codec
+} // namespace vendor
 } // namespace common
-
-#include "json.tpp"
 
 #endif

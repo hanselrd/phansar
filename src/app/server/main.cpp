@@ -18,13 +18,13 @@
  */
 
 #include <common/containers/dispatch_queue/dispatch_queue.hpp>
-#include <common/extlibs/json/json.hpp>
-#include <common/extlibs/sol/sol.hpp>
 #include <common/lua_api/lua_api.hpp>
 #include <common/network/address/address.hpp>
 #include <common/network/socket/socket.hpp>
 #include <common/scopes/enet_scope/enet_scope.hpp>
 #include <common/utils/log/log.hpp>
+#include <common/vendor/json/json.hpp>
+#include <common/vendor/sol/sol.hpp>
 #include <csignal>
 
 volatile auto running = bool{true};
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     //     enet_host_create(address, 64, 2, 0, 0), &enet_host_destroy);
 
     auto id = common::network::socket::peer_id{};
-    auto json = common::extlibs::json{};
+    auto json = common::vendor::json{};
 
     while (running) {
         // accept all peer connections

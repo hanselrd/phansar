@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_TILESET_TILESET_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_TILESET_TILESET_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include "../grid/grid.hpp"
 #include "../point2/point2.hpp"
 #include "../property/property.hpp"
@@ -58,8 +58,8 @@ struct _tileset_ {
     std::vector<_wang_set_> wangsets;
 };
 
-void to_json(extlibs::json &j, const _tileset_ &t);
-void from_json(const extlibs::json &j, _tileset_ &t);
+void to_json(vendor::json &j, const _tileset_ &t);
+void from_json(const vendor::json &j, _tileset_ &t);
 } // namespace format
 } // namespace map_detail
 } // namespace components

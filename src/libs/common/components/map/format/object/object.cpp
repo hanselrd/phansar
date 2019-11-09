@@ -25,32 +25,32 @@ namespace common {
 namespace components {
 namespace map_detail {
 namespace format {
-void to_json(extlibs::json &j, const _object_ &o) {
-    j = extlibs::json{{"ellipse", o.ellipse},
-                      {"gid", o.ellipse},
-                      {"id", o.id},
-                      {"height", o.height},
-                      {"name", o.name},
-                      {"point", o.point},
-                      {"polygon", o.polygon},
-                      {"polyline", o.polyline},
-                      {"properties", o.properties},
-                      {"rotation", o.rotation},
-                      {"template", o.template_file},
-                      {"text", o.text},
-                      {"type", o.type},
-                      {"visible", o.visible},
-                      {"width", o.width},
-                      {"x", o.x},
-                      {"y", o.y}};
+void to_json(vendor::json &j, const _object_ &o) {
+    j = vendor::json{{"ellipse", o.ellipse},
+                     {"gid", o.ellipse},
+                     {"id", o.id},
+                     {"height", o.height},
+                     {"name", o.name},
+                     {"point", o.point},
+                     {"polygon", o.polygon},
+                     {"polyline", o.polyline},
+                     {"properties", o.properties},
+                     {"rotation", o.rotation},
+                     {"template", o.template_file},
+                     {"text", o.text},
+                     {"type", o.type},
+                     {"visible", o.visible},
+                     {"width", o.width},
+                     {"x", o.x},
+                     {"y", o.y}};
 }
 
-void from_json(const extlibs::json &j, _object_ &o) {
+void from_json(const vendor::json &j, _object_ &o) {
 #define EXTRACT_HELPER(key, field)                                                                 \
     [&] {                                                                                          \
         try {                                                                                      \
             j.at(key).get_to(o.field);                                                             \
-        } catch (const extlibs::json::out_of_range &e) {                                           \
+        } catch (const vendor::json::out_of_range &e) {                                            \
             LOGW(e.what());                                                                        \
         }                                                                                          \
     }()

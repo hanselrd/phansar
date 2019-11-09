@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_TEXT_TEXT_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_TEXT_TEXT_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include <string>
 
 namespace common {
@@ -32,8 +32,8 @@ struct _text_ {
     bool wrap;
 };
 
-void to_json(extlibs::json &j, const _text_ &t);
-void from_json(const extlibs::json &j, _text_ &t);
+void to_json(vendor::json &j, const _text_ &t);
+void from_json(const vendor::json &j, _text_ &t);
 } // namespace format
 } // namespace map_detail
 } // namespace components

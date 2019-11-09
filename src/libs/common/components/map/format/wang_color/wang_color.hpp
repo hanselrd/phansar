@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_WANG_COLOR_WANG_COLOR_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_WANG_COLOR_WANG_COLOR_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include <cstdint>
 #include <string>
 
@@ -35,8 +35,8 @@ struct _wang_color_ {
     std::uint32_t tile;
 };
 
-void to_json(extlibs::json &j, const _wang_color_ &wc);
-void from_json(const extlibs::json &j, _wang_color_ &wc);
+void to_json(vendor::json &j, const _wang_color_ &wc);
+void from_json(const vendor::json &j, _wang_color_ &wc);
 } // namespace format
 } // namespace map_detail
 } // namespace components

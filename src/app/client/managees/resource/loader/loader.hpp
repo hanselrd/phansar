@@ -23,7 +23,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
-#include <common/extlibs/json/json.hpp>
+#include <common/vendor/json/json.hpp>
 #include <memory>
 #include <string_view>
 
@@ -32,8 +32,8 @@ namespace managees {
 namespace resource_detail {
 template <class T> struct loader {};
 
-template <> struct loader<common::extlibs::json> {
-    static std::shared_ptr<common::extlibs::json> load(std::string_view path);
+template <> struct loader<common::vendor::json> {
+    static std::shared_ptr<common::vendor::json> load(std::string_view path);
 };
 
 template <> struct loader<SDL_Surface> {

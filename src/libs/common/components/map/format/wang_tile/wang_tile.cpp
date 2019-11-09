@@ -25,20 +25,20 @@ namespace common {
 namespace components {
 namespace map_detail {
 namespace format {
-void to_json(extlibs::json &j, const _wang_tile_ &wt) {
-    j = extlibs::json{{"dflip", wt.dflip},
-                      {"hflip", wt.hflip},
-                      {"tileid", wt.tileid},
-                      {"vflip", wt.vflip},
-                      {"wangid", wt.wangid}};
+void to_json(vendor::json &j, const _wang_tile_ &wt) {
+    j = vendor::json{{"dflip", wt.dflip},
+                     {"hflip", wt.hflip},
+                     {"tileid", wt.tileid},
+                     {"vflip", wt.vflip},
+                     {"wangid", wt.wangid}};
 }
 
-void from_json(const extlibs::json &j, _wang_tile_ &wt) {
+void from_json(const vendor::json &j, _wang_tile_ &wt) {
 #define EXTRACT(field)                                                                             \
     [&] {                                                                                          \
         try {                                                                                      \
             j.at(STRINGIFY(field)).get_to(wt.field);                                               \
-        } catch (const extlibs::json::out_of_range &e) {                                           \
+        } catch (const vendor::json::out_of_range &e) {                                            \
             LOGW(e.what());                                                                        \
         }                                                                                          \
     }()

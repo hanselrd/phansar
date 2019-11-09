@@ -25,16 +25,16 @@ namespace common {
 namespace components {
 namespace map_detail {
 namespace format {
-void to_json(extlibs::json &j, const _property_ &p) {
-    j = extlibs::json{{"name", p.name}, {"type", p.type}, {"value", p.value}};
+void to_json(vendor::json &j, const _property_ &p) {
+    j = vendor::json{{"name", p.name}, {"type", p.type}, {"value", p.value}};
 }
 
-void from_json(const extlibs::json &j, _property_ &p) {
+void from_json(const vendor::json &j, _property_ &p) {
 #define EXTRACT(field)                                                                             \
     [&] {                                                                                          \
         try {                                                                                      \
             j.at(STRINGIFY(field)).get_to(p.field);                                                \
-        } catch (const extlibs::json::out_of_range &e) {                                           \
+        } catch (const vendor::json::out_of_range &e) {                                            \
             LOGW(e.what());                                                                        \
         }                                                                                          \
     }()

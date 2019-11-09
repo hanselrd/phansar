@@ -29,10 +29,10 @@
 #include <SDL2/SDL.h>
 #include <common/containers/dispatch_queue/dispatch_queue.hpp>
 #include <common/containers/event_queue/event_queue.hpp>
-#include <common/extlibs/json/json.hpp>
 #include <common/network/address/address.hpp>
 #include <common/network/socket/socket.hpp>
 #include <common/utils/log/log.hpp>
+#include <common/vendor/json/json.hpp>
 #include <cstdint>
 #include <enet/enet.h>
 #include <fstream>
@@ -72,8 +72,8 @@ int main(int argc, char *argv[]) {
         auto delta_time = float{0.f};
         auto fps = float{0.f};
 
-        auto in_json = common::extlibs::json{};
-        auto out_json = common::extlibs::json{};
+        auto in_json = common::vendor::json{};
+        auto out_json = common::vendor::json{};
         auto peer_id = common::network::socket::peer_id{};
 
         auto dq = managers::system_manager::get_dispatch_queue();

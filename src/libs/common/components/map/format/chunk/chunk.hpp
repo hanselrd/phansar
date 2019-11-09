@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_CHUNK_CHUNK_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_CHUNK_CHUNK_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include <cstdint>
 #include <string>
 #include <variant>
@@ -38,8 +38,8 @@ struct _chunk_ {
     std::uint32_t y;
 };
 
-void to_json(extlibs::json &j, const _chunk_ &c);
-void from_json(const extlibs::json &j, _chunk_ &c);
+void to_json(vendor::json &j, const _chunk_ &c);
+void from_json(const vendor::json &j, _chunk_ &c);
 } // namespace format
 } // namespace map_detail
 } // namespace components

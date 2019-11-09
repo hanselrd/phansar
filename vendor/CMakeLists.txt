@@ -17,7 +17,7 @@
 # along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-project(extlibs)
+project(vendor)
 
 function(check_git_commit_hash name source_dir branch)
     execute_process(

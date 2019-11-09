@@ -17,15 +17,31 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBS_COMMON_EXTLIBS_SOL_SOL_HPP
-#define LIBS_COMMON_EXTLIBS_SOL_SOL_HPP
+#ifndef LIBS_COMMON_VENDOR_JSON_JSON_HPP
+#define LIBS_COMMON_VENDOR_JSON_JSON_HPP
 
-#include <sol/sol.hpp>
+#include <nlohmann/json.hpp>
+#include <optional>
+#include <variant>
+
+namespace nlohmann {
+template <class T> struct adl_serializer<std::optional<T>> {
+    static void to_json(json &j, const std::optional<T> &opt);
+    static void from_json(const json &j, std::optional<T> &opt);
+};
+
+template <class... Ts> struct adl_serializer<std::variant<Ts...>> {
+    static void to_json(json &j, const std::variant<Ts...> &var);
+    static void from_json(const json &j, std::variant<Ts...> &var);
+};
+} // namespace nlohmann
 
 namespace common {
-namespace extlibs {
-namespace sol = sol;
+namespace vendor {
+using namespace nlohmann;
 }
 } // namespace common
+
+#include "json.tpp"
 
 #endif

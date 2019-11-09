@@ -25,34 +25,34 @@ namespace common {
 namespace components {
 namespace map_detail {
 namespace format {
-void to_json(extlibs::json &j, const _tileset_ &t) {
-    j = extlibs::json{{"columns", t.columns},
-                      {"firstgid", t.firstgid},
-                      {"grid", t.grid},
-                      {"image", t.image},
-                      {"imagewidth", t.imagewidth},
-                      {"imageheight", t.imageheight},
-                      {"margin", t.margin},
-                      {"name", t.name},
-                      {"properties", t.properties},
-                      {"spacing", t.spacing},
-                      {"terrains", t.terrains},
-                      {"tilecount", t.tilecount},
-                      {"tileheight", t.tileheight},
-                      {"tileoffset", t.tileoffset},
-                      {"tiles", t.tiles},
-                      {"tilewidth", t.tilewidth},
-                      {"transparentcolor", t.transparentcolor},
-                      {"type", t.type},
-                      {"wangsets", t.wangsets}};
+void to_json(vendor::json &j, const _tileset_ &t) {
+    j = vendor::json{{"columns", t.columns},
+                     {"firstgid", t.firstgid},
+                     {"grid", t.grid},
+                     {"image", t.image},
+                     {"imagewidth", t.imagewidth},
+                     {"imageheight", t.imageheight},
+                     {"margin", t.margin},
+                     {"name", t.name},
+                     {"properties", t.properties},
+                     {"spacing", t.spacing},
+                     {"terrains", t.terrains},
+                     {"tilecount", t.tilecount},
+                     {"tileheight", t.tileheight},
+                     {"tileoffset", t.tileoffset},
+                     {"tiles", t.tiles},
+                     {"tilewidth", t.tilewidth},
+                     {"transparentcolor", t.transparentcolor},
+                     {"type", t.type},
+                     {"wangsets", t.wangsets}};
 }
 
-void from_json(const extlibs::json &j, _tileset_ &t) {
+void from_json(const vendor::json &j, _tileset_ &t) {
 #define EXTRACT(field)                                                                             \
     [&] {                                                                                          \
         try {                                                                                      \
             j.at(STRINGIFY(field)).get_to(t.field);                                                \
-        } catch (const extlibs::json::out_of_range &e) {                                           \
+        } catch (const vendor::json::out_of_range &e) {                                            \
             LOGW(e.what());                                                                        \
         }                                                                                          \
     }()

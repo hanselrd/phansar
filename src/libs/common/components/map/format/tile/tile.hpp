@@ -20,7 +20,7 @@
 #ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_TILE_TILE_HPP
 #define LIBS_COMMON_COMPONENTS_MAP_FORMAT_TILE_TILE_HPP
 
-#include "../../../../extlibs/json/json.hpp"
+#include "../../../../vendor/json/json.hpp"
 #include "../frame/frame.hpp"
 #include "../layer/layer.hpp"
 #include "../property/property.hpp"
@@ -45,8 +45,8 @@ struct _tile_ {
     std::optional<std::string> type;
 };
 
-void to_json(extlibs::json &j, const _tile_ &t);
-void from_json(const extlibs::json &j, _tile_ &t);
+void to_json(vendor::json &j, const _tile_ &t);
+void from_json(const vendor::json &j, _tile_ &t);
 } // namespace format
 } // namespace map_detail
 } // namespace components
