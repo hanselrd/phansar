@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MANAGERS_SYSTEM_MANAGER_HPP
-#define CLIENT_MANAGERS_SYSTEM_MANAGER_HPP
+#ifndef APP_CLIENT_MANAGERS_SYSTEM_MANAGER_SYSTEM_MANAGER_HPP
+#define APP_CLIENT_MANAGERS_SYSTEM_MANAGER_SYSTEM_MANAGER_HPP
 
 #include <SDL2/SDL.h>
 #include <common/containers/dispatch_queue/dispatch_queue.hpp>

@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_COMPONENTS_COLOR_LUA_API_HPP
-#define COMMON_COMPONENTS_COLOR_LUA_API_HPP
+#ifndef LIBS_COMMON_COMPONENTS_COLOR_COLOR_LUA_API_HPP
+#define LIBS_COMMON_COMPONENTS_COLOR_COLOR_LUA_API_HPP
 
 #include "../../extlibs/sol/sol.hpp"
 

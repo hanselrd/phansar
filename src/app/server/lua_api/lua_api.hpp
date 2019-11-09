@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SERVER_LUA_API_HPP
-#define SERVER_LUA_API_HPP
+#ifndef APP_SERVER_LUA_API_LUA_API_HPP
+#define APP_SERVER_LUA_API_LUA_API_HPP
 
 #include <common/extlibs/sol/sol.hpp>
 

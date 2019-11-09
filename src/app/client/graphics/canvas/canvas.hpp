@@ -17,8 +17,8 @@
  *  along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GRAPHICS_CANVAS_HPP
-#define CLIENT_GRAPHICS_CANVAS_HPP
+#ifndef APP_CLIENT_GRAPHICS_CANVAS_CANVAS_HPP
+#define APP_CLIENT_GRAPHICS_CANVAS_CANVAS_HPP
 
 #include <SDL2/SDL.h>
 #include <common/components/color/color.hpp>

@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_NETWORK_ADDRESS_HPP
-#define COMMON_NETWORK_ADDRESS_HPP
+#ifndef LIBS_COMMON_NETWORK_ADDRESS_ADDRESS_HPP
+#define LIBS_COMMON_NETWORK_ADDRESS_ADDRESS_HPP
 
 #include <cstdint>
 #include <enet/enet.h>

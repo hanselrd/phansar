@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GRAPHICS_TRIANGLE_HPP
-#define CLIENT_GRAPHICS_TRIANGLE_HPP
+#ifndef APP_CLIENT_GRAPHICS_TRIANGLE_TRIANGLE_HPP
+#define APP_CLIENT_GRAPHICS_TRIANGLE_TRIANGLE_HPP
 
 #include "../polygon/polygon.hpp"
 #include <common/components/color/color.hpp>

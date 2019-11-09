@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_ARCHIVES_BASE_ARCHIVE_HPP
-#define COMMON_ARCHIVES_BASE_ARCHIVE_HPP
+#ifndef LIBS_COMMON_ARCHIVES_BASE_ARCHIVE_BASE_ARCHIVE_HPP
+#define LIBS_COMMON_ARCHIVES_BASE_ARCHIVE_BASE_ARCHIVE_HPP
 
 #include "../../extlibs/json/json.hpp"
 #include <iostream>

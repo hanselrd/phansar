@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_COMPONENTS_MAP_FORMAT_OBJECT_HPP
-#define COMMON_COMPONENTS_MAP_FORMAT_OBJECT_HPP
+#ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_OBJECT_OBJECT_HPP
+#define LIBS_COMMON_COMPONENTS_MAP_FORMAT_OBJECT_OBJECT_HPP
 
 #include "../../../../extlibs/json/json.hpp"
 #include "../point2/point2.hpp"

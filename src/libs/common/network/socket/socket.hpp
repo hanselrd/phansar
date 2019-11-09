@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_NETWORK_SOCKET_HPP
-#define COMMON_NETWORK_SOCKET_HPP
+#ifndef LIBS_COMMON_NETWORK_SOCKET_SOCKET_HPP
+#define LIBS_COMMON_NETWORK_SOCKET_SOCKET_HPP
 
 #include "../../extlibs/json/json.hpp"
 #include "../address/address.hpp"

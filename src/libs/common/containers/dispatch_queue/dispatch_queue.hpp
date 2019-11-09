@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_CONTAINERS_DISPATCH_QUEUE_HPP
-#define COMMON_CONTAINERS_DISPATCH_QUEUE_HPP
+#ifndef LIBS_COMMON_CONTAINERS_DISPATCH_QUEUE_DISPATCH_QUEUE_HPP
+#define LIBS_COMMON_CONTAINERS_DISPATCH_QUEUE_DISPATCH_QUEUE_HPP
 
 #include <condition_variable>
 #include <functional>

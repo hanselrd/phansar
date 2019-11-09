@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_CONTAINERS_EVENT_QUEUE_HPP
-#define COMMON_CONTAINERS_EVENT_QUEUE_HPP
+#ifndef LIBS_COMMON_CONTAINERS_EVENT_QUEUE_EVENT_QUEUE_HPP
+#define LIBS_COMMON_CONTAINERS_EVENT_QUEUE_EVENT_QUEUE_HPP
 
 #include <functional>
 #include <mutex>

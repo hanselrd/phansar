@@ -17,8 +17,8 @@
  *  along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_UTILS_CPPIFY_HPP
-#define COMMON_UTILS_CPPIFY_HPP
+#ifndef LIBS_COMMON_UTILS_CPPIFY_CPPIFY_HPP
+#define LIBS_COMMON_UTILS_CPPIFY_CPPIFY_HPP
 
 #include <memory>
 #include <type_traits>

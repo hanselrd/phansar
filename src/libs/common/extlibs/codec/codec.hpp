@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_EXTLIBS_CODEC_HPP
-#define COMMON_EXTLIBS_CODEC_HPP
+#ifndef LIBS_COMMON_EXTLIBS_CODEC_CODEC_HPP
+#define LIBS_COMMON_EXTLIBS_CODEC_CODEC_HPP
 
 #include <cppcodec/base32_crockford.hpp>
 #include <cppcodec/base64_rfc4648.hpp>

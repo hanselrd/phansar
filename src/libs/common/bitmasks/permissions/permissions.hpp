@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_BITMASKS_PERMISSION_HPP
-#define COMMON_BITMASKS_PERMISSION_HPP
+#ifndef LIBS_COMMON_BITMASKS_PERMISSIONS_PERMISSIONS_HPP
+#define LIBS_COMMON_BITMASKS_PERMISSIONS_PERMISSIONS_HPP
 
 #include <cstdint>
 #include <type_traits>

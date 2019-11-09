@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GRAPHICS_CIRCLE_HPP
-#define CLIENT_GRAPHICS_CIRCLE_HPP
+#ifndef APP_CLIENT_GRAPHICS_CIRCLE_CIRCLE_HPP
+#define APP_CLIENT_GRAPHICS_CIRCLE_CIRCLE_HPP
 
 #include "../canvas/canvas.hpp"
 #include "../shape/shape.hpp"

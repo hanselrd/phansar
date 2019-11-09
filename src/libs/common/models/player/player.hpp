@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_MODELS_PLAYER_HPP
-#define COMMON_MODELS_PLAYER_HPP
+#ifndef LIBS_COMMON_MODELS_PLAYER_PLAYER_HPP
+#define LIBS_COMMON_MODELS_PLAYER_PLAYER_HPP
 
 #include "../../bitmasks/permissions/permissions.hpp"
 #include "../entity/entity.hpp"

@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_COMPONENTS_MAP_FORMAT_TILESET_HPP
-#define COMMON_COMPONENTS_MAP_FORMAT_TILESET_HPP
+#ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_TILESET_TILESET_HPP
+#define LIBS_COMMON_COMPONENTS_MAP_FORMAT_TILESET_TILESET_HPP
 
 #include "../../../../extlibs/json/json.hpp"
 #include "../grid/grid.hpp"
