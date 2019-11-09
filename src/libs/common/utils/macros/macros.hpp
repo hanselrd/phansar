@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_UTILS_MACROS_HPP
-#define COMMON_UTILS_MACROS_HPP
+#ifndef LIBS_COMMON_UTILS_MACROS_MACROS_HPP
+#define LIBS_COMMON_UTILS_MACROS_MACROS_HPP
 
 #include "../log/log.hpp"
 

@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GRAPHICS_RECTANGLE_HPP
-#define CLIENT_GRAPHICS_RECTANGLE_HPP
+#ifndef APP_CLIENT_GRAPHICS_RECTANGLE_RECTANGLE_HPP
+#define APP_CLIENT_GRAPHICS_RECTANGLE_RECTANGLE_HPP
 
 #include "../shape/shape.hpp"
 #include <common/components/color/color.hpp>

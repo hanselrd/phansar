@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_EXTLIBS_SOL_HPP
-#define COMMON_EXTLIBS_SOL_HPP
+#ifndef LIBS_COMMON_EXTLIBS_SOL_SOL_HPP
+#define LIBS_COMMON_EXTLIBS_SOL_SOL_HPP
 
 #include <sol/sol.hpp>
 

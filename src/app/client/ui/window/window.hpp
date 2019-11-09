@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_UI_WINDOW_HPP
-#define CLIENT_UI_WINDOW_HPP
+#ifndef APP_CLIENT_UI_WINDOW_WINDOW_HPP
+#define APP_CLIENT_UI_WINDOW_WINDOW_HPP
 
 #include "../element/element.hpp"
 #include "../panel/panel.hpp"

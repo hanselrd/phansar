@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_SCOPES_ENET_SCOPE_HPP
-#define COMMON_SCOPES_ENET_SCOPE_HPP
+#ifndef LIBS_COMMON_SCOPES_ENET_SCOPE_ENET_SCOPE_HPP
+#define LIBS_COMMON_SCOPES_ENET_SCOPE_ENET_SCOPE_HPP
 
 #include "../base_scope/base_scope.hpp"
 #include <enet/enet.h>

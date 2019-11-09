@@ -17,8 +17,8 @@
  *  along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_UTILS_ATOMIC_HPP
-#define COMMON_UTILS_ATOMIC_HPP
+#ifndef LIBS_COMMON_UTILS_ATOMIC_ATOMIC_HPP
+#define LIBS_COMMON_UTILS_ATOMIC_ATOMIC_HPP
 
 #include <atomic>
 

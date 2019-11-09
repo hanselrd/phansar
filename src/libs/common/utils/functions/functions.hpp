@@ -17,8 +17,8 @@
  *  along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_UTILS_FUNCTIONS_HPP
-#define COMMON_UTILS_FUNCTIONS_HPP
+#ifndef LIBS_COMMON_UTILS_FUNCTIONS_FUNCTIONS_HPP
+#define LIBS_COMMON_UTILS_FUNCTIONS_FUNCTIONS_HPP
 
 #include "../../components/vec2/vec2.hpp"
 #include "../../components/vec3/vec3.hpp"

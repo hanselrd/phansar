@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_COMPONENTS_MAP_FORMAT_WANG_SET_HPP
-#define COMMON_COMPONENTS_MAP_FORMAT_WANG_SET_HPP
+#ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_WANG_SET_WANG_SET_HPP
+#define LIBS_COMMON_COMPONENTS_MAP_FORMAT_WANG_SET_WANG_SET_HPP
 
 #include "../../../../extlibs/json/json.hpp"
 #include "../wang_color/wang_color.hpp"

@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_EXTLIBS_JSON_HPP
-#define COMMON_EXTLIBS_JSON_HPP
+#ifndef LIBS_COMMON_EXTLIBS_JSON_JSON_HPP
+#define LIBS_COMMON_EXTLIBS_JSON_JSON_HPP
 
 #include <nlohmann/json.hpp>
 #include <optional>

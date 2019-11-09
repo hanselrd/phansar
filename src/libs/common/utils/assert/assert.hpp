@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_UTILS_ASSERT_HPP
-#define COMMON_UTILS_ASSERT_HPP
+#ifndef LIBS_COMMON_UTILS_ASSERT_ASSERT_HPP
+#define LIBS_COMMON_UTILS_ASSERT_ASSERT_HPP
 
 #include "../log/log.hpp"
 #include <cstdlib>

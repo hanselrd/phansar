@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_MODELS_ENTITY_HPP
-#define COMMON_MODELS_ENTITY_HPP
+#ifndef LIBS_COMMON_MODELS_ENTITY_ENTITY_HPP
+#define LIBS_COMMON_MODELS_ENTITY_ENTITY_HPP
 
 #include "../../components/vec3/vec3.hpp"
 #include <array>

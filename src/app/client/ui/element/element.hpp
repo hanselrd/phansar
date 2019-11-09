@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_UI_ELEMENT_HPP
-#define CLIENT_UI_ELEMENT_HPP
+#ifndef APP_CLIENT_UI_ELEMENT_ELEMENT_HPP
+#define APP_CLIENT_UI_ELEMENT_ELEMENT_HPP
 
 #include <SDL2/SDL.h>
 #include <common/components/vec2/vec2.hpp>

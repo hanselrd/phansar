@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_COMPONENTS_MAP_FORMAT_GRID_HPP
-#define COMMON_COMPONENTS_MAP_FORMAT_GRID_HPP
+#ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_GRID_GRID_HPP
+#define LIBS_COMMON_COMPONENTS_MAP_FORMAT_GRID_GRID_HPP
 
 #include "../../../../extlibs/json/json.hpp"
 #include <cstdint>

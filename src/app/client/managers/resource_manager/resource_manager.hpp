@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MANAGERS_RESOURCE_MANAGER_HPP
-#define CLIENT_MANAGERS_RESOURCE_MANAGER_HPP
+#ifndef APP_CLIENT_MANAGERS_RESOURCE_MANAGER_RESOURCE_MANAGER_HPP
+#define APP_CLIENT_MANAGERS_RESOURCE_MANAGER_RESOURCE_MANAGER_HPP
 
 #include "../../managees/resource/resource.hpp"
 #include <any>

@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MANAGEES_RESOURCE_LOADER_HPP
-#define CLIENT_MANAGEES_RESOURCE_LOADER_HPP
+#ifndef APP_CLIENT_MANAGEES_RESOURCE_LOADER_LOADER_HPP
+#define APP_CLIENT_MANAGEES_RESOURCE_LOADER_LOADER_HPP
 
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>

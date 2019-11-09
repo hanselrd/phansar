@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_UTILS_LOG_HPP
-#define COMMON_UTILS_LOG_HPP
+#ifndef LIBS_COMMON_UTILS_LOG_LOG_HPP
+#define LIBS_COMMON_UTILS_LOG_LOG_HPP
 
 #ifdef NDEBUG
 #    define SPDLOG_ACTIVE_LEVEL SDPLOG_LEVEL_INFO

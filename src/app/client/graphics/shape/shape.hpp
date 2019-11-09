@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GRAPHICS_SHAPE_HPP
-#define CLIENT_GRAPHICS_SHAPE_HPP
+#ifndef APP_CLIENT_GRAPHICS_SHAPE_SHAPE_HPP
+#define APP_CLIENT_GRAPHICS_SHAPE_SHAPE_HPP
 
 #include <common/components/color/color.hpp>
 #include <common/components/vec2/vec2.hpp>

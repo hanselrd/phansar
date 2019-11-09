@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GRAPHICS_TEXT_HPP
-#define CLIENT_GRAPHICS_TEXT_HPP
+#ifndef APP_CLIENT_GRAPHICS_TEXT_TEXT_HPP
+#define APP_CLIENT_GRAPHICS_TEXT_TEXT_HPP
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>

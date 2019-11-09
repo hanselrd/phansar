@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_ALLOCATORS_POOL_ALLOCATOR_HPP
-#define COMMON_ALLOCATORS_POOL_ALLOCATOR_HPP
+#ifndef LIBS_COMMON_ALLOCATORS_POOL_ALLOCATOR_POOL_ALLOCATOR_HPP
+#define LIBS_COMMON_ALLOCATORS_POOL_ALLOCATOR_POOL_ALLOCATOR_HPP
 
 #include "../base_allocator/base_allocator.hpp"
 #include <cstdint>

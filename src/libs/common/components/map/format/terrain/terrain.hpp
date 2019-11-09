@@ -17,8 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_COMPONENTS_MAP_FORMAT_TERRAIN_HPP
-#define COMMON_COMPONENTS_MAP_FORMAT_TERRAIN_HPP
+#ifndef LIBS_COMMON_COMPONENTS_MAP_FORMAT_TERRAIN_TERRAIN_HPP
+#define LIBS_COMMON_COMPONENTS_MAP_FORMAT_TERRAIN_TERRAIN_HPP
 
 #include "../../../../extlibs/json/json.hpp"
 #include <cstdint>
