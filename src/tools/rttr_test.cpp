@@ -17,6 +17,8 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <common/bitmasks/permissions/permissions.hpp>
+#include <common/rtti/rtti.hpp>
 #include <common/utils/log/log.hpp>
 #include <rttr/registration>
 
@@ -39,6 +41,7 @@ RTTR_REGISTRATION {
 
 int main(int argc, char *argv[]) {
     common::utils::log::init("rttr_test.log");
+    common::rtti::init();
 
     {
         auto t = rttr::type::get<MyStruct>();
@@ -80,6 +83,11 @@ int main(int argc, char *argv[]) {
         auto var = rttr::type::get(obj).create();
         meth.invoke(var, 42.0);
     }
+
+    auto enum_t = rttr::type::get<common::bitmasks::permissions>().get_enumeration();
+    auto enum_t_module = enum_t.get_metadata(common::rtti::metadata::module);
+    auto enum_t_name = enum_t.get_metadata(common::rtti::metadata::name);
+    LOGI("module: {}, name: {}", enum_t_module.to_string(), enum_t_name.to_string());
 
     return 0;
 }

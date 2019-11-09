@@ -42,6 +42,7 @@ set(sources
     containers/dispatch_queue/dispatch_queue.cpp
     network/address/address.cpp
     network/socket/socket.cpp
+    rtti/rtti.cpp
     scopes/enet_scope/enet_scope.cpp
     scopes/plibsys_scope/plibsys_scope.cpp
     scopes/sdl_scope/sdl_scope.cpp
