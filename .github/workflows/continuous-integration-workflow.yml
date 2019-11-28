@@ -12,7 +12,7 @@ jobs:
           run: |
             sudo add-apt-repository ppa:ubuntu-toolchain-r/test
             sudo apt update
-            sudo apt install -y wget build-essential cmake gcc-7 g++-7 gcc-8 g++-8 gcc-9 g++-9
+            sudo apt install -y wget build-essential cmake ninja-build gcc-7 g++-7 gcc-8 g++-8 gcc-9 g++-9
             wget "http://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
             tar xf clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
             sudo cp -R ./clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/* /usr/local
@@ -32,8 +32,8 @@ jobs:
         - name: Build and test (debug)
           working-directory: ./build
           run: |
-            cmake -DCMAKE_BUILD_TYPE=Debug ..
-            make -j2
+            cmake -G "Ninja" .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+            cmake --build .
             ctest --timeout 30 -V
         - name: Clean build directory
           working-directory: ./build
@@ -42,6 +42,6 @@ jobs:
         - name: Build and test (release)
           working-directory: ./build
           run: |
-            cmake -DCMAKE_BUILD_TYPE=Release ..
-            make -j2
+            cmake -G "Ninja" .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+            cmake --build .
             ctest --timeout 30 -V
