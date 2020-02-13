@@ -40,7 +40,7 @@
     do {                                                                                           \
         if (logger->should_log(level) || logger->should_backtrace()) {                             \
             logger->log(                                                                           \
-                spdlog::source_loc{__FILENAME__, __LINE__, SPDLOG_FUNCTION}, level, __VA_ARGS__);  \
+                spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, level, __VA_ARGS__);      \
         }                                                                                          \
     } while (0)
 
