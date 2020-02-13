@@ -34,14 +34,14 @@ function(check_git_commit_hash name source_dir branch)
     message(STATUS "${name}: (HEAD) ${head_hash}")
 
     if(NOT ${head_hash} STREQUAL ${origin_hash})
-        message(WARNING "${name}: (origin/${branch}) ${origin_hash}")
+        message(WARNING "Newer commit ${name}: (origin/${branch}) ${origin_hash}")
     endif()
 endfunction()
 
 include(FetchContent)
 FetchContent_Declare(Box2D_git
     GIT_REPOSITORY https://github.com/erincatto/Box2D.git
-    GIT_TAG        ef96a4f17f1c5527d20993b586b400c2617d6ae1)
+    GIT_TAG        ebb7c5e24ab289c394dffe5d56e3a4025c72c0fc)
 FetchContent_GetProperties(Box2D_git)
 if(NOT box2d_git_POPULATED)
     FetchContent_Populate(Box2D_git)
@@ -50,7 +50,7 @@ endif()
 
 FetchContent_Declare(Catch2_git
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        930f49a641aa6a495d264d7b5e7c007734da0b0c)
+    GIT_TAG        e70fd2a4b9a867c57c215b73d28bf911333bf45c)
 FetchContent_GetProperties(Catch2_git)
 if(NOT catch2_git_POPULATED)
     FetchContent_Populate(Catch2_git)
@@ -77,7 +77,7 @@ endif()
 
 FetchContent_Declare(json_git
     GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG        43e4db614130f4455ee1b543a26424d9f304b86f)
+    GIT_TAG        456478b3c50d60100dbb1fb9bc931f370a2c1c28)
 FetchContent_GetProperties(json_git)
 if(NOT json_git_POPULATED)
     FetchContent_Populate(json_git)
@@ -86,7 +86,7 @@ endif()
 
 FetchContent_Declare(lua_git
     GIT_REPOSITORY https://github.com/lua/lua.git
-    GIT_TAG        6e1aec7a677a9891f2f8ca57e039d9984fdc69bc)
+    GIT_TAG        69c7139ff88bf26e05d80bf19d0351e5c88d13a3)
 FetchContent_GetProperties(lua_git)
 if(NOT lua_git_POPULATED)
     FetchContent_Populate(lua_git)
@@ -113,7 +113,7 @@ endif()
 
 FetchContent_Declare(sol2_git
     GIT_REPOSITORY https://github.com/ThePhD/sol2.git
-    GIT_TAG        88355fcdf85dfcf52c76e41f75b36cd6ba0b7954)
+    GIT_TAG        47fbab369fcd4ab572929a91975552d3be8dc00e)
 FetchContent_GetProperties(sol2_git)
 if(NOT sol2_git_POPULATED)
     FetchContent_Populate(sol2_git)
@@ -122,7 +122,7 @@ endif()
 
 FetchContent_Declare(spdlog_git
     GIT_REPOSITORY https://github.com/gabime/spdlog.git
-    GIT_TAG        653ec05c0e82eed9c758ee28ecf40128da92a221)
+    GIT_TAG        0f42744f5c34402541d47c2dfaa125155d33c8e3)
 FetchContent_GetProperties(spdlog_git)
 if(NOT spdlog_git_POPULATED)
     FetchContent_Populate(spdlog_git)
@@ -150,56 +150,10 @@ if(NOT cef_tarbz2_POPULATED)
     message(STATUS "cef: ${cef_tarbz2_SOURCE_DIR}")
 endif()
 
-add_library(Box2D STATIC
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/Shapes/b2ChainShape.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/Shapes/b2CircleShape.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/Shapes/b2EdgeShape.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/Shapes/b2PolygonShape.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/b2BroadPhase.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/b2CollideCircle.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/b2CollideEdge.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/b2CollidePolygon.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/b2Collision.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/b2Distance.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/b2DynamicTree.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Collision/b2TimeOfImpact.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Common/b2BlockAllocator.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Common/b2Draw.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Common/b2Math.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Common/b2Settings.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Common/b2StackAllocator.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Common/b2Timer.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Contacts/b2CircleContact.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Contacts/b2Contact.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Contacts/b2ContactSolver.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Contacts/b2PolygonContact.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2DistanceJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2FrictionJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2GearJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2Joint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2MotorJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2MouseJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2PulleyJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2RevoluteJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2RopeJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2WeldJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/Joints/b2WheelJoint.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/b2Body.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/b2ContactManager.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/b2Fixture.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/b2Island.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/b2World.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Dynamics/b2WorldCallbacks.cpp
-    ${box2d_git_SOURCE_DIR}/Box2D/Rope/b2Rope.cpp)
-
-target_include_directories(Box2D PUBLIC
-    ${box2d_git_SOURCE_DIR})
+set(BOX2D_BUILD_TESTS OFF CACHE BOOL "")
+set(BOX2D_BUILD_SAMPLES OFF CACHE BOOL "")
+set(BOX2D_BUILD_DOCS OFF CACHE BOOL "")
+add_subdirectory(${box2d_git_SOURCE_DIR} ${box2d_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 set(CATCH_BUILD_TESTING OFF CACHE BOOL "")
 set(CATCH_INSTALL_DOCS OFF CACHE BOOL "")
@@ -286,7 +240,7 @@ target_include_directories(${PROJECT_NAME} INTERFACE
     ${cef_tarbz2_SOURCE_DIR}/include)
 
 target_link_libraries(${PROJECT_NAME} INTERFACE
-    Box2D
+    box2d
     Catch2
     enet
     nlohmann_json

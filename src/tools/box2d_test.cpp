@@ -17,7 +17,7 @@
  * along with Phansar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
 #include <common/utils/log/log.hpp>
 #include <cstdint>
 
