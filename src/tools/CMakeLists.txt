@@ -37,7 +37,7 @@ function(add_tool tool)
 endfunction()
 
 add_tool(box2d_test)
-add_tool(cef_test)
+# add_tool(cef_test)
 add_tool(compile_assets)
 add_tool(optional_json)
 add_tool(rttr_test)
