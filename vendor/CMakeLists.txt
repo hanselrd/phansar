@@ -129,18 +129,19 @@ if(NOT spdlog_git_POPULATED)
     check_git_commit_hash(spdlog ${spdlog_git_SOURCE_DIR} v1.x)
 endif()
 
+set(CEF_URL "http://opensource.spotify.com/cefbuilds/cef_binary_79.1.36%2Bg90301bd%2Bchromium-79.0.3945.130")
 if(WIN32)
     FetchContent_Declare(cef_tarbz2
-        URL            http://opensource.spotify.com/cefbuilds/cef_binary_78.2.9%2Bg4907ec5%2Bchromium-78.0.3904.70_windows64.tar.bz2
-        URL_HASH       SHA1=e6bf6a838fe7f7ee640c3f06f95dec09b14b79ca)
+        URL            ${CEF_URL}_windows64.tar.bz2
+        URL_HASH       SHA1=ce4673328a4473995f9bfedc03644560938b21ff)
 elseif(UNIX)
     FetchContent_Declare(cef_tarbz2
-        URL            http://opensource.spotify.com/cefbuilds/cef_binary_78.2.9%2Bg4907ec5%2Bchromium-78.0.3904.70_linux64.tar.bz2
-        URL_HASH       SHA1=20e2abeec7d70a80b6a3c6a0a9ea92fdb6231a91)
+        URL            ${CEF_URL}_linux64.tar.bz2
+        URL_HASH       SHA1=e28d0da5e8f8e4bfbc4ebfab751c04bfcddd4366)
 elseif(APPLE)
     FetchContent_Declare(cef_tarbz2
-        URL            http://opensource.spotify.com/cefbuilds/cef_binary_78.2.9%2Bg4907ec5%2Bchromium-78.0.3904.70_macosx64.tar.bz2
-        URL_HASH       SHA1=f660ca33de62a576cf7b9f033b7e0966130f5580)
+        URL            ${CEF_URL}_macosx64.tar.bz2
+        URL_HASH       SHA1=7931b1bf6b34567ab956b0aab3f8111609e82095)
 else()
     message(FATAL_ERROR "cef: platform not supported")
 endif()
@@ -228,6 +229,11 @@ add_subdirectory(${rttr_git_SOURCE_DIR} ${rttr_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 add_subdirectory(${spdlog_git_SOURCE_DIR} ${spdlog_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 add_subdirectory(${cef_tarbz2_SOURCE_DIR} ${cef_tarbz2_BINARY_DIR} EXCLUDE_FROM_ALL)
+add_custom_target(cef_resources ALL
+    COMMAND ${CMAKE_COMMAND} -E remove_directory resources
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${cef_tarbz2_SOURCE_DIR}/Resources resources
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${cef_tarbz2_SOURCE_DIR}/$<IF:$<OR:$<CONFIG:Release>,$<CONFIG:MinSizeRel>>,Release,Debug> resources
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_library(${PROJECT_NAME} INTERFACE)
 
@@ -239,6 +245,9 @@ target_include_directories(${PROJECT_NAME} INTERFACE
     ${cef_tarbz2_SOURCE_DIR}
     ${cef_tarbz2_SOURCE_DIR}/include)
 
+target_link_directories(${PROJECT_NAME} INTERFACE
+    ${CMAKE_BINARY_DIR}/resources)
+
 target_link_libraries(${PROJECT_NAME} INTERFACE
     box2d
     Catch2
@@ -248,4 +257,5 @@ target_link_libraries(${PROJECT_NAME} INTERFACE
     plibsysstatic
     rttr_core_lib
     spdlog
+    cef
     libcef_dll_wrapper)
