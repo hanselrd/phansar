@@ -20,7 +20,8 @@ jobs:
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-8 --slave /usr/bin/gcov gcov /usr/bin/gcov-8
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 --slave /usr/bin/g++ g++ /usr/bin/g++-7 --slave /usr/bin/gcov gcov /usr/bin/gcov-7
             sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
-            mkdir build
+            cmake -G"Ninja" -H. -Bbuild -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+            ln -sf build/compile_commands.json .
         - name: Check code formatting
           working-directory: ./utils
           run: |
@@ -29,19 +30,43 @@ jobs:
           working-directory: ./utils
           run: |
             ./check-include-guards.sh
-        - name: Build and test (debug)
+        - name: Build and test (Debug)
           working-directory: ./build
           run: |
-            cmake -G "Ninja" .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+            cmake -G"Ninja" -H.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             cmake --build .
             ctest --timeout 30 -V
-        - name: Clean build directory
+        - name: Clean build directory (Debug)
           working-directory: ./build
           run: |
             rm -rf *
-        - name: Build and test (release)
+        - name: Build and test (Release)
           working-directory: ./build
           run: |
-            cmake -G "Ninja" .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+            cmake -G"Ninja" -H.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             cmake --build .
             ctest --timeout 30 -V
+        - name: Clean build directory (Release)
+          working-directory: ./build
+          run: |
+            rm -rf *
+        - name: Build and test (RelWithDebInfo)
+          working-directory: ./build
+          run: |
+            cmake -G"Ninja" -H.. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+            cmake --build .
+            ctest --timeout 30 -V
+        - name: Clean build directory (RelWithDebInfo)
+          working-directory: ./build
+          run: |
+            rm -rf *
+        - name: Build and test (MinSizeRel)
+          working-directory: ./build
+          run: |
+            cmake -G"Ninja" -H.. -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+            cmake --build .
+            ctest --timeout 30 -V
+        - name: Clean build directory (MinSizeRel)
+          working-directory: ./build
+          run: |
+            rm -rf *
