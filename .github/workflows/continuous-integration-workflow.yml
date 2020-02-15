@@ -25,11 +25,11 @@ jobs:
         - name: Check code formatting
           working-directory: ./utils
           run: |
-            ./check-clang-format.sh
+            ./clang-format.bash check
         - name: Check include guards
           working-directory: ./utils
           run: |
-            ./check-include-guards.sh
+            ./include-guards.bash check
         - name: Build and test (Debug)
           working-directory: ./build
           run: |
