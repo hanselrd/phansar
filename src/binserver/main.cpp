@@ -1,6 +1,6 @@
 #include <ph_common.hpp>
 
 int main() {
-    ph::common::log::log();
+    ph::common::log::init("ph_server.log");
     return 0;
 }
