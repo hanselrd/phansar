@@ -85,3 +85,27 @@ function(ph_add_generic_executable name sources libs)
 
     ph_target_compile_options(${name})
 endfunction()
+
+function(ph_add_generic_tests name sources)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests)
+
+    ph_add_executable(test_${name}
+        ${sources}
+        ${CMAKE_SOURCE_DIR}/tests/main.cpp)
+
+    ph_target_link_libraries(test_${name} PUBLIC
+        Catch2
+        ${name})
+
+    string(TOUPPER ${name} uppername)
+
+    ph_target_compile_definitions(test_${name}
+        TESTING_${uppername})
+
+    ph_target_compile_features(test_${name})
+
+    ph_target_compile_options(test_${name})
+
+    catch_discover_tests(test_${name}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+endfunction()
