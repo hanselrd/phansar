@@ -19,9 +19,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 string(LENGTH ${CMAKE_SOURCE_DIR}/src/ SOURCE_PATH_SIZE)
 add_definitions(-DPH_SOURCE_PATH_SIZE=${SOURCE_PATH_SIZE})
 
-# enable_testing()
-# include(CTest)
+enable_testing()
+include(CTest)
 
-# add_subdirectory(vendor)
-# include(Catch)
+add_subdirectory(vendor)
+include(Catch)
 add_subdirectory(src)

@@ -60,7 +60,7 @@ function(ph_add_generic_library name sources libs)
     string(TOUPPER ${name} uppername)
 
     ph_target_compile_definitions(${name}
-        PH_BUILD_${uppername})
+        BUILD_${uppername})
 
     ph_target_compile_features(${name})
 
@@ -79,7 +79,7 @@ function(ph_add_generic_executable name sources libs)
     string(TOUPPER ${name} uppername)
 
     ph_target_compile_definitions(${name}
-        PH_BUILD_${uppername})
+        BUILD_${uppername})
 
     ph_target_compile_features(${name})
 
