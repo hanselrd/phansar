@@ -11,11 +11,11 @@
 #include <string>
 #include <string_view>
 
-#if defined(__FILE__) && defined(PH_SOURCE_PATH_SIZE)
-#    define __FILENAME__ (__FILE__ + PH_SOURCE_PATH_SIZE)
-#else
-#    define __FILENAME__ "unknown"
-#endif
+/* #if defined(__FILE__) && defined(PH_SOURCE_PATH_SIZE) */
+/* #    define __FILENAME__ (__FILE__ + PH_SOURCE_PATH_SIZE) */
+/* #else */
+/* #    define __FILENAME__ "unknown" */
+/* #endif */
 
 #define PH_LOG_LOGGER_CALL(logger, level, ...)                                                     \
     do {                                                                                           \
