@@ -1,3 +1,7 @@
+project(vendor)
+
+find_package(Git REQUIRED)
+
 function(check_git_commit_hash name source_dir branch)
     execute_process(
         COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
@@ -20,7 +24,7 @@ endfunction()
 include(FetchContent)
 FetchContent_Declare(Catch2_git
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        e70fd2a4b9a867c57c215b73d28bf911333bf45c)
+    GIT_TAG        7900fb3abba819536258073d927f9522da7371a0)
 FetchContent_GetProperties(Catch2_git)
 if(NOT catch2_git_POPULATED)
     FetchContent_Populate(Catch2_git)
@@ -48,7 +52,7 @@ add_subdirectory(${plibsys_git_SOURCE_DIR} ${plibsys_git_BINARY_DIR} EXCLUDE_FRO
 
 FetchContent_Declare(spdlog_git
     GIT_REPOSITORY https://github.com/gabime/spdlog.git
-    GIT_TAG        0f42744f5c34402541d47c2dfaa125155d33c8e3)
+    GIT_TAG        f57378d8ba5757837b913a3d4b059b9c54a43ee1)
 FetchContent_GetProperties(spdlog_git)
 if(NOT spdlog_git_POPULATED)
     FetchContent_Populate(spdlog_git)
