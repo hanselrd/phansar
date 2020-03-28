@@ -2,6 +2,5 @@
 #include <catch2/catch.hpp>
 
 TEST_CASE("can initialize logger", "[libcommon][log]") {
-    auto k = 0;
-    (void)k;
+    ph::common::log::init("unittest.log");
 }
