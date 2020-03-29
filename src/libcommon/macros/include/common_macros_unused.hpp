@@ -1,8 +1,16 @@
 #ifndef LIBCOMMON_MACROS_INCLUDE_COMMON_MACROS_UNUSED_HPP
 #define LIBCOMMON_MACROS_INCLUDE_COMMON_MACROS_UNUSED_HPP
 
-#include <plibsys.h>
+#include "common_log.hpp"
 
-#define UNUSED P_UNUSED
+#ifndef NDEBUG
+#    define UNUSED_ARG(arg)                                                                        \
+        [&] {                                                                                      \
+            LOGW("Unused argument `" #arg "'");                                                    \
+            (void)arg;                                                                             \
+        }()
+#else
+#    define UNUSED_ARG(arg) ((void)arg)
+#endif
 
 #endif
