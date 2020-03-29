@@ -3,6 +3,7 @@
 
 #include "common_log.hpp"
 #include "common_macros.hpp"
+#include "common_memory.hpp"
 #include "common_system.hpp"
 
 #endif
