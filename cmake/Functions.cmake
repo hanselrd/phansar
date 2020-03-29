@@ -95,6 +95,7 @@ function(ph_add_generic_tests name sources)
 
     ph_target_link_libraries(test_${name} PUBLIC
         Catch2
+        ph_common_system
         ${name})
 
     string(TOUPPER ${name} uppername)

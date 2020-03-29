@@ -24,7 +24,7 @@ endfunction()
 include(FetchContent)
 FetchContent_Declare(Catch2_git
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        7900fb3abba819536258073d927f9522da7371a0)
+    GIT_TAG        62609621088df6723e48ea1d164108303511755b)
 FetchContent_GetProperties(Catch2_git)
 if(NOT catch2_git_POPULATED)
     FetchContent_Populate(Catch2_git)
@@ -72,7 +72,6 @@ add_subdirectory(${spdlog_git_SOURCE_DIR} ${spdlog_git_BINARY_DIR} EXCLUDE_FROM_
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${sdl2_cmake_modules_git_SOURCE_DIR} ${catch2_git_SOURCE_DIR}/contrib PARENT_SCOPE)
 
 set(libs
-    Catch2
     plibsysstatic
     spdlog)
 
