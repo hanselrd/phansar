@@ -2,16 +2,18 @@
 #include <catch2/catch.hpp>
 #include <string>
 
-#ifdef TESTING_PH_COMMON_LOG
-#    include "common_log.hpp"
+#ifdef TESTING_PH_COMMON_SYSTEM
+#    include "common_system.hpp"
 #else
-#    include <common_log.hpp>
+#    include <common_system.hpp>
 #endif
 
 int main(int argc, char *argv[]) {
-    auto bin = std::string{argv[0]};
+    common::system::init(argc, argv);
 
-    common::log::init(bin.substr(bin.find_last_of('/') + 1) + ".log");
+    auto result = Catch::Session().run(argc, argv);
 
-    return Catch::Session().run(argc, argv);
+    common::system::shutdown();
+
+    return result;
 }

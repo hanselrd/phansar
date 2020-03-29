@@ -3,6 +3,7 @@
 
 namespace common::system {
 void init(int argc, char **argv);
-}
+void shutdown();
+} // namespace common::system
 
 #endif
