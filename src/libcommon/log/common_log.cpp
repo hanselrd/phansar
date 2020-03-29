@@ -1,11 +1,11 @@
-#include "ph_common_log.hpp"
+#include "common_log.hpp"
 #include <cstdlib>
 #include <plibsys.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
-namespace ph::common::log {
+namespace common::log {
 void init(std::string_view filename) {
     if (filename.empty()) {
         return;
@@ -37,9 +37,9 @@ void init(std::string_view filename) {
     logger->set_level(spdlog::level::trace);
     spdlog::set_default_logger(logger);
 
-    PH_LOGI("");
-    PH_LOGD("Logger initialized");
-    PH_LOGD("  log file: {}", filename);
+    LOGI("");
+    LOGD("Logger initialized");
+    LOGD("  log file: {}", filename);
 
     auto cpu_str = std::string{""};
 #ifdef P_CPU_ALPHA
@@ -135,10 +135,10 @@ void init(std::string_view filename) {
 #ifdef P_CPU_HPPA_64
     cpu_str += " HPPA_64";
 #endif
-    PH_LOGI("CPU:{}", cpu_str);
-    /* PH_LOGI("CPU count: {}", 0); */
-    /* PH_LOGI("CPU cache line size: {}", 0); */
-    PH_LOGI_IF(
+    LOGI("CPU:{}", cpu_str);
+    /* LOGI("CPU count: {}", 0); */
+    /* LOGI("CPU cache line size: {}", 0); */
+    LOGI_IF(
         P_BYTE_ORDER, "CPU endianness: {}", (P_BYTE_ORDER == P_LITTLE_ENDIAN) ? "little" : "big");
 
     auto os_str = std::string{""};
@@ -247,7 +247,7 @@ void init(std::string_view filename) {
 #ifdef P_OS_ANDROID
     os_str += " ANDROID";
 #endif
-    PH_LOGI("OS:{}", os_str);
+    LOGI("OS:{}", os_str);
 
     auto cc_str = std::string{""};
 #ifdef P_CC_MSVC
@@ -295,9 +295,9 @@ void init(std::string_view filename) {
 #ifdef P_CC_CRAY
     cc_str += " CRAY";
 #endif
-    PH_LOGI("Compiler:{}", cc_str);
+    LOGI("Compiler:{}", cc_str);
 
-    /* PH_LOGI("System RAM: {}", "unknown"); */
+    /* LOGI("System RAM: {}", "unknown"); */
 
     auto build_type_str =
 #ifdef NDEBUG
@@ -306,11 +306,11 @@ void init(std::string_view filename) {
         "debug"
 #endif
         ;
-    PH_LOGI("Build type: {}", build_type_str);
+    LOGI("Build type: {}", build_type_str);
 
     std::atexit([] {
-        PH_LOGD("Logger shutdown");
-        PH_LOGI("");
+        LOGD("Logger shutdown");
+        LOGI("");
     });
 }
-} // namespace ph::common::log
+} // namespace common::log
