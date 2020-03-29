@@ -1,8 +1,8 @@
 set(sources
-    ph_common_system.cpp)
+    common_system.cpp)
 
 set(unittest_sources
-    ph_common_system.unittest.cpp)
+    common_system.unittest.cpp)
 
 set(libs
     ph_common_log

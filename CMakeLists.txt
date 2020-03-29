@@ -17,7 +17,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # find_package(Threads REQUIRED)
 
 string(LENGTH ${CMAKE_SOURCE_DIR}/src/ SOURCE_PATH_SIZE)
-add_definitions(-DPH_SOURCE_PATH_SIZE=${SOURCE_PATH_SIZE})
+add_definitions(-D__SOURCE_PATH_SIZE__=${SOURCE_PATH_SIZE})
 
 enable_testing()
 include(CTest)
