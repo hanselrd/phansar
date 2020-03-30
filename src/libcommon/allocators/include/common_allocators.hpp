@@ -1,0 +1,6 @@
+#ifndef LIBCOMMON_ALLOCATORS_INCLUDE_COMMON_ALLOCATORS_HPP
+#define LIBCOMMON_ALLOCATORS_INCLUDE_COMMON_ALLOCATORS_HPP
+
+#include "common_allocators_default.hpp"
+
+#endif

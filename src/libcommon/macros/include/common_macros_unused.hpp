@@ -6,7 +6,7 @@
 #ifndef NDEBUG
 #    define UNUSED_ARG(arg)                                                                        \
         [&] {                                                                                      \
-            LOGW("Unused argument `" #arg "'");                                                    \
+            LOGT("Unused argument `" #arg "'");                                                    \
             (void)arg;                                                                             \
         }()
 #else
