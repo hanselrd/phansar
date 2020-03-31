@@ -1,5 +1,5 @@
-#ifndef LIBCOMMON_STDLIB_INCLUDE_COMMON_STDLIB_HPP
-#define LIBCOMMON_STDLIB_INCLUDE_COMMON_STDLIB_HPP
+#ifndef LIBCOMMON_CONTAINERS_INCLUDE_COMMON_CONTAINERS_HPP
+#define LIBCOMMON_CONTAINERS_INCLUDE_COMMON_CONTAINERS_HPP
 
 #include "common_allocators.hpp"
 #include <array>
@@ -14,7 +14,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace common::stdlib {
+namespace common::containers {
 template <class T, std::size_t N> using array = std::array<T, N>;
 
 template <class T, class Allocator = allocators::default_allocator<T>>
@@ -85,6 +85,6 @@ template <class T,
           class Container = vector<T>,
           class Compare = std::less<typename Container::value_type>>
 using priority_queue = std::priority_queue<T, Container, Compare>;
-} // namespace common::stdlib
+} // namespace common::containers
 
 #endif
