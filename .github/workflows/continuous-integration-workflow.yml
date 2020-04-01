@@ -4,7 +4,16 @@ on: [push, pull_request]
 
 jobs:
     build:
+        name: "[${{ matrix.build_type }}] ${{ matrix.compiler.cc }} ${ matrix.compiler.cxx }}"
         runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                build_type: ["Debug", "Release", "RelWithDebInfo", "MinSizeRel"]
+                compiler:
+                  - { cc: "gcc", cxx: "g++" }
+                  - { cc: "clang", cxx: "clang++" }
 
         steps:
         - uses: actions/checkout@v1
@@ -12,15 +21,13 @@ jobs:
           run: |
             sudo add-apt-repository ppa:ubuntu-toolchain-r/test
             sudo apt update
-            sudo apt install -y wget build-essential cmake ninja-build gcc-7 g++-7 gcc-8 g++-8 gcc-9 g++-9
+            sudo apt install -y wget build-essential cmake ninja-build gcc-9 g++-9
             wget "https://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
             tar xf clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
             sudo cp -R ./clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/* /usr/local
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
-            sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-8 --slave /usr/bin/gcov gcov /usr/bin/gcov-8
-            sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 --slave /usr/bin/g++ g++ /usr/bin/g++-7 --slave /usr/bin/gcov gcov /usr/bin/gcov-7
             sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
-            cmake -G"Ninja" -H. -Bbuild -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+            cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.compiler.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
         - name: Check code formatting
           working-directory: ./utils
@@ -30,43 +37,8 @@ jobs:
           working-directory: ./utils
           run: |
             ./include-guards.bash check
-        - name: Build and test (Debug)
+        - name: Build and test
           working-directory: ./build
           run: |
-            cmake -G"Ninja" -H.. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             cmake --build .
             ctest --timeout 30 -V
-        - name: Clean build directory (Debug)
-          working-directory: ./build
-          run: |
-            rm -rf *
-        - name: Build and test (Release)
-          working-directory: ./build
-          run: |
-            cmake -G"Ninja" -H.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
-            cmake --build .
-            ctest --timeout 30 -V
-        - name: Clean build directory (Release)
-          working-directory: ./build
-          run: |
-            rm -rf *
-        - name: Build and test (RelWithDebInfo)
-          working-directory: ./build
-          run: |
-            cmake -G"Ninja" -H.. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
-            cmake --build .
-            ctest --timeout 30 -V
-        - name: Clean build directory (RelWithDebInfo)
-          working-directory: ./build
-          run: |
-            rm -rf *
-        - name: Build and test (MinSizeRel)
-          working-directory: ./build
-          run: |
-            cmake -G"Ninja" -H.. -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
-            cmake --build .
-            ctest --timeout 30 -V
-        - name: Clean build directory (MinSizeRel)
-          working-directory: ./build
-          run: |
-            rm -rf *
