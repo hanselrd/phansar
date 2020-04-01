@@ -7,5 +7,6 @@
 #include "common_macros.hpp"
 #include "common_memory.hpp"
 #include "common_system.hpp"
+#include "common_threading.hpp"
 
 #endif
