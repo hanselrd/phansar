@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
     build:
-        name: "[${{ matrix.build_type }}] ${{ matrix.compiler.cc }} ${ matrix.compiler.cxx }}"
+        name: "[${{ matrix.build_type }}] ${{ matrix.compiler.cc }} ${{ matrix.compiler.cxx }}"
         runs-on: ubuntu-latest
 
         strategy:
