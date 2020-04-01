@@ -13,7 +13,7 @@ jobs:
             sudo add-apt-repository ppa:ubuntu-toolchain-r/test
             sudo apt update
             sudo apt install -y wget build-essential cmake ninja-build gcc-7 g++-7 gcc-8 g++-8 gcc-9 g++-9
-            wget "http://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
+            wget "https://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
             tar xf clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
             sudo cp -R ./clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/* /usr/local
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
