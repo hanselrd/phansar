@@ -7,22 +7,36 @@
 #    define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
 #endif
 
+#include <algorithm>
+#include <cctype>
+#include <cstdint>
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/spdlog.h>
 #include <string>
 #include <string_view>
 
-#if defined(__FILE__) && defined(__SOURCE_PATH_SIZE__)
-#    define __FILENAME__ (__FILE__ + __SOURCE_PATH_SIZE__)
-#else
-#    define __FILENAME__ "unknown"
-#endif
+/* #if defined(__FILE__) && defined(__SOURCE_PATH_SIZE__) */
+/* #    define __FILENAME__ (__FILE__ + __SOURCE_PATH_SIZE__) */
+/* #else */
+/* #    define __FILENAME__ "unknown" */
+/* #endif */
 
 #define LOG_LOGGER_CALL(logger, level, ...)                                                        \
     do {                                                                                           \
         if (logger->should_log(level) || logger->should_backtrace()) {                             \
+            auto file = std::string{__FILE__};                                                     \
+            file = file.substr(file.find_last_of('/') + 1);                                        \
+            auto pos = std::size_t{0};                                                             \
+            auto index = std::size_t{0};                                                           \
+            while ((pos = file.find_first_of("._")) != std::string::npos) {                        \
+                ++index;                                                                           \
+                file.erase(index, pos - index + 1);                                                \
+            }                                                                                      \
+            std::transform(file.begin(), file.end(), file.begin(), [](unsigned char c) {           \
+                return std::toupper(c);                                                            \
+            });                                                                                    \
             logger->log(                                                                           \
-                spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION}, level, __VA_ARGS__);      \
+                spdlog::source_loc{file.c_str(), __LINE__, SPDLOG_FUNCTION}, level, __VA_ARGS__);  \
         }                                                                                          \
     } while (0)
 
