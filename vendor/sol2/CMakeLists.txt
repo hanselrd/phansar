@@ -7,7 +7,7 @@ if(NOT sol2_git_POPULATED)
     check_git_commit_hash(sol2 ${sol2_git_SOURCE_DIR} develop)
 endif()
 
-add_subdirectory(${sol2_git_SOURCE_DIR} ${sol2_git_BINARY_DIR} EXCLUDE_FROM_ALL)
+# add_subdirectory(${sol2_git_SOURCE_DIR} ${sol2_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 set(includes
     ${sol2_git_SOURCE_DIR}/single/include)

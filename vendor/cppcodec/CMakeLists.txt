@@ -7,7 +7,7 @@ if(NOT cppcodec_git_POPULATED)
     check_git_commit_hash(cppcodec ${cppcodec_git_SOURCE_DIR} master)
 endif()
 
-add_subdirectory(${cppcodec_git_SOURCE_DIR} ${cppcodec_git_BINARY_DIR} EXCLUDE_FROM_ALL)
+# add_subdirectory(${cppcodec_git_SOURCE_DIR} ${cppcodec_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 set(includes
     ${cppcodec_git_SOURCE_DIR})
