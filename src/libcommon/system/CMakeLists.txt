@@ -7,4 +7,4 @@ set(libs
     ph_common_memory
     ph_vendor)
 
-ph_add_generic_library(ph_common_system "${sources}" "${libs}")
+ph_add_generic_library(ph_common_system "${sources}" "${libs}" "")

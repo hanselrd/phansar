@@ -71,8 +71,8 @@ add_subdirectory(${spdlog_git_SOURCE_DIR} ${spdlog_git_BINARY_DIR} EXCLUDE_FROM_
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${sdl2_cmake_modules_git_SOURCE_DIR} ${catch2_git_SOURCE_DIR}/contrib PARENT_SCOPE)
 
-set(libs
+set(system_libs
     plibsysstatic
     spdlog)
 
-ph_add_generic_interface_library(ph_vendor "${libs}")
+ph_add_generic_interface_library(ph_vendor "" "${system_libs}")
