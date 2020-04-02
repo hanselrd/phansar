@@ -18,6 +18,7 @@ add_definitions(-D__SOURCE_PATH_SIZE__=${SOURCE_PATH_SIZE})
 enable_testing()
 include(CTest)
 
+include(FetchContent)
 add_subdirectory(vendor)
 include(Catch)
 add_subdirectory(src)

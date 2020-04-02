@@ -10,7 +10,8 @@ endfunction()
 
 function(ph_target_include_directories name type)
     target_include_directories(${name} ${type}
-        ${CMAKE_CURRENT_SOURCE_DIR}/include)
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${ARGN})
 endfunction()
 
 function(ph_target_link_libraries name type)
@@ -91,6 +92,48 @@ function(ph_add_generic_library name sources libs system_libs)
     ph_target_compile_options(${name})
 endfunction()
 
+function(ph_add_generic_vendor_interface_library name includes libs system_libs)
+    ph_add_library(${name} INTERFACE)
+
+    ph_target_include_directories(${name} INTERFACE
+        ${includes})
+
+    if(libs)
+        ph_target_link_libraries(${name} INTERFACE
+            ${libs})
+    endif()
+
+    if(system_libs)
+        ph_target_link_system_libraries(${name} INTERFACE
+            ${system_libs})
+    endif()
+endfunction()
+
+function(ph_add_generic_vendor_library name sources includes libs system_libs)
+    ph_add_library(${name} STATIC
+        ${sources})
+
+    ph_target_include_directories(${name} PUBLIC
+        ${includes})
+
+    if(libs)
+        ph_target_link_libraries(${name} PUBLIC
+            ${libs})
+    endif()
+
+    if(system_libs)
+        ph_target_link_system_libraries(${name} PUBLIC
+            ${system_libs})
+    endif()
+
+    string(TOUPPER ${name} uppername)
+
+    ph_target_compile_definitions(${name}
+        BUILD_${uppername})
+
+    ph_target_compile_features(${name})
+endfunction()
+
 function(ph_add_generic_executable name sources libs system_libs)
     ph_add_executable(${name}
         ${sources})
@@ -123,7 +166,7 @@ function(ph_add_generic_tests name sources)
         ${CMAKE_SOURCE_DIR}/tests/main.cpp)
 
     ph_target_link_libraries(test_${name} PUBLIC
-        Catch2
+        ph_vendor_catch2
         ph_common_system
         ${name})
 
