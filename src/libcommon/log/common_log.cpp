@@ -12,7 +12,7 @@ void init(std::string_view filename) {
     }
 
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e %z] [%t] [%^%l%$] [%s:%#] %v");
+    console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e %z] [%t] [%^%l%$] [%g%#] %v");
     /* console_sink->set_level( */
     /* #ifdef NDEBUG */
     /*     spdlog::level::info */
@@ -23,7 +23,7 @@ void init(std::string_view filename) {
 
     auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
         std::string{filename}, 1048576 * 5, 3);
-    rotating_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e %z] [%t] [%^%l%$] [%s:%#] %v");
+    rotating_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e %z] [%t] [%^%l%$] [%g%#] %v");
     /* rotating_sink->set_level( */
     /* #ifdef NDEBUG */
     /*     spdlog::level::info */

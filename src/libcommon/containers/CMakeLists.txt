@@ -1,5 +1,6 @@
 set(unittest_sources
-    common_containers.unittest.cpp)
+    common_containers_event_queue.unittest.cpp
+    common_containers_stdlib.unittest.cpp)
 
 set(libs
     ph_common_allocators)
