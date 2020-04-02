@@ -6,9 +6,11 @@ set(unittest_sources
     common_threading_synchronized.unittest.cpp)
 
 set(libs
-    ph_common_log
+    ph_common_log)
+
+set(system_libs
     Threads::Threads)
 
-ph_add_generic_interface_library(ph_common_threading "${libs}")
+ph_add_generic_interface_library(ph_common_threading "${libs}" "${system_libs}")
 
 ph_add_generic_tests(ph_common_threading "${unittest_sources}")

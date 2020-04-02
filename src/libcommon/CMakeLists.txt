@@ -15,4 +15,4 @@ set(libs
     ph_common_system
     ph_common_threading)
 
-ph_add_generic_interface_library(ph_common "${libs}")
+ph_add_generic_interface_library(ph_common "${libs}" "")

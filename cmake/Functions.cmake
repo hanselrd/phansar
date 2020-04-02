@@ -18,6 +18,17 @@ function(ph_target_link_libraries name type)
         ${ARGN})
 endfunction()
 
+function(ph_target_link_system_libraries name type)
+    set(libs ${ARGN})
+    foreach(lib ${libs})
+        get_target_property(lib_include_dirs ${lib} INTERFACE_INCLUDE_DIRECTORIES)
+        target_include_directories(${name} SYSTEM ${type}
+            ${lib_include_dirs})
+        target_link_libraries(${name} ${type}
+            ${lib})
+    endforeach()
+endfunction()
+
 function(ph_target_compile_definitions name)
     target_compile_definitions(${name} PRIVATE
         ${ARGN})
@@ -33,11 +44,12 @@ function(ph_target_compile_options name)
     target_compile_options(${name} PRIVATE
         $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:$<$<CONFIG:DEBUG>:-O0>>
         $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:$<$<OR:$<CONFIG:RELEASE>,$<CONFIG:RELWITHDEBINFO>,$<CONFIG:MINSIZEREL>>:-D_FORTIFY_SOURCE=2>>
-        $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-Wall -Wextra -Werror -Wpedantic -Wshadow -Wdouble-promotion -Wformat=2 -Wformat-overflow=2 -Wformat-truncation=2 -Wundef -fno-common -fstack-usage -Wconversion>
+        $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-Wall -Wextra -Werror -Wpedantic -Wshadow -Wdouble-promotion -Wformat=2 -Wundef -fno-common -Wconversion>
+        $<$<CXX_COMPILER_ID:GNU>:-Wformat-overflow=2 -Wformat-truncation=2 -fstack-usage>
         $<$<CXX_COMPILER_ID:MSVC>:/Wall>)
 endfunction()
 
-function(ph_add_generic_interface_library name libs)
+function(ph_add_generic_interface_library name libs system_libs)
     ph_add_library(${name} INTERFACE)
 
     ph_target_include_directories(${name} INTERFACE)
@@ -46,9 +58,14 @@ function(ph_add_generic_interface_library name libs)
         ph_target_link_libraries(${name} INTERFACE
             ${libs})
     endif()
+
+    if(system_libs)
+        ph_target_link_system_libraries(${name} INTERFACE
+            ${system_libs})
+    endif()
 endfunction()
 
-function(ph_add_generic_library name sources libs)
+function(ph_add_generic_library name sources libs system_libs)
     ph_add_library(${name} STATIC
         ${sources})
 
@@ -57,6 +74,11 @@ function(ph_add_generic_library name sources libs)
     if(libs)
         ph_target_link_libraries(${name} PUBLIC
             ${libs})
+    endif()
+
+    if(system_libs)
+        ph_target_link_system_libraries(${name} PUBLIC
+            ${system_libs})
     endif()
 
     string(TOUPPER ${name} uppername)
@@ -69,13 +91,18 @@ function(ph_add_generic_library name sources libs)
     ph_target_compile_options(${name})
 endfunction()
 
-function(ph_add_generic_executable name sources libs)
+function(ph_add_generic_executable name sources libs system_libs)
     ph_add_executable(${name}
         ${sources})
 
     if(libs)
         ph_target_link_libraries(${name} PUBLIC
             ${libs})
+    endif()
+
+    if(system_libs)
+        ph_target_link_system_libraries(${name} PUBLIC
+            ${system_libs})
     endif()
 
     string(TOUPPER ${name} uppername)

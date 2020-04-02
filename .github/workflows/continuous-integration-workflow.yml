@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
     build:
-        name: "[${{ matrix.build_type }}] ${{ matrix.compiler.cc }} ${{ matrix.compiler.cxx }}"
+        name: "[${{ matrix.build_type }}] ${{ matrix.compiler.name }}"
         runs-on: ubuntu-latest
 
         strategy:
@@ -12,8 +12,8 @@ jobs:
             matrix:
                 build_type: ["Debug", "Release", "RelWithDebInfo", "MinSizeRel"]
                 compiler:
-                  - { cc: "gcc", cxx: "g++" }
-                  - { cc: "clang", cxx: "clang++" }
+                  - { name: "GCC", cc: "gcc", cxx: "g++" }
+                  - { name: "Clang", cc: "clang", cxx: "clang++" }
 
         steps:
         - uses: actions/checkout@v1
@@ -27,6 +27,8 @@ jobs:
             sudo cp -R ./clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/* /usr/local
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
             sudo apt install -y libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+        - name: Configure build
+          run: |
             cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.compiler.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
         - name: Check code formatting

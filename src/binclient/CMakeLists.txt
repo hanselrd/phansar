@@ -7,10 +7,12 @@ set(sources
     main.cpp)
 
 set(libs
-    ph_common
+    ph_common)
+
+set(system_libs
     SDL2::Core
     SDL2::Image
     SDL2::Mixer
     SDL2::TTF)
 
-ph_add_generic_executable(ph_client "${sources}" "${libs}")
+ph_add_generic_executable(ph_client "${sources}" "${libs}" "${system_libs}")
