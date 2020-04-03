@@ -3,19 +3,36 @@
 
 namespace common::threading {
 template <class T, class Mutex>
-synchronized<T, Mutex>::proxy::proxy(T &obj, Mutex &mutex) : _obj_r{obj}, _mutex_r{mutex} {
+synchronized<T, Mutex>::proxy::proxy(T &obj, Mutex &mutex) : _obj_p{&obj}, _mutex_p{&mutex} {
+}
+
+template <class T, class Mutex>
+synchronized<T, Mutex>::proxy::proxy(proxy &&other)
+    : _obj_p{std::exchange(other._obj_p, nullptr)}, _mutex_p{
+                                                        std::exchange(other._mutex_p, nullptr)} {
+}
+
+template <class T, class Mutex>
+typename synchronized<T, Mutex>::proxy &synchronized<T, Mutex>::proxy::operator=(proxy &&other) {
+    if (this != &other) {
+        std::exchange(other._obj_p, nullptr);
+        std::exchange(other._mutex_p, nullptr);
+    }
+    return *this;
 }
 
 template <class T, class Mutex> synchronized<T, Mutex>::proxy::~proxy() {
-    _mutex_r.unlock();
+    if (_mutex_p) {
+        _mutex_p->unlock();
+    }
 }
 
 template <class T, class Mutex> T &synchronized<T, Mutex>::proxy::operator*() const {
-    return _obj_r;
+    return *_obj_p;
 }
 
 template <class T, class Mutex> T *synchronized<T, Mutex>::proxy::operator->() const {
-    return &_obj_r;
+    return _obj_p;
 }
 
 template <class T, class Mutex> T &synchronized<T, Mutex>::synchronized::proxy::get() const {

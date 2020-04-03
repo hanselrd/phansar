@@ -66,7 +66,13 @@ TEST_CASE("can use synchronized primitive", "[libcommon][threading][synchronized
     for (std::size_t i = 0; i < std::thread::hardware_concurrency(); ++i) {
         threads.emplace_back([&s]() {
             for (int j = 0; j < 10000; ++j) {
-                ++(*s.lock());
+                /* ++(*s.lock()); */
+                while (true) {
+                    if (auto l = s.try_lock(); l.has_value()) {
+                        ++l->get();
+                        break;
+                    }
+                }
             }
         });
     }
