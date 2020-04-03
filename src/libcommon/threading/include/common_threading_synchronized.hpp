@@ -13,7 +13,11 @@ public:
     public:
         proxy() = delete;
         proxy(const proxy &) = delete;
+        proxy &operator=(const proxy &) = delete;
+        proxy(proxy &&other);
+        proxy &operator=(proxy &&other);
         ~proxy();
+
         T &operator*() const;
         T *operator->() const;
         T &get() const;
@@ -21,8 +25,8 @@ public:
     private:
         explicit proxy(T &obj, Mutex &mutex);
 
-        T &_obj_r;
-        Mutex &_mutex_r;
+        T *_obj_p;
+        Mutex *_mutex_p;
     };
 
     template <class... Args> synchronized(Args &&... args);
