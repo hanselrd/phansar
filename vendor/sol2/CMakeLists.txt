@@ -1,6 +1,6 @@
 FetchContent_Declare(sol2_git
     GIT_REPOSITORY https://github.com/ThePhD/sol2.git
-    GIT_TAG        053a7fdcb13605fbbd2b660325578a75adfbb8f4)
+    GIT_TAG        e82af463c130c09760b22063b55b71e3f1a47e3f)
 FetchContent_GetProperties(sol2_git)
 if(NOT sol2_git_POPULATED)
     FetchContent_Populate(sol2_git)

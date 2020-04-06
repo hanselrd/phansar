@@ -1,12 +1,6 @@
 #include "common_containers_stdlib.hpp"
 #include <catch2/catch.hpp>
 
-TEST_CASE("can use container array", "[libcommon][containers][stdlib]") {
-    auto a = common::containers::array<int, 2>{};
-    a[0] = 10;
-    a[1] = 11;
-}
-
 TEST_CASE("can use container vector", "[libcommon][containers][stdlib]") {
     auto v = common::containers::vector<int>{};
     v.push_back(10);

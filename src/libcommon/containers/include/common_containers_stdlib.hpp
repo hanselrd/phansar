@@ -2,7 +2,6 @@
 #define LIBCOMMON_CONTAINERS_INCLUDE_COMMON_CONTAINERS_STDLIB_HPP
 
 #include "common_allocators.hpp"
-#include <array>
 #include <deque>
 #include <forward_list>
 #include <list>
@@ -15,8 +14,6 @@
 #include <vector>
 
 namespace common::containers {
-template <class T, std::size_t N> using array = std::array<T, N>;
-
 template <class T, class Allocator = allocators::default_allocator<T>>
 using vector = std::vector<T, Allocator>;
 
