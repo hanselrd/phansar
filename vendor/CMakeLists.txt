@@ -17,7 +17,7 @@ function(check_git_commit_hash name source_dir branch)
     message(STATUS "${name}: (HEAD) ${head_hash}")
 
     if(NOT ${head_hash} STREQUAL ${origin_hash})
-        message(WARNING "Newer commit ${name}: (origin/${branch}) ${origin_hash}")
+        message(STATUS "Newer commit ${name}: (origin/${branch}) ${origin_hash}")
     endif()
 endfunction()
 
