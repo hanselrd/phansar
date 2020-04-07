@@ -23,8 +23,10 @@ function(ph_target_link_system_libraries name type)
     set(libs ${ARGN})
     foreach(lib ${libs})
         get_target_property(lib_include_dirs ${lib} INTERFACE_INCLUDE_DIRECTORIES)
-        target_include_directories(${name} SYSTEM ${type}
-            ${lib_include_dirs})
+        if(lib_include_dirs)
+            target_include_directories(${name} SYSTEM ${type}
+                ${lib_include_dirs})
+        endif()
         target_link_libraries(${name} ${type}
             ${lib})
     endforeach()
