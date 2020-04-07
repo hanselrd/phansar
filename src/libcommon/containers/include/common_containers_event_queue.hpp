@@ -13,6 +13,7 @@ public:
     template <class... Args,
               class = std::void_t<std::enable_if_t<std::is_convertible_v<Args, Event>>...>>
     explicit event_queue(Args &&... args);
+
     void push(const Event &event, const T &t);
     void subscribe(subscribe_function f);
     void update();

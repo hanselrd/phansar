@@ -11,7 +11,6 @@ public:
         friend class synchronized;
 
     public:
-        proxy() = delete;
         proxy(const proxy &) = delete;
         proxy &operator=(const proxy &) = delete;
         proxy(proxy &&other);
@@ -29,7 +28,8 @@ public:
         Mutex *_mutex_p;
     };
 
-    template <class... Args> synchronized(Args &&... args);
+    template <class... Args> explicit synchronized(Args &&... args);
+
     proxy lock();
     std::optional<proxy> try_lock();
 
