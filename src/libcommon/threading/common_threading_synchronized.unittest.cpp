@@ -9,9 +9,9 @@ TEST_CASE("can use synchronized vector", "[libcommon][threading][synchronized]")
 
     REQUIRE(std::thread::hardware_concurrency() > 0);
 
-    for (std::size_t i = 0; i < std::thread::hardware_concurrency(); ++i) {
+    for (auto i = std::size_t{0}; i < std::thread::hardware_concurrency(); ++i) {
         threads.emplace_back([&s]() {
-            for (int j = 0; j < 10000; ++j) {
+            for (auto j = int{0}; j < 10000; ++j) {
                 s.lock()->push_back(j);
             }
         });
@@ -37,9 +37,9 @@ TEST_CASE("can use synchronized struct", "[libcommon][threading][synchronized]")
 
     REQUIRE(std::thread::hardware_concurrency() > 0);
 
-    for (std::size_t i = 0; i < std::thread::hardware_concurrency(); ++i) {
+    for (auto i = std::size_t{0}; i < std::thread::hardware_concurrency(); ++i) {
         threads.emplace_back([&s]() {
-            for (int j = 0; j < 10000; ++j) {
+            for (auto j = int{0}; j < 10000; ++j) {
                 auto l = s.lock();
                 ++l->x;
                 --l->y;
@@ -63,9 +63,9 @@ TEST_CASE("can use synchronized primitive", "[libcommon][threading][synchronized
 
     REQUIRE(std::thread::hardware_concurrency() > 0);
 
-    for (std::size_t i = 0; i < std::thread::hardware_concurrency(); ++i) {
+    for (auto i = std::size_t{0}; i < std::thread::hardware_concurrency(); ++i) {
         threads.emplace_back([&s]() {
-            for (int j = 0; j < 10000; ++j) {
+            for (auto j = int{0}; j < 10000; ++j) {
                 /* ++(*s.lock()); */
                 while (true) {
                     if (auto l = s.try_lock(); l.has_value()) {
