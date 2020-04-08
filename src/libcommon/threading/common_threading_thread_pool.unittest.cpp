@@ -3,13 +3,15 @@
 #include <catch2/catch.hpp>
 #include <vector>
 
+#define THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS (10000)
+
 TEST_CASE("can use thread pool", "[libcommon][threading][thread_pool]") {
     auto tp = common::threading::thread_pool{};
     auto count = std::atomic_uint64_t{0};
     auto futs = std::vector<std::future<std::uint64_t>>{};
     auto futs_count = std::uint64_t{0};
 
-    for (auto i = std::size_t{0}; i < 10000; ++i) {
+    for (auto i = std::size_t{0}; i < THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS; ++i) {
         tp.push_work([&count] { count.fetch_add(1); });
 
         auto fut = tp.push_task([&count] {
@@ -25,6 +27,6 @@ TEST_CASE("can use thread pool", "[libcommon][threading][thread_pool]") {
 
     tp.wait_done();
 
-    REQUIRE(count.load() == 20000);
-    REQUIRE(futs_count == 10000);
+    REQUIRE(count.load() == (2 * THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS));
+    REQUIRE(futs_count == THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS);
 }

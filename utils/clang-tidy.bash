@@ -6,7 +6,7 @@ tmpdir=$(mktemp -d -p /tmp clang-tidy-XXXXXXXXX)
 tmpf=$(mktemp -p "$tmpdir" XXXXXXXXX.fdiff)
 
 runclangtidy() {
-    clangtidychecks="-*,bugprone-*,-bugprone-lambda-function-name,-bugprone-sizeof-expression,clang-analyzer-*,modernize-*,-modernize-use-nodiscard,performance-*,portability-*,readability-*,-readability-magic-numbers"
+    clangtidychecks="-*,bugprone-*,-bugprone-lambda-function-name,-bugprone-sizeof-expression,clang-analyzer-*,modernize-*,-modernize-use-nodiscard,performance-*,portability-*,readability-*"
     clangtidyheaderfilter=".*"
     clangtidyextraarg="-Wno-unknown-warning-option"
     clangtidyfiles="$PWD/{src,tests,vendor}"

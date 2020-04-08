@@ -5,6 +5,8 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
+#define LOG_MAX_FILE_SIZE (1024 * 1024 * 5)
+
 namespace common::log {
 void init(std::string_view filename) {
     if (filename.empty()) {
@@ -22,7 +24,7 @@ void init(std::string_view filename) {
     /* ); */
 
     auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-        std::string{filename}, 1048576 * 5, 3);
+        std::string{filename}, LOG_MAX_FILE_SIZE, 3);
     rotating_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e %z] [%t] [%^%l%$] [%g%#] %v");
     /* rotating_sink->set_level( */
     /* #ifdef NDEBUG */

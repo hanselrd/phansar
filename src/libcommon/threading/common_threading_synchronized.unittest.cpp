@@ -3,6 +3,8 @@
 #include <thread>
 #include <vector>
 
+#define THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS (10000)
+
 TEST_CASE("can use synchronized vector", "[libcommon][threading][synchronized]") {
     auto s = common::threading::synchronized<std::vector<int>>{};
     auto threads = std::vector<std::thread>{};
@@ -11,7 +13,7 @@ TEST_CASE("can use synchronized vector", "[libcommon][threading][synchronized]")
 
     for (auto i = std::size_t{0}; i < std::thread::hardware_concurrency(); ++i) {
         threads.emplace_back([&s]() {
-            for (auto j = int{0}; j < 10000; ++j) {
+            for (auto j = int{0}; j < THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS; ++j) {
                 s.lock()->push_back(j);
             }
         });
@@ -23,7 +25,8 @@ TEST_CASE("can use synchronized vector", "[libcommon][threading][synchronized]")
         }
     }
 
-    REQUIRE(s.lock()->size() == (10000 * std::thread::hardware_concurrency()));
+    REQUIRE(s.lock()->size() ==
+            (THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS * std::thread::hardware_concurrency()));
 }
 
 TEST_CASE("can use synchronized struct", "[libcommon][threading][synchronized]") {
@@ -39,7 +42,7 @@ TEST_CASE("can use synchronized struct", "[libcommon][threading][synchronized]")
 
     for (auto i = std::size_t{0}; i < std::thread::hardware_concurrency(); ++i) {
         threads.emplace_back([&s]() {
-            for (auto j = int{0}; j < 10000; ++j) {
+            for (auto j = int{0}; j < THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS; ++j) {
                 auto l = s.lock();
                 ++l->x;
                 --l->y;
@@ -53,8 +56,10 @@ TEST_CASE("can use synchronized struct", "[libcommon][threading][synchronized]")
         }
     }
 
-    REQUIRE(s.lock()->x == (10000 * static_cast<int>(std::thread::hardware_concurrency())));
-    REQUIRE(s.lock()->y == (-10000 * static_cast<int>(std::thread::hardware_concurrency())));
+    REQUIRE(s.lock()->x == (THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
+                            static_cast<int>(std::thread::hardware_concurrency())));
+    REQUIRE(s.lock()->y == (-THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
+                            static_cast<int>(std::thread::hardware_concurrency())));
 }
 
 TEST_CASE("can use synchronized primitive", "[libcommon][threading][synchronized]") {
@@ -65,7 +70,7 @@ TEST_CASE("can use synchronized primitive", "[libcommon][threading][synchronized
 
     for (auto i = std::size_t{0}; i < std::thread::hardware_concurrency(); ++i) {
         threads.emplace_back([&s]() {
-            for (auto j = int{0}; j < 10000; ++j) {
+            for (auto j = int{0}; j < THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS; ++j) {
                 /* ++(*s.lock()); */
                 while (true) {
                     if (auto l = s.try_lock(); l.has_value()) {
@@ -83,5 +88,6 @@ TEST_CASE("can use synchronized primitive", "[libcommon][threading][synchronized
         }
     }
 
-    REQUIRE(*s.lock() == (10000 * static_cast<int>(std::thread::hardware_concurrency())));
+    REQUIRE(*s.lock() == (THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
+                          static_cast<int>(std::thread::hardware_concurrency())));
 }
