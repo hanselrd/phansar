@@ -41,7 +41,7 @@ void init(std::string_view filename) {
     LOGD("Logger initialized");
     LOGD("  log file: {}", filename);
 
-    auto cpu_str = std::string{""};
+    auto cpu_str = std::string{};
 #ifdef P_CPU_ALPHA
     cpu_str += " ALPHA";
 #endif
@@ -141,7 +141,7 @@ void init(std::string_view filename) {
     LOGI_IF(
         P_BYTE_ORDER, "CPU endianness: {}", (P_BYTE_ORDER == P_LITTLE_ENDIAN) ? "little" : "big");
 
-    auto os_str = std::string{""};
+    auto os_str = std::string{};
 #ifdef P_OS_DARWIN
     os_str += " DARWIN";
 #endif
@@ -249,7 +249,7 @@ void init(std::string_view filename) {
 #endif
     LOGI("OS:{}", os_str);
 
-    auto cc_str = std::string{""};
+    auto cc_str = std::string{};
 #ifdef P_CC_MSVC
     cc_str += " MSVC";
 #endif

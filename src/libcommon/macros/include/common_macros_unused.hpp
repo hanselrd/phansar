@@ -7,7 +7,7 @@
 #    define UNUSED_ARG(arg)                                                                        \
         [&] {                                                                                      \
             LOGT("Unused argument `" #arg "'");                                                    \
-            (void)arg;                                                                             \
+            (void)(arg);                                                                           \
         }()
 #else
 #    define UNUSED_ARG(arg) ((void)arg)

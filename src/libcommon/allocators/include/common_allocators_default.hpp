@@ -9,15 +9,17 @@ public:
     using value_type = T;
 
     default_allocator() = default;
-    template <class U> default_allocator(const default_allocator<U> &);
-    T *allocate(std::size_t nelems);
+    template <class U> default_allocator(const default_allocator<U> & /*unused*/);
+    auto allocate(std::size_t nelems) -> T *;
     void deallocate(T *ptr, std::size_t nelems);
 };
 
 template <class T, class U>
-bool operator==(const default_allocator<T> &, const default_allocator<U> &);
+auto operator==(const default_allocator<T> & /*unused*/, const default_allocator<U> & /*unused*/)
+    -> bool;
 template <class T, class U>
-bool operator!=(const default_allocator<T> &, const default_allocator<U> &);
+auto operator!=(const default_allocator<T> & /*unused*/, const default_allocator<U> & /*unused*/)
+    -> bool;
 } // namespace common::allocators
 
 #include "../common_allocators_default.tpp"

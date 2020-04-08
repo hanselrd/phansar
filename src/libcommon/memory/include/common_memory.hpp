@@ -5,10 +5,10 @@
 #include <cstdlib>
 
 namespace common::memory {
-void *malloc(std::size_t nbytes);
-void *malloc0(std::size_t nbytes);
-void *calloc(std::size_t num, std::size_t nbytes);
-void *realloc(void *mem, std::size_t nbytes);
+auto malloc(std::size_t nbytes) -> void *;
+auto malloc0(std::size_t nbytes) -> void *;
+auto calloc(std::size_t num, std::size_t nbytes) -> void *;
+auto realloc(void *mem, std::size_t nbytes) -> void *;
 void free(void *mem);
 } // namespace common::memory
 

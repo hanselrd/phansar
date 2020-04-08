@@ -7,7 +7,7 @@ event_queue<Event, T>::event_queue(Args &&... args) : _whitelist{std::forward<Ar
 }
 
 template <class Event, class T> void event_queue<Event, T>::push(const Event &event, const T &t) {
-    if (_whitelist.size() > 0) {
+    if (!_whitelist.empty()) {
         auto found = bool{false};
         for (const auto &w : _whitelist) {
             if (w == event) {
@@ -28,7 +28,7 @@ template <class Event, class T> void event_queue<Event, T>::subscribe(subscribe_
 }
 
 template <class Event, class T> void event_queue<Event, T>::update() {
-    while (_queue.size() > 0) {
+    while (!_queue.empty()) {
         auto &[event, t] = _queue.front();
         _queue.pop();
 

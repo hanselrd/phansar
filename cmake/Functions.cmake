@@ -48,7 +48,7 @@ function(ph_target_compile_options name)
         $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:$<$<CONFIG:DEBUG>:-O0>>
         $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:$<$<OR:$<CONFIG:RELEASE>,$<CONFIG:RELWITHDEBINFO>,$<CONFIG:MINSIZEREL>>:-D_FORTIFY_SOURCE=2>>
         $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-Wall -Wextra -Werror -Wpedantic -Wshadow -Wdouble-promotion -Wformat=2 -Wundef -fno-common -Wconversion>
-        $<$<CXX_COMPILER_ID:GNU>:-Wformat-overflow=2 -Wformat-truncation=2 -fstack-usage>
+        $<$<CXX_COMPILER_ID:GNU>:-Wformat-overflow=2 -Wformat-truncation=2>
         $<$<CXX_COMPILER_ID:MSVC>:/Wall>)
 endfunction()
 
