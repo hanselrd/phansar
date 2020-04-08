@@ -10,7 +10,7 @@
             (void)(arg);                                                                           \
         }()
 #else
-#    define UNUSED_ARG(arg) ((void)arg)
+#    define UNUSED_ARG(arg) ((void)(arg))
 #endif
 
 #endif
