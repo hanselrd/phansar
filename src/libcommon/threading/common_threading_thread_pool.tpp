@@ -23,7 +23,7 @@ template <class F, class... Args> void thread_pool::push_work(F &&f, Args &&... 
 }
 
 template <class F, class... Args, class R>
-std::future<R> thread_pool::push_task(F &&f, Args &&... args) {
+auto thread_pool::push_task(F &&f, Args &&... args) -> std::future<R> {
     auto task = std::make_shared<std::packaged_task<R()>>(
         std::bind(std::forward<F>(f), std::forward<Args>(args)...));
     auto fut = task->get_future();

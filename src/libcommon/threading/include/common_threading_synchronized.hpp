@@ -12,14 +12,14 @@ public:
 
     public:
         proxy(const proxy &) = delete;
-        proxy &operator=(const proxy &) = delete;
-        proxy(proxy &&other);
-        proxy &operator=(proxy &&other);
+        auto operator=(const proxy &) -> proxy & = delete;
+        proxy(proxy &&other) noexcept;
+        auto operator=(proxy &&other) noexcept -> proxy &;
         ~proxy();
 
-        T &operator*() const;
-        T *operator->() const;
-        T &get() const;
+        auto operator*() const -> T &;
+        auto operator-> () const -> T *;
+        auto get() const -> T &;
 
     private:
         explicit proxy(T &obj, Mutex &mutex);
@@ -30,8 +30,8 @@ public:
 
     template <class... Args> explicit synchronized(Args &&... args);
 
-    proxy lock();
-    std::optional<proxy> try_lock();
+    auto lock() -> proxy;
+    auto try_lock() -> std::optional<proxy>;
 
 private:
     T _obj;

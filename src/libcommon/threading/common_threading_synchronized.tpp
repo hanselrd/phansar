@@ -7,13 +7,14 @@ synchronized<T, Mutex>::proxy::proxy(T &obj, Mutex &mutex) : _obj_p{&obj}, _mute
 }
 
 template <class T, class Mutex>
-synchronized<T, Mutex>::proxy::proxy(proxy &&other)
+synchronized<T, Mutex>::proxy::proxy(proxy &&other) noexcept
     : _obj_p{std::exchange(other._obj_p, nullptr)}, _mutex_p{
                                                         std::exchange(other._mutex_p, nullptr)} {
 }
 
 template <class T, class Mutex>
-typename synchronized<T, Mutex>::proxy &synchronized<T, Mutex>::proxy::operator=(proxy &&other) {
+auto synchronized<T, Mutex>::proxy::operator=(proxy &&other) noexcept ->
+    typename synchronized<T, Mutex>::proxy & {
     if (this != &other) {
         std::exchange(other._obj_p, nullptr);
         std::exchange(other._mutex_p, nullptr);
@@ -27,15 +28,16 @@ template <class T, class Mutex> synchronized<T, Mutex>::proxy::~proxy() {
     }
 }
 
-template <class T, class Mutex> T &synchronized<T, Mutex>::proxy::operator*() const {
+template <class T, class Mutex> auto synchronized<T, Mutex>::proxy::operator*() const -> T & {
     return *_obj_p;
 }
 
-template <class T, class Mutex> T *synchronized<T, Mutex>::proxy::operator->() const {
+template <class T, class Mutex> auto synchronized<T, Mutex>::proxy::operator-> () const -> T * {
     return _obj_p;
 }
 
-template <class T, class Mutex> T &synchronized<T, Mutex>::synchronized::proxy::get() const {
+template <class T, class Mutex>
+auto synchronized<T, Mutex>::synchronized::proxy::get() const -> T & {
     return operator*();
 }
 
@@ -45,17 +47,16 @@ synchronized<T, Mutex>::synchronized(Args &&... args) : _obj{std::forward<Args>(
 }
 
 template <class T, class Mutex>
-typename synchronized<T, Mutex>::proxy synchronized<T, Mutex>::lock() {
+auto synchronized<T, Mutex>::lock() -> typename synchronized<T, Mutex>::proxy {
     _mutex.lock();
     return proxy{_obj, _mutex};
 }
 
 template <class T, class Mutex>
-std::optional<typename synchronized<T, Mutex>::proxy> synchronized<T, Mutex>::try_lock() {
+auto synchronized<T, Mutex>::try_lock() -> std::optional<typename synchronized<T, Mutex>::proxy> {
     if (_mutex.try_lock()) {
         return proxy{_obj, _mutex};
-    } else {
-        return std::nullopt;
     }
+    return std::nullopt;
 }
 } // namespace common::threading

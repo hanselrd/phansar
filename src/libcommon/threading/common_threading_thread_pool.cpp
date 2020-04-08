@@ -9,7 +9,7 @@ thread_pool::thread_pool(std::size_t nthreads) : _queues{nthreads} {
             while (_running) {
                 for (auto n = std::size_t{0}; n < _threads.size(); ++n) {
                     if (auto l = _queues[(i + n) % _threads.size()].try_lock();
-                        l.has_value() && l.value()->size() > 0) {
+                        l.has_value() && !l.value()->empty()) {
                         l.value()->front()();
                         l.value()->pop();
                         LOGD("Worker {} executed from queue {} ({})",
@@ -19,7 +19,7 @@ thread_pool::thread_pool(std::size_t nthreads) : _queues{nthreads} {
                     }
                 }
 
-                if (auto l = _queues[i].lock(); l->size() > 0) {
+                if (auto l = _queues[i].lock(); !l->empty()) {
                     l->front()();
                     l->pop();
                     LOGD("Worker {} executed from queue {} ({})", i, i, l->size());

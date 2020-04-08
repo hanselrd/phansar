@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 namespace common::memory {
-void *malloc(std::size_t nbytes) {
+auto malloc(std::size_t nbytes) -> void * {
     ASSERT(nbytes > 0);
 
     auto ptr = std::malloc(nbytes);
@@ -12,7 +12,7 @@ void *malloc(std::size_t nbytes) {
     return ptr;
 }
 
-void *malloc0(std::size_t nbytes) {
+auto malloc0(std::size_t nbytes) -> void * {
     ASSERT(nbytes > 0);
 
     auto ptr = std::calloc(1, nbytes);
@@ -20,7 +20,7 @@ void *malloc0(std::size_t nbytes) {
     return ptr;
 }
 
-void *calloc(std::size_t num, std::size_t nbytes) {
+auto calloc(std::size_t num, std::size_t nbytes) -> void * {
     ASSERT(num > 0);
     ASSERT(nbytes > 0);
 
@@ -29,7 +29,7 @@ void *calloc(std::size_t num, std::size_t nbytes) {
     return ptr;
 }
 
-void *realloc(void *mem, std::size_t nbytes) {
+auto realloc(void *mem, std::size_t nbytes) -> void * {
     ASSERT(mem != nullptr);
     ASSERT(nbytes > 0);
 
