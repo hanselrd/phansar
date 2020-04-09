@@ -24,9 +24,9 @@
 #define LOG_LOGGER_CALL(logger, level, ...)                                                        \
     do {                                                                                           \
         if (logger->should_log(level) || logger->should_backtrace()) {                             \
-            auto file = std::string{__FILE__};                                                     \
-            file = file.substr(file.find_last_of('/') + 1);                                        \
-            auto pos = std::size_t{0};                                                             \
+            auto file  = std::string{__FILE__};                                                    \
+            file       = file.substr(file.find_last_of('/') + 1);                                  \
+            auto pos   = std::size_t{0};                                                           \
             auto index = std::size_t{0};                                                           \
             while ((pos = file.find_first_of("._")) != std::string::npos) {                        \
                 ++index;                                                                           \
@@ -35,49 +35,50 @@
             std::transform(file.begin(), file.end(), file.begin(), [](unsigned char c) {           \
                 return std::toupper(c);                                                            \
             });                                                                                    \
-            logger->log(                                                                           \
-                spdlog::source_loc{file.c_str(), __LINE__, SPDLOG_FUNCTION}, level, __VA_ARGS__);  \
+            logger->log(spdlog::source_loc{file.c_str(), __LINE__, SPDLOG_FUNCTION},               \
+                        level,                                                                     \
+                        __VA_ARGS__);                                                              \
         }                                                                                          \
     } while (0)
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
 #    define LOG_LOGGER_TRACE(logger, ...) LOG_LOGGER_CALL(logger, spdlog::level::trace, __VA_ARGS__)
-#    define LOG_TRACE(...) LOG_LOGGER_TRACE(spdlog::default_logger_raw(), __VA_ARGS__)
+#    define LOG_TRACE(...)                LOG_LOGGER_TRACE(spdlog::default_logger_raw(), __VA_ARGS__)
 #else
 #    define LOG_LOGGER_TRACE(logger, ...) (void)0
-#    define LOG_TRACE(...) (void)0
+#    define LOG_TRACE(...)                (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_DEBUG
 #    define LOG_LOGGER_DEBUG(logger, ...) LOG_LOGGER_CALL(logger, spdlog::level::debug, __VA_ARGS__)
-#    define LOG_DEBUG(...) LOG_LOGGER_DEBUG(spdlog::default_logger_raw(), __VA_ARGS__)
+#    define LOG_DEBUG(...)                LOG_LOGGER_DEBUG(spdlog::default_logger_raw(), __VA_ARGS__)
 #else
 #    define LOG_LOGGER_DEBUG(logger, ...) (void)0
-#    define LOG_DEBUG(...) (void)0
+#    define LOG_DEBUG(...)                (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_INFO
 #    define LOG_LOGGER_INFO(logger, ...) LOG_LOGGER_CALL(logger, spdlog::level::info, __VA_ARGS__)
-#    define LOG_INFO(...) LOG_LOGGER_INFO(spdlog::default_logger_raw(), __VA_ARGS__)
+#    define LOG_INFO(...)                LOG_LOGGER_INFO(spdlog::default_logger_raw(), __VA_ARGS__)
 #else
 #    define LOG_LOGGER_INFO(logger, ...) (void)0
-#    define LOG_INFO(...) (void)0
+#    define LOG_INFO(...)                (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_WARN
 #    define LOG_LOGGER_WARN(logger, ...) LOG_LOGGER_CALL(logger, spdlog::level::warn, __VA_ARGS__)
-#    define LOG_WARN(...) LOG_LOGGER_WARN(spdlog::default_logger_raw(), __VA_ARGS__)
+#    define LOG_WARN(...)                LOG_LOGGER_WARN(spdlog::default_logger_raw(), __VA_ARGS__)
 #else
 #    define LOG_LOGGER_WARN(logger, ...) (void)0
-#    define LOG_WARN(...) (void)0
+#    define LOG_WARN(...)                (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_ERROR
 #    define LOG_LOGGER_ERROR(logger, ...) LOG_LOGGER_CALL(logger, spdlog::level::err, __VA_ARGS__)
-#    define LOG_ERROR(...) LOG_LOGGER_ERROR(spdlog::default_logger_raw(), __VA_ARGS__)
+#    define LOG_ERROR(...)                LOG_LOGGER_ERROR(spdlog::default_logger_raw(), __VA_ARGS__)
 #else
 #    define LOG_LOGGER_ERROR(logger, ...) (void)0
-#    define LOG_ERROR(...) (void)0
+#    define LOG_ERROR(...)                (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_CRITICAL
@@ -86,7 +87,7 @@
 #    define LOG_CRITICAL(...) LOG_LOGGER_CRITICAL(spdlog::default_logger_raw(), __VA_ARGS__)
 #else
 #    define LOG_LOGGER_CRITICAL(logger, ...) (void)0
-#    define LOG_CRITICAL(...) (void)0
+#    define LOG_CRITICAL(...)                (void)0
 #endif
 
 #define LOGT LOG_TRACE
@@ -110,7 +111,7 @@
         LOG_LOGGER_TRACE_IF(spdlog::default_logger_raw(), condition, __VA_ARGS__)
 #else
 #    define LOG_LOGGER_TRACE_IF(logger, condition, ...) (void)0
-#    define LOG_TRACE_IF(...) (void)0
+#    define LOG_TRACE_IF(...)                           (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_DEBUG
@@ -120,7 +121,7 @@
         LOG_LOGGER_DEBUG_IF(spdlog::default_logger_raw(), condition, __VA_ARGS__)
 #else
 #    define LOG_LOGGER_DEBUG_IF(logger, condition, ...) (void)0
-#    define LOG_DEBUG_IF(...) (void)0
+#    define LOG_DEBUG_IF(...)                           (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_INFO
@@ -130,7 +131,7 @@
         LOG_LOGGER_INFO_IF(spdlog::default_logger_raw(), condition, __VA_ARGS__)
 #else
 #    define LOG_LOGGER_INFO_IF(logger, condition, ...) (void)0
-#    define LOG_INFO_IF(...) (void)0
+#    define LOG_INFO_IF(...)                           (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_WARN
@@ -140,7 +141,7 @@
         LOG_LOGGER_WARN_IF(spdlog::default_logger_raw(), condition, __VA_ARGS__)
 #else
 #    define LOG_LOGGER_WARN_IF(logger, condition, ...) (void)0
-#    define LOG_WARN_IF(...) (void)0
+#    define LOG_WARN_IF(...)                           (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_ERROR
@@ -150,7 +151,7 @@
         LOG_LOGGER_ERROR_IF(spdlog::default_logger_raw(), condition, __VA_ARGS__)
 #else
 #    define LOG_LOGGER_ERROR_IF(logger, condition, ...) (void)0
-#    define LOG_ERROR_IF(...) (void)0
+#    define LOG_ERROR_IF(...)                           (void)0
 #endif
 
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_CRITICAL
@@ -160,7 +161,7 @@
         LOG_LOGGER_CRITICAL_IF(spdlog::default_logger_raw(), condition, __VA_ARGS__)
 #else
 #    define LOG_LOGGER_CRITICAL_IF(logger, condition, ...) (void)0
-#    define LOG_CRITICAL_IF(...) (void)0
+#    define LOG_CRITICAL_IF(...)                           (void)0
 #endif
 
 #define LOGT_IF LOG_TRACE_IF

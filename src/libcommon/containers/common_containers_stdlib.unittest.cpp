@@ -33,8 +33,8 @@ TEST_CASE("can use container set", "[libcommon][containers][stdlib]") {
 
 TEST_CASE("can use container map", "[libcommon][containers][stdlib]") {
     auto m = common::containers::map<int, int>{};
-    m[0] = 3;
-    m[1] = 4;
+    m[0]   = 3;
+    m[1]   = 4;
 }
 
 TEST_CASE("can use container multiset", "[libcommon][containers][stdlib]") {
@@ -57,8 +57,8 @@ TEST_CASE("can use container unordered set", "[libcommon][containers][stdlib]") 
 
 TEST_CASE("can use container unordered map", "[libcommon][containers][stdlib]") {
     auto um = common::containers::unordered_map<int, int>{};
-    um[0] = 3;
-    um[1] = 4;
+    um[0]   = 3;
+    um[1]   = 4;
 }
 
 TEST_CASE("can use container unordered multiset", "[libcommon][containers][stdlib]") {

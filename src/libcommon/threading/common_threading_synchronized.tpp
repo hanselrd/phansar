@@ -22,17 +22,20 @@ auto synchronized<T, Mutex>::proxy::operator=(proxy &&other) noexcept ->
     return *this;
 }
 
-template <class T, class Mutex> synchronized<T, Mutex>::proxy::~proxy() {
+template <class T, class Mutex>
+synchronized<T, Mutex>::proxy::~proxy() {
     if (_mutex_p) {
         _mutex_p->unlock();
     }
 }
 
-template <class T, class Mutex> auto synchronized<T, Mutex>::proxy::operator*() const -> T & {
+template <class T, class Mutex>
+auto synchronized<T, Mutex>::proxy::operator*() const -> T & {
     return *_obj_p;
 }
 
-template <class T, class Mutex> auto synchronized<T, Mutex>::proxy::operator-> () const -> T * {
+template <class T, class Mutex>
+auto synchronized<T, Mutex>::proxy::operator-> () const -> T * {
     return _obj_p;
 }
 

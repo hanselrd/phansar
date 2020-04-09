@@ -6,7 +6,8 @@
 #include <type_traits>
 
 namespace common::containers {
-template <class Event, class T> class event_queue {
+template <class Event, class T>
+class event_queue {
     using subscribe_function = std::function<void(const Event &event, const T &)>;
 
 public:
@@ -20,7 +21,7 @@ public:
 
 private:
     vector<subscribe_function> _subscribers;
-    vector<Event> _whitelist;
+    vector<Event>              _whitelist;
     queue<std::pair<Event, T>> _queue;
 };
 } // namespace common::containers

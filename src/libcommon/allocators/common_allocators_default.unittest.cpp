@@ -2,7 +2,7 @@
 #include <catch2/catch.hpp>
 
 TEST_CASE("can use default allocator", "[libcommon][allocators][default]") {
-    auto a = common::allocators::default_allocator<int>{};
+    auto a   = common::allocators::default_allocator<int>{};
     auto ptr = a.allocate(2);
     REQUIRE(ptr != nullptr);
     a.deallocate(ptr, 2);

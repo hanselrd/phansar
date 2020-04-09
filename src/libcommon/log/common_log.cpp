@@ -23,8 +23,10 @@ void init(std::string_view filename) {
     /* #endif */
     /* ); */
 
-    auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-        std::string{filename}, LOG_MAX_FILE_SIZE, 3);
+    auto rotating_sink =
+        std::make_shared<spdlog::sinks::rotating_file_sink_mt>(std::string{filename},
+                                                               LOG_MAX_FILE_SIZE,
+                                                               3);
     rotating_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e %z] [%t] [%^%l%$] [%g%#] %v");
     /* rotating_sink->set_level( */
     /* #ifdef NDEBUG */
@@ -140,8 +142,9 @@ void init(std::string_view filename) {
     LOGI("CPU:{}", cpu_str);
     /* LOGI("CPU count: {}", 0); */
     /* LOGI("CPU cache line size: {}", 0); */
-    LOGI_IF(
-        P_BYTE_ORDER, "CPU endianness: {}", (P_BYTE_ORDER == P_LITTLE_ENDIAN) ? "little" : "big");
+    LOGI_IF(P_BYTE_ORDER,
+            "CPU endianness: {}",
+            (P_BYTE_ORDER == P_LITTLE_ENDIAN) ? "little" : "big");
 
     auto os_str = std::string{};
 #ifdef P_OS_DARWIN

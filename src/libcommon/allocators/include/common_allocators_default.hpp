@@ -4,14 +4,16 @@
 #include <cstdint>
 
 namespace common::allocators {
-template <class T> class default_allocator {
+template <class T>
+class default_allocator {
 public:
     using value_type = T;
 
     default_allocator() = default;
-    template <class U> default_allocator(const default_allocator<U> & /*unused*/);
-    auto allocate(std::size_t nelems) -> T *;
-    void deallocate(T *ptr, std::size_t nelems);
+    template <class U>
+    explicit default_allocator(const default_allocator<U> & /*unused*/);
+    [[nodiscard]] auto allocate(std::size_t nelems) const -> T *;
+    void               deallocate(T *ptr, std::size_t nelems) const;
 };
 
 template <class T, class U>

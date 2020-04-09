@@ -3,8 +3,11 @@
 #include <memory>
 
 namespace common::threading {
-template <class F, class... Args> void thread_pool::push_work(F &&f, Args &&... args) {
-    auto work = [f, args...] { f(args...); };
+template <class F, class... Args>
+void thread_pool::push_work(F &&f, Args &&... args) {
+    auto work = [f, args...] {
+        f(args...);
+    };
     auto i = _index.fetch_add(1);
 
     for (auto n = std::size_t{0}; n < _threads.size(); ++n) {
@@ -28,7 +31,9 @@ auto thread_pool::push_task(F &&f, Args &&... args) -> std::future<R> {
         std::bind(std::forward<F>(f), std::forward<Args>(args)...));
     auto fut = task->get_future();
 
-    auto work = [task] { (*task)(); };
+    auto work = [task] {
+        (*task)();
+    };
     auto i = _index.fetch_add(1);
 
     for (auto n = std::size_t{0}; n < _threads.size(); ++n) {
