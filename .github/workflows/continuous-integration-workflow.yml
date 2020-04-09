@@ -22,6 +22,8 @@ jobs:
             sudo add-apt-repository ppa:ubuntu-toolchain-r/test
             sudo apt update
             sudo apt install -y wget build-essential cmake ninja-build gcc-9 g++-9
+            export PATH=$(python3 -m site --user-base):$(python -m site --user-base):$PATH
+            echo $PATH
             pip install --user wheel
             pip3 install --user wheel cmake-format
             wget "https://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
