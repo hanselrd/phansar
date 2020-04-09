@@ -11,7 +11,7 @@ TEST_CASE("can use event queue", "[libcommon][containers][event_queue]") {
 
 TEST_CASE("can use event queue all", "[libcommon][containers][event_queue]") {
 
-    auto eq = common::containers::event_queue<event_type, std::string>{};
+    auto eq    = common::containers::event_queue<event_type, std::string>{};
     auto count = std::uint8_t{0};
 
     eq.subscribe([&count](const event_type &event, const std::string &data) {

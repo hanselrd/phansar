@@ -6,7 +6,7 @@
 #define THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS (10000)
 
 TEST_CASE("can use synchronized vector", "[libcommon][threading][synchronized]") {
-    auto s = common::threading::synchronized<std::vector<int>>{};
+    auto s       = common::threading::synchronized<std::vector<int>>{};
     auto threads = std::vector<std::thread>{};
 
     REQUIRE(std::thread::hardware_concurrency() > 0);
@@ -35,7 +35,7 @@ TEST_CASE("can use synchronized struct", "[libcommon][threading][synchronized]")
         int y;
     };
 
-    auto s = common::threading::synchronized<point>{};
+    auto s       = common::threading::synchronized<point>{};
     auto threads = std::vector<std::thread>{};
 
     REQUIRE(std::thread::hardware_concurrency() > 0);
@@ -63,7 +63,7 @@ TEST_CASE("can use synchronized struct", "[libcommon][threading][synchronized]")
 }
 
 TEST_CASE("can use synchronized primitive", "[libcommon][threading][synchronized]") {
-    auto s = common::threading::synchronized<int>{};
+    auto s       = common::threading::synchronized<int>{};
     auto threads = std::vector<std::thread>{};
 
     REQUIRE(std::thread::hardware_concurrency() > 0);

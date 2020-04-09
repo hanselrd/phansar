@@ -5,7 +5,8 @@
 #include <optional>
 
 namespace common::threading {
-template <class T, class Mutex = std::mutex> class synchronized {
+template <class T, class Mutex = std::mutex>
+class synchronized {
 public:
     class proxy {
         friend class synchronized;
@@ -17,24 +18,25 @@ public:
         auto operator=(proxy &&other) noexcept -> proxy &;
         ~proxy();
 
-        auto operator*() const -> T &;
-        auto operator-> () const -> T *;
-        auto get() const -> T &;
+        auto               operator*() const -> T &;
+        auto               operator-> () const -> T *;
+        [[nodiscard]] auto get() const -> T &;
 
     private:
-        explicit proxy(T &obj, Mutex &mutex);
+        proxy(T &obj, Mutex &mutex);
 
-        T *_obj_p;
+        T *    _obj_p;
         Mutex *_mutex_p;
     };
 
-    template <class... Args> explicit synchronized(Args &&... args);
+    template <class... Args>
+    explicit synchronized(Args &&... args);
 
     auto lock() -> proxy;
     auto try_lock() -> std::optional<proxy>;
 
 private:
-    T _obj;
+    T     _obj;
     Mutex _mutex;
 };
 } // namespace common::threading

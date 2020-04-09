@@ -15,10 +15,10 @@ void init(int argc, char **argv) {
     // postponed until after we initialize logger
     UNUSED_ARG(argc);
 
-    auto vtable = PMemVTable{};
-    vtable.malloc = &common::memory::malloc;
+    auto vtable    = PMemVTable{};
+    vtable.malloc  = &common::memory::malloc;
     vtable.realloc = &common::memory::realloc;
-    vtable.free = &common::memory::free;
+    vtable.free    = &common::memory::free;
 
     p_libsys_init_full(&vtable);
 }

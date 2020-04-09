@@ -7,7 +7,7 @@
 #ifndef NDEBUG
 #    define EXPECT_TRUE(condition)                                                                 \
         [&] {                                                                                      \
-            if (!(condition)) {                                                                    \
+            if (! (condition)) {                                                                   \
                 LOGW("Expected `" #condition "' to be true");                                      \
             }                                                                                      \
             return condition;                                                                      \
@@ -21,7 +21,7 @@
             return condition;                                                                      \
         }()
 #else
-#    define EXPECT_TRUE(condition) P_LIKELY(condition)
+#    define EXPECT_TRUE(condition)  P_LIKELY(condition)
 #    define EXPECT_FALSE(condition) P_UNLIKELY(condition)
 #endif
 
