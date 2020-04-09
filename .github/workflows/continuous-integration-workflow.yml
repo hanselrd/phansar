@@ -39,14 +39,14 @@ jobs:
             export PATH=$(python3 -m site --user-base)/bin:$(python -m site --user-base)/bin:$PATH
             echo $PATH
             ./cmake-format.bash check
-        - name: Check code formatting
-          working-directory: ./utils
-          run: |
-            ./clang-format.bash check
         - name: Check include guards
           working-directory: ./utils
           run: |
             ./include-guards.bash check
+        - name: Check code formatting
+          working-directory: ./utils
+          run: |
+            ./clang-format.bash check
         - name: Check static analysis
           working-directory: ./utils
           run: |
