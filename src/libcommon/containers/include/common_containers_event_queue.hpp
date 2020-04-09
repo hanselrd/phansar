@@ -8,14 +8,14 @@
 namespace common::containers {
 template <class Event, class T>
 class event_queue {
-    using subscribe_function = std::function<void(const Event &event, const T &)>;
+    using subscribe_function = std::function<void(const Event &, const T &)>;
 
 public:
     template <class... Args,
               class = std::void_t<std::enable_if_t<std::is_convertible_v<Args, Event>>...>>
     explicit event_queue(Args &&... args);
 
-    void push(const Event &event, const T &t);
+    void push(const Event & event, const T & t);
     void subscribe(subscribe_function f);
     void update();
 

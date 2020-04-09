@@ -33,7 +33,7 @@ thread_pool::thread_pool(std::size_t nthreads) : _queues{nthreads} {
 thread_pool::~thread_pool() {
     _running = false;
 
-    for (auto &t : _threads) {
+    for (auto & t : _threads) {
         if (t.joinable()) {
             t.join();
         }
@@ -43,7 +43,7 @@ thread_pool::~thread_pool() {
 void thread_pool::wait_done() {
     auto nwork = std::size_t{0};
     while (true) {
-        for (auto &q : _queues) {
+        for (auto & q : _queues) {
             nwork += q.lock()->size();
         }
 

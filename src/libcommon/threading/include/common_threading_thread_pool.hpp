@@ -21,9 +21,9 @@ public:
     ~thread_pool();
 
     template <class F, class... Args>
-    void push_work(F &&f, Args &&... args);
+    void push_work(F && f, Args &&... args);
     template <class F, class... Args, class R = std::invoke_result_t<F, Args...>>
-    auto push_task(F &&f, Args &&... args) -> std::future<R>;
+    auto push_task(F && f, Args &&... args) -> std::future<R>;
     void wait_done();
 
 private:

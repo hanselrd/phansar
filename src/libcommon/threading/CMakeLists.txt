@@ -2,6 +2,7 @@ set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
 
+# cmake-format: off
 set(sources
     common_threading_thread_pool.cpp)
 
@@ -15,6 +16,7 @@ set(libs
 
 set(system_libs
     Threads::Threads)
+# cmake-format: on
 
 ph_add_generic_library(ph_common_threading "${sources}" "${libs}" "${system_libs}")
 

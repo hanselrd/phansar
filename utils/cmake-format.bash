@@ -2,7 +2,7 @@
 
 cd "$(git rev-parse --show-toplevel)" || exit
 
-tmpdir=$(mktemp -d -p /tmp clang-format-XXXXXXXXX)
+tmpdir=$(mktemp -d -p /tmp cmake-format-XXXXXXXXX)
 tmpf=$(mktemp -p "$tmpdir" XXXXXXXXX.fdiff)
 
 check() {
@@ -11,20 +11,20 @@ check() {
     tmpa=$(mktemp -p "$tmpdir" XXXXXXXXX.after)
     echo "$1"
     cat "$1" > "$tmpb"
-    clang-format -style=file "$1" > "$tmpa"
+    cmake-format "$1" > "$tmpa"
     diff -u "$tmpb" "$tmpa" | tee -a "$tmpd"
 }
 
 fix() {
     check "$1"
-    clang-format --style=file -i "$1"
+    cmake-format -i "$1"
 }
 
 ### MAIN
 
 case "$1" in
     check)
-        find src tests vendor -type f -regex '.*\.\(hpp\|cpp\|tpp\)$' -print0 |
+        find . -type f -regex './\(CMakeLists.txt\|cmake/.*\.cmake\|\(src\|vendor\)/.*CMakeLists.txt\)$' -print0 |
             while IFS= read -r -d '' file; do
                 check "$file"
             done
@@ -35,7 +35,7 @@ case "$1" in
             done
         ;;
     fix)
-        find src tests vendor -type f -regex '.*\.\(hpp\|cpp\|tpp\)$' -print0 |
+        find . -type f -regex './\(CMakeLists.txt\|cmake/.*\.cmake\|\(src\|vendor\)/.*CMakeLists.txt\)$' -print0 |
             while IFS= read -r -d '' file; do
                 fix "$file"
             done

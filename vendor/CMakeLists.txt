@@ -30,8 +30,11 @@ add_subdirectory(sdl2-cmake-modules EXCLUDE_FROM_ALL)
 add_subdirectory(sol2 EXCLUDE_FROM_ALL)
 add_subdirectory(spdlog EXCLUDE_FROM_ALL)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)
+set(CMAKE_MODULE_PATH
+    ${CMAKE_MODULE_PATH}
+    PARENT_SCOPE)
 
+# cmake-format: off
 set(system_libs
     ph_vendor_cppcodec
     ph_vendor_json
@@ -39,5 +42,6 @@ set(system_libs
     ph_vendor_plibsys
     ph_vendor_sol2
     ph_vendor_spdlog)
+# cmake-format: on
 
 ph_add_generic_interface_library(ph_vendor "" "${system_libs}")

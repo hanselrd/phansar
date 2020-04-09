@@ -22,6 +22,7 @@ jobs:
             sudo add-apt-repository ppa:ubuntu-toolchain-r/test
             sudo apt update
             sudo apt install -y wget build-essential cmake ninja-build gcc-9 g++-9
+            pip install --user cmake-format
             wget "https://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
             tar xf clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
             sudo cp -R ./clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/* /usr/local
@@ -31,10 +32,10 @@ jobs:
           run: |
             cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.compiler.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
-        - name: Check static analysis
+        - name: Check build formatting
           working-directory: ./utils
           run: |
-            ./clang-tidy.bash check
+            ./cmake-format.bash check
         - name: Check code formatting
           working-directory: ./utils
           run: |
@@ -43,6 +44,10 @@ jobs:
           working-directory: ./utils
           run: |
             ./include-guards.bash check
+        - name: Check static analysis
+          working-directory: ./utils
+          run: |
+            ./clang-tidy.bash check
         - name: Build and test
           working-directory: ./build
           run: |

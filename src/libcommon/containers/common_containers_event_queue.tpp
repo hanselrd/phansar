@@ -3,14 +3,13 @@
 namespace common::containers {
 template <class Event, class T>
 template <class... Args, class>
-event_queue<Event, T>::event_queue(Args &&... args) : _whitelist{std::forward<Args>(args)...} {
-}
+event_queue<Event, T>::event_queue(Args &&... args) : _whitelist{std::forward<Args>(args)...} {}
 
 template <class Event, class T>
-void event_queue<Event, T>::push(const Event &event, const T &t) {
+void event_queue<Event, T>::push(const Event & event, const T & t) {
     if (! _whitelist.empty()) {
         auto found = bool{false};
-        for (const auto &w : _whitelist) {
+        for (const auto & w : _whitelist) {
             if (w == event) {
                 found = true;
             }
@@ -32,10 +31,10 @@ void event_queue<Event, T>::subscribe(subscribe_function f) {
 template <class Event, class T>
 void event_queue<Event, T>::update() {
     while (! _queue.empty()) {
-        auto &[event, t] = _queue.front();
+        auto & [event, t] = _queue.front();
         _queue.pop();
 
-        for (const auto &s : _subscribers) {
+        for (const auto & s : _subscribers) {
             s(event, t);
         }
     }

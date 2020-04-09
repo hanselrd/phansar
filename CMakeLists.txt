@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
-project(phansar VERSION 1.0.0 LANGUAGES CXX C)
+project(
+    phansar
+    VERSION 1.0.0
+    LANGUAGES CXX C)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(Functions)

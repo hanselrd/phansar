@@ -7,8 +7,7 @@
 namespace common::allocators {
 template <class T>
 template <class U>
-default_allocator<T>::default_allocator(const default_allocator<U> & /*unused*/) {
-}
+default_allocator<T>::default_allocator(const default_allocator<U> & /*unused*/) {}
 
 template <class T>
 auto default_allocator<T>::allocate(std::size_t nelems) const -> T * {
@@ -18,7 +17,7 @@ auto default_allocator<T>::allocate(std::size_t nelems) const -> T * {
 }
 
 template <class T>
-void default_allocator<T>::deallocate(T *ptr, std::size_t nelems) const {
+void default_allocator<T>::deallocate(T * ptr, std::size_t nelems) const {
     UNUSED_ARG(nelems);
 
     memory::free(ptr);
