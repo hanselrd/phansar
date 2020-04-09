@@ -1,8 +1,10 @@
+# cmake-format: off
 set(unittest_sources
     common_strings_stdlib.unittest.cpp)
 
 set(libs
     ph_common_allocators)
+# cmake-format: on
 
 ph_add_generic_interface_library(ph_common_strings "${libs}" "")
 

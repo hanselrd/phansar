@@ -13,7 +13,7 @@ public:
     template <class U>
     explicit default_allocator(const default_allocator<U> & /*unused*/);
     [[nodiscard]] auto allocate(std::size_t nelems) const -> T *;
-    void               deallocate(T *ptr, std::size_t nelems) const;
+    void               deallocate(T * ptr, std::size_t nelems) const;
 };
 
 template <class T, class U>

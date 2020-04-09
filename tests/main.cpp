@@ -8,7 +8,7 @@
 #    include <common_system.hpp>
 #endif
 
-auto main(int argc, char *argv[]) -> int {
+auto main(int argc, char * argv[]) -> int {
     common::system::init(argc, argv);
 
     auto result = Catch::Session().run(argc, argv);

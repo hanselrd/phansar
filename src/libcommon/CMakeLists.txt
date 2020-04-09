@@ -7,6 +7,7 @@ add_subdirectory(strings)
 add_subdirectory(system)
 add_subdirectory(threading)
 
+# cmake-format: off
 set(libs
     ph_common_allocators
     ph_common_containers
@@ -16,5 +17,6 @@ set(libs
     ph_common_strings
     ph_common_system
     ph_common_threading)
+# cmake-format: on
 
 ph_add_generic_interface_library(ph_common "${libs}" "")

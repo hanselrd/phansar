@@ -14,8 +14,8 @@ public:
     public:
         proxy(const proxy &) = delete;
         auto operator=(const proxy &) -> proxy & = delete;
-        proxy(proxy &&other) noexcept;
-        auto operator=(proxy &&other) noexcept -> proxy &;
+        proxy(proxy && other) noexcept;
+        auto operator=(proxy && other) noexcept -> proxy &;
         ~proxy();
 
         auto               operator*() const -> T &;
@@ -23,10 +23,10 @@ public:
         [[nodiscard]] auto get() const -> T &;
 
     private:
-        proxy(T &obj, Mutex &mutex);
+        proxy(T & obj, Mutex & mutex);
 
-        T *    _obj_p;
-        Mutex *_mutex_p;
+        T *     _obj_p;
+        Mutex * _mutex_p;
     };
 
     template <class... Args>

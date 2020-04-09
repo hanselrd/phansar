@@ -12,9 +12,7 @@ TEST_CASE("can use thread pool", "[libcommon][threading][thread_pool]") {
     auto futs_count = std::uint64_t{0};
 
     for (auto i = std::size_t{0}; i < THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS; ++i) {
-        tp.push_work([&count] {
-            count.fetch_add(1);
-        });
+        tp.push_work([&count] { count.fetch_add(1); });
 
         auto fut = tp.push_task([&count] {
             count.fetch_add(1);
@@ -23,7 +21,7 @@ TEST_CASE("can use thread pool", "[libcommon][threading][thread_pool]") {
         futs.push_back(std::move(fut));
     }
 
-    for (auto &f : futs) {
+    for (auto & f : futs) {
         futs_count += f.get();
     }
 

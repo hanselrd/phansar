@@ -29,7 +29,7 @@ auto calloc(std::size_t num, std::size_t nbytes) -> void * {
     return ptr;
 }
 
-auto realloc(void *mem, std::size_t nbytes) -> void * {
+auto realloc(void * mem, std::size_t nbytes) -> void * {
     ASSERT(mem != nullptr);
     ASSERT(nbytes > 0);
 
@@ -38,7 +38,7 @@ auto realloc(void *mem, std::size_t nbytes) -> void * {
     return ptr;
 }
 
-void free(void *mem) {
+void free(void * mem) {
     ASSERT(mem != nullptr);
 
     std::free(mem);

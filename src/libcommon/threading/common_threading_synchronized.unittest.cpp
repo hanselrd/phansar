@@ -19,7 +19,7 @@ TEST_CASE("can use synchronized vector", "[libcommon][threading][synchronized]")
         });
     }
 
-    for (auto &t : threads) {
+    for (auto & t : threads) {
         if (t.joinable()) {
             t.join();
         }
@@ -50,7 +50,7 @@ TEST_CASE("can use synchronized struct", "[libcommon][threading][synchronized]")
         });
     }
 
-    for (auto &t : threads) {
+    for (auto & t : threads) {
         if (t.joinable()) {
             t.join();
         }
@@ -82,7 +82,7 @@ TEST_CASE("can use synchronized primitive", "[libcommon][threading][synchronized
         });
     }
 
-    for (auto &t : threads) {
+    for (auto & t : threads) {
         if (t.joinable()) {
             t.join();
         }

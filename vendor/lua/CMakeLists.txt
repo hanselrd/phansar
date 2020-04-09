@@ -1,6 +1,7 @@
-FetchContent_Declare(lua_git
+FetchContent_Declare(
+    lua_git
     GIT_REPOSITORY https://github.com/lua/lua.git
-    GIT_TAG        7288528a1e081d101a1bc19346a974088b6b8315)
+    GIT_TAG 7288528a1e081d101a1bc19346a974088b6b8315)
 FetchContent_GetProperties(lua_git)
 if(NOT lua_git_POPULATED)
     FetchContent_Populate(lua_git)
@@ -9,6 +10,7 @@ endif()
 
 # add_subdirectory(${lua_git_SOURCE_DIR} ${lua_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
+# cmake-format: off
 set(sources
     ${lua_git_SOURCE_DIR}/lapi.c
     ${lua_git_SOURCE_DIR}/lauxlib.c
@@ -48,5 +50,6 @@ set(sources
 
 set(includes
     ${lua_git_SOURCE_DIR})
+# cmake-format: on
 
 ph_add_generic_vendor_library(ph_vendor_lua "${sources}" "${includes}" "" "")
