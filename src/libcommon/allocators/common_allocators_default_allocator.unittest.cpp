@@ -1,9 +1,20 @@
 #include "common_allocators_default_allocator.hpp"
 #include <catch2/catch.hpp>
+#include <string>
+#include <vector>
 
-TEST_CASE("can use default allocator", "[libcommon][allocators][default_allocator]") {
-    auto a   = common::allocators::default_allocator<int>{};
-    auto ptr = a.allocate(2);
-    REQUIRE(ptr != nullptr);
-    a.deallocate(ptr, 2);
+TEMPLATE_TEST_CASE("common_allocators_default_allocator",
+                   "[common][allocators][default_allocator]",
+                   int,
+                   std::string,
+                   std::vector<int>,
+                   std::vector<std::string>) {
+    auto a = common::allocators::default_allocator<TestType>{};
+
+    SECTION("can allocate and deallocate") {
+        auto ptr = a.allocate(2);
+        a.deallocate(ptr, 2);
+
+        REQUIRE(ptr != nullptr);
+    }
 }
