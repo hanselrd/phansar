@@ -11,6 +11,7 @@
 namespace common::threading {
 class thread_pool {
     using work_function = std::function<void()>;
+    using sync_queue    = synchronized<containers::stdlib::queue<work_function>>;
 
 public:
     explicit thread_pool(std::size_t nthreads = std::thread::hardware_concurrency());
@@ -27,10 +28,10 @@ public:
     void wait_done();
 
 private:
-    containers::stdlib::vector<synchronized<containers::stdlib::queue<work_function>>> _queues;
-    containers::stdlib::vector<std::thread>                                            _threads;
-    std::atomic_uint64_t                                                               _index = 0;
-    volatile bool _running = true;
+    containers::stdlib::vector<sync_queue>  _queues;
+    containers::stdlib::vector<std::thread> _threads;
+    std::atomic_uint64_t                    _index   = 0;
+    volatile bool                           _running = true;
 };
 } // namespace common::threading
 

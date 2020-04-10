@@ -11,9 +11,9 @@ check() {
     tmpa=$(mktemp -p "$tmpdir" XXXXXXXXX.after)
     echo "$1"
     cur_ts_name=$(grep "TEST_CASE" < "$1" | head -n 1 | cut -d ',' -f 1)
-    new_ts_name=$(echo $(grep "TEST_CASE" < "$1" | head -n 1 | cut -d '"' -f 1)$(echo '"')$(echo "$1" | cut -d '/' -f 4 | cut -d '.' -f 1)$(echo '"'))
+    new_ts_name=$(grep "TEST_CASE" < "$1" | head -n 1 | cut -d '"' -f 1)'"'$(echo "$1" | cut -d '/' -f 4 | cut -d '.' -f 1)'"'
     cur_ts_tags=$(grep -oE '"\[.*\]"' < "$1" | head -n 1 | sed 's/\[/\\[/g;s/\]/\\]/g')
-    new_ts_tags=$(echo $(echo '"[')$(echo "$1" | cut -d '/' -f 4 | cut -d '.' -f 1 | sed 's/_/][/;s/_/][/')$(echo ']"'))
+    new_ts_tags='"['$(echo "$1" | cut -d '/' -f 4 | cut -d '.' -f 1 | sed 's/_/][/;s/_/][/')']"'
     cat "$1" > "$tmpb"
     cat "$1" > "$tmpa"
     sed -i "s/$cur_ts_name/$new_ts_name/g" "$tmpa"
