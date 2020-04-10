@@ -55,8 +55,11 @@ jobs:
           working-directory: ./utils
           run: |
             ./clang-tidy.bash check
-        - name: Build and test
+        - name: Run build
           working-directory: ./build
           run: |
             cmake --build .
-            ctest --timeout 30 -V
+        - name: Run tests
+          working-directory: ./build
+          run: |
+            ctest -VV --timeout 30

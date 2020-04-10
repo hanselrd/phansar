@@ -12,7 +12,7 @@ thread_pool::thread_pool(std::size_t nthreads) : _queues{nthreads} {
                         l.has_value() && ! l.value()->empty()) {
                         l.value()->front()();
                         l.value()->pop();
-                        LOGD("Worker {} executed from queue {} ({})",
+                        LOGT("Worker {} executed from queue {} ({})",
                              i,
                              (i + n) % _threads.size(),
                              l.value()->size());
@@ -22,7 +22,7 @@ thread_pool::thread_pool(std::size_t nthreads) : _queues{nthreads} {
                 if (auto l = _queues[i].lock(); ! l->empty()) {
                     l->front()();
                     l->pop();
-                    LOGD("Worker {} executed from queue {} ({})", i, i, l->size());
+                    LOGT("Worker {} executed from queue {} ({})", i, i, l->size());
                 }
             }
             LOGD("Worker {} shutdown", i);

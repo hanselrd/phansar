@@ -9,7 +9,7 @@
 #endif
 
 auto main(int argc, char * argv[]) -> int {
-    common::system::init(argc, argv);
+    common::system::init(argc, argv, false);
 
     auto result = Catch::Session().run(argc, argv);
 
