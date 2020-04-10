@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 
-namespace common::strings {
+namespace common::strings::stdlib {
 template <class CharT,
           class Traits    = std::char_traits<CharT>,
           class Allocator = allocators::default_allocator<CharT>>
@@ -27,6 +27,6 @@ using wstringstream   = basic_stringstream<wchar_t>;
 using u8stringstream  = basic_stringstream<char8_t>;
 using u16stringstream = basic_stringstream<char16_t>;
 using u32stringstream = basic_stringstream<char32_t>;
-} // namespace common::strings
+} // namespace common::strings::stdlib
 
 #endif

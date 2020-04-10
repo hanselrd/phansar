@@ -1,6 +1,6 @@
 # cmake-format: off
 set(unittest_sources
-    common_allocators_default.unittest.cpp)
+    common_allocators_default_allocator.unittest.cpp)
 
 set(libs
     ph_common_log

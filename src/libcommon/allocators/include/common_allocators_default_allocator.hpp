@@ -1,5 +1,5 @@
-#ifndef LIBCOMMON_ALLOCATORS_INCLUDE_COMMON_ALLOCATORS_DEFAULT_HPP
-#define LIBCOMMON_ALLOCATORS_INCLUDE_COMMON_ALLOCATORS_DEFAULT_HPP
+#ifndef LIBCOMMON_ALLOCATORS_INCLUDE_COMMON_ALLOCATORS_DEFAULT_ALLOCATOR_HPP
+#define LIBCOMMON_ALLOCATORS_INCLUDE_COMMON_ALLOCATORS_DEFAULT_ALLOCATOR_HPP
 
 #include <cstdint>
 
@@ -24,6 +24,6 @@ auto operator!=(const default_allocator<T> & /*unused*/, const default_allocator
     -> bool;
 } // namespace common::allocators
 
-#include "../common_allocators_default.tpp"
+#include "../common_allocators_default_allocator.tpp"
 
 #endif

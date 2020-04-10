@@ -13,7 +13,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace common::containers {
+namespace common::containers::stdlib {
 template <class T, class Allocator = allocators::default_allocator<T>>
 using vector = std::vector<T, Allocator>;
 
@@ -84,6 +84,6 @@ template <class T,
           class Container = vector<T>,
           class Compare   = std::less<typename Container::value_type>>
 using priority_queue = std::priority_queue<T, Container, Compare>;
-} // namespace common::containers
+} // namespace common::containers::stdlib
 
 #endif
