@@ -2,33 +2,33 @@
 #include <catch2/catch.hpp>
 
 TEST_CASE("can use string", "[libcommon][strings][stdlib]") {
-    auto s = common::strings::string{};
+    auto s = common::strings::stdlib::string{};
 }
 
 TEST_CASE("can use u8string", "[libcommon][strings][stdlib]") {
-    auto u8s = common::strings::u8string{};
+    auto u8s = common::strings::stdlib::u8string{};
 }
 
 TEST_CASE("can use u16string", "[libcommon][strings][stdlib]") {
-    auto u16s = common::strings::u16string{};
+    auto u16s = common::strings::stdlib::u16string{};
 }
 
 TEST_CASE("can use u32string", "[libcommon][strings][stdlib]") {
-    auto u32s = common::strings::u32string{};
+    auto u32s = common::strings::stdlib::u32string{};
 }
 
 TEST_CASE("can use stringstream", "[libcommon][strings][stdlib]") {
-    auto ss = common::strings::stringstream{};
+    auto ss = common::strings::stdlib::stringstream{};
 }
 
 TEST_CASE("can use u8stringstream", "[libcommon][strings][stdlib]") {
-    auto u8ss = common::strings::u8stringstream{};
+    auto u8ss = common::strings::stdlib::u8stringstream{};
 }
 
 TEST_CASE("can use u16stringstream", "[libcommon][strings][stdlib]") {
-    auto u16ss = common::strings::u16stringstream{};
+    auto u16ss = common::strings::stdlib::u16stringstream{};
 }
 
 TEST_CASE("can use u32stringstream", "[libcommon][strings][stdlib]") {
-    auto u32ss = common::strings::u32stringstream{};
+    auto u32ss = common::strings::stdlib::u32stringstream{};
 }

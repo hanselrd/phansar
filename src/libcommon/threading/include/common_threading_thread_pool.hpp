@@ -27,10 +27,10 @@ public:
     void wait_done();
 
 private:
-    containers::vector<synchronized<containers::queue<work_function>>> _queues;
-    containers::vector<std::thread>                                    _threads;
-    std::atomic_uint64_t                                               _index   = 0;
-    volatile bool                                                      _running = true;
+    containers::stdlib::vector<synchronized<containers::stdlib::queue<work_function>>> _queues;
+    containers::stdlib::vector<std::thread>                                            _threads;
+    std::atomic_uint64_t                                                               _index = 0;
+    volatile bool _running = true;
 };
 } // namespace common::threading
 

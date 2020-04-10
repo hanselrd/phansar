@@ -20,9 +20,9 @@ public:
     void update();
 
 private:
-    vector<subscribe_function> _subscribers;
-    vector<Event>              _whitelist;
-    queue<std::pair<Event, T>> _queue;
+    stdlib::vector<subscribe_function> _subscribers;
+    stdlib::vector<Event>              _whitelist;
+    stdlib::queue<std::pair<Event, T>> _queue;
 };
 } // namespace common::containers
 
