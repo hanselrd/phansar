@@ -43,6 +43,10 @@ jobs:
           working-directory: ./utils
           run: |
             ./include-guards.bash check
+        - name: Check test cases
+          working-directory: ./utils
+          run: |
+            ./test-cases.bash check
         - name: Check code formatting
           working-directory: ./utils
           run: |
