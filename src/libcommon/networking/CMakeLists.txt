@@ -1,9 +1,9 @@
 # cmake-format: off
 set(sources
-    common_networking_socket_address.cpp)
+    common_networking_socket.cpp)
 
 set(unittest_sources
-    common_networking_socket_address.unittest.cpp)
+    common_networking_socket.unittest.cpp)
 
 set(libs
     ph_common_containers
