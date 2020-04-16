@@ -1,7 +1,7 @@
 FetchContent_Declare(
     lua_git
     GIT_REPOSITORY https://github.com/lua/lua.git
-    GIT_TAG 7288528a1e081d101a1bc19346a974088b6b8315)
+    GIT_TAG 9e0a8475cdd53af664b807c4f0c4d53088a7faf2)
 FetchContent_GetProperties(lua_git)
 if(NOT lua_git_POPULATED)
     FetchContent_Populate(lua_git)
