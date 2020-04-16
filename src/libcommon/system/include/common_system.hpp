@@ -2,7 +2,7 @@
 #define LIBCOMMON_SYSTEM_INCLUDE_COMMON_SYSTEM_HPP
 
 namespace common::system {
-void init(int argc, char ** argv, bool enable_logging = true);
+void init(int argc, char ** argv, bool enable_log = true);
 void shutdown();
 } // namespace common::system
 

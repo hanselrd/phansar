@@ -7,14 +7,11 @@
 #include <string>
 
 namespace common::system {
-void init(int argc, char ** argv, bool enable_logging) {
-    if (! enable_logging) {
-        return;
+void init(int argc, char ** argv, bool enable_log) {
+    if (enable_log) {
+        auto bin = std::string{argv[0]};
+        log::init(bin.substr(bin.find_last_of('/') + 1) + ".log");
     }
-
-    auto bin = std::string{argv[0]};
-
-    log::init(bin.substr(bin.find_last_of('/') + 1) + ".log");
 
     // postponed until after we initialize logger
     UNUSED_ARG(argc);

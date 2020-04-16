@@ -21,12 +21,16 @@ function(check_git_commit_hash name source_dir branch)
     endif()
 endfunction()
 
+# add_subdirectory(sdl2-cmake-modules EXCLUDE_FROM_ALL)
 add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
 add_subdirectory(cppcodec EXCLUDE_FROM_ALL)
+add_subdirectory(docopt.cpp EXCLUDE_FROM_ALL)
+add_subdirectory(fmt EXCLUDE_FROM_ALL)
 add_subdirectory(json EXCLUDE_FROM_ALL)
 add_subdirectory(lua EXCLUDE_FROM_ALL)
 add_subdirectory(plibsys EXCLUDE_FROM_ALL)
-add_subdirectory(sdl2-cmake-modules EXCLUDE_FROM_ALL)
+add_subdirectory(raygui EXCLUDE_FROM_ALL)
+add_subdirectory(raylib EXCLUDE_FROM_ALL)
 add_subdirectory(sol2 EXCLUDE_FROM_ALL)
 add_subdirectory(spdlog EXCLUDE_FROM_ALL)
 
@@ -37,9 +41,13 @@ set(CMAKE_MODULE_PATH
 # cmake-format: off
 set(system_libs
     ph_vendor_cppcodec
+    ph_vendor_docopt
+    ph_vendor_fmt
     ph_vendor_json
     ph_vendor_lua
     ph_vendor_plibsys
+    ph_vendor_raygui
+    ph_vendor_raylib
     ph_vendor_sol2
     ph_vendor_spdlog)
 # cmake-format: on
