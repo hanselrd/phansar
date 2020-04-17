@@ -8,42 +8,43 @@
 #define LOG_MAX_FILE_SIZE (1024 * 1024 * 5)
 
 namespace common::log {
-void init(std::string_view filename) {
-    if (filename.empty()) {
+void init(std::string_view          log_file,
+          spdlog::level::level_enum log_level,
+          std::string_view          log_name) {
+    if (log_file.empty()) {
         return;
     }
 
+    auto pattern = std::string{"[%Y-%m-%d %H:%M:%S.%e %z] [%n] [%t] [%^%l%$] [%g%#] %v"};
+
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e %z] [%t] [%^%l%$] [%g%#] %v");
-    /* console_sink->set_level( */
-    /* #ifdef NDEBUG */
-    /*     spdlog::level::info */
-    /* #else */
-    /*     spdlog::level::debug */
-    /* #endif */
-    /* ); */
+    console_sink->set_pattern(pattern);
+    console_sink->set_level(log_level);
 
     auto rotating_sink =
-        std::make_shared<spdlog::sinks::rotating_file_sink_mt>(std::string{filename},
+        std::make_shared<spdlog::sinks::rotating_file_sink_mt>(std::string{log_file},
                                                                LOG_MAX_FILE_SIZE,
                                                                3);
-    rotating_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e %z] [%t] [%^%l%$] [%g%#] %v");
-    /* rotating_sink->set_level( */
-    /* #ifdef NDEBUG */
-    /*     spdlog::level::info */
-    /* #else */
-    /*     spdlog::level::debug */
-    /* #endif */
-    /* ); */
+    rotating_sink->set_pattern(pattern);
+    rotating_sink->set_level(log_level);
 
     auto logger = std::make_shared<spdlog::logger>(
-        spdlog::logger{"multi_sink", {console_sink, rotating_sink}});
+        spdlog::logger{std::string{log_name}, {console_sink, rotating_sink}});
     logger->set_level(spdlog::level::trace);
     spdlog::set_default_logger(logger);
 
     LOGI("");
     LOGD("Logger initialized");
-    LOGD("  log file: {}", filename);
+    LOGD("  log file: {}", log_file);
+
+#ifndef NDEBUG
+    LOGT("     trace");
+    LOGD("     debug");
+    LOGI("      info");
+    LOGW("   warning");
+    LOGE("     error");
+    LOGC("  critical");
+#endif
 
     auto cpu_str = std::string{};
 #ifdef P_CPU_ALPHA

@@ -11,8 +11,8 @@ synchronized<T, Mutex>::proxy::proxy(proxy && other) noexcept
                                                         std::exchange(other._mutex_p, nullptr)} {}
 
 template <class T, class Mutex>
-auto synchronized<T, Mutex>::proxy::operator=(proxy && other) noexcept ->
-    typename synchronized<T, Mutex>::proxy & {
+auto synchronized<T, Mutex>::proxy::operator=(proxy && other) noexcept
+    -> synchronized<T, Mutex>::proxy & {
     if (this != &other) {
         std::exchange(other._obj_p, nullptr);
         std::exchange(other._mutex_p, nullptr);
@@ -47,13 +47,13 @@ template <class... Args>
 synchronized<T, Mutex>::synchronized(Args &&... args) : _obj{std::forward<Args>(args)...} {}
 
 template <class T, class Mutex>
-auto synchronized<T, Mutex>::lock() -> typename synchronized<T, Mutex>::proxy {
+auto synchronized<T, Mutex>::lock() -> synchronized<T, Mutex>::proxy {
     _mutex.lock();
     return proxy{_obj, _mutex};
 }
 
 template <class T, class Mutex>
-auto synchronized<T, Mutex>::try_lock() -> std::optional<typename synchronized<T, Mutex>::proxy> {
+auto synchronized<T, Mutex>::try_lock() -> std::optional<synchronized<T, Mutex>::proxy> {
     if (_mutex.try_lock()) {
         return proxy{_obj, _mutex};
     }

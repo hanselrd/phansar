@@ -1,4 +1,5 @@
 #include "common_system.hpp"
+#include "common_config.hpp"
 #include "common_log.hpp"
 #include "common_macros.hpp"
 #include "common_memory.hpp"
@@ -7,14 +8,12 @@
 #include <string>
 
 namespace common::system {
-void init(int argc, char ** argv, bool enable_log) {
-    if (enable_log) {
-        auto bin = std::string{argv[0]};
-        log::init(bin.substr(bin.find_last_of('/') + 1) + ".log");
-    }
+void init(int argc, const char * const * argv, bool enable_config) {
+    if (enable_config) {
+        config::init(argc, argv);
 
-    // postponed until after we initialize logger
-    UNUSED_ARG(argc);
+        log::init(config::get_log_file(), config::get_log_level(), config::get_binary_name());
+    }
 
     auto vtable    = PMemVTable{};
     vtable.malloc  = &common::memory::malloc;
