@@ -10,6 +10,9 @@ endif()
 
 # add_subdirectory(${cppcodec_git_SOURCE_DIR} ${cppcodec_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
-set(includes ${cppcodec_git_SOURCE_DIR})
+# cmake-format: off
+set(includes
+    ${cppcodec_git_SOURCE_DIR})
+# cmake-format: on
 
 ph_add_generic_vendor_interface_library(ph_vendor_cppcodec "${includes}" "" "")

@@ -6,22 +6,24 @@
 
 static const auto USAGE =
     /* R"(Phansar Server */
-    /*     Usage: */
-    /*         ph_server ship new <name>... */
-    /*         ph_server ship <name> move <x> <y> [--speed=<kn>] */
-    /*         ph_server ship shoot <x> <y> */
-    /*         ph_server mine (set|remove) <x> <y> [--moored | --drifting] */
-    /*         ph_server (-h | --help) */
-    /*         ph_server --version */
 
-    /*     Options: */
-    /*         -h --help       Show this screen */
-    /*         -v --version    Show version */
-    /*         --speed=<kn>    Speed in knots [default: 10] */
-    /*         --moored        Moored (anchored) mine */
-    /*         --drifting      Drifting mine */
+    /* Usage: */
+    /*     ph_server ship new <name>... */
+    /*     ph_server ship <name> move <x> <y> [--speed=<kn>] */
+    /*     ph_server ship shoot <x> <y> */
+    /*     ph_server mine (set|remove) <x> <y> [--moored | --drifting] */
+    /*     ph_server (-h | --help) */
+    /*     ph_server --version */
+
+    /* Options: */
+    /*     -h --help       Show this screen */
+    /*     -v --version    Show version */
+    /*     --speed=<kn>    Speed in knots [default: 10] */
+    /*     --moored        Moored (anchored) mine */
+    /*     --drifting      Drifting mine */
     /* )"; */
     R"(Phansar Server
+
     Usage:
         ph_server [options]
 
@@ -29,13 +31,13 @@ static const auto USAGE =
         -h, --help                          Show this screen
         -v, --version                       Show version
         -l <file>, --log-file=<file>        Log file [default: {logfile}]
-        -L <level>, --log-level=<level>     Log level [default: DEBUG]
+        -L <level>, --log-level=<level>     Log level [default: debug]
         -i <ip>, --ip=<ip>                  IP Address [default: 0.0.0.0]
         -p <port>, --port=<port>            Port [default: 7000]
         -t <threads>, --threads=<threads>   Number of threads [default: 2]
 
     Arguments:
-        <level>: TRACE,DEBUG,INFO,WARN,ERROR,CRITICAL,OFF
+        <level>: trace,debug,info,warn,error,critical,off
 )";
 
 auto main(int argc, char * argv[]) -> int {

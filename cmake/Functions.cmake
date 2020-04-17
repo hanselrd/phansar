@@ -37,7 +37,7 @@ function(ph_target_compile_options name)
     target_compile_options(
         ${name}
         PRIVATE
-            $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:$<$<CONFIG:DEBUG>:-O0>>
+            $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:$<$<CONFIG:DEBUG>:-Og>>
             $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:$<$<OR:$<CONFIG:RELEASE>,$<CONFIG:RELWITHDEBINFO>,$<CONFIG:MINSIZEREL>>:-D_FORTIFY_SOURCE=2>>
             $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-Wall
             -Wextra
