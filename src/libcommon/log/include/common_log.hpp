@@ -1,6 +1,9 @@
 #ifndef LIBCOMMON_LOG_INCLUDE_COMMON_LOG_HPP
 #define LIBCOMMON_LOG_INCLUDE_COMMON_LOG_HPP
 
+#ifdef SPDLOG_ACTIVE_LEVEL
+#    undef SPDLOG_ACTIVE_LEVEL
+#endif
 #ifdef NDEBUG
 #    define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
 #else
@@ -172,7 +175,9 @@
 #define LOGC_IF LOG_CRITICAL_IF
 
 namespace common::log {
-void init(std::string_view filename);
+void init(std::string_view          log_file,
+          spdlog::level::level_enum log_level,
+          std::string_view          log_name);
 }
 
 #endif

@@ -1,4 +1,5 @@
 add_subdirectory(allocators)
+add_subdirectory(config)
 add_subdirectory(containers)
 add_subdirectory(log)
 add_subdirectory(macros)
@@ -11,6 +12,7 @@ add_subdirectory(threading)
 # cmake-format: off
 set(libs
     ph_common_allocators
+    ph_common_config
     ph_common_containers
     ph_common_log
     ph_common_macros

@@ -2,6 +2,7 @@
 #define LIBCOMMON_INCLUDE_COMMON_HPP
 
 #include "common_allocators.hpp"
+#include "common_config.hpp"
 #include "common_containers.hpp"
 #include "common_log.hpp"
 #include "common_macros.hpp"
