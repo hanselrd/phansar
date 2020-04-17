@@ -22,7 +22,7 @@ thread_pool::thread_pool(std::size_t nthreads) : _queues{nthreads} {
                 if (auto l = _queues[i].lock(); ! l->empty()) {
                     l->front()();
                     l->pop();
-                    LOGT("Worker {} executed from queue {} ({})", i, i, l->size());
+                    LOGT("Worker {0} executed from queue {0} ({1})", i, l->size());
                 }
             }
             LOGD("Worker {} shutdown", i);
