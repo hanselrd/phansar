@@ -14,8 +14,14 @@ set(BUILD_EXAMPLES
 add_subdirectory(${raygui_git_SOURCE_DIR} ${raygui_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 # cmake-format: off
+set(sources
+    vendor_raygui.cpp)
+
+set(libs
+    ph_vendor_raylib)
+
 set(system_libs
     raygui)
 # cmake-format: on
 
-ph_add_generic_vendor_interface_library(ph_vendor_raygui "" "" "${system_libs}")
+ph_add_generic_vendor_library(ph_vendor_raygui "${sources}" "" "${libs}" "${system_libs}")
