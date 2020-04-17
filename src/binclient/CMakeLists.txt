@@ -9,8 +9,10 @@ set(sources
 
 set(libs
     ph_common
+    ph_vendor_hedley
     ph_vendor_raygui
-    ph_vendor_raylib)
+    ph_vendor_raylib
+    ph_vendor_sol2)
 
 # set(system_libs
 #     SDL2::Core

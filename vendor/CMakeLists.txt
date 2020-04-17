@@ -26,6 +26,7 @@ add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
 add_subdirectory(cppcodec EXCLUDE_FROM_ALL)
 add_subdirectory(docopt.cpp EXCLUDE_FROM_ALL)
 add_subdirectory(fmt EXCLUDE_FROM_ALL)
+add_subdirectory(hedley EXCLUDE_FROM_ALL)
 add_subdirectory(json EXCLUDE_FROM_ALL)
 add_subdirectory(lua EXCLUDE_FROM_ALL)
 add_subdirectory(plibsys EXCLUDE_FROM_ALL)
@@ -43,6 +44,7 @@ set(system_libs
     ph_vendor_cppcodec
     ph_vendor_docopt
     ph_vendor_fmt
+    ph_vendor_hedley
     ph_vendor_json
     ph_vendor_lua
     ph_vendor_plibsys

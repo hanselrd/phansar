@@ -8,14 +8,14 @@ if(NOT sol2_git_POPULATED)
     check_git_commit_hash(sol2 ${sol2_git_SOURCE_DIR} develop)
 endif()
 
-# add_subdirectory(${sol2_git_SOURCE_DIR} ${sol2_git_BINARY_DIR} EXCLUDE_FROM_ALL)
+add_subdirectory(${sol2_git_SOURCE_DIR} ${sol2_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 # cmake-format: off
-set(includes
-    ${sol2_git_SOURCE_DIR}/single/include)
-
 set(libs
     ph_vendor_lua)
+
+set(system_libs
+    sol2)
 # cmake-format: on
 
-ph_add_generic_vendor_interface_library(ph_vendor_sol2 "${includes}" "${libs}" "")
+ph_add_generic_vendor_interface_library(ph_vendor_sol2 "" "${libs}" "${system_libs}")

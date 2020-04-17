@@ -3,34 +3,39 @@
 #include <array>
 #include <common.hpp>
 #include <cstring>
+#include <hedley.h>
 #include <raygui.h>
 #include <raylib.h>
 #include <ricons.h>
+#include <sol/sol.hpp>
 
 #define BUF_SIZE 512
+
+HEDLEY_PRINTF_FORMAT(2, 0)
+static void trace_log_callback(int msg_type, const char * fmt, va_list args) {
+    auto buf = std::array<char, BUF_SIZE>{};
+    std::vsnprintf(buf.data(), sizeof(buf), fmt, args);
+
+    switch (msg_type) {
+    case LOG_DEBUG:
+        LOGD("{}", buf.data());
+        break;
+    case LOG_INFO:
+        LOGI("{}", buf.data());
+        break;
+    case LOG_WARNING:
+        LOGW("{}", buf.data());
+        break;
+    case LOG_ERROR:
+        LOGE("{}", buf.data());
+        break;
+    }
+}
 
 auto main(int argc, char * argv[]) -> int {
     common::system::init(argc, argv);
 
-    SetTraceLogCallback([](int msg_type, const char * text, va_list args) {
-        auto buf = std::array<char, BUF_SIZE>{};
-        std::vsnprintf(buf.data(), sizeof(buf), text, args);
-
-        switch (msg_type) {
-        case LOG_DEBUG:
-            LOGD("{}", buf.data());
-            break;
-        case LOG_INFO:
-            LOGI("{}", buf.data());
-            break;
-        case LOG_WARNING:
-            LOGW("{}", buf.data());
-            break;
-        case LOG_ERROR:
-            LOGE("{}", buf.data());
-            break;
-        }
-    });
+    SetTraceLogCallback(&trace_log_callback);
 
     const auto screen_width  = int{800};
     const auto screen_height = int{600};

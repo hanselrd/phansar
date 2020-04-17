@@ -51,7 +51,6 @@ function(ph_target_compile_options name)
             -Wconversion>
             $<$<CXX_COMPILER_ID:GNU>:-Wformat-overflow=2
             -Wformat-truncation=2>
-            $<$<CXX_COMPILER_ID:Clang>:-Wno-format-nonliteral>
             $<$<CXX_COMPILER_ID:MSVC>:/Wall>)
 endfunction()
 
