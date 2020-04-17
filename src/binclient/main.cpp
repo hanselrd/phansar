@@ -74,8 +74,9 @@ auto main(int argc, char * argv[]) -> int {
         const auto button_width  = int{100};
         const auto button_height = int{30};
 
-        if (GuiButton({screen_width / 4.0F, screen_height / 4.0F, button_width, button_height},
-                      GuiIconText(RICON_HAND_POINTER, "Click Me"))) {
+        if (GuiButton(
+                {(float)screen_width / 4, (float)screen_height / 4, button_width, button_height},
+                GuiIconText(RICON_HAND_POINTER, "Click Me"))) {
             LOGI("Clicked");
         }
 
