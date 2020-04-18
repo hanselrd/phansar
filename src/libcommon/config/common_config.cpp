@@ -5,7 +5,8 @@
 #include <string>
 
 static const auto USAGE =
-    R"(
+    R"({name}
+
     Usage:
         {name} [options]
 
