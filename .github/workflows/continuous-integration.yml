@@ -16,15 +16,19 @@ jobs:
                   - { name: "Clang", cc: "clang", cxx: "clang++" }
 
         steps:
-        - uses: actions/checkout@v1
+        - uses: actions/checkout@v2
+        - uses: actions/setup-python@v1
+          with:
+            python-version: '3.x'
+            architecture: 'x64'
         - name: Set up system
           shell: bash
           run: |
             sudo add-apt-repository ppa:ubuntu-toolchain-r/test
             sudo apt update
             sudo apt install -y wget build-essential cmake ninja-build gcc-9 g++-9
-            pip install --user wheel
-            pip3 install --user wheel beautysh cmake-format
+            python -m pip install --upgrade pip
+            pip install beautysh cmake-format
             wget "https://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
             tar xf clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
             sudo cp -R ./clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/* /usr/local
@@ -39,15 +43,11 @@ jobs:
           shell: bash
           working-directory: ./utils
           run: |
-            export PATH=$(python3 -m site --user-base)/bin:$(python -m site --user-base)/bin:$PATH
-            echo $PATH
             ./beautysh.bash check
         - name: Check build formatting
           shell: bash
           working-directory: ./utils
           run: |
-            export PATH=$(python3 -m site --user-base)/bin:$(python -m site --user-base)/bin:$PATH
-            echo $PATH
             ./cmake-format.bash check
         - name: Check include guards
           shell: bash
