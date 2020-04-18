@@ -9,24 +9,21 @@ env:
 
 jobs:
     build:
-        name: "${{ matrix.os }} ${{ matrix.compiler }} ${{ matrix.build_type }}"
-        runs-on: ${{ matrix.os }}
+        name: "[${{ matrix.cfg.os }}] ${{ matrix.cfg.name }} ${{ matrix.build_type }}"
+        runs-on: ${{ matrix.cfg.os }}
 
         strategy:
             fail-fast: false
             matrix:
-                os: [windows-latest, ubuntu-latest, macos-latest]
-                compiler: [MSVC, GNU, Clang]
-                build_type: [Debug, Release, RelWithDebInfo, MinSizeRel]
-                exclude:
-                    - { os: ubuntu-latest, compiler: MSVC, build_type: Debug }
-                    - { os: ubuntu-latest, compiler: MSVC, build_type: Release }
-                    - { os: ubuntu-latest, compiler: MSVC, build_type: RelWithDebInfo }
-                    - { os: ubuntu-latest, compiler: MSVC, build_type: MinSizeRel }
-                    - { os: macos-latest, compiler: MSVC, build_type: Debug }
-                    - { os: macos-latest, compiler: MSVC, build_type: Release }
-                    - { os: macos-latest, compiler: MSVC, build_type: RelWithDebInfo }
-                    - { os: macos-latest, compiler: MSVC, build_type: MinSizeRel }
+                build_type: [Debug, Release]#, RelWithDebInfo, MinSizeRel]
+                cfg:
+                    - { name: MSVC,  os: windows-latest, cc: cl,    cxx: cl }
+                    - { name: GNU,   os: windows-latest, cc: gcc,   cxx: g++ }
+                    - { name: Clang, os: windows-latest, cc: clang, cxx: clang++ }
+                    - { name: GNU,   os: ubuntu-latest,  cc: gcc,   cxx: g++ }
+                    - { name: Clang, os: ubuntu-latest,  cc: clang, cxx: clang++ }
+                    - { name: GNU,   os: macos-latest,   cc: gcc,   cxx: g++ }
+                    - { name: Clang, os: macos-latest,   cc: clang, cxx: clang++ }
 
         steps:
         - uses: actions/checkout@v2
@@ -49,22 +46,9 @@ jobs:
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
             sudo apt install -y libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
         - name: Configure build
-          if: matrix.compiler == 'MSVC'
           shell: bash
           run: |
-            cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
-            ln -sf build/compile_commands.json .
-        - name: Configure build
-          if: matrix.compiler == 'GNU'
-          shell: bash
-          run: |
-            cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
-            ln -sf build/compile_commands.json .
-        - name: Configure build
-          if: matrix.compiler == 'Clang'
-          shell: bash
-          run: |
-            cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+            cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
         - name: Check shell formatting
           shell: bash
