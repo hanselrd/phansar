@@ -2,18 +2,43 @@ name: Continuous Integration
 
 on: [push, pull_request]
 
+env:
+    CMAKE_VERSION: 3.16.6
+    NINJA_VERSION: 1.10.0
+    GLFW_VERSION: 3.3.2
+
 jobs:
     build:
-        name: "[${{ matrix.build_type }}] ${{ matrix.compiler.name }}"
-        runs-on: ubuntu-latest
+        name: "[${{ matrix.config.name }}] [${{ matrix.build_type }}] ${{ matrix.config.compiler.name }}"
+        runs-on: "${{ matrix.config.os }}"
 
         strategy:
             fail-fast: false
             matrix:
                 build_type: ["Debug", "Release", "RelWithDebInfo", "MinSizeRel"]
-                compiler:
-                  - { name: "GCC", cc: "gcc", cxx: "g++" }
-                  - { name: "Clang", cc: "clang", cxx: "clang++" }
+                # compiler:
+                #   - { name: "GCC", cc: "gcc", cxx: "g++" }
+                #   - { name: "Clang", cc: "clang", cxx: "clang++" }
+                config:
+                  - {
+                      name: "windows", os: windows-latest,
+                      compiler:
+                        - { name: "MSVC", cc: "cl", cxx: "cl" }
+                        - { name: "MinGW", cc: "gcc", cxx: "g++" }
+                        - { name: "Clang", cc: "clang", cxx: "clang++" }
+                    }
+                  - {
+                      name: "linux", os: ubuntu-latest,
+                      compiler:
+                        - { name: "GCC", cc: "gcc", cxx: "g++" }
+                        - { name: "Clang", cc: "clang", cxx: "clang++" }
+                    }
+                  - {
+                      name: "macos", os: macos-latest,
+                      compiler:
+                        - { name: "GCC", cc: "gcc", cxx: "g++" }
+                        - { name: "Clang", cc: "clang", cxx: "clang++" }
+                    }
 
         steps:
         - uses: actions/checkout@v2
@@ -37,7 +62,7 @@ jobs:
         - name: Configure build
           shell: bash
           run: |
-            cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.compiler.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+            cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.config.compiler.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.compiler.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
         - name: Check shell formatting
           shell: bash
