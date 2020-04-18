@@ -18,48 +18,64 @@ jobs:
         steps:
         - uses: actions/checkout@v1
         - name: Set up system
+          shell: bash
           run: |
             sudo add-apt-repository ppa:ubuntu-toolchain-r/test
             sudo apt update
             sudo apt install -y wget build-essential cmake ninja-build gcc-9 g++-9
             pip install --user wheel
-            pip3 install --user wheel cmake-format
+            pip3 install --user wheel beautysh cmake-format
             wget "https://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
             tar xf clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
             sudo cp -R ./clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/* /usr/local
             sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
             sudo apt install -y libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
         - name: Configure build
+          shell: bash
           run: |
             cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.compiler.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
+        - name: Check shell formatting
+          shell: bash
+          working-directory: ./utils
+          run: |
+            export PATH=$(python3 -m site --user-base)/bin:$(python -m site --user-base)/bin:$PATH
+            echo $PATH
+            ./beautysh.bash check
         - name: Check build formatting
+          shell: bash
           working-directory: ./utils
           run: |
             export PATH=$(python3 -m site --user-base)/bin:$(python -m site --user-base)/bin:$PATH
             echo $PATH
             ./cmake-format.bash check
         - name: Check include guards
+          shell: bash
           working-directory: ./utils
           run: |
             ./include-guards.bash check
         - name: Check test cases
+          shell: bash
           working-directory: ./utils
           run: |
             ./test-cases.bash check
         - name: Check code formatting
+          shell: bash
           working-directory: ./utils
           run: |
             ./clang-format.bash check
         - name: Check static analysis
+          shell: bash
           working-directory: ./utils
           run: |
             ./clang-tidy.bash check
         - name: Run build
+          shell: bash
           working-directory: ./build
           run: |
             cmake --build .
         - name: Run tests
+          shell: bash
           working-directory: ./build
           run: |
             ctest -VV --timeout 30 -E "pkg-config"

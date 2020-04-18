@@ -25,20 +25,20 @@ fix() {
 case "$1" in
     check)
         find . -type f -regex './\(CMakeLists.txt\|cmake/.*\.cmake\|\(src\|vendor\)/.*CMakeLists.txt\)$' -print0 |
-            while IFS= read -r -d '' file; do
-                check "$file"
-            done
+        while IFS= read -r -d '' file; do
+            check "$file"
+        done
 
         find "$tmpdir" -type f -regex '.*\.\(diff\)$' -print0 |
-            while IFS= read -r -d '' file; do
-                tee -a "$tmpf" < "$file"
-            done
+        while IFS= read -r -d '' file; do
+            tee -a "$tmpf" < "$file"
+        done
         ;;
     fix)
         find . -type f -regex './\(CMakeLists.txt\|cmake/.*\.cmake\|\(src\|vendor\)/.*CMakeLists.txt\)$' -print0 |
-            while IFS= read -r -d '' file; do
-                fix "$file"
-            done
+        while IFS= read -r -d '' file; do
+            fix "$file"
+        done
         ;;
     *)
         exit 1
