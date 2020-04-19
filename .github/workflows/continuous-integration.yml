@@ -37,18 +37,19 @@ jobs:
           shell: bash
           run: |
             if [ "${{ runner.os }}" == "Windows" ]; then
-                wget -O /tmp/downloads/cmake.zip https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-win64-x64.zip
-                wget -O /tmp/downloads/ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-win.zip
-                # wget -O /tmp/downloads/glfw.zip https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.WIN64.zip
+                wget -O cmake.zip https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-win64-x64.zip
+                wget -O ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-win.zip
+                # wget -O glfw.zip https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.WIN64.zip
             elif [ "${{ runner.os }}" == "Linux" ]; then
+                sudo apt update -y
                 sudo apt install -y libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
-                wget -O /tmp/downloads/cmake.zip https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz
-                wget -O /tmp/downloads/ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-linux.zip
-                # wget -O /tmp/downloads/glfw.zip https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.zip
+                wget -O cmake.zip https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Linux-x86_64.tar.gz
+                wget -O ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-linux.zip
+                # wget -O glfw.zip https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.zip
             elif [ "${{ runner.os }}" == "macOS" ]; then
-                wget -O /tmp/downloads/cmake.zip https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Darwin-x86_64.tar.gz
-                wget -O /tmp/downloads/ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-mac.zip
-                # wget -O /tmp/downloads/glfw.zip https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.MACOS.zip
+                wget -O cmake.zip https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-Darwin-x86_64.tar.gz
+                wget -O ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-mac.zip
+                # wget -O glfw.zip https://github.com/glfw/glfw/releases/download/3.3.2/glfw-3.3.2.bin.MACOS.zip
             fi
             cmake -E tar xvf cmake.zip
             cmake -E tar xvf ninja.zip
