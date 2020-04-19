@@ -3,9 +3,10 @@ name: Continuous Integration
 on: [push, pull_request]
 
 env:
+    LLVM_VERSION: 10.0.0
     CMAKE_VERSION: 3.16.6
     NINJA_VERSION: 1.10.0
-    GLFW_VERSION: 3.3.2
+    # GLFW_VERSION: 3.3.2
 
 jobs:
     build:
@@ -32,56 +33,62 @@ jobs:
             python-version: '3.x'
             architecture: 'x64'
         - name: Set up system
-          id: system_setup
+          # id: system_setup
           # if: runner.os == 'Linux'
           shell: bash
           run: |
-            echo "::add-path::$PWD"
             if [ "${{ runner.os }}" == "Windows" ]; then
+                # wget -O llvm.zip
                 wget -O cmake.zip https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-win64-x64.zip
                 wget -O ninja.zip https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-win.zip
                 # wget -O glfw.zip https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.bin.WIN64.zip
             elif [ "${{ runner.os }}" == "Linux" ]; then
                 sudo apt update -y
                 sudo apt install -y libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+                wget -O llvm.zip https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-18.04.tar.xz
                 wget -O cmake.zip https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-Linux-x86_64.tar.gz
                 wget -O ninja.zip https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-linux.zip
                 # wget -O glfw.zip https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.zip
             elif [ "${{ runner.os }}" == "macOS" ]; then
+                wget -O llvm.zip https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang+llvm-$LLVM_VERSION-x86_64-apple-darwin.tar.xz
                 wget -O cmake.zip https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-Darwin-x86_64.tar.gz
                 wget -O ninja.zip https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-mac.zip
                 # wget -O glfw.zip https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.bin.MACOS.zip
             fi
+            cmake -E tar xvf llvm.zip
             cmake -E tar xvf cmake.zip
             cmake -E tar xvf ninja.zip
             # cmake -E tar xvf glfw.zip
+            echo "::add-path::$PWD"
             if [ "${{ runner.os }}" == "Windows" ]; then
-                echo "::set-output name=cmake_path::$PWD/cmake-$CMAKE_VERSION-win64-x64/bin"
+                echo "::add-path::$PWD/cmake-$CMAKE_VERSION-win64-x64/bin"
             elif [ "${{ runner.os }}" == "Linux" ]; then
-                echo "::set-output name=cmake_path::$PWD/cmake-$CMAKE_VERSION-Linux-x86_64/bin"
+                echo "::add-path::$PWD/clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-18.04/bin"
+                echo "::add-path::$PWD/cmake-$CMAKE_VERSION-Linux-x86_64/bin"
             elif [ "${{ runner.os }}" == "macOS" ]; then
-                echo "::set-output name=cmake_path::$PWD/cmake-$CMAKE_VERSION-Darwin-x86_64/CMake.app/Contents/bin"
+                echo "::add-path::$PWD/clang+llvm-$LLVM_VERSION-x86_64-apple-darwin/bin"
+                echo "::add-path::$PWD/cmake-$CMAKE_VERSION-Darwin-x86_64/CMake.app/Contents/bin"
             fi
             if [ "${{ runner.os }}" != "Windows" ]; then
                 chmod +x ninja
             fi
             python -m pip install --upgrade pip
             pip install pyyaml beautysh cmake-format
-          # run: |
-          #   sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-          #   sudo apt update
-          #   sudo apt install -y wget build-essential cmake ninja-build gcc-9 g++-9
-          #   python -m pip install --upgrade pip
-          #   pip install pyyaml beautysh cmake-format
-          #   wget "https://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
-          #   tar xf clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz
-          #   sudo cp -R ./clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04/* /usr/local
-          #   sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
-          #   sudo apt install -y libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+        - name: Software versions
+          shell: bash
+          run: |
+            clang-format --version
+            clang-tidy --version
+            clang-apply-replacements --version
+            cmake --version
+            ctest --version
+            ninja --version
+            beautysh --version
+            cmake-format --version
         - name: Configure build
           shell: bash
           run: |
-            ${{ steps.system_setup.outputs.cmake_path }}/cmake -G"Ninja" -S. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+            cmake -G"Ninja" -S. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
         - name: Check shell formatting
           shell: bash
@@ -117,9 +124,9 @@ jobs:
           shell: bash
           working-directory: ./build
           run: |
-            ${{ steps.system_setup.outputs.cmake_path }}/cmake --build .
+            cmake --build .
         - name: Run tests
           shell: bash
           working-directory: ./build
           run: |
-            ${{ steps.system_setup.outputs.cmake_path }}/ctest -VV --timeout 30 -E "pkg-config"
+            ctest -VV --timeout 30 -E "pkg-config"
