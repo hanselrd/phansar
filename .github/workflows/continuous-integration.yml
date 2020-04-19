@@ -77,7 +77,14 @@ jobs:
         - name: Configure build
           shell: bash
           run: |
-            ${{ steps.system_setup.outputs.cmake_path }}/cmake -G"Ninja" -H. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+            ${{ steps.system_setup.outputs.cmake_path }}/cmake -G"Ninja" \
+                                                               -S. \
+                                                               -Bbuild \
+                                                               -DCMAKE_MAKE_PROGRAM=ninja \
+                                                               -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} \
+                                                               -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} \
+                                                               -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+                                                               -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
         - name: Check shell formatting
           shell: bash
