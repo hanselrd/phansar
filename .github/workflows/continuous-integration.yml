@@ -36,6 +36,7 @@ jobs:
           # if: runner.os == 'Linux'
           shell: bash
           run: |
+            echo "::add-path::$PWD"
             if [ "${{ runner.os }}" == "Windows" ]; then
                 wget -O cmake.zip https://github.com/Kitware/CMake/releases/download/v3.16.6/cmake-3.16.6-win64-x64.zip
                 wget -O ninja.zip https://github.com/ninja-build/ninja/releases/download/v1.10.0/ninja-win.zip
