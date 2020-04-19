@@ -6,7 +6,7 @@ env:
     LLVM_VERSION: 10.0.0
     CMAKE_VERSION: 3.16.6
     NINJA_VERSION: 1.10.0
-    # GLFW_VERSION: 3.3.2
+    GLFW_VERSION: 3.3.2
 
 jobs:
     build:
@@ -38,29 +38,34 @@ jobs:
           shell: bash
           run: |
             if [ "${{ runner.os }}" == "Windows" ]; then
-                # wget -O llvm.zip
-                wget -O cmake.zip https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-win64-x64.zip
-                wget -O ninja.zip https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-win.zip
-                # wget -O glfw.zip https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.bin.WIN64.zip
+                llvm_url="https://ziglang.org/deps/llvm%2bclang%2blld-$LLVM_VERSION-x86_64-windows-msvc-release-mt.tar.xz"
+                cmake_url="https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-win64-x64.zip"
+                ninja_url="https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-win.zip"
+                glfw_url="https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.bin.WIN64.zip"
             elif [ "${{ runner.os }}" == "Linux" ]; then
                 sudo apt update -y
                 sudo apt install -y libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
-                wget -O llvm.zip https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-18.04.tar.xz
-                wget -O cmake.zip https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-Linux-x86_64.tar.gz
-                wget -O ninja.zip https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-linux.zip
-                # wget -O glfw.zip https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.zip
+                llvm_url="https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
+                cmake_url="https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-Linux-x86_64.tar.gz"
+                ninja_url="https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-linux.zip"
+                glfw_url="https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.zip"
             elif [ "${{ runner.os }}" == "macOS" ]; then
-                wget -O llvm.zip https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang+llvm-$LLVM_VERSION-x86_64-apple-darwin.tar.xz
-                wget -O cmake.zip https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-Darwin-x86_64.tar.gz
-                wget -O ninja.zip https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-mac.zip
-                # wget -O glfw.zip https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.bin.MACOS.zip
+                llvm_url="https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang+llvm-$LLVM_VERSION-x86_64-apple-darwin.tar.xz"
+                cmake_url="https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-Darwin-x86_64.tar.gz"
+                ninja_url="https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-mac.zip"
+                glfw_url="https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.bin.MACOS.zip"
             fi
+            cmake -P /dev/stdin <<< "file(DOWNLOAD $llvm_url llvm.zip SHOW_PROGRESS)"
+            cmake -P /dev/stdin <<< "file(DOWNLOAD $cmake_url cmake.zip SHOW_PROGRESS)"
+            cmake -P /dev/stdin <<< "file(DOWNLOAD $ninja_url ninja.zip SHOW_PROGRESS)"
+            cmake -P /dev/stdin <<< "file(DOWNLOAD $glfw_url glfw.zip SHOW_PROGRESS)"
             cmake -E tar xvf llvm.zip
             cmake -E tar xvf cmake.zip
             cmake -E tar xvf ninja.zip
-            # cmake -E tar xvf glfw.zip
+            cmake -E tar xvf glfw.zip
             echo "::add-path::$PWD"
             if [ "${{ runner.os }}" == "Windows" ]; then
+                echo "::add-path::$PWD/llvm+clang+lld-$LLVM_VERSION-x86_64-windows-msvc-release-mt/bin"
                 echo "::add-path::$PWD/cmake-$CMAKE_VERSION-win64-x64/bin"
             elif [ "${{ runner.os }}" == "Linux" ]; then
                 echo "::add-path::$PWD/clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-18.04/bin"
@@ -77,13 +82,21 @@ jobs:
         - name: Software versions
           shell: bash
           run: |
+            echo "clang-format"
             clang-format --version
+            echo "clang-tidy"
             clang-tidy --version
+            echo "clang-apply-replacements"
             clang-apply-replacements --version
+            echo "cmake"
             cmake --version
+            echo "ctest"
             ctest --version
+            echo "ninja"
             ninja --version
+            echo "beautysh"
             beautysh --version
+            echo "cmake-format"
             cmake-format --version
         - name: Configure build
           shell: bash
