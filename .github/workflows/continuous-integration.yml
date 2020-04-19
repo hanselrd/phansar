@@ -61,6 +61,9 @@ jobs:
             elif [ "${{ runner.os }}" == "macOS" ]; then
                 echo "::set-output name=cmake_path::cmake-3.16.6-Darwin-x86_64/CMake.app/Contents/bin"
             fi
+            if [ "${{ runner.os }}" != "Windows" ]; then
+                chmod +x ninja
+            fi
             python -m pip install --upgrade pip
             pip install pyyaml beautysh cmake-format
           # run: |
@@ -77,14 +80,7 @@ jobs:
         - name: Configure build
           shell: bash
           run: |
-            ${{ steps.system_setup.outputs.cmake_path }}/cmake -G"Ninja" \
-                                                               -S. \
-                                                               -Bbuild \
-                                                               -DCMAKE_MAKE_PROGRAM=ninja \
-                                                               -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} \
-                                                               -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} \
-                                                               -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-                                                               -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+            ${{ steps.system_setup.outputs.cmake_path }}/cmake -G"Ninja" -S. -Bbuild -DCMAKE_MAKE_PROGRAM=ninja -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
         - name: Check shell formatting
           shell: bash
