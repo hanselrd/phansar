@@ -81,10 +81,6 @@ jobs:
                 echo "::add-path::$PWD/cmake-$CMAKE_VERSION-Darwin-x86_64/CMake.app/Contents/bin"
             fi
 
-            if [ "${{ runner.os }}" != "Windows" ]; then
-                chmod +x ninja
-            fi
-
             python -m pip install --upgrade pip
             pip install pyyaml beautysh cmake-format
         - name: Software versions
