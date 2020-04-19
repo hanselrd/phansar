@@ -55,10 +55,10 @@ jobs:
                 ninja_url="https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-mac.zip"
                 glfw_url="https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.bin.MACOS.zip"
             fi
-            cmake -P /dev/stdin <<< "file(DOWNLOAD $llvm_url llvm.zip SHOW_PROGRESS)"
-            cmake -P /dev/stdin <<< "file(DOWNLOAD $cmake_url cmake.zip SHOW_PROGRESS)"
-            cmake -P /dev/stdin <<< "file(DOWNLOAD $ninja_url ninja.zip SHOW_PROGRESS)"
-            cmake -P /dev/stdin <<< "file(DOWNLOAD $glfw_url glfw.zip SHOW_PROGRESS)"
+            cmake -P /dev/stdin <<< "file(DOWNLOAD $llvm_url ./llvm.zip SHOW_PROGRESS)"
+            cmake -P /dev/stdin <<< "file(DOWNLOAD $cmake_url ./cmake.zip SHOW_PROGRESS)"
+            cmake -P /dev/stdin <<< "file(DOWNLOAD $ninja_url ./ninja.zip SHOW_PROGRESS)"
+            cmake -P /dev/stdin <<< "file(DOWNLOAD $glfw_url ./glfw.zip SHOW_PROGRESS)"
             cmake -E tar xvf llvm.zip
             cmake -E tar xvf cmake.zip
             cmake -E tar xvf ninja.zip
