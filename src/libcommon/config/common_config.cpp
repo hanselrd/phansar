@@ -107,7 +107,7 @@ auto get_port() -> std::uint16_t {
 }
 
 auto get_num_threads() -> std::size_t {
-    if ((docopt_map.count("--threads") != 0) && docopt_map["--threads"]) {
+    if (docopt_map.count("--threads") != 0 && docopt_map["--threads"]) {
         return static_cast<std::size_t>(docopt_map["--threads"].asLong());
     }
     return 0;
