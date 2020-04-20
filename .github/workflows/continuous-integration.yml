@@ -10,7 +10,7 @@ env:
 
 jobs:
     build:
-        name: "[${{ matrix.cfg.os }}] ${{ matrix.cfg.name }} ${{ matrix.build_type }}"
+        name: "[${{ runner.os }}] ${{ matrix.cfg.name }} ${{ matrix.build_type }}"
         runs-on: ${{ matrix.cfg.os }}
 
         strategy:
@@ -19,7 +19,7 @@ jobs:
                 build_type: [Debug, Release]#, RelWithDebInfo, MinSizeRel]
                 cfg:
                     # - { name: MSVC,  os: windows-latest, cc: cl,    cxx: cl }
-                    - { name: GNU,   os: windows-latest, cc: gcc,   cxx: g++ }
+                    - { name: MinGW,   os: windows-latest, cc: gcc,   cxx: g++ }
                     # - { name: Clang, os: windows-latest, cc: clang, cxx: clang++ }
                     - { name: GNU,   os: ubuntu-latest,  cc: gcc-9, cxx: g++-9 }
                     - { name: Clang, os: ubuntu-latest,  cc: clang, cxx: clang++ }
