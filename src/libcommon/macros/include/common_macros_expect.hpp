@@ -2,7 +2,7 @@
 #define LIBCOMMON_MACROS_INCLUDE_COMMON_MACROS_EXPECT_HPP
 
 #include "common_log.hpp"
-#include <plibsys.h>
+#include <hedley.h>
 
 #ifndef NDEBUG
 #    define EXPECT_TRUE(condition)                                                                 \
@@ -21,8 +21,8 @@
             return condition;                                                                      \
         }()
 #else
-#    define EXPECT_TRUE(condition)  P_LIKELY(condition)
-#    define EXPECT_FALSE(condition) P_UNLIKELY(condition)
+#    define EXPECT_TRUE(condition)  HEDLEY_LIKELY(condition)
+#    define EXPECT_FALSE(condition) HEDLEY_UNLIKELY(condition)
 #endif
 
 #endif
