@@ -43,28 +43,28 @@ void init(int argc, const char * const * argv) {
 }
 
 auto get_binary_name() -> std::string {
-    if (docopt_map.contains("--name") && docopt_map["--name"]) {
+    if (docopt_map.count("--name") != 0 && docopt_map["--name"]) {
         return docopt_map["--name"].asString();
     }
     return {};
 }
 
 auto get_config_file() -> std::string {
-    if (docopt_map.contains("--config") && docopt_map["--config"]) {
+    if (docopt_map.count("--config") != 0 && docopt_map["--config"]) {
         return docopt_map["--config"].asString();
     }
     return {};
 }
 
 auto get_log_file() -> std::string {
-    if (docopt_map.contains("--log-file") && docopt_map["--log-file"]) {
+    if (docopt_map.count("--log-file") != 0 && docopt_map["--log-file"]) {
         return docopt_map["--log-file"].asString();
     }
     return {};
 }
 
 auto get_log_level() -> spdlog::level::level_enum {
-    if (docopt_map.contains("--log-level") && docopt_map["--log-level"]) {
+    if (docopt_map.count("--log-level") != 0 && docopt_map["--log-level"]) {
         auto log_level = docopt_map["--log-level"].asString();
 
         if (log_level == "trace") {
@@ -93,21 +93,21 @@ auto get_log_level() -> spdlog::level::level_enum {
 }
 
 auto get_ip_address() -> std::string {
-    if (docopt_map.contains("--ip") && docopt_map["--ip"]) {
+    if (docopt_map.count("--ip") != 0 && docopt_map["--ip"]) {
         return docopt_map["--ip"].asString();
     }
     return {};
 }
 
 auto get_port() -> std::uint16_t {
-    if (docopt_map.contains("--port") && docopt_map["--port"]) {
+    if (docopt_map.count("--port") != 0 && docopt_map["--port"]) {
         return static_cast<std::uint16_t>(docopt_map["--port"].asLong());
     }
     return 0;
 }
 
 auto get_num_threads() -> std::size_t {
-    if (docopt_map.contains("--threads") && docopt_map["--threads"]) {
+    if ((docopt_map.count("--threads") != 0) && docopt_map["--threads"]) {
         return static_cast<std::size_t>(docopt_map["--threads"].asLong());
     }
     return 0;
