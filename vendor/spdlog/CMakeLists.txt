@@ -1,7 +1,7 @@
 FetchContent_Declare(
     spdlog_git
     GIT_REPOSITORY https://github.com/gabime/spdlog.git
-    GIT_TAG f5309d902af2daef790c585873a7c7a6ca693045)
+    GIT_TAG 81444265f4618f9e3eafba863b806ce07fab12aa)
 FetchContent_GetProperties(spdlog_git)
 if(NOT spdlog_git_POPULATED)
     FetchContent_Populate(spdlog_git)
