@@ -16,7 +16,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                build_type: [Debug, Release]#, RelWithDebInfo, MinSizeRel]
+                build_type: [Debug, Release, RelWithDebInfo, MinSizeRel]
                 cfg:
                     # - { name: "[Windows] MSVC",  os: windows-latest, cc: cl,    cxx: cl }
                     - { name: "[Windows] MinGW", os: windows-latest, cc: gcc,   cxx: g++ }
