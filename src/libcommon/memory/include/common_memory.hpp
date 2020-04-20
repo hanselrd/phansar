@@ -1,6 +1,7 @@
 #ifndef LIBCOMMON_MEMORY_INCLUDE_COMMON_MEMORY_HPP
 #define LIBCOMMON_MEMORY_INCLUDE_COMMON_MEMORY_HPP
 
+#include <cstddef>
 #include <cstdint>
 #include <cstdlib>
 

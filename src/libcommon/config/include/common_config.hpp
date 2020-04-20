@@ -1,6 +1,7 @@
 #ifndef LIBCOMMON_CONFIG_INCLUDE_COMMON_CONFIG_HPP
 #define LIBCOMMON_CONFIG_INCLUDE_COMMON_CONFIG_HPP
 
+#include <cstddef>
 #include <cstdint>
 #include <spdlog/common.h>
 #include <string>

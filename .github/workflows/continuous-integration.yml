@@ -97,32 +97,33 @@ jobs:
 
             python -m pip install --upgrade pip
             pip install pyyaml beautysh cmake-format
-        - name: Software versions
-          shell: bash
-          run: |
-            echo "clang-format"
-            clang-format --version
+            # pip install -r requirements.txt
+        # - name: Software versions
+        #   shell: bash
+        #   run: |
+        #     echo "clang-format"
+        #     clang-format --version
 
-            echo "clang-tidy"
-            clang-tidy --version
+        #     echo "clang-tidy"
+        #     clang-tidy --version
 
-            echo "clang-apply-replacements"
-            clang-apply-replacements --version
+        #     echo "clang-apply-replacements"
+        #     clang-apply-replacements --version
 
-            echo "cmake"
-            cmake --version
+        #     echo "cmake"
+        #     cmake --version
 
-            echo "ctest"
-            ctest --version
+        #     echo "ctest"
+        #     ctest --version
 
-            echo "ninja"
-            ninja --version
+        #     echo "ninja"
+        #     ninja --version
 
-            echo "beautysh"
-            beautysh --version
+        #     echo "beautysh"
+        #     beautysh --version
 
-            echo "cmake-format"
-            cmake-format --version
+        #     echo "cmake-format"
+        #     cmake-format --version
         - name: Configure build
           shell: bash
           run: |
