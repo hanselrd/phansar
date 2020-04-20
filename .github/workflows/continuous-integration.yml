@@ -80,10 +80,12 @@ jobs:
           shell: bash
           run: |
             if [ "${{ runner.os }}" == "Windows" ]; then
+                :
             elif [ "${{ runner.os }}" == "Linux" ]; then
                 sudo apt update -y
                 sudo apt install -y libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
             elif [ "${{ runner.os }}" == "macOS" ]; then
+                :
             fi
 
             python -m pip install --upgrade pip
