@@ -10,7 +10,7 @@ env:
 
 jobs:
     build:
-        name: "[${{ runner.os }}] ${{ matrix.cfg.name }} ${{ matrix.build_type }}"
+        name: ${{ matrix.cfg.name }} ${{ matrix.build_type }}
         runs-on: ${{ matrix.cfg.os }}
 
         strategy:
@@ -18,13 +18,13 @@ jobs:
             matrix:
                 build_type: [Debug, Release]#, RelWithDebInfo, MinSizeRel]
                 cfg:
-                    # - { name: MSVC,  os: windows-latest, cc: cl,    cxx: cl }
-                    - { name: MinGW,   os: windows-latest, cc: gcc,   cxx: g++ }
-                    # - { name: Clang, os: windows-latest, cc: clang, cxx: clang++ }
-                    - { name: GNU,   os: ubuntu-latest,  cc: gcc-9, cxx: g++-9 }
-                    - { name: Clang, os: ubuntu-latest,  cc: clang, cxx: clang++ }
-                    - { name: GNU,   os: macos-latest,   cc: gcc,   cxx: g++ }
-                    - { name: Clang, os: macos-latest,   cc: clang, cxx: clang++ }
+                    # - { name: "[Windows] MSVC",  os: windows-latest, cc: cl,    cxx: cl }
+                    - { name: "[Windows] MinGW", os: windows-latest, cc: gcc,   cxx: g++ }
+                    # - { name: "[Windows] Clang", os: windows-latest, cc: clang, cxx: clang++ }
+                    - { name: "[Linux] GNU",     os: ubuntu-latest,  cc: gcc-9, cxx: g++-9 }
+                    - { name: "[Linux] Clang",   os: ubuntu-latest,  cc: clang, cxx: clang++ }
+                    - { name: "[macOS] GNU",     os: macos-latest,   cc: gcc,   cxx: g++ }
+                    - { name: "[macOS] Clang",   os: macos-latest,   cc: clang, cxx: clang++ }
 
         steps:
         - uses: actions/checkout@v2
