@@ -19,7 +19,7 @@ public:
         ~proxy();
 
         auto               operator*() const -> T &;
-        auto               operator->() const -> T *;
+        auto               operator-> () const -> T *;
         [[nodiscard]] auto get() const -> T &;
 
     private:

@@ -4,6 +4,7 @@
 #include "common_containers.hpp"
 #include "common_threading_synchronized.hpp"
 #include <atomic>
+#include <cstddef>
 #include <functional>
 #include <future>
 #include <thread>

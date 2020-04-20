@@ -33,7 +33,7 @@ auto synchronized<T, Mutex>::proxy::operator*() const -> T & {
 }
 
 template <class T, class Mutex>
-auto synchronized<T, Mutex>::proxy::operator->() const -> T * {
+auto synchronized<T, Mutex>::proxy::operator-> () const -> T * {
     return _obj_p;
 }
 

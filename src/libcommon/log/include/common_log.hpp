@@ -12,6 +12,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cstddef>
 #include <cstdint>
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/spdlog.h>
