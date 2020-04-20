@@ -40,45 +40,50 @@ jobs:
                 set(cmake_url "https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-win64-x64.zip")
                 set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-win.zip")
                 set(glfw_url "https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.bin.WIN64.zip")
+
+                set(llvm_dir "llvm+clang+lld-$LLVM_VERSION-x86_64-windows-msvc-release-mt/bin")
+                set(cmake_dir "cmake-$CMAKE_VERSION-win64-x64/bin")
             elseif("${{ runner.os }}" STREQUAL "Linux")
                 set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-18.04.tar.xz")
                 set(cmake_url "https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-Linux-x86_64.tar.gz")
                 set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-linux.zip")
                 set(glfw_url "https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.zip")
+
+                set(llvm_dir "clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-18.04/bin")
+                set(cmake_dir "cmake-$CMAKE_VERSION-Linux-x86_64/bin")
             elseif("${{ runner.os }}" STREQUAL "macOS")
                 set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-$LLVM_VERSION/clang+llvm-$LLVM_VERSION-x86_64-apple-darwin.tar.xz")
                 set(cmake_url "https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-Darwin-x86_64.tar.gz")
                 set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v$NINJA_VERSION/ninja-mac.zip")
                 set(glfw_url "https://github.com/glfw/glfw/releases/download/$GLFW_VERSION/glfw-$GLFW_VERSION.bin.MACOS.zip")
+
+                set(llvm_dir "clang+llvm-$LLVM_VERSION-x86_64-apple-darwin/bin")
+                set(cmake_dir "cmake-$CMAKE_VERSION-Darwin-x86_64/CMake.app/Contents/bin")
             endif()
 
+            message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}")
+
             file(DOWNLOAD "$llvm_url" ./llvm.zip SHOW_PROGRESS)
+            execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./llvm.zip)
+            message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}/${llvm_dir}")
+
             file(DOWNLOAD "$cmake_url" ./cmake.zip SHOW_PROGRESS)
+            execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./cmake.zip)
+            message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}/${cmake_dir}")
+
             file(DOWNLOAD "$ninja_url" ./ninja.zip SHOW_PROGRESS)
+            execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ninja.zip)
+
             file(DOWNLOAD "$glfw_url" ./glfw.zip SHOW_PROGRESS)
+            execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./glfw.zip)
         - name: Set up system
-          # id: system_setup
-          # if: runner.os == 'Linux'
           shell: bash
           run: |
-            cmake -E tar xvf llvm.zip
-            cmake -E tar xvf cmake.zip
-            cmake -E tar xvf ninja.zip
-            cmake -E tar xvf glfw.zip
-
-            echo "::add-path::$PWD"
-
             if [ "${{ runner.os }}" == "Windows" ]; then
-                echo "::add-path::$PWD/llvm+clang+lld-$LLVM_VERSION-x86_64-windows-msvc-release-mt/bin"
-                echo "::add-path::$PWD/cmake-$CMAKE_VERSION-win64-x64/bin"
             elif [ "${{ runner.os }}" == "Linux" ]; then
                 sudo apt update -y
                 sudo apt install -y libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
-                echo "::add-path::$PWD/clang+llvm-$LLVM_VERSION-x86_64-linux-gnu-ubuntu-18.04/bin"
-                echo "::add-path::$PWD/cmake-$CMAKE_VERSION-Linux-x86_64/bin"
             elif [ "${{ runner.os }}" == "macOS" ]; then
-                echo "::add-path::$PWD/clang+llvm-$LLVM_VERSION-x86_64-apple-darwin/bin"
-                echo "::add-path::$PWD/cmake-$CMAKE_VERSION-Darwin-x86_64/CMake.app/Contents/bin"
             fi
 
             python -m pip install --upgrade pip
@@ -88,18 +93,25 @@ jobs:
           run: |
             echo "clang-format"
             clang-format --version
+
             echo "clang-tidy"
             clang-tidy --version
+
             echo "clang-apply-replacements"
             clang-apply-replacements --version
+
             echo "cmake"
             cmake --version
+
             echo "ctest"
             ctest --version
+
             echo "ninja"
             ninja --version
+
             echo "beautysh"
             beautysh --version
+
             echo "cmake-format"
             cmake-format --version
         - name: Configure build
@@ -107,36 +119,36 @@ jobs:
           run: |
             cmake -G"Ninja" -S. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
-        - name: Check shell formatting
-          shell: bash
-          working-directory: ./utils
-          run: |
-            ./beautysh.bash check
-        - name: Check build formatting
-          shell: bash
-          working-directory: ./utils
-          run: |
-            ./cmake-format.bash check
-        - name: Check include guards
-          shell: bash
-          working-directory: ./utils
-          run: |
-            ./include-guards.bash check
-        - name: Check test cases
-          shell: bash
-          working-directory: ./utils
-          run: |
-            ./test-cases.bash check
-        - name: Check code formatting
-          shell: bash
-          working-directory: ./utils
-          run: |
-            ./clang-format.bash check
-        - name: Check static analysis
-          shell: bash
-          working-directory: ./utils
-          run: |
-            ./clang-tidy.bash check
+        # - name: Check shell formatting
+        #   shell: bash
+        #   working-directory: ./utils
+        #   run: |
+        #     ./beautysh.bash check
+        # - name: Check build formatting
+        #   shell: bash
+        #   working-directory: ./utils
+        #   run: |
+        #     ./cmake-format.bash check
+        # - name: Check include guards
+        #   shell: bash
+        #   working-directory: ./utils
+        #   run: |
+        #     ./include-guards.bash check
+        # - name: Check test cases
+        #   shell: bash
+        #   working-directory: ./utils
+        #   run: |
+        #     ./test-cases.bash check
+        # - name: Check code formatting
+        #   shell: bash
+        #   working-directory: ./utils
+        #   run: |
+        #     ./clang-format.bash check
+        # - name: Check static analysis
+        #   shell: bash
+        #   working-directory: ./utils
+        #   run: |
+        #     ./clang-tidy.bash check
         - name: Run build
           shell: bash
           working-directory: ./build
