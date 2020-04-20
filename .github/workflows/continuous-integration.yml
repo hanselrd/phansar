@@ -35,6 +35,8 @@ jobs:
         - name: Download dependencies
           shell: cmake -P {0}
           run: |
+            message(NOTICE "Using host CMAKE version: ${CMAKE_VERSION}")
+
             if("${{ runner.os }}" STREQUAL "Windows")
                 set(llvm_url "https://ziglang.org/deps/llvm%2bclang%2blld-$LLVM_VERSION-x86_64-windows-msvc-release-mt.tar.xz")
                 set(cmake_url "https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cmake-$CMAKE_VERSION-win64-x64.zip")
@@ -63,18 +65,18 @@ jobs:
 
             message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}")
 
-            file(DOWNLOAD "$llvm_url" ./llvm.zip SHOW_PROGRESS)
+            file(DOWNLOAD "${llvm_url}" ./llvm.zip SHOW_PROGRESS)
             execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./llvm.zip)
             message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}/${llvm_dir}")
 
-            file(DOWNLOAD "$cmake_url" ./cmake.zip SHOW_PROGRESS)
+            file(DOWNLOAD "${cmake_url}" ./cmake.zip SHOW_PROGRESS)
             execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./cmake.zip)
             message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}/${cmake_dir}")
 
-            file(DOWNLOAD "$ninja_url" ./ninja.zip SHOW_PROGRESS)
+            file(DOWNLOAD "${ninja_url}" ./ninja.zip SHOW_PROGRESS)
             execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ninja.zip)
 
-            file(DOWNLOAD "$glfw_url" ./glfw.zip SHOW_PROGRESS)
+            file(DOWNLOAD "${glfw_url}" ./glfw.zip SHOW_PROGRESS)
             execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./glfw.zip)
         - name: Set up system
           shell: bash
