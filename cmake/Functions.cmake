@@ -162,3 +162,15 @@ function(ph_add_generic_tests name sources)
 
     catch_discover_tests(test_${name} WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endfunction()
+
+# cmake-format: off
+# target_include_directories(ph_ PRIVATE ...)
+# target_compile_definitions(ph_ PRIVATE ...)
+# target_compile_options(ph_ PRIVATE ...)
+# target_compile_features(ph_ PRIVATE ...)
+# target_sources(ph_ PRIVATE ...)
+# target_precompile_headers(ph_ PRIVATE ...)
+# target_link_libraries(ph_ PRIVATE ...)
+# target_link_options(ph_ PRIVATE ...)
+# target_link_directories(ph_ PRIVATE ...)
+# cmake-format: on
