@@ -15,7 +15,7 @@ add_subdirectory(${raygui_git_SOURCE_DIR} ${raygui_git_BINARY_DIR} EXCLUDE_FROM_
 
 # cmake-format: off
 set(sources
-    vendor_raygui.cpp)
+    raygui.cpp)
 
 set(libs
     ph_vendor_raylib)

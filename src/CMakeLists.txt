@@ -1,3 +1,3 @@
-add_subdirectory(libcommon)
-add_subdirectory(binclient)
-add_subdirectory(binserver)
+add_subdirectory(common)
+add_subdirectory(client)
+add_subdirectory(server)

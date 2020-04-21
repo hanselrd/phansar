@@ -38,20 +38,3 @@ add_subdirectory(spdlog EXCLUDE_FROM_ALL)
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     PARENT_SCOPE)
-
-# cmake-format: off
-set(system_libs
-    ph_vendor_cppcodec
-    ph_vendor_docopt
-    ph_vendor_fmt
-    ph_vendor_hedley
-    ph_vendor_json
-    ph_vendor_lua
-    ph_vendor_plibsys
-    ph_vendor_raygui
-    ph_vendor_raylib
-    ph_vendor_sol2
-    ph_vendor_spdlog)
-# cmake-format: on
-
-ph_add_generic_interface_library(ph_vendor "" "${system_libs}")

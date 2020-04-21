@@ -1,6 +1,0 @@
-#ifndef LIBCOMMON_NETWORKING_INCLUDE_COMMON_NETWORKING_HPP
-#define LIBCOMMON_NETWORKING_INCLUDE_COMMON_NETWORKING_HPP
-
-#include "common_networking_socket.hpp"
-
-#endif
