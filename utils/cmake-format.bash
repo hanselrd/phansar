@@ -24,7 +24,7 @@ fix() {
 
 case "$1" in
     check)
-        find . -type f -regex './\(CMakeLists.txt\|cmake/.*\.cmake\|\(src\|vendor\)/.*CMakeLists.txt\)$' -print0 |
+        find . -type f -regex './\(CMakeLists.txt\|cmake/.*\.cmake\|\(src\|test\|vendor\)/.*CMakeLists.txt\)$' -print0 |
         while IFS= read -r -d '' file; do
             check "$file"
         done
@@ -35,7 +35,7 @@ case "$1" in
         done
         ;;
     fix)
-        find . -type f -regex './\(CMakeLists.txt\|cmake/.*\.cmake\|\(src\|vendor\)/.*CMakeLists.txt\)$' -print0 |
+        find . -type f -regex './\(CMakeLists.txt\|cmake/.*\.cmake\|\(src\|test\|vendor\)/.*CMakeLists.txt\)$' -print0 |
         while IFS= read -r -d '' file; do
             fix "$file"
         done

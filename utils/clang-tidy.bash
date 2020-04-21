@@ -9,7 +9,7 @@ runclangtidy() {
     clangtidychecks="-*,bugprone-*,-bugprone-branch-clone,-bugprone-lambda-function-name,-bugprone-sizeof-expression,cert-*,-cert-err58-cpp,clang-analyzer-*,google-explicit-constructor,modernize-*,-modernize-avoid-c-arrays,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-misleading-indentation"
     clangtidyheaderfilter=".*"
     clangtidyextraarg="-Wno-unknown-warning-option"
-    clangtidyfiles="$PWD/{src,tests,vendor}"
+    clangtidyfiles="$PWD/{include,src,test,vendor}"
 
     bash -c "./utils/run-clang-tidy.py -checks=$clangtidychecks -header-filter=$clangtidyheaderfilter -extra-arg=$clangtidyextraarg $* $clangtidyfiles"
 }

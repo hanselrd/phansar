@@ -27,7 +27,7 @@ fix() {
 
 case "$1" in
     check)
-        find src tests vendor -type f -regex '.*\.\(hpp\)$' -print0 |
+        find include src test vendor -type f -regex '.*\.\(hpp\)$' -print0 |
         while IFS= read -r -d '' file; do
             check "$file"
         done
@@ -38,7 +38,7 @@ case "$1" in
         done
         ;;
     fix)
-        find src tests vendor -type f -regex '.*\.\(hpp\)$' -print0 |
+        find include src test vendor -type f -regex '.*\.\(hpp\)$' -print0 |
         while IFS= read -r -d '' file; do
             fix "$file"
         done
