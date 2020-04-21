@@ -7,8 +7,7 @@ function(ph_add_executable name)
 endfunction()
 
 function(ph_target_include_directories name type)
-    target_include_directories(${name} ${type} ${CMAKE_SOURCE_DIR}/include
-                               ${CMAKE_CURRENT_SOURCE_DIR}/include ${ARGN})
+    target_include_directories(${name} ${type} ${ARGN})
 endfunction()
 
 function(ph_target_link_libraries name type)
@@ -58,7 +57,7 @@ endfunction()
 function(ph_add_generic_interface_library name libs system_libs)
     ph_add_library(${name} INTERFACE)
 
-    ph_target_include_directories(${name} INTERFACE)
+    ph_target_include_directories(${name} INTERFACE ${CMAKE_SOURCE_DIR}/include)
 
     if(libs)
         ph_target_link_libraries(${name} INTERFACE ${libs})
@@ -72,7 +71,7 @@ endfunction()
 function(ph_add_generic_library name sources libs system_libs)
     ph_add_library(${name} STATIC ${sources})
 
-    ph_target_include_directories(${name} PUBLIC)
+    ph_target_include_directories(${name} PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
     if(libs)
         ph_target_link_libraries(${name} PUBLIC ${libs})
@@ -146,8 +145,6 @@ function(ph_add_generic_executable name sources libs system_libs)
 endfunction()
 
 function(ph_add_generic_tests name sources)
-    # set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests)
-
     ph_add_executable(test_${name} ${sources} ${CMAKE_SOURCE_DIR}/test/main.cpp)
 
     ph_target_link_libraries(test_${name} PUBLIC ph_vendor_catch2 ${name})
