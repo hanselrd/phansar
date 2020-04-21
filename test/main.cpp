@@ -1,7 +1,6 @@
-#define CATCH_CONFIG_RUNNER
-
 #include <phansar/common/system.hpp>
 
+#define CATCH_CONFIG_RUNNER
 #include <catch2/catch.hpp>
 
 #include <string>

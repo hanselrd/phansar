@@ -1,5 +1,8 @@
 #include <phansar/common.hpp>
 
+#define SOL_ALL_SAFETIES_ON 1
+#include <sol/sol.hpp>
+
 auto main(int argc, char * argv[]) -> int {
     phansar::common::system::init(argc, argv);
 
@@ -10,6 +13,12 @@ auto main(int argc, char * argv[]) -> int {
     LOGI("IP Address: {}", phansar::common::config::get_ip_address());
     LOGI("Port: {}", phansar::common::config::get_port());
     LOGI("Num Threads: {}", phansar::common::config::get_num_threads());
+
+    auto lua = sol::state{};
+    lua.open_libraries(sol::lib::base, sol::lib::package);
+    lua.script(R"lua(
+        print('test test test!')
+    )lua");
 
     phansar::common::system::shutdown();
 

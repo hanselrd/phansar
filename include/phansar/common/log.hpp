@@ -9,7 +9,6 @@
 #else
 #    define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
 #endif
-
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/spdlog.h>
 
