@@ -96,7 +96,8 @@ jobs:
             fi
 
             python -m pip install --upgrade pip
-            pip install pyyaml beautysh cmake-format
+            pip install pipenv pyyaml beautysh cmake-format
+            pipenv install
             # pip install -r requirements.txt
         # - name: Software versions
         #   shell: bash
