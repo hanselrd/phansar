@@ -14,6 +14,7 @@ set(PLIBSYS_TESTS
 set(PLIBSYS_BUILD_DOC
     OFF
     CACHE BOOL "")
+set(CMAKE_POLICY_DEFAULT_CMP0048 NEW)
 add_subdirectory(${plibsys_git_SOURCE_DIR} ${plibsys_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 # cmake-format: off

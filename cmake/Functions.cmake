@@ -93,7 +93,9 @@ endfunction()
 function(ph_add_generic_vendor_interface_library name includes libs system_libs)
     ph_add_library(${name} INTERFACE)
 
-    ph_target_include_directories(${name} INTERFACE ${includes})
+    if(includes)
+        ph_target_include_directories(${name} INTERFACE ${includes})
+    endif()
 
     if(libs)
         ph_target_link_libraries(${name} INTERFACE ${libs})
@@ -107,7 +109,9 @@ endfunction()
 function(ph_add_generic_vendor_library name sources includes libs system_libs)
     ph_add_library(${name} STATIC ${sources})
 
-    ph_target_include_directories(${name} PUBLIC ${includes})
+    if(includes)
+        ph_target_include_directories(${name} PUBLIC ${includes})
+    endif()
 
     if(libs)
         ph_target_link_libraries(${name} PUBLIC ${libs})
@@ -127,12 +131,14 @@ endfunction()
 function(ph_add_generic_executable name sources libs system_libs)
     ph_add_executable(${name} ${sources})
 
+    ph_target_include_directories(${name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
     if(libs)
-        ph_target_link_libraries(${name} PUBLIC ${libs})
+        ph_target_link_libraries(${name} PRIVATE ${libs})
     endif()
 
     if(system_libs)
-        ph_target_link_system_libraries(${name} PUBLIC ${system_libs})
+        ph_target_link_system_libraries(${name} PRIVATE ${system_libs})
     endif()
 
     string(TOUPPER ${name} uppername)
@@ -147,7 +153,9 @@ endfunction()
 function(ph_add_generic_tests name sources)
     ph_add_executable(test_${name} ${sources} ${CMAKE_SOURCE_DIR}/test/main.cpp)
 
-    ph_target_link_libraries(test_${name} PUBLIC ph_vendor_catch2 ${name})
+    ph_target_include_directories(${name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+    ph_target_link_libraries(test_${name} PRIVATE ph_vendor_catch2 ${name})
 
     string(TOUPPER ${name} uppername)
 
