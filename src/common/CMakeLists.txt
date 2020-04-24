@@ -17,9 +17,8 @@ set(system_libs
     ph_vendor_fmt
     ph_vendor_hedley
     ph_vendor_json
-    ph_vendor_lua
     ph_vendor_plibsys
-    ph_vendor_sol2
+    ph_vendor_pybind11
     ph_vendor_spdlog
     Threads::Threads)
 # cmake-format: on
