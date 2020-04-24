@@ -6,7 +6,6 @@ env:
     CMAKE_GENERATOR: Ninja
     GCC_VERSION: 9
     LLVM_VERSION: 9
-    LLVM_VERSION_FULL: 9.0.1
 
 jobs:
     build:
@@ -82,9 +81,6 @@ jobs:
               Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
               scoop install ninja llvm --global
 
-              curl -fsSL -o LLVM.exe https://github.com/llvm/llvm-project/releases/download/llvmorg-$env:LLVM_VERSION_FULL/LLVM-$env:LLVM_VERSION_FULL-win64.exe
-              7z x LLVM.exe -y -o"C:/Program Files/LLVM"
-
               if ("${{ matrix.compiler }}" -eq "gcc") {
                   scoop install gcc --global
                   echo "::set-env name=CC::gcc"
@@ -97,7 +93,7 @@ jobs:
                   echo "::set-env name=CXX::${{ matrix.compiler }}"
               }
 
-              echo "::set-env name=PATH::C:/Program Files/LLVM/bin;$env:PATH"
+              echo "::set-env name=PATH::$env:PATH"
 
         - name: Install (Linux)
           if: runner.os == 'Linux'
