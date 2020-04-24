@@ -52,7 +52,7 @@ jobs:
                 set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-Linux-x86_64.tar.gz")
                 set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-linux.zip")
 
-                set(llvm_dir "clang+llvm-${llvm_version}-x86_64-linux-gnu-ubuntu-18.04/bin")
+                set(llvm_dir "clang+llvm-${llvm_version}-x86_64-linux-gnu-ubuntu-16.04/bin")
                 set(cmake_dir "cmake-${cmake_version}-Linux-x86_64/bin")
             elseif("${{ runner.os }}" STREQUAL "macOS")
                 set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/clang+llvm-${llvm_version}-x86_64-apple-darwin.tar.xz")
