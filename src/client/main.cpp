@@ -14,7 +14,7 @@
 HEDLEY_PRINTF_FORMAT(2, 0)
 static void trace_log_callback(int msg_type, const char * fmt, va_list args) {
     auto buf = std::array<char, BUF_SIZE>{};
-    std::vsnprintf(buf.data(), sizeof(buf), fmt, args);
+    std::vsnprintf(buf.data(), buf.size(), fmt, args);
 
     switch (msg_type) {
     case LOG_DEBUG:
