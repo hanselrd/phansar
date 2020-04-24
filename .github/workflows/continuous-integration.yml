@@ -88,70 +88,68 @@ jobs:
             fi
 
             python -m pip install --upgrade pip
-            pip install pipenv pyyaml beautysh cmake-format black
+            pip install pipenv pyyaml cmake-format black
             pipenv install
-        # - name: Software versions (Linux)
-        #   if: runner.os == 'Linux'
-        #   shell: bash
-        #   run: |
-        #     echo "clang-format"
-        #     clang-format --version
+        - name: Software versions
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          run: |
+            echo "clang-format"
+            clang-format --version
 
-        #     echo "clang-tidy"
-        #     clang-tidy --version
+            echo "clang-tidy"
+            clang-tidy --version
 
-        #     echo "clang-apply-replacements"
-        #     clang-apply-replacements --version
+            echo "clang-apply-replacements"
+            clang-apply-replacements --version
 
-        #     echo "cmake"
-        #     cmake --version
+            echo "cmake"
+            cmake --version
 
-        #     echo "ctest"
-        #     ctest --version
+            echo "ctest"
+            ctest --version
 
-        #     echo "ninja"
-        #     ninja --version
+            echo "ninja"
+            ninja --version
 
-        #     echo "beautysh"
-        #     beautysh --version
-
-        #     echo "cmake-format"
-        #     cmake-format --version
-        - name: Configure build
+            echo "cmake-format"
+            cmake-format --version
+        - name: Configure build (Windows)
+          if: runner.os == 'Windows'
           shell: bash
           run: |
             cmake -G"Ninja" -S. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
             ln -sf build/compile_commands.json .
-        # - name: Check shell formatting
-        #   shell: bash
-        #   working-directory: ./utils
-        #   run: |
-        #     ./beautysh.bash check
-        # - name: Check build formatting
-        #   shell: bash
-        #   working-directory: ./utils
-        #   run: |
-        #     ./cmake-format.bash check
-        # - name: Check include guards
-        #   shell: bash
-        #   working-directory: ./utils
-        #   run: |
-        #     ./include-guards.bash check
-        # - name: Check test cases
-        #   shell: bash
-        #   working-directory: ./utils
-        #   run: |
-        #     ./test-cases.bash check
-        # - name: Check code formatting
-        #   shell: bash
-        #   working-directory: ./utils
-        #   run: |
-        #     ./clang-format.bash check
-        # - name: Check static analysis
-        #   shell: bash
-        #   working-directory: ./utils
-        #   run: |
-        #     ./clang-tidy.bash check
+        - name: Configure build (Linux or macOS)
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          run: |
+            cmake -G"Ninja" -S. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES -DENABLE_CMAKE_FORMAT=ON -DENABLE_BLACK=ON -DENABLE_CLANG_FORMAT=ON -DENABLE_CLANG_TIDY=ON
+            ln -sf build/compile_commands.json .
+        - name: Check CMake files
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          working-directory: ./build
+          run: |
+            cmake --build . --target check-cmake-format
+        - name: Check Python files
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          working-directory: ./build
+          run: |
+            cmake --build . --target check-black
+        - name: Check C++ files (1)
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          working-directory: ./build
+          run: |
+            cmake --build . --target check-clang-format
+        - name: Check C++ files (2)
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          working-directory: ./build
+          run: |
+            cmake --build . --target check-clang-tidy
         - name: Run build
           shell: bash
           working-directory: ./build
