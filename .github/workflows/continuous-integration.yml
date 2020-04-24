@@ -17,9 +17,9 @@ jobs:
             matrix:
                 build_type: [Debug, Release]#, RelWithDebInfo, MinSizeRel]
                 cfg:
-                    # - { name: "[Windows] MSVC",  os: windows-latest, cc: cl,    cxx: cl }
-                    # - { name: "[Windows] MinGW", os: windows-latest, cc: gcc,   cxx: g++ }
-                    # - { name: "[Windows] Clang", os: windows-latest, cc: clang, cxx: clang++ }
+                    - { name: "[Windows] MSVC",  os: windows-latest, cc: cl,    cxx: cl }
+                    - { name: "[Windows] MinGW", os: windows-latest, cc: gcc,   cxx: g++ }
+                    - { name: "[Windows] Clang", os: windows-latest, cc: clang, cxx: clang++ }
                     - { name: "[Linux] GNU",     os: ubuntu-latest,  cc: gcc-9, cxx: g++-9 }
                     - { name: "[Linux] Clang",   os: ubuntu-latest,  cc: clang, cxx: clang++ }
                     - { name: "[macOS] GNU",     os: macos-latest,   cc: gcc,   cxx: g++ }
@@ -41,11 +41,11 @@ jobs:
             message(NOTICE "Using host CMAKE version: ${CMAKE_VERSION}")
 
             if("${{ runner.os }}" STREQUAL "Windows")
-                set(llvm_url "https://ziglang.org/deps/llvm%2bclang%2blld-${llvm_version}-x86_64-windows-msvc-release-mt.tar.xz")
+                set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/LLVM-${llvm_version}-win64.exe")
                 set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-win64-x64.zip")
                 set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-win.zip")
 
-                set(llvm_dir "llvm+clang+lld-${llvm_version}-x86_64-windows-msvc-release-mt/bin")
+                set(llvm_dir "llvm/bin")
                 set(cmake_dir "cmake-${cmake_version}-win64-x64/bin")
             elseif("${{ runner.os }}" STREQUAL "Linux")
                 set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/clang+llvm-${llvm_version}-x86_64-linux-gnu-ubuntu-16.04.tar.xz")
@@ -66,7 +66,11 @@ jobs:
             message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}")
 
             file(DOWNLOAD "${llvm_url}" ./llvm.zip SHOW_PROGRESS)
-            execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./llvm.zip)
+            if("${{ runner.os }}" STREQUAL "Windows")
+                execute_process(COMMAND 7z x ./llvm.zip -y -o"llvm")
+            else()
+                execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./llvm.zip)
+            endif()
             message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}/${llvm_dir}")
 
             file(DOWNLOAD "${cmake_url}" ./cmake.zip SHOW_PROGRESS)
