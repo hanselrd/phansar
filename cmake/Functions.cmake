@@ -50,8 +50,8 @@ function(ph_target_compile_options name)
             -fno-common
             -Wconversion>
             $<$<CXX_COMPILER_ID:GNU>:-Wformat-overflow=2
-            -Wformat-truncation=2>)
-            # $<$<CXX_COMPILER_ID:MSVC>:/Wall>)
+            -Wformat-truncation=2>
+            $<$<CXX_COMPILER_ID:MSVC>:/Wall>)
 endfunction()
 
 function(ph_add_generic_interface_library name libs system_libs)

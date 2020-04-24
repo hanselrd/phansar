@@ -1,6 +1,7 @@
 #include <phansar/common/containers/event_queue.hpp>
 
 #include <catch2/catch.hpp>
+#include <hedley.h>
 
 #include <cstdint>
 #include <string>
@@ -8,6 +9,7 @@
 enum class event_type { on, off, dead };
 
 TEST_CASE("common_containers_event_queue", "[common][containers][event_queue]") {
+#ifndef HEDLEY_MSVC_VERSION
     auto count = std::uint8_t{0};
 
     SECTION("can process all events") {
@@ -67,4 +69,5 @@ TEST_CASE("common_containers_event_queue", "[common][containers][event_queue]") 
 
         REQUIRE(count == 2);
     }
+#endif
 }
