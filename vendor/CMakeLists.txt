@@ -1,5 +1,3 @@
-project(vendor)
-
 find_package(Git REQUIRED)
 
 function(check_git_commit_hash name source_dir branch)

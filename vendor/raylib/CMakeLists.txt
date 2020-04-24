@@ -11,6 +11,7 @@ endif()
 set(BUILD_EXAMPLES
     OFF
     CACHE BOOL "")
+set(CMAKE_POLICY_DEFAULT_CMP0072 NEW)
 add_subdirectory(${raylib_git_SOURCE_DIR} ${raylib_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 # cmake-format: off
