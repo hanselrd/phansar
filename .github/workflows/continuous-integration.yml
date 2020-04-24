@@ -5,8 +5,8 @@ on: [push, pull_request]
 env:
     CMAKE_GENERATOR: Ninja
     GCC_VERSION: 9
-    CLANG_VERSION: 9
-    XCODE_VERSION: 11.3
+    LLVM_VERSION: 9
+    LLVM_VERSION_FULL: 9.0.1
 
 jobs:
     build:
@@ -82,6 +82,9 @@ jobs:
               Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
               scoop install ninja llvm --global
 
+              curl -fsSL -o LLVM.exe https://github.com/llvm/llvm-project/releases/download/llvmorg-$env:LLVM_VERSION_FULL/LLVM-$env:LLVM_VERSION_FULL-win64.exe
+              7z x LLVM.exe -y -o"C:/Program Files/LLVM"
+
               if ("${{ matrix.compiler }}" -eq "gcc") {
                   scoop install gcc --global
                   echo "::set-env name=CC::gcc"
@@ -94,44 +97,41 @@ jobs:
                   echo "::set-env name=CXX::${{ matrix.compiler }}"
               }
 
-              echo "::set-env name=PATH::$env:PATH"
+              echo "::set-env name=PATH::C:/Program Files/LLVM/bin;$env:PATH"
 
         - name: Install (Linux)
           if: runner.os == 'Linux'
           shell: bash
           run: |
-              sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-$CLANG_VERSION main"
+              sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-$LLVM_VERSION main"
 
               sudo apt-get update -y
 
-              sudo apt-get install -y ninja-build clang-tools-$CLANG_VERSION clang-format-$CLANG_VERSION clang-tidy-$CLANG_VERSION libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+              sudo apt-get install -y ninja-build clang-tools-$LLVM_VERSION clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
 
               if [ "${{ matrix.compiler }}" == "gcc" ]; then
                   sudo apt-get install -y g++-$GCC_VERSION
                   echo "::set-env name=CC::gcc-$GCC_VERSION"
                   echo "::set-env name=CXX::g++-$GCC_VERSION"
               elif [ "${{ matrix.compiler }}" == "clang" ]; then
-                  sudo apt-get install -y clang-$CLANG_VERSION
-                  echo "::set-env name=CC::clang-$CLANG_VERSION"
-                  echo "::set-env name=CXX::clang++-$CLANG_VERSION"
+                  sudo apt-get install -y clang-$LLVM_VERSION
+                  echo "::set-env name=CC::clang-$LLVM_VERSION"
+                  echo "::set-env name=CXX::clang++-$LLVM_VERSION"
               fi
 
         - name: Install (macOS)
           if: runner.os == 'macOS'
           shell: bash
           run: |
-              brew install ninja llvm@$CLANG_VERSION
+              brew install ninja llvm@$LLVM_VERSION
 
-              ls -ls /usr/local/opt/llvm@$CLANG_VERSION/
-              echo "::add-path::/usr/local/opt/llvm@$CLANG_VERSION/bin"
+              echo "::add-path::/usr/local/opt/llvm@$LLVM_VERSION/bin"
 
               if [ "${{ matrix.compiler }}" == "gcc" ]; then
                   brew install gcc@$GCC_VERSION
                   echo "::set-env name=CC::gcc-$GCC_VERSION"
                   echo "::set-env name=CXX::g++-$GCC_VERSION"
               elif [ "${{ matrix.compiler }}" == "clang" ]; then
-                  ls -ls /Applications/
-                  sudo xcode-select -switch /Applications/Xcode_$XCODE_VERSION.app
                   echo "::set-env name=CC::clang"
                   echo "::set-env name=CXX::clang++"
               fi
