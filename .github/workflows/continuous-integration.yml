@@ -3,7 +3,7 @@ name: Continuous Integration
 on: [push, pull_request]
 
 env:
-    LLVM_VERSION: 10.0.0
+    LLVM_VERSION: 9.0.1
     CMAKE_VERSION: 3.16.6
     NINJA_VERSION: 1.10.0
 
@@ -18,7 +18,7 @@ jobs:
                 build_type: [Debug, Release]#, RelWithDebInfo, MinSizeRel]
                 cfg:
                     # - { name: "[Windows] MSVC",  os: windows-latest, cc: cl,    cxx: cl }
-                    - { name: "[Windows] MinGW", os: windows-latest, cc: gcc,   cxx: g++ }
+                    # - { name: "[Windows] MinGW", os: windows-latest, cc: gcc,   cxx: g++ }
                     # - { name: "[Windows] Clang", os: windows-latest, cc: clang, cxx: clang++ }
                     - { name: "[Linux] GNU",     os: ubuntu-latest,  cc: gcc-9, cxx: g++-9 }
                     - { name: "[Linux] Clang",   os: ubuntu-latest,  cc: clang, cxx: clang++ }
@@ -48,7 +48,7 @@ jobs:
                 set(llvm_dir "llvm+clang+lld-${llvm_version}-x86_64-windows-msvc-release-mt/bin")
                 set(cmake_dir "cmake-${cmake_version}-win64-x64/bin")
             elseif("${{ runner.os }}" STREQUAL "Linux")
-                set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/clang+llvm-${llvm_version}-x86_64-linux-gnu-ubuntu-18.04.tar.xz")
+                set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/clang+llvm-${llvm_version}-x86_64-linux-gnu-ubuntu-16.04.tar.xz")
                 set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-Linux-x86_64.tar.gz")
                 set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-linux.zip")
 
@@ -90,8 +90,8 @@ jobs:
             python -m pip install --upgrade pip
             pip install pipenv pyyaml beautysh cmake-format black
             pipenv install
-            # pip install -r requirements.txt
-        # - name: Software versions
+        # - name: Software versions (Linux)
+        #   if: runner.os == 'Linux'
         #   shell: bash
         #   run: |
         #     echo "clang-format"
