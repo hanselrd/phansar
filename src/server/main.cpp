@@ -1,7 +1,13 @@
 #include <phansar/common.hpp>
 
-#define SOL_ALL_SAFETIES_ON 1
-#include <sol/sol.hpp>
+#include <pybind11/embed.h>
+namespace py = pybind11;
+
+// NOLINTNEXTLINE(modernize-use-trailing-return-type)
+PYBIND11_EMBEDDED_MODULE(py_phansar, m) {
+    auto fast_calc = m.def_submodule("fast_calc");
+    fast_calc.def("add", [](int i, int j) { return i + j; });
+}
 
 auto main(int argc, char * argv[]) -> int {
     phansar::common::system::init(argc, argv);
@@ -14,11 +20,14 @@ auto main(int argc, char * argv[]) -> int {
     LOGI("Port: {}", phansar::common::config::get_port());
     LOGI("Num Threads: {}", phansar::common::config::get_num_threads());
 
-    auto lua = sol::state{};
-    lua.open_libraries(sol::lib::base, sol::lib::package);
-    lua.script(R"lua(
-        print('test test test!')
-    )lua");
+    auto guard = py::scoped_interpreter{};
+    py::print("Hello world!");
+    py::exec(R"python(
+        from py_phansar import fast_calc
+
+        print("Hello, {name}! The answer is {number}".format(name="Bob", number=42))
+        print("{} + {} = {}".format(3, 4, fast_calc.add(3, 4)))
+    )python");
 
     phansar::common::system::shutdown();
 

@@ -6,7 +6,6 @@
     Options:
         -h, --help                                  Show this screen
         -v, --version                               Show version
-        -j <jobs>, --jobs=<jobs>                    Number of jobs in parallel [default: 0]
         -t <threshold>, --threshold=<threshold>     Score threshold [default: 50]
 """
 

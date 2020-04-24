@@ -6,7 +6,6 @@ env:
     LLVM_VERSION: 10.0.0
     CMAKE_VERSION: 3.16.6
     NINJA_VERSION: 1.10.0
-    GLFW_VERSION: 3.3.2
 
 jobs:
     build:
@@ -38,7 +37,6 @@ jobs:
             set(llvm_version $ENV{LLVM_VERSION})
             set(cmake_version $ENV{CMAKE_VERSION})
             set(ninja_version $ENV{NINJA_VERSION})
-            set(glfw_version $ENV{GLFW_VERSION})
 
             message(NOTICE "Using host CMAKE version: ${CMAKE_VERSION}")
 
@@ -46,7 +44,6 @@ jobs:
                 set(llvm_url "https://ziglang.org/deps/llvm%2bclang%2blld-${llvm_version}-x86_64-windows-msvc-release-mt.tar.xz")
                 set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-win64-x64.zip")
                 set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-win.zip")
-                set(glfw_url "https://github.com/glfw/glfw/releases/download/${glfw_version}/glfw-${glfw_version}.bin.WIN64.zip")
 
                 set(llvm_dir "llvm+clang+lld-${llvm_version}-x86_64-windows-msvc-release-mt/bin")
                 set(cmake_dir "cmake-${cmake_version}-win64-x64/bin")
@@ -54,7 +51,6 @@ jobs:
                 set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/clang+llvm-${llvm_version}-x86_64-linux-gnu-ubuntu-18.04.tar.xz")
                 set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-Linux-x86_64.tar.gz")
                 set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-linux.zip")
-                set(glfw_url "https://github.com/glfw/glfw/releases/download/${glfw_version}/glfw-${glfw_version}.zip")
 
                 set(llvm_dir "clang+llvm-${llvm_version}-x86_64-linux-gnu-ubuntu-18.04/bin")
                 set(cmake_dir "cmake-${cmake_version}-Linux-x86_64/bin")
@@ -62,7 +58,6 @@ jobs:
                 set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/clang+llvm-${llvm_version}-x86_64-apple-darwin.tar.xz")
                 set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-Darwin-x86_64.tar.gz")
                 set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-mac.zip")
-                set(glfw_url "https://github.com/glfw/glfw/releases/download/${glfw_version}/glfw-${glfw_version}.bin.MACOS.zip")
 
                 set(llvm_dir "clang+llvm-${llvm_version}-x86_64-apple-darwin/bin")
                 set(cmake_dir "cmake-${cmake_version}-Darwin-x86_64/CMake.app/Contents/bin")
@@ -80,9 +75,6 @@ jobs:
 
             file(DOWNLOAD "${ninja_url}" ./ninja.zip SHOW_PROGRESS)
             execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ninja.zip)
-
-            file(DOWNLOAD "${glfw_url}" ./glfw.zip SHOW_PROGRESS)
-            execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./glfw.zip)
         - name: Set up system
           shell: bash
           run: |
@@ -90,13 +82,13 @@ jobs:
                 :
             elif [ "${{ runner.os }}" == "Linux" ]; then
                 sudo apt update -y
-                sudo apt install -y libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+                sudo apt install -y libglfw3-dev
             elif [ "${{ runner.os }}" == "macOS" ]; then
                 :
             fi
 
             python -m pip install --upgrade pip
-            pip install pipenv pyyaml beautysh cmake-format
+            pip install pipenv pyyaml beautysh cmake-format black
             pipenv install
             # pip install -r requirements.txt
         # - name: Software versions

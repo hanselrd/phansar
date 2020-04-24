@@ -5,7 +5,6 @@
 #include <raygui.h>
 #include <raylib.h>
 #include <ricons.h>
-#include <sol/sol.hpp>
 
 #include <array>
 #include <cstring>
