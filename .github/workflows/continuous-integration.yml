@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 env:
     LLVM_VERSION: 9.0.1
-    CMAKE_VERSION: 3.16.6
+    CMAKE_VERSION: 3.17.1
     NINJA_VERSION: 1.10.0
 
 jobs:
