@@ -1,0 +1,166 @@
+name: Continuous Integration
+
+on: [push, pull_request]
+
+env:
+    LLVM_VERSION: 9.0.1
+    CMAKE_VERSION: 3.17.1
+    NINJA_VERSION: 1.10.0
+
+jobs:
+    build:
+        name: ${{ matrix.cfg.name }} ${{ matrix.build_type }}
+        runs-on: ${{ matrix.cfg.os }}
+
+        strategy:
+            fail-fast: false
+            matrix:
+                build_type: [Debug, Release]#, RelWithDebInfo, MinSizeRel]
+                cfg:
+                    - { name: "[Windows] MSVC",  os: windows-latest, cc: cl,    cxx: cl }
+                    - { name: "[Windows] MinGW", os: windows-latest, cc: gcc,   cxx: g++ }
+                    - { name: "[Windows] Clang", os: windows-latest, cc: clang, cxx: clang++ }
+                    - { name: "[Linux] GNU",     os: ubuntu-latest,  cc: gcc-9, cxx: g++-9 }
+                    - { name: "[Linux] Clang",   os: ubuntu-latest,  cc: clang, cxx: clang++ }
+                    - { name: "[macOS] GNU",     os: macos-latest,   cc: gcc,   cxx: g++ }
+                    - { name: "[macOS] Clang",   os: macos-latest,   cc: clang, cxx: clang++ }
+
+        steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-python@v1
+          with:
+            python-version: '3.x'
+            architecture: 'x64'
+        - name: Download dependencies
+          shell: cmake -P {0}
+          run: |
+            set(llvm_version $ENV{LLVM_VERSION})
+            set(cmake_version $ENV{CMAKE_VERSION})
+            set(ninja_version $ENV{NINJA_VERSION})
+
+            message(NOTICE "Using host CMAKE version: ${CMAKE_VERSION}")
+
+            if("${{ runner.os }}" STREQUAL "Windows")
+                set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/LLVM-${llvm_version}-win64.exe")
+                set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-win64-x64.zip")
+                set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-win.zip")
+
+                set(llvm_dir "llvm/bin")
+                set(cmake_dir "cmake-${cmake_version}-win64-x64/bin")
+            elseif("${{ runner.os }}" STREQUAL "Linux")
+                set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/clang+llvm-${llvm_version}-x86_64-linux-gnu-ubuntu-16.04.tar.xz")
+                set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-Linux-x86_64.tar.gz")
+                set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-linux.zip")
+
+                set(llvm_dir "clang+llvm-${llvm_version}-x86_64-linux-gnu-ubuntu-16.04/bin")
+                set(cmake_dir "cmake-${cmake_version}-Linux-x86_64/bin")
+            elseif("${{ runner.os }}" STREQUAL "macOS")
+                set(llvm_url "https://github.com/llvm/llvm-project/releases/download/llvmorg-${llvm_version}/clang+llvm-${llvm_version}-x86_64-apple-darwin.tar.xz")
+                set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-Darwin-x86_64.tar.gz")
+                set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-mac.zip")
+
+                set(llvm_dir "clang+llvm-${llvm_version}-x86_64-apple-darwin/bin")
+                set(cmake_dir "cmake-${cmake_version}-Darwin-x86_64/CMake.app/Contents/bin")
+            endif()
+
+            message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}")
+
+            file(DOWNLOAD "${llvm_url}" ./llvm.zip SHOW_PROGRESS)
+            if("${{ runner.os }}" STREQUAL "Windows")
+                execute_process(COMMAND 7z x ./llvm.zip -y -o"llvm")
+            else()
+                execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./llvm.zip)
+            endif()
+            message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}/${llvm_dir}")
+
+            file(DOWNLOAD "${cmake_url}" ./cmake.zip SHOW_PROGRESS)
+            execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./cmake.zip)
+            message(NOTICE "::add-path::${CMAKE_SOURCE_DIR}/${cmake_dir}")
+
+            file(DOWNLOAD "${ninja_url}" ./ninja.zip SHOW_PROGRESS)
+            execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ninja.zip)
+        - name: Set up system
+          shell: bash
+          run: |
+            if [ "${{ runner.os }}" == "Windows" ]; then
+                :
+            elif [ "${{ runner.os }}" == "Linux" ]; then
+                sudo apt update -y
+                sudo apt install -y libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+            elif [ "${{ runner.os }}" == "macOS" ]; then
+                :
+            fi
+
+            python -m pip install --upgrade pip
+            pip install pipenv pyyaml cmake-format black
+            pipenv install
+        - name: Software versions
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          run: |
+            echo "clang-format"
+            clang-format --version
+
+            echo "clang-tidy"
+            clang-tidy --version
+
+            echo "clang-apply-replacements"
+            clang-apply-replacements --version
+
+            echo "cmake"
+            cmake --version
+
+            echo "ctest"
+            ctest --version
+
+            echo "ninja"
+            ninja --version
+
+            echo "cmake-format"
+            cmake-format --version
+        - name: Configure build (Windows)
+          if: runner.os == 'Windows'
+          shell: bash
+          run: |
+            cmake -G"Ninja" -S. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES
+            ln -sf build/compile_commands.json .
+        - name: Configure build (Linux or macOS)
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          run: |
+            cmake -G"Ninja" -S. -Bbuild -DCMAKE_C_COMPILER=${{ matrix.cfg.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.cfg.cxx }} -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_EXPORT_COMPILE_COMMANDS=YES -DENABLE_CMAKE_FORMAT=ON -DENABLE_BLACK=ON -DENABLE_CLANG_FORMAT=ON -DENABLE_CLANG_TIDY=ON
+            ln -sf build/compile_commands.json .
+        - name: Check CMake files
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          working-directory: ./build
+          run: |
+            cmake --build . --target check-cmake-format
+        - name: Check Python files
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          working-directory: ./build
+          run: |
+            cmake --build . --target check-black
+        - name: Check C++ files (1)
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          working-directory: ./build
+          run: |
+            cmake --build . --target check-clang-format
+        - name: Check C++ files (2)
+          if: runner.os == 'Linux' || runner.os == 'macOS'
+          shell: bash
+          working-directory: ./build
+          run: |
+            cmake --build . --target check-clang-tidy
+        - name: Run build
+          shell: bash
+          working-directory: ./build
+          run: |
+            cmake --build .
+        - name: Run tests
+          shell: bash
+          working-directory: ./build
+          run: |
+            ctest -VV --timeout 30 -E "pkg-config"
