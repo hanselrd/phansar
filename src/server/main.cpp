@@ -1,7 +1,6 @@
 #include <phansar/common.hpp>
 
-#include <pybind11/embed.h>
-namespace py = pybind11;
+#include <phansar/vendor/pybind11.hpp>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
 PYBIND11_EMBEDDED_MODULE(py_phansar, m) {

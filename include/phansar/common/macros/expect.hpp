@@ -3,7 +3,7 @@
 
 #include <phansar/common/log.hpp>
 
-#include <hedley.h>
+#include <phansar/vendor/hedley.hpp>
 
 #ifndef NDEBUG
 #    define EXPECT_TRUE(condition)                                                                 \

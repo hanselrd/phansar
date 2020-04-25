@@ -4,7 +4,7 @@
 #include <phansar/common/memory.hpp>
 #include <phansar/common/system.hpp>
 
-#include <plibsys.h>
+#include <phansar/vendor/plibsys.hpp>
 
 #include <cstdlib>
 #include <string>

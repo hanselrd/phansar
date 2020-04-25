@@ -1,6 +1,6 @@
 #include <phansar/common/containers/stdlib.hpp>
 
-#include <catch2/catch.hpp>
+#include <phansar/vendor/catch2.hpp>
 
 TEST_CASE("common_containers_stdlib", "[common][containers][stdlib]") {
     SECTION("can use vector") {

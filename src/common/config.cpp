@@ -1,6 +1,6 @@
 #include <phansar/common/config.hpp>
 
-#include <docopt.h>
+#include <phansar/vendor/docopt.hpp>
 
 #include <iterator>
 #include <string>

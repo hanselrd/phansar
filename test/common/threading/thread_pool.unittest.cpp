@@ -1,6 +1,6 @@
 #include <phansar/common/threading/thread_pool.hpp>
 
-#include <catch2/catch.hpp>
+#include <phansar/vendor/catch2.hpp>
 
 #include <atomic>
 #include <vector>
