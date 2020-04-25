@@ -1,7 +1,7 @@
 #include <phansar/common/log.hpp>
 
 #include <phansar/vendor/plibsys.hpp>
-#include <phansar/vendor/spdlog.hpp>
+#include <phansar/vendor/spdlog_private.hpp>
 
 #include <cstdlib>
 
