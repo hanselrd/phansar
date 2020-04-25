@@ -17,7 +17,7 @@ jobs:
             matrix:
                 name: [
                     windows-latest-cl,
-                    windows-latest-clang-cl,
+                    # windows-latest-clang-cl,
                     # windows-latest-clang,
                     # windows-latest-gcc,
                     ubuntu-latest-gcc,
@@ -31,9 +31,9 @@ jobs:
                       os: windows-latest
                       compiler: cl
 
-                    - name: windows-latest-clang-cl
-                      os: windows-latest
-                      compiler: clang-cl
+                    # - name: windows-latest-clang-cl
+                    #   os: windows-latest
+                    #   compiler: clang-cl
 
                     # - name: windows-latest-clang
                     #   os: windows-latest
