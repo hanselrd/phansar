@@ -1,10 +1,8 @@
 #include <phansar/common.hpp>
 
-#define RAYGUI_SUPPORT_ICONS
-#include <hedley.h>
-#include <raygui.h>
-#include <raylib.h>
-#include <ricons.h>
+#include <phansar/vendor/hedley.hpp>
+#include <phansar/vendor/raygui.hpp>
+#include <phansar/vendor/raylib.hpp>
 
 #include <array>
 #include <cstring>

@@ -1,9 +1,7 @@
 #include <phansar/common/log.hpp>
 
-#include <plibsys.h>
-#include <spdlog/sinks/rotating_file_sink.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
+#include <phansar/vendor/plibsys.hpp>
+#include <phansar/vendor/spdlog.hpp>
 
 #include <cstdlib>
 

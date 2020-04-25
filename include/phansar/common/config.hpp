@@ -1,7 +1,7 @@
 #ifndef PHANSAR_COMMON_CONFIG_HPP
 #define PHANSAR_COMMON_CONFIG_HPP
 
-#include <spdlog/common.h>
+#include <phansar/vendor/spdlog.hpp>
 
 #include <cstddef>
 #include <cstdint>

@@ -1,7 +1,7 @@
 #include <phansar/common/containers/event_queue.hpp>
 
-#include <catch2/catch.hpp>
-#include <hedley.h>
+#include <phansar/vendor/catch2.hpp>
+#include <phansar/vendor/hedley.hpp>
 
 #include <cstdint>
 #include <string>

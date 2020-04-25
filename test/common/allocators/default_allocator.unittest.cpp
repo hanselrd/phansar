@@ -1,6 +1,6 @@
 #include <phansar/common/allocators/default_allocator.hpp>
 
-#include <catch2/catch.hpp>
+#include <phansar/vendor/catch2.hpp>
 
 #include <string>
 #include <tuple>

@@ -1,6 +1,6 @@
 #include <phansar/common/strings/stdlib.hpp>
 
-#include <catch2/catch.hpp>
+#include <phansar/vendor/catch2.hpp>
 
 #include <tuple>
 #include <type_traits>
