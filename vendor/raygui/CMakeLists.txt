@@ -1,7 +1,7 @@
 FetchContent_Declare(
     raygui_git
     GIT_REPOSITORY https://github.com/raysan5/raygui.git
-    GIT_TAG 0fdacc87f6de77146850fcaf88c582cbd7219220)
+    GIT_TAG e689c710e46683924df890027370bbf99a6e1215)
 FetchContent_GetProperties(raygui_git)
 if(NOT raygui_git_POPULATED)
     FetchContent_Populate(raygui_git)

@@ -18,9 +18,9 @@ void init(int argc, const char * const * argv, bool enable_config) {
     }
 
     auto vtable    = PMemVTable{};
-    vtable.malloc  = &phansar::common::memory::malloc;
-    vtable.realloc = &phansar::common::memory::realloc;
-    vtable.free    = &phansar::common::memory::free;
+    vtable.malloc  = &memory::malloc;
+    vtable.realloc = &memory::realloc;
+    vtable.free    = &memory::free;
 
     p_libsys_init_full(&vtable);
 }

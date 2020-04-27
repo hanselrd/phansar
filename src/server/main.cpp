@@ -27,6 +27,13 @@ auto main(int argc, char * argv[]) -> int {
         print("Hello, {name}! The answer is {number}".format(name="Bob", number=42))
         print("{} + {} = {}".format(3, 4, fast_calc.add(3, 4)))
     )python");
+    py::exec(R"python(
+        from inspect import currentframe, getframeinfo
+
+        frameinfo = getframeinfo(currentframe())
+        print(frameinfo)
+        print(frameinfo.filename, frameinfo.lineno)
+    )python");
 
     phansar::common::system::shutdown();
 
