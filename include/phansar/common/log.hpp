@@ -7,40 +7,26 @@
 #ifdef NDEBUG
 #    define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO
 #else
-#    define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
+#    define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
 #endif
 #include <phansar/vendor/spdlog.hpp>
 
-#include <algorithm>
 #include <cctype>
 #include <cstddef>
 #include <cstdint>
 #include <string>
 #include <string_view>
 
-/* #if defined(__FILE__) && defined(__SOURCE_PATH_SIZE__) */
-/* #    define __FILENAME__ (__FILE__ + __SOURCE_PATH_SIZE__) */
-/* #else */
-/* #    define __FILENAME__ "unknown" */
-/* #endif */
-
 #define LOG_LOGGER_CALL(logger, level, ...)                                                        \
     do {                                                                                           \
         if (logger->should_log(level) || logger->should_backtrace()) {                             \
-            auto file  = std::string{__FILE__};                                                    \
-            file       = file.substr(file.find_last_of('/') + 1);                                  \
-            auto pos   = std::size_t{0};                                                           \
-            auto index = std::size_t{0};                                                           \
-            while ((pos = file.find_first_of("._")) != std::string::npos) {                        \
-                ++index;                                                                           \
-                file.erase(index, pos - index + 1);                                                \
-            }                                                                                      \
-            std::transform(file.begin(), file.end(), file.begin(), [](unsigned char c) {           \
-                return std::toupper(c);                                                            \
-            });                                                                                    \
-            logger->log(spdlog::source_loc{file.c_str(), __LINE__, SPDLOG_FUNCTION},               \
-                        level,                                                                     \
-                        __VA_ARGS__);                                                              \
+            logger->log(                                                                           \
+                spdlog::source_loc{                                                                \
+                    phansar::common::log::detail::parse_file_name(__FILE__).c_str(),               \
+                    __LINE__,                                                                      \
+                    SPDLOG_FUNCTION},                                                              \
+                level,                                                                             \
+                __VA_ARGS__);                                                                      \
         }                                                                                          \
     } while (0)
 
@@ -173,6 +159,10 @@
 #define LOGW_IF LOG_WARN_IF
 #define LOGE_IF LOG_ERROR_IF
 #define LOGC_IF LOG_CRITICAL_IF
+
+namespace phansar::common::log::detail {
+auto parse_file_name(std::string_view file_name) -> std::string;
+}
 
 namespace phansar::common::log {
 void init(std::string_view          log_file,
