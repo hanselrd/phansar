@@ -1,6 +1,8 @@
 #include <phansar/common/log.hpp>
 #include <phansar/common/threading/thread_pool.hpp>
 
+#include <phansar/vendor/rangev3.hpp>
+
 namespace phansar::common::threading {
 thread_pool::thread_pool(std::size_t nthreads) : _queues{nthreads} {
     for (auto i = std::size_t{0}; i < nthreads; ++i) {
@@ -33,25 +35,17 @@ thread_pool::thread_pool(std::size_t nthreads) : _queues{nthreads} {
 thread_pool::~thread_pool() {
     _running = false;
 
-    for (auto & t : _threads) {
+    ranges::for_each(_threads, [](auto & t) {
         if (t.joinable()) {
             t.join();
         }
-    }
+    });
 }
 
 void thread_pool::wait_done() {
-    auto nwork = std::size_t{0};
-    while (true) {
-        for (auto & q : _queues) {
-            nwork += q.lock()->size();
-        }
-
-        if (nwork > 0) {
-            nwork = 0;
-        } else {
-            return;
-        }
+    while (ranges::accumulate(_queues, 0, [](std::size_t sum, auto & q) {
+               return sum + q.lock()->size();
+           }) > 0) {
     }
 }
 } // namespace phansar::common::threading

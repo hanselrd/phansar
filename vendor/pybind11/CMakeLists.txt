@@ -12,7 +12,7 @@ add_subdirectory(${pybind11_git_SOURCE_DIR} ${pybind11_git_BINARY_DIR} EXCLUDE_F
 
 # cmake-format: off
 set(system_libs
-    pybind11::pybind11)
+    pybind11)
 # cmake-format: on
 
 ph_add_generic_vendor_interface_library(ph_vendor_pybind11 "" "" "${system_libs}")

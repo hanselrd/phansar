@@ -1,5 +1,7 @@
 #include <phansar/common/containers/event_queue.hpp>
 
+#include <phansar/vendor/rangev3.hpp>
+
 namespace phansar::common::containers {
 template <class Event, class T>
 template <class... Args, class>
@@ -7,17 +9,9 @@ event_queue<Event, T>::event_queue(Args &&... args) : _whitelist{std::forward<Ar
 
 template <class Event, class T>
 void event_queue<Event, T>::push(const Event & event, const T & t) {
-    if (! _whitelist.empty()) {
-        auto found = bool{false};
-        for (const auto & w : _whitelist) {
-            if (w == event) {
-                found = true;
-            }
-        }
-
-        if (! found) {
-            return;
-        }
+    if (! _whitelist.empty() &&
+        ranges::none_of(_whitelist, [&event](const auto & w) { return w == event; })) {
+        return;
     }
 
     _queue.emplace(std::make_pair(event, t));
@@ -31,12 +25,9 @@ void event_queue<Event, T>::subscribe(subscribe_function f) {
 template <class Event, class T>
 void event_queue<Event, T>::update() {
     while (! _queue.empty()) {
-        auto & [event, t] = _queue.front();
-        _queue.pop();
+        ranges::for_each(_subscribers, [this](const auto & s) { std::apply(s, _queue.front()); });
 
-        for (const auto & s : _subscribers) {
-            s(event, t);
-        }
+        _queue.pop();
     }
 }
 } // namespace phansar::common::containers
