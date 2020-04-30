@@ -11,10 +11,10 @@
 namespace phansar::common::log::detail {
 auto parse_file_name(std::string_view file_name) -> std::string {
     return file_name | ranges::views::split('/') | ranges::views::drop_while([](const auto & s) {
-               return ! ranges::equal(s, ranges::view::c_str("include")) &&
-                      ! ranges::equal(s, ranges::view::c_str("src")) &&
-                      ! ranges::equal(s, ranges::view::c_str("test")) &&
-                      ! ranges::equal(s, ranges::view::c_str("vendor"));
+               return ! ranges::equal(s, ranges::views::c_str("include")) &&
+                      ! ranges::equal(s, ranges::views::c_str("src")) &&
+                      ! ranges::equal(s, ranges::views::c_str("test")) &&
+                      ! ranges::equal(s, ranges::views::c_str("vendor"));
            }) |
            ranges::views::drop(1) | ranges::views::join('/') | ranges::to<std::string>();
 }
