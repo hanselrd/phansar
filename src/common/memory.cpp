@@ -42,6 +42,7 @@ auto realloc(void * mem, std::size_t nbytes) -> void * {
 void free(void * mem) {
     ASSERT(mem != nullptr);
 
+    // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
     std::free(mem);
     LOGT("Freed {}", mem);
 }
