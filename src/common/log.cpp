@@ -1,5 +1,6 @@
 #include <phansar/common/log.hpp>
 
+#include <phansar/vendor/hedley.hpp>
 #include <phansar/vendor/plibsys.hpp>
 #include <phansar/vendor/rangev3.hpp>
 #include <phansar/vendor/spdlog_private.hpp>
@@ -10,6 +11,7 @@
 
 namespace phansar::common::log::detail {
 auto parse_file_name(std::string_view file_name) -> std::string {
+#ifndef HEDLEY_MSVC_VERSION
     return file_name | ranges::views::split('/') | ranges::views::drop_while([](const auto & s) {
                return ! ranges::equal(s, ranges::views::c_str("include")) &&
                       ! ranges::equal(s, ranges::views::c_str("src")) &&
@@ -17,6 +19,9 @@ auto parse_file_name(std::string_view file_name) -> std::string {
                       ! ranges::equal(s, ranges::views::c_str("vendor"));
            }) |
            ranges::views::drop(1) | ranges::views::join('/') | ranges::to<std::string>();
+#else
+    return std::string{file_name};
+#endif
 }
 } // namespace phansar::common::log::detail
 
@@ -28,7 +33,12 @@ void init(std::string_view          log_file,
         return;
     }
 
-    auto pattern = std::string{"[%Y-%m-%d %H:%M:%S.%e %z] [%n] [%t] [%^%l%$] [%g@%#] %v"};
+    auto pattern =
+#ifndef HEDLEY_MSVC_VERSION
+        std::string{"[%Y-%m-%d %H:%M:%S.%e %z] [%n] [%t] [%^%l%$] [%g@%#] %v"};
+#else
+        std::string{"[%Y-%m-%d %H:%M:%S.%e %z] [%n] [%t] [%^%l%$] [%s@%#] %v"};
+#endif
 
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     console_sink->set_pattern(pattern);
@@ -320,11 +330,10 @@ void init(std::string_view          log_file,
 
     auto build_type_str =
 #ifdef NDEBUG
-        "release"
+        "release";
 #else
-        "debug"
+        "debug";
 #endif
-        ;
     LOGI("Build type: {}", build_type_str);
 
     std::atexit([] {

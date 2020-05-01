@@ -192,3 +192,13 @@ jobs:
               cmake --build build
               cd build
               ctest -VV --timeout 30 -E "pkg-config"
+
+        - name: Build and run server
+          shell: bash
+          run: |
+              cmake -E rm -rf build
+              cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+              cmake --build build
+              cd build
+              ./bin/ph_server -h
+              ./bin/ph_server
