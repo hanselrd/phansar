@@ -329,7 +329,7 @@ void init(std::string_view          log_file,
 
     /* LOGI("System RAM: {}", "unknown"); */
 
-    auto build_type_str =
+    const auto * build_type_str =
 #ifdef NDEBUG
         "release";
 #else

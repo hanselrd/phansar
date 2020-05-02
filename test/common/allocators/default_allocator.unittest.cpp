@@ -14,7 +14,7 @@ TEMPLATE_LIST_TEST_CASE("common_allocators_default_allocator",
     auto a = phansar::common::allocators::default_allocator<TestType>{};
 
     SECTION("can allocate and deallocate") {
-        auto ptr = a.allocate(2);
+        auto * ptr = a.allocate(2);
         a.deallocate(ptr, 2);
 
         REQUIRE(ptr != nullptr);
