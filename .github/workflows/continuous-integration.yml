@@ -4,8 +4,8 @@ on: [push, pull_request]
 
 env:
     CMAKE_GENERATOR: Ninja
-    GCC_VERSION: 9
-    LLVM_VERSION: 9
+    GCC_VERSION: 10
+    LLVM_VERSION: 10
 
 jobs:
     build:
