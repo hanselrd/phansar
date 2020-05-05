@@ -1,17 +1,17 @@
 FetchContent_Declare(
     raygui_git
     GIT_REPOSITORY https://github.com/raysan5/raygui.git
-    GIT_TAG e689c710e46683924df890027370bbf99a6e1215)
+    GIT_TAG 8c33be58b25c95be96d230277eaf99281f9a8481)
 FetchContent_GetProperties(raygui_git)
 if(NOT raygui_git_POPULATED)
     FetchContent_Populate(raygui_git)
     check_git_commit_hash(raygui ${raygui_git_SOURCE_DIR} master)
 endif()
 
-set(BUILD_EXAMPLES
+set(BUILD_RAYGUI_EXAMPLES
     OFF
     CACHE BOOL "")
-add_subdirectory(${raygui_git_SOURCE_DIR} ${raygui_git_BINARY_DIR} EXCLUDE_FROM_ALL)
+add_subdirectory(${raygui_git_SOURCE_DIR}/projects/CMake ${raygui_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 # cmake-format: off
 set(sources
