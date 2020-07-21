@@ -1,7 +1,7 @@
 FetchContent_Declare(
     docopt_cpp_git
     GIT_REPOSITORY https://github.com/docopt/docopt.cpp.git
-    GIT_TAG c8a63d5fa606091e5c8044bb7c2b1db3f51f100d)
+    GIT_TAG 6f5de76970be94a6f1e4556d1716593100e285d2)
 FetchContent_GetProperties(docopt_cpp_git)
 if(NOT docopt_cpp_git_POPULATED)
     FetchContent_Populate(docopt_cpp_git)

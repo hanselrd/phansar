@@ -1,7 +1,7 @@
 FetchContent_Declare(
     json_git
     GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG 456478b3c50d60100dbb1fb9bc931f370a2c1c28)
+    GIT_TAG fbec662afab55019654e471b65a846a47a696722)
 FetchContent_GetProperties(json_git)
 if(NOT json_git_POPULATED)
     FetchContent_Populate(json_git)
