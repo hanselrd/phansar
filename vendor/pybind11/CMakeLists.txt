@@ -1,7 +1,7 @@
 FetchContent_Declare(
     pybind11_git
     GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG a54eab92d265337996b8e4b4149d9176c2d428a6)
+    GIT_TAG c4fd1fd9872b731e9df21347a09d094489776801)
 FetchContent_GetProperties(pybind11_git)
 if(NOT pybind11_git_POPULATED)
     FetchContent_Populate(pybind11_git)

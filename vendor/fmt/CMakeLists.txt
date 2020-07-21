@@ -1,7 +1,7 @@
 FetchContent_Declare(
     fmt_git
     GIT_REPOSITORY https://github.com/fmtlib/fmt.git
-    GIT_TAG 7e57cace5dacceaa31e983fdc2d1e279d36f1dca)
+    GIT_TAG d69e2da22122f31f990dbe2e2c4510a651716952)
 FetchContent_GetProperties(fmt_git)
 if(NOT fmt_git_POPULATED)
     FetchContent_Populate(fmt_git)

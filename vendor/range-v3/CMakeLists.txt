@@ -1,7 +1,7 @@
 FetchContent_Declare(
     range_v3_git
     GIT_REPOSITORY https://github.com/ericniebler/range-v3.git
-    GIT_TAG 2e0591c57fce2aca6073ad6e4fdc50d841827864)
+    GIT_TAG 6dd1cb6a03a588031868b6ffb66286e6eaab6714)
 FetchContent_GetProperties(range_v3_git)
 if(NOT range_v3_git_POPULATED)
     FetchContent_Populate(range_v3_git)
