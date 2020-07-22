@@ -152,10 +152,10 @@ jobs:
 
               cmake --build build --target check-black
 
-              if [ "${{ runner.os }}" != "Windows" ]; then
+              # if [ "${{ runner.os }}" != "Windows" ]; then
                   cmake --build build --target check-clang-format
                   cmake --build build --target check-clang-tidy
-              fi
+              # fi
 
         - name: Build and test Debug
           shell: bash
