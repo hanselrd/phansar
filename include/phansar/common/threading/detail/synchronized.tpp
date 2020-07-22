@@ -15,8 +15,11 @@ template <class T, class Mutex>
 auto synchronized<T, Mutex>::proxy::operator=(proxy && other) noexcept
     -> synchronized<T, Mutex>::proxy & {
     if (this != &other) {
-        std::exchange(other._obj_p, nullptr);
-        std::exchange(other._mutex_p, nullptr);
+        if (_mutex_p) {
+            _mutex_p->unlock();
+        }
+        _obj_p = std::exchange(other._obj_p, nullptr);
+        _mutex_p = std::exchange(other._mutex_p, nullptr);
     }
     return *this;
 }
