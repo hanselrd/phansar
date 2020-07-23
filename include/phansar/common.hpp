@@ -4,6 +4,7 @@
 #include <phansar/common/allocators.hpp>
 #include <phansar/common/config.hpp>
 #include <phansar/common/containers.hpp>
+#include <phansar/common/histogram.hpp>
 #include <phansar/common/log.hpp>
 #include <phansar/common/macros.hpp>
 #include <phansar/common/memory.hpp>
