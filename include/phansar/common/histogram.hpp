@@ -22,6 +22,10 @@
         LOGI("  variance: {}", (hist).get_variance());                                             \
         LOGI("  standard deviation: {}", (hist).get_standard_deviation());                         \
         LOGI("  percentiles:");                                                                    \
+        LOGI("    00.01: {}", (hist).get_percentile(.01));                                         \
+        LOGI("    00.10: {}", (hist).get_percentile(.1));                                          \
+        LOGI("    01.00: {}", (hist).get_percentile(1.));                                          \
+        LOGI("    05.00: {}", (hist).get_percentile(5.));                                          \
         LOGI("    10.00: {}", (hist).get_percentile(10.));                                         \
         LOGI("    25.00: {}", (hist).get_percentile(25.));                                         \
         LOGI("    50.00: {}", (hist).get_percentile(50.));                                         \
