@@ -11,5 +11,6 @@
 #include <phansar/common/strings.hpp>
 #include <phansar/common/system.hpp>
 #include <phansar/common/threading.hpp>
+#include <phansar/common/timer.hpp>
 
 #endif
