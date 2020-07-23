@@ -62,12 +62,12 @@ void init(std::string_view          log_file,
     LOGD("  log file: {}", log_file);
 
 #ifndef NDEBUG
-    LOGT("     trace");
-    LOGD("     debug");
-    LOGI("      info");
-    LOGW("   warning");
-    LOGE("     error");
-    LOGC("  critical");
+    LOGT("    trace");
+    LOGD("    debug");
+    LOGI("     info");
+    LOGW("  warning");
+    LOGE("    error");
+    LOGC(" critical");
 #endif
 
     auto cpu_str = std::string{};

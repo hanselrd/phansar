@@ -184,7 +184,7 @@ if(ENABLE_CLANG_TIDY)
             COMMENT "Applying fixes ...")
 
         set(CLANG_TIDY_CHECKS
-            "-*,bugprone-*,-bugprone-branch-clone,-bugprone-exception-escape,-bugprone-lambda-function-name,-bugprone-sizeof-expression,cert-*,-cert-err58-cpp,clang-analyzer-*,google-explicit-constructor,google-runtime-int,llvm-header-guard,modernize-*,-modernize-avoid-c-arrays,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-misleading-indentation"
+            "-*,bugprone-*,-bugprone-branch-clone,-bugprone-exception-escape,-bugprone-lambda-function-name,-bugprone-sizeof-expression,cert-*,-cert-err58-cpp,clang-analyzer-*,google-explicit-constructor,google-runtime-int,llvm-header-guard,modernize-*,-modernize-avoid-c-arrays,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-magic-numbers,-readability-misleading-indentation"
         )
 
         set(counter 1)

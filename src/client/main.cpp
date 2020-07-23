@@ -50,7 +50,10 @@ auto main(int argc, char * argv[]) -> int {
 
     const auto velocity = float{2.0F};
 
+    auto hist_fps = phansar::common::histogram<int>{};
     while (! WindowShouldClose()) {
+        hist_fps.push(GetFPS());
+
         if (IsKeyDown(KEY_LEFT)) {
             ball_position.x -= velocity;
         }
@@ -87,6 +90,8 @@ auto main(int argc, char * argv[]) -> int {
     }
 
     CloseWindow();
+
+    LOG_HISTOGRAM(hist_fps, "FPS", "fps", 5);
 
     phansar::common::system::shutdown();
 
