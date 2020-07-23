@@ -38,7 +38,7 @@ auto histogram<T>::get_variance() const -> double {
     auto mean = get_mean();
     return ranges::accumulate(_samples,
                               0.,
-                              [this, mean](auto acc, auto elem) {
+                              [mean](auto acc, auto elem) {
                                   return acc + ((elem - mean) * (elem - mean));
                               }) /
            (static_cast<double>(_samples.size()) - 1);
