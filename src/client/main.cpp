@@ -50,7 +50,8 @@ auto main(int argc, char * argv[]) -> int {
 
     const auto velocity = float{2.0F};
 
-    auto hist_fps = phansar::common::histogram<int>{};
+    auto hist_fps = phansar::common::histogram<int>{"FPS", "frames per second", 5};
+
     while (! WindowShouldClose()) {
         hist_fps.push(GetFPS());
 
@@ -91,7 +92,7 @@ auto main(int argc, char * argv[]) -> int {
 
     CloseWindow();
 
-    LOG_HISTOGRAM(hist_fps, "FPS", "fps", 5);
+    hist_fps.log();
 
     phansar::common::system::shutdown();
 

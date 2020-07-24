@@ -2,6 +2,8 @@
 
 #include <phansar/vendor/pybind11.hpp>
 
+#include <random>
+
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
 PYBIND11_EMBEDDED_MODULE(py_phansar, m) {
     auto fast_calc = m.def_submodule("fast_calc");
@@ -34,6 +36,19 @@ auto main(int argc, char * argv[]) -> int {
         print(frameinfo)
         print(frameinfo.filename, frameinfo.lineno)
     )python");
+
+    auto rd      = std::random_device{};
+    auto gen     = std::mt19937{rd()};
+    auto distrib = std::uniform_int_distribution{1, 6};
+
+    auto h = phansar::common::histogram<int>{"XXXX", "xxxx", 6};
+    for (auto i = std::size_t{0}; i < 1000000 /*000*/; ++i) {
+        h.push(distrib(gen));
+    }
+    /* for (auto && i : {5, 5, 10, 12, 8, 3, 2, 9, 8, 4, 1, 20, 3, 2, 4, 6}) { */
+    /*     h.push(i); */
+    /* } */
+    h.log();
 
     phansar::common::system::shutdown();
 
