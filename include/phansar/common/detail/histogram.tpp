@@ -17,7 +17,9 @@ void histogram<T>::push(const T & sample) {
 
 template <class T>
 auto histogram<T>::get_sample_count() const -> std::uint64_t {
-    return ranges::accumulate(_samples, 0, [](auto acc, const auto & s) { return acc + s.second; });
+    return ranges::accumulate(_samples, std::uint64_t{0}, [](auto acc, const auto & s) {
+        return acc + s.second;
+    });
 }
 
 template <class T>

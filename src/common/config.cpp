@@ -17,7 +17,7 @@ static const auto USAGE =
         -n <name>, --name=<name>            Name of this binary [default: {name}]
         -c <config>, --config=<config>      Configuration file
         -l <file>, --log-file=<file>        Log file [default: {logfile}]
-        -L <level>, --log-level=<level>     Log level [default: debug]
+        -L <level>, --log-level=<level>     Log level [default: {loglevel}]
         -i <ip>, --ip=<ip>                  IP Address [default: 0.0.0.0]
         -p <port>, --port=<port>            Port [default: 7000]
         -t <threads>, --threads=<threads>   Number of concurrent threads [default: 1]
@@ -36,11 +36,19 @@ void init(int argc, const char * const * argv) {
     auto bin = std::string{argv[0]};
     bin      = bin.substr(bin.find_last_of('/') + 1);
 
-    docopt_map =
-        docopt::docopt(fmt::format(USAGE, fmt::arg("name", bin), fmt::arg("logfile", bin + ".log")),
-                       {std::next(argv), std::next(argv, argc)},
-                       true,
-                       bin + " 1.0");
+    docopt_map = docopt::docopt(fmt::format(USAGE,
+                                            fmt::arg("name", bin),
+                                            fmt::arg("logfile", bin + ".log"),
+                                            fmt::arg("loglevel",
+#ifdef NDEBUG
+                                                     "info"
+#else
+                                                     "debug"
+#endif
+                                                     )),
+                                {std::next(argv), std::next(argv, argc)},
+                                true,
+                                bin + " 1.0");
 }
 
 auto get_binary_name() -> std::string {
