@@ -1,12 +1,20 @@
-#include <phansar/common.hpp>
+#include <phansar/common/config.hpp>
+#include <phansar/common/histogram.hpp>
+#include <phansar/common/log.hpp>
+#include <phansar/common/python.hpp>
+#include <phansar/common/system.hpp>
+#include <phansar/common/threading/thread_pool.hpp>
 
 #include <phansar/vendor/pybind11.hpp>
 
 #include <random>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
-PYBIND11_EMBEDDED_MODULE(py_phansar, m) {
-    auto fast_calc = m.def_submodule("fast_calc");
+PYBIND11_EMBEDDED_MODULE(phansar, m) {
+    phansar::common::python::embed(m);
+
+    auto server    = m.def_submodule("server");
+    auto fast_calc = server.def_submodule("fast_calc");
     fast_calc.def("add", [](int i, int j) { return i + j; });
 }
 
@@ -22,19 +30,19 @@ auto main(int argc, char * argv[]) -> int {
     LOGI("Num Threads: {}", phansar::common::config::get_num_threads());
 
     auto guard = py::scoped_interpreter{};
-    py::print("Hello world!");
     py::exec(R"python(
-        from py_phansar import fast_calc
+        from phansar.common import log
+        from phansar.server import fast_calc
 
-        print("Hello, {name}! The answer is {number}".format(name="Bob", number=42))
-        print("{} + {} = {}".format(3, 4, fast_calc.add(3, 4)))
-    )python");
-    py::exec(R"python(
-        from inspect import currentframe, getframeinfo
-
-        frameinfo = getframeinfo(currentframe())
-        print(frameinfo)
-        print(frameinfo.filename, frameinfo.lineno)
+        log.info("Hello, {name}! The answer is {number}".format(name="Bob", number=42))
+        log.info("{} + {} = {}".format(3, 4, fast_calc.add(3, 4)))
+        log.info("test")
+        log.trace("trace")
+        log.debug('debug')
+        log.info("info")
+        log.warning("warning")
+        log.error("error")
+        log.critical("critical")
     )python");
 
     auto tp = phansar::common::threading::thread_pool{};

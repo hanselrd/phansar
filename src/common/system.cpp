@@ -1,6 +1,6 @@
 #include <phansar/common/config.hpp>
 #include <phansar/common/log.hpp>
-#include <phansar/common/macros.hpp>
+#include <phansar/common/macros/assert.hpp>
 #include <phansar/common/memory.hpp>
 #include <phansar/common/system.hpp>
 
