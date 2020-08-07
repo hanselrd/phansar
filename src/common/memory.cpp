@@ -56,22 +56,22 @@ auto operator new[](std::size_t nbytes) -> void * {
     return operator new(nbytes);
 }
 
-void operator delete(void * ptr) {
+void operator delete(void * ptr) noexcept {
     // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
     phansar::common::memory::free(ptr);
 }
 
-void operator delete(void * ptr, std::size_t /*unused*/) {
+void operator delete(void * ptr, std::size_t /*unused*/) noexcept {
     // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
     operator delete(ptr);
 }
 
-void operator delete[](void * ptr) {
+void operator delete[](void * ptr) noexcept {
     // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
     operator delete(ptr);
 }
 
-void operator delete[](void * ptr, std::size_t /*unused*/) {
+void operator delete[](void * ptr, std::size_t /*unused*/) noexcept {
     // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
     operator delete(ptr);
 }
