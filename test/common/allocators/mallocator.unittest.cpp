@@ -1,4 +1,4 @@
-#include <phansar/common/allocators/default_allocator.hpp>
+#include <phansar/common/allocators/mallocator.hpp>
 
 #include <phansar/vendor/catch2.hpp>
 
@@ -8,10 +8,8 @@
 
 using types = std::tuple<int, std::string, std::vector<int>, std::vector<std::string>>;
 
-TEMPLATE_LIST_TEST_CASE("common_allocators_default_allocator",
-                        "[common][allocators][default_allocator]",
-                        types) {
-    auto a = phansar::common::allocators::default_allocator<TestType>{};
+TEMPLATE_LIST_TEST_CASE("common_allocators_mallocator", "[common][allocators][mallocator]", types) {
+    auto a = phansar::common::allocators::mallocator<TestType>{};
 
     SECTION("can allocate and deallocate") {
         auto * ptr = a.allocate(2);

@@ -37,12 +37,15 @@ auto main(int argc, char * argv[]) -> int {
         print(frameinfo.filename, frameinfo.lineno)
     )python");
 
+    auto tp = phansar::common::threading::thread_pool{};
+    tp.push_work([] { LOGI("work"); });
+
     auto rd      = std::random_device{};
     auto gen     = std::mt19937{rd()};
     auto distrib = std::uniform_int_distribution{1, 6};
 
     auto h = phansar::common::histogram<int>{"XXXX", "xxxx", 6};
-    for (auto i = std::size_t{0}; i < 1000000 /*000*/; ++i) {
+    for (auto i = std::size_t{0}; i < 1000000; ++i) {
         h.push(distrib(gen));
     }
     /* for (auto && i : {5, 5, 10, 12, 8, 3, 2, 9, 8, 4, 1, 20, 3, 2, 4, 6}) { */

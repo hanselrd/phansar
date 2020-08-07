@@ -1,10 +1,10 @@
 #ifndef PHANSAR_COMMON_CONTAINERS_EVENT_QUEUE_HPP
 #define PHANSAR_COMMON_CONTAINERS_EVENT_QUEUE_HPP
 
-#include <phansar/common/containers/stdlib.hpp>
-
 #include <functional>
+#include <queue>
 #include <type_traits>
+#include <vector>
 
 namespace phansar::common::containers {
 template <class Event, class T>
@@ -21,9 +21,9 @@ public:
     void update();
 
 private:
-    stdlib::vector<subscribe_function> _subscribers;
-    stdlib::vector<Event>              _whitelist;
-    stdlib::queue<std::pair<Event, T>> _queue;
+    std::vector<subscribe_function> _subscribers;
+    std::vector<Event>              _whitelist;
+    std::queue<std::pair<Event, T>> _queue;
 };
 } // namespace phansar::common::containers
 

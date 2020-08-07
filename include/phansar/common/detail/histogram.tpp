@@ -132,7 +132,7 @@ void histogram<T>::log() const {
              b);
     });
 
-    LOGT(" samples:");
-    ranges::for_each(_samples, [](const auto & s) { LOGT("   {}: {}", s.first, s.second); });
+    LOGD("  samples:");
+    ranges::for_each(_samples, [](const auto & s) { LOGD("    {}: {}", s.first, s.second); });
 }
 } // namespace phansar::common

@@ -6,7 +6,7 @@
 
 namespace phansar::common::memory {
 auto malloc(std::size_t nbytes) -> void * {
-    ASSERT(nbytes > 0);
+    /* ASSERT(nbytes > 0); */
 
     auto * ptr = std::malloc(nbytes);
     LOGT("Allocated {} bytes at {}", nbytes, ptr);
@@ -14,7 +14,7 @@ auto malloc(std::size_t nbytes) -> void * {
 }
 
 auto malloc0(std::size_t nbytes) -> void * {
-    ASSERT(nbytes > 0);
+    /* ASSERT(nbytes > 0); */
 
     auto * ptr = std::calloc(1, nbytes);
     LOGT("Allocated {} bytes at {} to zero", nbytes, ptr);
@@ -22,28 +22,56 @@ auto malloc0(std::size_t nbytes) -> void * {
 }
 
 auto calloc(std::size_t num, std::size_t nbytes) -> void * {
-    ASSERT(num > 0);
-    ASSERT(nbytes > 0);
+    /* ASSERT(num > 0); */
+    /* ASSERT(nbytes > 0); */
 
     auto * ptr = std::calloc(num, nbytes);
     LOGT("Allocated {} chunks of {} bytes at {} to zero", num, nbytes, ptr);
     return ptr;
 }
 
-auto realloc(void * mem, std::size_t nbytes) -> void * {
-    ASSERT(mem != nullptr);
-    ASSERT(nbytes > 0);
+auto realloc(void * ptr, std::size_t nbytes) -> void * {
+    /* ASSERT(ptr != nullptr); */
+    /* ASSERT(nbytes > 0); */
 
-    auto * ptr = std::realloc(mem, nbytes);
-    LOGT("Reallocated {} bytes at {} from {}", nbytes, ptr, mem);
-    return ptr;
+    auto * new_ptr = std::realloc(ptr, nbytes);
+    LOGT("Reallocated {} bytes at {} from {}", nbytes, new_ptr, ptr);
+    return new_ptr;
 }
 
-void free(void * mem) {
-    ASSERT(mem != nullptr);
+void free(void * ptr) {
+    /* ASSERT(ptr != nullptr); */
 
     // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
-    std::free(mem);
-    LOGT("Freed {}", mem);
+    std::free(ptr);
+    LOGT("Freed {}", ptr);
 }
 } // namespace phansar::common::memory
+
+auto operator new(std::size_t nbytes) -> void * {
+    return phansar::common::memory::malloc(nbytes);
+}
+
+auto operator new[](std::size_t nbytes) -> void * {
+    return operator new(nbytes);
+}
+
+void operator delete(void * ptr) {
+    // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
+    phansar::common::memory::free(ptr);
+}
+
+void operator delete(void * ptr, std::size_t /*unused*/) {
+    // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
+    operator delete(ptr);
+}
+
+void operator delete[](void * ptr) {
+    // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
+    operator delete(ptr);
+}
+
+void operator delete[](void * ptr, std::size_t /*unused*/) {
+    // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
+    operator delete(ptr);
+}

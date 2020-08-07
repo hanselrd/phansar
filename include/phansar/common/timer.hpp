@@ -2,7 +2,6 @@
 #define PHANSAR_COMMON_TIMER_HPP
 
 #include <chrono>
-#include <ratio>
 
 namespace phansar::common {
 template <class Clock = std::chrono::steady_clock>
@@ -10,8 +9,8 @@ class timer {
 public:
     void start();
     void stop();
-    template <class Rep = double, class Period = std::nano>
-    [[nodiscard]] auto get_elapsed_time() const -> Rep;
+    template <class T = double, class Duration = std::chrono::nanoseconds>
+    [[nodiscard]] auto get_elapsed_time() const -> T;
 
 private:
     std::chrono::time_point<Clock> _start_time, _end_time;

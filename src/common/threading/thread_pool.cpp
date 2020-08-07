@@ -1,12 +1,14 @@
 #include <phansar/common/log.hpp>
 #include <phansar/common/threading/thread_pool.hpp>
 
+#include <phansar/vendor/fmt.hpp>
 #include <phansar/vendor/rangev3.hpp>
 
 namespace phansar::common::threading {
 thread_pool::thread_pool(std::size_t nthreads) : _queues{nthreads} {
     for (auto i = std::size_t{0}; i < nthreads; ++i) {
         _threads.emplace_back([this, i] {
+            log::set_thread_name(fmt::format("WORKER{}", i));
             LOGD("Worker {} initialized", i);
             while (_running) {
                 for (auto n = std::size_t{0}; n < _threads.size(); ++n) {
