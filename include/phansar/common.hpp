@@ -9,9 +9,9 @@
 #include <phansar/common/macros.hpp>
 #include <phansar/common/memory.hpp>
 #include <phansar/common/networking.hpp>
-#include <phansar/common/strings.hpp>
 #include <phansar/common/system.hpp>
 #include <phansar/common/threading.hpp>
 #include <phansar/common/timer.hpp>
+#include <phansar/common/types.hpp>
 
 #endif

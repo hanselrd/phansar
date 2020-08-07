@@ -30,7 +30,6 @@ add_subdirectory(pybind11 EXCLUDE_FROM_ALL)
 add_subdirectory(range-v3 EXCLUDE_FROM_ALL)
 add_subdirectory(raygui EXCLUDE_FROM_ALL)
 add_subdirectory(raylib EXCLUDE_FROM_ALL)
-add_subdirectory(spdlog EXCLUDE_FROM_ALL)
 
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}

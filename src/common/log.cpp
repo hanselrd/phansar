@@ -1,73 +1,104 @@
+#include <phansar/common/allocators.hpp>
 #include <phansar/common/log.hpp>
+#include <phansar/common/threading/synchronized.hpp>
+#include <phansar/common/types.hpp>
 
-/* #include <phansar/vendor/hedley.hpp> */
 #include <phansar/vendor/plibsys.hpp>
-/* #include <phansar/vendor/rangev3.hpp> */
-#include <phansar/vendor/spdlog_private.hpp>
 
+#include <chrono>
 #include <cstdlib>
-
-#define LOG_MAX_FILE_SIZE (1024 * 1024 * 5)
-
-namespace phansar::common::log::detail {
-auto parse_file_name(std::string_view file_name) -> std::string {
-    /* #ifndef HEDLEY_MSVC_VERSION */
-    /*     return file_name | ranges::views::split('/') | ranges::views::drop_while([](const auto &
-     * s) { */
-    /*                return ! ranges::equal(s, ranges::views::c_str("include")) && */
-    /*                       ! ranges::equal(s, ranges::views::c_str("src")) && */
-    /*                       ! ranges::equal(s, ranges::views::c_str("test")) && */
-    /*                       ! ranges::equal(s, ranges::views::c_str("vendor")); */
-    /*            }) | */
-    /*            ranges::views::drop(1) | ranges::views::join('/') | ranges::to<std::string>(); */
-    /* #else */
-    return std::string{file_name};
-    /* #endif */
-}
-} // namespace phansar::common::log::detail
+#include <mutex>
+#include <string>
+#include <thread>
+#include <unordered_map>
 
 namespace phansar::common::log {
-void init(std::string_view          log_file,
-          spdlog::level::level_enum log_level,
-          std::string_view          log_name) {
-    if (log_file.empty()) {
+static const auto _STYLE_MAP = std::unordered_map<level, std::pair<std::string, fmt::text_style>>{
+    {level::trace, {"TRACE", fmt::fg(fmt::color::gray)}},
+    {level::debug, {"DEBUG", fmt::fg(fmt::color::cadet_blue)}},
+    {level::info, {"INFO", fmt::fg(fmt::color::white)}},
+    {level::warning, {"WARNING", fmt::fg(fmt::color::gold)}},
+    {level::error, {"ERROR", fmt::fg(fmt::color::coral)}},
+    {level::critical, {"CRITICAL", fmt::fg(fmt::color::black) | fmt::bg(fmt::color::coral)}},
+};
+static const auto _START_TIME = std::chrono::steady_clock::now();
+
+static auto _thread_name_map =
+    threading::synchronized<std::unordered_map<std::thread::id, std::string>>{};
+static auto _level       = level::off;
+static auto _binary_name = std::string{};
+static auto _mutex       = std::mutex{};
+
+namespace detail {
+void vprint(std::string_view file,
+            int              line,
+            level            level,
+            std::string_view format,
+            fmt::format_args args) {
+    if (_level == level::off || level < _level) {
+        return;
+    }
+    auto out = types::fmt::memory_buffer<allocators::mallocator>{};
+    fmt::vformat_to(out, format, args);
+    const auto message = types::std::string<allocators::mallocator>{out.data(), out.size()};
+    const auto & [level_str, text_style] = _STYLE_MAP.at(level);
+    auto   now       = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    auto * time_info = std::localtime(&now);
+    auto   uptime    = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(
+                                          std::chrono::steady_clock::now() - _START_TIME)
+                                          .count()) /
+                  1000.;
+    auto thread_name = types::std::string<allocators::mallocator>{};
+    {
+        auto l = _thread_name_map.lock();
+
+        auto ss = types::std::stringstream<allocators::mallocator>{};
+        if (l->count(std::this_thread::get_id()) > 0) {
+            ss << (*l)[std::this_thread::get_id()];
+        } else {
+            ss << std::this_thread::get_id();
+        }
+
+        thread_name = ss.str();
+    }
+
+    {
+        auto lock = std::lock_guard{_mutex};
+        fmt::print(text_style,
+                   "{:%Y-%m-%d %H:%M:%S %z} ({:>9.3f}s) [{}/{:<10}] {:>22}:{:<5} {:>8}| {}\n",
+                   *time_info,
+                   uptime,
+                   _binary_name,
+                   thread_name,
+                   file,
+                   line,
+                   level_str,
+                   message);
+    }
+}
+} // namespace detail
+
+void init(std::string_view file_name, level level, std::string_view binary_name) {
+    if (file_name.empty()) {
         return;
     }
 
-    auto pattern =
-        /* #ifndef HEDLEY_MSVC_VERSION */
-        /*         std::string{"[%Y-%m-%d %H:%M:%S.%e %z] [%n] [%t] [%^%l%$] [%g@%#] %v"}; */
-        /* #else */
-        std::string{"[%Y-%m-%d %H:%M:%S.%e %z] [%n] [%t] [%^%l%$] [%s@%#] %v"};
-    /* #endif */
+    set_thread_name("MAIN");
 
-    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console_sink->set_pattern(pattern);
-    console_sink->set_level(log_level);
-
-    auto rotating_sink =
-        std::make_shared<spdlog::sinks::rotating_file_sink_mt>(std::string{log_file},
-                                                               LOG_MAX_FILE_SIZE,
-                                                               3);
-    rotating_sink->set_pattern(pattern);
-    rotating_sink->set_level(log_level);
-
-    auto logger = std::make_shared<spdlog::logger>(
-        spdlog::logger{std::string{log_name}, {console_sink, rotating_sink}});
-    logger->set_level(spdlog::level::trace);
-    spdlog::set_default_logger(logger);
+    _level       = level;
+    _binary_name = binary_name;
 
     LOGI("");
     LOGD("Logger initialized");
-    LOGD("  log file: {}", log_file);
+    LOGD("  log file: {}", file_name);
 
 #ifndef NDEBUG
-    LOGT("    trace");
-    LOGD("    debug");
-    LOGI("     info");
+    LOGT("  trace");
+    LOGD("  debug");
+    LOGI("  info");
     LOGW("  warning");
-    LOGE("    error");
-    LOGC(" critical");
+    LOGE("  error");
+    LOGC("  critical");
 #endif
 
     auto cpu_str = std::string{};
@@ -340,6 +371,12 @@ void init(std::string_view          log_file,
     std::atexit([] {
         LOGD("Logger shutdown");
         LOGI("");
+
+        _level = level::off;
     });
+}
+
+void set_thread_name(std::string_view name) {
+    (*_thread_name_map.lock())[std::this_thread::get_id()] = name;
 }
 } // namespace phansar::common::log

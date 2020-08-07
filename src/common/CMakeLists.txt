@@ -20,7 +20,6 @@ set(system_libs
     ph_vendor_plibsys
     ph_vendor_pybind11
     ph_vendor_rangev3
-    ph_vendor_spdlog
     Threads::Threads)
 # cmake-format: on
 

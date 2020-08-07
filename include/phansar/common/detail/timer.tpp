@@ -18,9 +18,10 @@ void timer<Clock>::stop() {
 }
 
 template <class Clock>
-template <class Rep, class Period>
-auto timer<Clock>::get_elapsed_time() const -> Rep {
-    return std::chrono::duration<Rep, Period>{((_running) ? Clock::now() : _end_time) - _start_time}
-        .count();
+template <class T, class Duration>
+auto timer<Clock>::get_elapsed_time() const -> T {
+    return static_cast<T>(
+        std::chrono::duration_cast<Duration>((_running ? Clock::now() : _end_time) - _start_time)
+            .count());
 }
 } // namespace phansar::common
