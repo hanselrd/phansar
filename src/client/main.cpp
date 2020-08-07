@@ -1,6 +1,10 @@
-#include <phansar/common.hpp>
+#include <phansar/common/histogram.hpp>
+#include <phansar/common/log.hpp>
+#include <phansar/common/python.hpp>
+#include <phansar/common/system.hpp>
 
 #include <phansar/vendor/hedley.hpp>
+#include <phansar/vendor/pybind11.hpp>
 #include <phansar/vendor/raygui.hpp>
 #include <phansar/vendor/raylib.hpp>
 
@@ -8,6 +12,11 @@
 #include <cstring>
 
 #define BUF_SIZE 512
+
+// NOLINTNEXTLINE(modernize-use-trailing-return-type)
+PYBIND11_EMBEDDED_MODULE(phansar, m) {
+    phansar::common::python::embed(m);
+}
 
 HEDLEY_PRINTF_FORMAT(2, 0)
 static void trace_log_callback(int msg_type, const char * fmt, va_list args) {

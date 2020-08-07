@@ -1,12 +1,14 @@
-#include <phansar/common/allocators.hpp>
+#include <phansar/common/allocators/mallocator.hpp>
 #include <phansar/common/log.hpp>
 #include <phansar/common/threading/synchronized.hpp>
-#include <phansar/common/types.hpp>
+#include <phansar/common/types/fmt.hpp>
+#include <phansar/common/types/std.hpp>
 
 #include <phansar/vendor/plibsys.hpp>
 
 #include <chrono>
 #include <cstdlib>
+#include <cstring>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -28,55 +30,6 @@ static auto _thread_name_map =
 static auto _level       = level::off;
 static auto _binary_name = std::string{};
 static auto _mutex       = std::mutex{};
-
-namespace detail {
-void vprint(std::string_view file,
-            int              line,
-            level            level,
-            std::string_view format,
-            fmt::format_args args) {
-    if (_level == level::off || level < _level) {
-        return;
-    }
-    auto out = types::fmt::memory_buffer<allocators::mallocator>{};
-    fmt::vformat_to(out, format, args);
-    const auto message = types::std::string<allocators::mallocator>{out.data(), out.size()};
-    const auto & [level_str, text_style] = _STYLE_MAP.at(level);
-    auto   now       = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    auto * time_info = std::localtime(&now);
-    auto   uptime    = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(
-                                          std::chrono::steady_clock::now() - _START_TIME)
-                                          .count()) /
-                  1000.;
-    auto thread_name = types::std::string<allocators::mallocator>{};
-    {
-        auto l = _thread_name_map.lock();
-
-        auto ss = types::std::stringstream<allocators::mallocator>{};
-        if (l->count(std::this_thread::get_id()) > 0) {
-            ss << (*l)[std::this_thread::get_id()];
-        } else {
-            ss << std::this_thread::get_id();
-        }
-
-        thread_name = ss.str();
-    }
-
-    {
-        auto lock = std::lock_guard{_mutex};
-        fmt::print(text_style,
-                   "{:%Y-%m-%d %H:%M:%S %z} ({:>9.3f}s) [{}/{:<10}] {:>22}:{:<5} {:>8}| {}\n",
-                   *time_info,
-                   uptime,
-                   _binary_name,
-                   thread_name,
-                   file,
-                   line,
-                   level_str,
-                   message);
-    }
-}
-} // namespace detail
 
 void init(std::string_view file_name, level level, std::string_view binary_name) {
     if (file_name.empty()) {
@@ -378,5 +331,55 @@ void init(std::string_view file_name, level level, std::string_view binary_name)
 
 void set_thread_name(std::string_view name) {
     (*_thread_name_map.lock())[std::this_thread::get_id()] = name;
+}
+
+void vprint(std::string_view file,
+            int              line,
+            level            level,
+            std::string_view format,
+            fmt::format_args args) {
+    if (_level == level::off || level < _level) {
+        return;
+    }
+    const auto * filename = (std::strrchr(file.data(), '/') != nullptr)
+                                ? std::strrchr(file.data(), '/') + 1
+                                : file.data();
+    auto out = types::fmt::memory_buffer<allocators::mallocator>{};
+    fmt::vformat_to(out, format, args);
+    const auto message = types::std::string<allocators::mallocator>{out.data(), out.size()};
+    const auto & [level_str, text_style] = _STYLE_MAP.at(level);
+    auto   now       = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    auto * time_info = std::localtime(&now);
+    auto   uptime    = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(
+                                          std::chrono::steady_clock::now() - _START_TIME)
+                                          .count()) /
+                  1000.;
+    auto thread_name = types::std::string<allocators::mallocator>{};
+    {
+        auto l = _thread_name_map.lock();
+
+        auto ss = types::std::stringstream<allocators::mallocator>{};
+        if (l->count(std::this_thread::get_id()) > 0) {
+            ss << (*l)[std::this_thread::get_id()];
+        } else {
+            ss << std::this_thread::get_id();
+        }
+
+        thread_name = ss.str();
+    }
+
+    {
+        auto lock = std::lock_guard{_mutex};
+        fmt::print(text_style,
+                   "{:%Y-%m-%d %H:%M:%S %z} ({:>9.3f}s) [{}/{:<10}] {:>22}:{:<5} {:>8}| {}\n",
+                   *time_info,
+                   uptime,
+                   _binary_name,
+                   thread_name,
+                   filename,
+                   line,
+                   level_str,
+                   message);
+    }
 }
 } // namespace phansar::common::log

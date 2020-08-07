@@ -5,38 +5,24 @@
 
 #include <string_view>
 
-#define __FILENAME__ (std::strrchr(__FILE__, '/') ? std::strrchr(__FILE__, '/') + 1 : __FILE__)
-
 #define LOGT(...)                                                                                  \
-    phansar::common::log::detail::print(__FILENAME__,                                              \
-                                        __LINE__,                                                  \
-                                        phansar::common::log::level::trace,                        \
-                                        __VA_ARGS__)
+    phansar::common::log::print(__FILE__, __LINE__, phansar::common::log::level::trace, __VA_ARGS__)
 #define LOGD(...)                                                                                  \
-    phansar::common::log::detail::print(__FILENAME__,                                              \
-                                        __LINE__,                                                  \
-                                        phansar::common::log::level::debug,                        \
-                                        __VA_ARGS__)
+    phansar::common::log::print(__FILE__, __LINE__, phansar::common::log::level::debug, __VA_ARGS__)
 #define LOGI(...)                                                                                  \
-    phansar::common::log::detail::print(__FILENAME__,                                              \
-                                        __LINE__,                                                  \
-                                        phansar::common::log::level::info,                         \
-                                        __VA_ARGS__)
+    phansar::common::log::print(__FILE__, __LINE__, phansar::common::log::level::info, __VA_ARGS__)
 #define LOGW(...)                                                                                  \
-    phansar::common::log::detail::print(__FILENAME__,                                              \
-                                        __LINE__,                                                  \
-                                        phansar::common::log::level::warning,                      \
-                                        __VA_ARGS__)
+    phansar::common::log::print(__FILE__,                                                          \
+                                __LINE__,                                                          \
+                                phansar::common::log::level::warning,                              \
+                                __VA_ARGS__)
 #define LOGE(...)                                                                                  \
-    phansar::common::log::detail::print(__FILENAME__,                                              \
-                                        __LINE__,                                                  \
-                                        phansar::common::log::level::error,                        \
-                                        __VA_ARGS__)
+    phansar::common::log::print(__FILE__, __LINE__, phansar::common::log::level::error, __VA_ARGS__)
 #define LOGC(...)                                                                                  \
-    phansar::common::log::detail::print(__FILENAME__,                                              \
-                                        __LINE__,                                                  \
-                                        phansar::common::log::level::critical,                     \
-                                        __VA_ARGS__)
+    phansar::common::log::print(__FILE__,                                                          \
+                                __LINE__,                                                          \
+                                phansar::common::log::level::critical,                             \
+                                __VA_ARGS__)
 #define LOGT_IF(condition, ...)                                                                    \
     do {                                                                                           \
         if (condition) {                                                                           \
@@ -77,7 +63,8 @@
 namespace phansar::common::log {
 enum class level { trace, debug, info, warning, error, critical, off };
 
-namespace detail {
+void init(std::string_view file_name, level level, std::string_view binary_name);
+void set_thread_name(std::string_view name);
 void vprint(std::string_view file,
             int              line,
             level            level,
@@ -85,10 +72,6 @@ void vprint(std::string_view file,
             fmt::format_args args);
 template <class... Args>
 void print(std::string_view file, int line, level level, std::string_view format, Args &&... args);
-} // namespace detail
-
-void init(std::string_view file_name, level level, std::string_view binary_name);
-void set_thread_name(std::string_view name);
 } // namespace phansar::common::log
 
 #include <phansar/common/detail/log.tpp>

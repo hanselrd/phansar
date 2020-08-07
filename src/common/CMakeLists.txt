@@ -8,6 +8,7 @@ set(sources
     log.cpp
     memory.cpp
     networking/socket.cpp
+    python.cpp
     system.cpp
     threading/thread_pool.cpp)
 
