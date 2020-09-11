@@ -1,7 +1,7 @@
 FetchContent_Declare(
     plibsys_git
     GIT_REPOSITORY https://github.com/saprykin/plibsys.git
-    GIT_TAG e57dfc613163989bb536d980bec142fd7e35271d)
+    GIT_TAG 1631fe68f048f81f749645aae3e56d9d0c544a0a)
 FetchContent_GetProperties(plibsys_git)
 if(NOT plibsys_git_POPULATED)
     FetchContent_Populate(plibsys_git)

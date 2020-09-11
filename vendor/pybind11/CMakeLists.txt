@@ -1,7 +1,7 @@
 FetchContent_Declare(
     pybind11_git
     GIT_REPOSITORY https://github.com/pybind/pybind11.git
-    GIT_TAG c4fd1fd9872b731e9df21347a09d094489776801)
+    GIT_TAG fe9ee86ba882634ee7ec46dfdc72ac6cbbfb5b50)
 FetchContent_GetProperties(pybind11_git)
 if(NOT pybind11_git_POPULATED)
     FetchContent_Populate(pybind11_git)
@@ -12,7 +12,7 @@ add_subdirectory(${pybind11_git_SOURCE_DIR} ${pybind11_git_BINARY_DIR} EXCLUDE_F
 
 # cmake-format: off
 set(system_libs
-    pybind11)
+    pybind11::embed)
 # cmake-format: on
 
 ph_add_generic_vendor_interface_library(ph_vendor_pybind11 "" "" "${system_libs}")

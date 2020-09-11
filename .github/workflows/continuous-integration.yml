@@ -71,7 +71,7 @@ jobs:
           shell: bash
           run: |
               python -m pip install --upgrade pip
-              pip install pipenv cmake pyyaml cmake-format black
+              pip install pipenv cmake pyyaml cmakelang black
               pipenv install
 
         - name: Install (Windows)
