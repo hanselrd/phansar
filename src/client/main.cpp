@@ -24,17 +24,47 @@ static void trace_log_callback(int msg_type, const char * fmt, va_list args) {
     std::vsnprintf(buf.data(), buf.size(), fmt, args);
 
     switch (msg_type) {
+    case LOG_TRACE:
+        phansar::common::log::print("<raylib>",
+                                    1,
+                                    phansar::common::log::level::trace,
+                                    "{}",
+                                    buf.data());
+        break;
     case LOG_DEBUG:
-        LOGD("{}", buf.data());
+        phansar::common::log::print("<raylib>",
+                                    1,
+                                    phansar::common::log::level::debug,
+                                    "{}",
+                                    buf.data());
         break;
     case LOG_INFO:
-        LOGI("{}", buf.data());
+        phansar::common::log::print("<raylib>",
+                                    1,
+                                    phansar::common::log::level::info,
+                                    "{}",
+                                    buf.data());
         break;
     case LOG_WARNING:
-        LOGW("{}", buf.data());
+        phansar::common::log::print("<raylib>",
+                                    1,
+                                    phansar::common::log::level::warning,
+                                    "{}",
+                                    buf.data());
         break;
     case LOG_ERROR:
-        LOGE("{}", buf.data());
+        phansar::common::log::print("<raylib>",
+                                    1,
+                                    phansar::common::log::level::error,
+                                    "{}",
+                                    buf.data());
+        break;
+    case LOG_FATAL:
+        phansar::common::log::print("<raylib>",
+                                    1,
+                                    phansar::common::log::level::critical,
+                                    "{}",
+                                    buf.data());
         break;
     }
 }
