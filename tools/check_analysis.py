@@ -19,7 +19,9 @@ import sys
 
 
 Unit = collections.namedtuple(
-    "Unit", ["header", "template", "source", "test"], defaults=[None, None, None, None],
+    "Unit",
+    ["header", "template", "source", "test"],
+    defaults=[None, None, None, None],
 )
 
 

@@ -3,6 +3,7 @@
 #include <phansar/common/python.hpp>
 #include <phansar/common/system.hpp>
 
+#include <phansar/vendor/fmt.hpp>
 #include <phansar/vendor/hedley.hpp>
 #include <phansar/vendor/pybind11.hpp>
 #include <phansar/vendor/raygui.hpp>
@@ -81,50 +82,69 @@ auto main(int argc, char * argv[]) -> int {
 
     GuiLoadStyle("_deps/raygui_git-src/styles/jungle/jungle.rgs");
 
-    auto ball_position = Vector2{(float)screen_width / 2, (float)screen_height / 2};
+    auto camera     = Camera{};
+    camera.position = Vector3{4.F, 2.F, 4.F};
+    camera.target   = Vector3{0.F, 1.8F, 0.F};
+    camera.up       = Vector3{0.F, 1.F, 0.F};
+    camera.fovy     = 60.F;
+    camera.type     = CAMERA_PERSPECTIVE;
 
-    const auto target_fps = int{60};
+    SetCameraMode(camera, CAMERA_FIRST_PERSON);
 
-    SetTargetFPS(target_fps);
-
-    const auto velocity = float{2.0F};
+    SetTargetFPS(60);
 
     auto hist_fps = phansar::common::histogram<int>{"FPS", "frames per second", 5};
 
     while (! WindowShouldClose()) {
         hist_fps.push(GetFPS());
 
-        if (IsKeyDown(KEY_LEFT)) {
-            ball_position.x -= velocity;
-        }
-        if (IsKeyDown(KEY_RIGHT)) {
-            ball_position.x += velocity;
-        }
-        if (IsKeyDown(KEY_UP)) {
-            ball_position.y -= velocity;
-        }
-        if (IsKeyDown(KEY_DOWN)) {
-            ball_position.y += velocity;
-        }
+        UpdateCamera(&camera);
 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
 
-        const auto font_size = int{20};
+        ClearBackground(BLACK);
 
-        const auto ball_radius = float{50.0F};
+        BeginMode3D(camera);
 
-        DrawText("Phansar", screen_width / 3, screen_height / 3, font_size, LIGHTGRAY);
-        DrawCircleV(ball_position, ball_radius, MAROON);
+        DrawPlane(Vector3{0.F, 0.F, 0.F}, Vector2{32.F, 32.F}, LIGHTGRAY);
+        DrawCube(Vector3{-16.F, 2.5F, 0.F}, 1.F, 5.F, 32.F, BLUE);
+        DrawCube(Vector3{16.F, 2.5F, 0.F}, 1.F, 5.F, 32.F, LIME);
+        DrawCube(Vector3{0.F, 2.5F, -16.F}, 32.F, 5.F, 1.F, RED);
+        DrawCube(Vector3{0.F, 2.5F, 16.F}, 32.F, 5.F, 1.F, GOLD);
 
-        const auto button_width  = int{100};
-        const auto button_height = int{30};
+        EndMode3D();
 
-        if (GuiButton(
-                {(float)screen_width / 4, (float)screen_height / 4, button_width, button_height},
-                GuiIconText(RICON_HAND_POINTER, "Click Me"))) {
-            LOGI("Clicked");
-        }
+        DrawRectangle(10, 10, 250, 70, Fade(SKYBLUE, 0.5F));
+        DrawRectangleLines(10, 10, 250, 70, BLUE);
+
+        DrawText(fmt::format("Position: ({}, {}, {})",
+                             camera.position.x,
+                             camera.position.y,
+                             camera.position.z)
+                     .c_str(),
+                 20,
+                 20,
+                 10,
+                 WHITE);
+        DrawText(
+            fmt::format("Target: ({}, {}, {})", camera.target.x, camera.target.y, camera.target.z)
+                .c_str(),
+            20,
+            40,
+            10,
+            WHITE);
+        DrawText(fmt::format("Up: ({}, {}, {})", camera.up.x, camera.up.y, camera.up.z).c_str(),
+                 20,
+                 60,
+                 10,
+                 WHITE);
+
+        /* DrawText("Phansar", screen_width / 3, screen_height / 3, 20, LIGHTGRAY); */
+
+        /* if (GuiButton({(float)screen_width / 4, (float)screen_height / 4, 100, 30}, */
+        /*               GuiIconText(RICON_HAND_POINTER, "Click Me"))) { */
+        /*     LOGI("Clicked"); */
+        /* } */
 
         EndDrawing();
     }
