@@ -34,24 +34,43 @@ function(ph_target_compile_features name)
 endfunction()
 
 function(ph_target_compile_options name)
-    target_compile_options(
-        ${name}
-        PRIVATE
-            $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:$<$<CONFIG:DEBUG>:-Og>>
-            $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:$<$<OR:$<CONFIG:RELEASE>,$<CONFIG:RELWITHDEBINFO>,$<CONFIG:MINSIZEREL>>:-D_FORTIFY_SOURCE=2>>
-            $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-Wall
-            -Wextra
-            -Werror
-            -Wpedantic
-            -Wshadow
-            -Wdouble-promotion
-            -Wformat=2
-            -Wundef
-            -fno-common
-            -Wconversion>
-            $<$<CXX_COMPILER_ID:GNU>:-Wformat-overflow=2
-            -Wformat-truncation=2>
-            $<$<CXX_COMPILER_ID:MSVC>:/Wall>)
+    macro(append_compile_option testname flag)
+        string(REGEX REPLACE "^-Wno-" "-W" alt ${flag})
+        check_cxx_compiler_flag(${alt} PHANSAR_${testname})
+        if(PHANSAR_${testname})
+            target_compile_options(${name} PRIVATE ${flag})
+        endif()
+    endmacro()
+
+    if(CMAKE_BUILD_TYPE MATCHES "Debug")
+        append_compile_option(HAS_OG "-Og")
+        append_compile_option(HAS_G3 "-g3")
+        append_compile_option(HAS_GGDB "-ggdb")
+        # append_compile_option(HAS_GLLDB "-glldb")
+        append_compile_option(HAS_FNO_INLINE "-fno-inline")
+        append_compile_option(HAS_FSTACK_PROTECTOR_ALL "-fstack-protector-all")
+    else()
+        append_compile_option(HAS_DFORTIFY_SOURCE_2 "-D_FORTIFY_SOURCE=2")
+    endif()
+    append_compile_option(HAS_WALL "-Wall")
+    append_compile_option(HAS_WEXTRA "-Wextra")
+    append_compile_option(HAS_WERROR "-Werror")
+    append_compile_option(HAS_WPEDANTIC "-Wpedantic")
+    append_compile_option(HAS_WSHADOW "-Wshadow")
+    append_compile_option(HAS_WDOUBLE_PROMOTION "-Wdouble-promotion")
+    append_compile_option(HAS_WFORMAT_2 "-Wformat=2")
+    append_compile_option(HAS_WERROR_FORMAT_SECURITY "-Werror=format-security")
+    append_compile_option(HAS_WUNDEF "-Wundef")
+    append_compile_option(HAS_FNO_COMMON "-fno-common")
+    append_compile_option(HAS_WCONVERSION "-Wconversion")
+    append_compile_option(HAS_WFORMAT_OVERFLOW_2 "-Wformat-overflow=2")
+    append_compile_option(HAS_WFORMAT_TRUNCATION_2 "-Wformat-truncation=2")
+    if(ENABLE_NATIVE_OPTIMIZATIONS)
+        append_compile_option(HAS_MARCH_NATIVE "-march=native")
+        append_compile_option(HAS_MTUNE_NATIVE "-mtune=native")
+    endif()
+    append_compile_option(HAS_PIPE "-pipe")
+    append_compile_option(HAS_WALL_MSVC "/Wall")
 endfunction()
 
 function(ph_add_generic_interface_library name libs system_libs)

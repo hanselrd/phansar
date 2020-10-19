@@ -6,8 +6,10 @@
 #include <phansar/common/threading/thread_pool.hpp>
 
 #include <phansar/vendor/pybind11.hpp>
+#include <phansar/vendor/xsimd.hpp>
 
 #include <random>
+#include <vector>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
 PYBIND11_EMBEDDED_MODULE(phansar, m) {
@@ -60,6 +62,18 @@ auto main(int argc, char * argv[]) -> int {
     /*     h.push(i); */
     /* } */
     h.log();
+
+    auto a = std::vector<double>{1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5};
+    auto b = std::vector<double>{2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5};
+    auto c = std::vector<double>(9);
+    xsimd::transform(std::cbegin(a),
+                     std::cend(a),
+                     std::cbegin(b),
+                     std::begin(c),
+                     [](const auto & x, const auto & y) { return (x + y) / 2.; });
+    LOGI("a: {}", a);
+    LOGI("b: {}", b);
+    LOGI("c: {}", c);
 
     phansar::common::system::shutdown();
 

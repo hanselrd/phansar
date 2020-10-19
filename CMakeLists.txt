@@ -5,7 +5,15 @@ project(
     VERSION 1.0.0
     LANGUAGES CXX C)
 
+option(ENABLE_CMAKE_FORMAT "Enable cmake-format" OFF)
+option(ENABLE_BLACK "Enable black" OFF)
+option(ENABLE_CLANG_FORMAT "Enable clang-format" OFF)
+option(ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
+option(ENABLE_NATIVE_OPTIMIZATIONS "Enable native optimizations" OFF)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(CheckCXXCompilerFlag)
+include(CheckCCompilerFlag)
 include(Functions)
 include(Formatters)
 

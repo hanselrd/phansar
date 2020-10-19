@@ -9,6 +9,7 @@
 #include <chrono>
 #include <cstdlib>
 #include <cstring>
+#include <fstream>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -27,6 +28,7 @@ static const auto _START_TIME = std::chrono::steady_clock::now();
 
 static auto _thread_name_map =
     threading::synchronized<std::unordered_map<std::thread::id, std::string>>{};
+static auto _log_out     = std::ofstream{};
 static auto _level       = level::off;
 static auto _binary_name = std::string{};
 static auto _mutex       = std::mutex{};
@@ -38,6 +40,7 @@ void init(std::string_view file_name, level level, std::string_view binary_name)
 
     set_thread_name("MAIN");
 
+    _log_out     = std::ofstream{std::string{file_name}.c_str(), std::ofstream::out};
     _level       = level;
     _binary_name = binary_name;
 
@@ -370,8 +373,20 @@ void vprint(std::string_view file,
 
     {
         auto lock = std::lock_guard{_mutex};
+        auto format_str =
+            std::string{"{:%Y-%m-%d %H:%M:%S %z} ({:>9.3f}s) [{}/{:<10}] {:>22}:{:<5} {:>8}| {}\n"};
         fmt::print(text_style,
-                   "{:%Y-%m-%d %H:%M:%S %z} ({:>9.3f}s) [{}/{:<10}] {:>22}:{:<5} {:>8}| {}\n",
+                   format_str,
+                   *time_info,
+                   uptime,
+                   _binary_name,
+                   thread_name,
+                   filename,
+                   line,
+                   level_str,
+                   message);
+        fmt::print(_log_out,
+                   format_str,
                    *time_info,
                    uptime,
                    _binary_name,
