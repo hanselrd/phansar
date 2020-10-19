@@ -78,7 +78,7 @@ jobs:
           shell: powershell
           run: |
               Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-              scoop install ninja llvm --global
+              scoop install ninja llvm postgresql --global
 
               if ("${{ matrix.compiler }}" -eq "gcc") {
                   scoop install gcc --global
@@ -99,10 +99,14 @@ jobs:
           shell: bash
           run: |
               sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-$LLVM_VERSION main"
+              sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 15CF4D18AF4F742
+
+              sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+              wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
               sudo apt-get update -y
 
-              sudo apt-get install -y ninja-build clang-tools-$LLVM_VERSION clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+              sudo apt-get install -y ninja-build clang-tools-$LLVM_VERSION clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev postgresql
 
               if [ "${{ matrix.compiler }}" == "gcc" ]; then
                   sudo apt-get install -y g++-$GCC_VERSION
@@ -118,7 +122,7 @@ jobs:
           if: runner.os == 'macOS'
           shell: bash
           run: |
-              brew install ninja llvm@$LLVM_VERSION
+              brew install ninja llvm@$LLVM_VERSION postgresql
 
               # echo "::add-path::/usr/local/opt/llvm@$LLVM_VERSION/bin"
               echo "::set-env name=PATH::$PATH:/usr/local/opt/llvm@$LLVM_VERSION/bin"
