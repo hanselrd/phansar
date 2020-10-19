@@ -1,7 +1,7 @@
 FetchContent_Declare(
     Catch2_git
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG f9620d11bee620bff58ebb9ab82da40abcc6a20f)
+    GIT_TAG 165ee585a54bfd80bd7eac67b67028222675c8a5)
 FetchContent_GetProperties(Catch2_git)
 if(NOT catch2_git_POPULATED)
     FetchContent_Populate(Catch2_git)

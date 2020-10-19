@@ -1,8 +1,3 @@
-option(ENABLE_CMAKE_FORMAT "Enable cmake-format" OFF)
-option(ENABLE_BLACK "Enable black" OFF)
-option(ENABLE_CLANG_FORMAT "Enable clang-format" OFF)
-option(ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
-
 add_custom_target(check)
 add_custom_target(format)
 

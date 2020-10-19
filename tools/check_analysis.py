@@ -1,17 +1,7 @@
-"""{name}
+#!/usr/bin/env python
 
-    Usage:
-        {name} [options]
-
-    Options:
-        -h, --help                                  Show this screen
-        -v, --version                               Show version
-        -t <threshold>, --threshold=<threshold>     Score threshold [default: 50]
-"""
-
-
+import argparse
 import collections
-import docopt
 import glob
 import os
 import re
@@ -47,11 +37,31 @@ def get_unit_score(unit):
 
 
 if __name__ == "__main__":
-    os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-    arguments = docopt.docopt(
-        __doc__.format(name="check_analysis"), version="check_analysis 1.0"
+    parser = argparse.ArgumentParser(
+        description="Generate source code analysis",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        add_help=False,
     )
+
+    # positional_parser = parser.add_argument_group("positional arguments")
+
+    # required_parser = parser.add_argument_group("required arguments")
+
+    optional_parser = parser.add_argument_group("optional arguments")
+    optional_parser.add_argument(
+        "-h",
+        "--help",
+        help="show this help message and exit",
+        action="help",
+        default=argparse.SUPPRESS,
+    )
+    optional_parser.add_argument(
+        "-t", "--threshold", help="score threshold", default=50
+    )
+
+    args = parser.parse_args()
+
+    os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
     folders = ["include", "src", "test", "vendor"]
     extensions = ["*.hpp", "*.tpp", "*.cpp"]
@@ -119,7 +129,7 @@ if __name__ == "__main__":
 
     percentage = score / len(units) * (100 / 5)
 
-    if percentage >= int(arguments["--threshold"]):
+    if percentage >= int(args.threshold):
         print("\npassed analysis with {}%".format(round(percentage, 2)))
         sys.exit(0)
     else:
