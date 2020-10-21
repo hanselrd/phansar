@@ -5,9 +5,9 @@
 #include <phansar/common/system.hpp>
 #include <phansar/common/threading/thread_pool.hpp>
 
+#include <phansar/vendor/pqxx.hpp>
 #include <phansar/vendor/pybind11.hpp>
 #include <phansar/vendor/xsimd.hpp>
-#include <phansar/vendor/pqxx.hpp>
 
 #include <random>
 #include <vector>
