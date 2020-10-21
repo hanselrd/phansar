@@ -6,6 +6,7 @@ env:
     CMAKE_GENERATOR: Ninja
     GCC_VERSION: 10
     LLVM_VERSION: 10
+    POSTGRES_VERSION: 12
 
 jobs:
     build:
@@ -106,7 +107,7 @@ jobs:
 
               sudo apt-get update -y
 
-              sudo apt-get install -y ninja-build clang-tools-$LLVM_VERSION clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev postgresql
+              sudo apt-get install -y ninja-build clang-tools-$LLVM_VERSION clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev postgresql-$POSTGRES_VERSION
 
               if [ "${{ matrix.compiler }}" == "gcc" ]; then
                   sudo apt-get install -y g++-$GCC_VERSION
@@ -122,7 +123,7 @@ jobs:
           if: runner.os == 'macOS'
           shell: bash
           run: |
-              brew install ninja llvm@$LLVM_VERSION postgresql
+              brew install ninja llvm@$LLVM_VERSION postgresql@POSTGRES_VERSION
 
               # echo "::add-path::/usr/local/opt/llvm@$LLVM_VERSION/bin"
               echo "::set-env name=PATH::$PATH:/usr/local/opt/llvm@$LLVM_VERSION/bin"
