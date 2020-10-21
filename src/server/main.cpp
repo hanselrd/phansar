@@ -7,6 +7,7 @@
 
 #include <phansar/vendor/pybind11.hpp>
 #include <phansar/vendor/xsimd.hpp>
+#include <phansar/vendor/pqxx.hpp>
 
 #include <random>
 #include <vector>
