@@ -8,7 +8,6 @@ if(NOT libpqxx_git_POPULATED)
     check_git_commit_hash(libpqxx ${libpqxx_git_SOURCE_DIR} master)
 endif()
 
-set(PostgreSQL_ADDITIONAL_VERSIONS "13")
 set(SKIP_BUILD_TEST
     ON
     CACHE BOOL "")
