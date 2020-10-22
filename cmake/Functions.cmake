@@ -174,7 +174,7 @@ function(ph_add_generic_tests name sources)
 
     ph_target_include_directories(${name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-    ph_target_link_libraries(test_${name} PRIVATE ph_vendor_catch2 ${name})
+    ph_target_link_libraries(test_${name} PRIVATE ph_vendor_catch2 ph_vendor_trompeloeil ${name})
 
     string(TOUPPER ${name} uppername)
 

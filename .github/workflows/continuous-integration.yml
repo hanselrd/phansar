@@ -167,7 +167,7 @@ jobs:
               cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
               cmake --build build
               cd build
-              ctest -VV --timeout 30 -E "pkg-config"
+              ctest --output-on-failure --timeout 30 -E "pkg-config"
 
         - name: Build and test Release
           shell: bash
@@ -176,7 +176,7 @@ jobs:
               cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
               cmake --build build
               cd build
-              ctest -VV --timeout 30 -E "pkg-config"
+              ctest --output-on-failure --timeout 30 -E "pkg-config"
 
         - name: Build and test RelWithDebInfo
           shell: bash
@@ -185,7 +185,7 @@ jobs:
               cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo
               cmake --build build
               cd build
-              ctest -VV --timeout 30 -E "pkg-config"
+              ctest --output-on-failure --timeout 30 -E "pkg-config"
 
         - name: Build and test MinSizeRel
           shell: bash
@@ -194,4 +194,4 @@ jobs:
               cmake -S . -B build -DCMAKE_BUILD_TYPE=MinSizeRel
               cmake --build build
               cd build
-              ctest -VV --timeout 30 -E "pkg-config"
+              ctest --output-on-failure --timeout 30 -E "pkg-config"
