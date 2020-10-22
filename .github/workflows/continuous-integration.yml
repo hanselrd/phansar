@@ -107,7 +107,7 @@ jobs:
 
               sudo apt-get update -y
 
-              sudo apt-get install -y ninja-build clang-tools-$LLVM_VERSION clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev postgresql-$POSTGRES_VERSION libpq-dev
+              sudo apt-get install -y ninja-build clang-tools-$LLVM_VERSION clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev postgresql-$POSTGRES_VERSION libpq-dev postgresql-server-dev-$POSTGRES_VERSION
 
               if [ "${{ matrix.compiler }}" == "gcc" ]; then
                   sudo apt-get install -y g++-$GCC_VERSION
