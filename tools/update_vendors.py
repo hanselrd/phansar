@@ -9,7 +9,7 @@ import re
 import sys
 import tempfile
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Update vendor libraries",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -54,14 +54,20 @@ if __name__ == '__main__':
 
     os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-    files = [f for f in glob.glob('vendor/*/CMakeLists.txt', recursive=True) if
-             os.path.isfile(f)]
+    files = [
+        f
+        for f in glob.glob("vendor/*/CMakeLists.txt", recursive=True)
+        if os.path.isfile(f)
+    ]
 
     for f in files:
         with tempfile.TemporaryDirectory() as tmpdir:
-            with open(f, 'r') as file:
+            with open(f, "r") as file:
                 data = file.read()
-                groups = re.search('GIT_REPOSITORY\s*(.*)\s*GIT_TAG\s*(.*)\)\s*.*\s*.*\s*.*\s*check_git_commit_hash\((?:\w|-|\.)*\s*\${\w*}\s*(.*)\)',data).groups()
+                groups = re.search(
+                    "GIT_REPOSITORY\s*(.*)\s*GIT_TAG\s*(.*)\)\s*.*\s*.*\s*.*\s*check_git_commit_hash\((?:\w|-|\.)*\s*\${\w*}\s*(.*)\)",
+                    data,
+                ).groups()
                 shell(f"git clone {groups[0]} -b {groups[2]} {tmpdir}")
                 shell(f"cd {tmpdir} && git checkout {groups[1]}")
                 _, stdout, _ = shell(f"cd {tmpdir} && git rev-parse HEAD")
@@ -72,5 +78,5 @@ if __name__ == '__main__':
             if HEAD_HASH != ORIGIN_HASH:
                 data = data.replace(groups[1], ORIGIN_HASH)
 
-                with open(f, 'w') as file:
+                with open(f, "w") as file:
                     file.write(data)
