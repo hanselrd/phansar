@@ -93,7 +93,7 @@ jobs:
                   echo "CXX=${{ matrix.compiler }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
               }
 
-              echo "$env:PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+              echo "PATH=$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
         - name: Install (Linux)
           if: runner.os == 'Linux'
