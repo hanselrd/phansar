@@ -4,6 +4,7 @@ import subprocess
 import time
 import typing
 
+
 def shell(
     cmd: str,
     stdout: bool = True,
