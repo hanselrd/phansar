@@ -4,7 +4,8 @@ set(unittest_sources
     containers/event_queue.unittest.cpp
     networking/socket.unittest.cpp
     threading/synchronized.unittest.cpp
-    threading/thread_pool.unittest.cpp)
+    threading/thread_pool.unittest.cpp
+    timer.unittest.cpp)
 # cmake-format: on
 
 ph_add_generic_tests(ph_common "${unittest_sources}")
