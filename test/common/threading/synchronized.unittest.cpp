@@ -1,123 +1,95 @@
 #include <phansar/common/threading/synchronized.hpp>
 
 #include <phansar/vendor/catch2.hpp>
+#include <phansar/vendor/trompeloeil.hpp>
 
-#include <thread>
-#include <tuple>
-#include <type_traits>
-#include <vector>
+struct mutex_mock {
+    struct adapter {
+        // NOLINTNEXTLINE(modernize-use-trailing-return-type)
+        MAKE_MOCK0(lock, void());
+        // NOLINTNEXTLINE(modernize-use-trailing-return-type)
+        MAKE_MOCK0(try_lock, bool());
+        // NOLINTNEXTLINE(modernize-use-trailing-return-type)
+        MAKE_MOCK0(unlock, void());
+    };
 
-#define THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS (10000)
-
-struct point {
-    int x;
-    int y;
-};
-
-using types = std::tuple<std::vector<int>, point, int>;
-
-TEMPLATE_LIST_TEST_CASE("common_threading_synchronized",
-                        "[common][threading][synchronized]",
-                        types) {
-    auto s       = phansar::common::threading::synchronized<TestType>{};
-    auto threads = std::vector<std::thread>{};
-
-    REQUIRE(std::thread::hardware_concurrency() > 0);
-
-    SECTION("can lock") {
-        for (auto i = std::size_t{0}; i < std::thread::hardware_concurrency(); ++i) {
-            threads.emplace_back([&s] {
-                for (auto j = std::size_t{0}; j < THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS;
-                     ++j) {
-                    auto l = s.lock();
-
-                    if constexpr (std::is_same_v<TestType, std::tuple_element_t<0, types>>) {
-                        l->push_back(1);
-                    } else if constexpr (std::is_same_v<TestType, std::tuple_element_t<1, types>>) {
-                        ++l->x;
-                        --l->y;
-                    } else if constexpr (std::is_same_v<TestType, std::tuple_element_t<2, types>>) {
-                        ++(*l);
-                    }
-                }
-            });
-        }
-
-        for (auto & t : threads) {
-            if (t.joinable()) {
-                t.join();
-            }
-        }
-
-        auto l = s.lock();
-
-        if constexpr (std::is_same_v<TestType, std::tuple_element_t<0, types>>) {
-            REQUIRE(l->size() == (THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
-                                  std::thread::hardware_concurrency()));
-        } else if constexpr (std::is_same_v<TestType, std::tuple_element_t<1, types>>) {
-            REQUIRE(l->x == (THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
-                             static_cast<decltype(l->x)>(std::thread::hardware_concurrency())));
-            REQUIRE(l->y == -(THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
-                              static_cast<decltype(l->y)>(std::thread::hardware_concurrency())));
-        } else if constexpr (std::is_same_v<TestType, std::tuple_element_t<2, types>>) {
-            REQUIRE(*l == (THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
-                           static_cast<std::remove_reference_t<decltype(*l)>>(
-                               std::thread::hardware_concurrency())));
-        }
+    static void lock() {
+        return s_mock.lock();
     }
 
-    SECTION("can try_lock") {
-        for (auto i = std::size_t{0}; i < std::thread::hardware_concurrency(); ++i) {
-            threads.emplace_back([&s] {
-                for (auto j = std::size_t{0}; j < THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS;
-                     ++j) {
-                    while (true) {
-                        if (auto l = s.try_lock(); l.has_value()) {
-                            if constexpr (std::is_same_v<TestType,
-                                                         std::tuple_element_t<0, types>>) {
-                                l.value()->push_back(1);
-                            } else if constexpr (std::is_same_v<TestType,
-                                                                std::tuple_element_t<1, types>>) {
-                                ++l.value()->x;
-                                --l.value()->y;
-                            } else if constexpr (std::is_same_v<TestType,
-                                                                std::tuple_element_t<2, types>>) {
-                                ++(*l.value());
-                            }
+    static auto try_lock() -> bool {
+        return s_mock.try_lock();
+    }
 
-                            break;
+    static void unlock() {
+        return s_mock.unlock();
+    }
+
+    static adapter s_mock;
+};
+
+mutex_mock::adapter mutex_mock::s_mock = mutex_mock::adapter{};
+
+SCENARIO("common::threading::synchronized", "[common][threading][synchronized]") {
+    auto & mock = mutex_mock::s_mock;
+    auto   sync = phansar::common::threading::synchronized<int, mutex_mock>{50};
+
+    GIVEN("a new synchronized value") {
+        WHEN("it is locked") {
+            auto x1    = NAMED_REQUIRE_CALL(mock, lock());
+            auto proxy = sync.lock();
+
+            THEN("the value is locked") {
+                x1.reset();
+
+                AND_THEN("a proxy is returned") {
+                    REQUIRE(*proxy == 50);
+
+                    AND_WHEN("it goes out of scope") {
+                        auto x2 = NAMED_REQUIRE_CALL(mock, unlock());
+                        { auto dummy = std::move(proxy); }
+
+                        THEN("the synchronized value is unlocked") {
+                            x2.reset();
                         }
                     }
                 }
-            });
-        }
-
-        for (auto & t : threads) {
-            if (t.joinable()) {
-                t.join();
             }
         }
+        WHEN("it is try locked") {
+            AND_WHEN("it is successful") {
+                auto x1    = NAMED_REQUIRE_CALL(mock, try_lock()).RETURN(true);
+                auto proxy = sync.try_lock();
 
-        while (true) {
-            if (auto l = s.try_lock(); l.has_value()) {
-                if constexpr (std::is_same_v<TestType, std::tuple_element_t<0, types>>) {
-                    REQUIRE(l.value()->size() == (THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
-                                                  std::thread::hardware_concurrency()));
-                } else if constexpr (std::is_same_v<TestType, std::tuple_element_t<1, types>>) {
-                    REQUIRE(l.value()->x == (THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
-                                             static_cast<decltype(l.value()->x)>(
-                                                 std::thread::hardware_concurrency())));
-                    REQUIRE(l.value()->y == -(THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
-                                              static_cast<decltype(l.value()->y)>(
-                                                  std::thread::hardware_concurrency())));
-                } else if constexpr (std::is_same_v<TestType, std::tuple_element_t<2, types>>) {
-                    REQUIRE(*l.value() ==
-                            (THREADING_SYNCHRONIZED_UNITTEST_MAX_ITERATIONS *
-                             static_cast<std::remove_reference_t<decltype(*l.value())>>(
-                                 std::thread::hardware_concurrency())));
+                THEN("the value is locked") {
+                    x1.reset();
+
+                    AND_THEN("a proxy is returned") {
+                        REQUIRE(proxy.has_value());
+                        REQUIRE(*proxy.value() == 50);
+
+                        AND_WHEN("it goes out of scope") {
+                            auto x2 = NAMED_REQUIRE_CALL(mock, unlock());
+                            { auto dummy = std::move(proxy); }
+
+                            THEN("the synchronized value is unlocked") {
+                                x2.reset();
+                            }
+                        }
+                    }
                 }
+            }
+            AND_WHEN("it fails") {
+                auto x1    = NAMED_REQUIRE_CALL(mock, try_lock()).RETURN(false);
+                auto proxy = sync.try_lock();
 
-                break;
+                THEN("the value is not locked") {
+                    x1.reset();
+
+                    AND_THEN("nothing is returned") {
+                        REQUIRE(! proxy.has_value());
+                    }
+                }
             }
         }
     }
