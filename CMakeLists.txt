@@ -47,7 +47,7 @@ include(Catch)
 add_subdirectory(src)
 add_subdirectory(test)
 
-find_package(Python COMPONENTS Interpreter)
+find_package(Python REQUIRED COMPONENTS Interpreter)
 add_custom_target(
     assets ALL
     COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tools/compile_assets.py -o assets.json

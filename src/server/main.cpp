@@ -5,6 +5,7 @@
 #include <phansar/common/system.hpp>
 #include <phansar/common/threading/thread_pool.hpp>
 
+#include <phansar/vendor/enet.hpp>
 #include <phansar/vendor/fmt.hpp>
 #include <phansar/vendor/pqxx.hpp>
 #include <phansar/vendor/pybind11.hpp>
@@ -117,6 +118,9 @@ auto main(int argc, char * argv[]) -> int {
 
     executor.run(taskflow).wait();
     LOGI("\n{}", taskflow.dump());
+
+    enet_initialize();
+    enet_deinitialize();
 
     phansar::common::system::shutdown();
 

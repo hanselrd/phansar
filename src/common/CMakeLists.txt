@@ -15,6 +15,7 @@ set(sources
 set(system_libs
     ph_vendor_cppcodec
     ph_vendor_docopt
+    ph_vendor_enet
     ph_vendor_fmt
     ph_vendor_hedley
     ph_vendor_json
