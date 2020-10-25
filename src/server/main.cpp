@@ -3,7 +3,6 @@
 #include <phansar/common/log.hpp>
 #include <phansar/common/python.hpp>
 #include <phansar/common/system.hpp>
-#include <phansar/common/threading/thread_pool.hpp>
 
 #include <phansar/vendor/enet.hpp>
 #include <phansar/vendor/fmt.hpp>
@@ -50,9 +49,6 @@ auto main(int argc, char * argv[]) -> int {
         log.error("error")
         log.critical("critical")
     )python");
-
-    auto tp = phansar::common::threading::thread_pool{};
-    tp.push_work([] { LOGI("work"); });
 
     auto rd      = std::random_device{};
     auto gen     = std::mt19937{rd()};

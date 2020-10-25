@@ -9,8 +9,7 @@ set(sources
     memory.cpp
     networking/socket.cpp
     python.cpp
-    system.cpp
-    threading/thread_pool.cpp)
+    system.cpp)
 
 set(system_libs
     ph_vendor_cppcodec
