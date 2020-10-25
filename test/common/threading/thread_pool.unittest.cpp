@@ -2,44 +2,31 @@
 
 #include <phansar/vendor/catch2.hpp>
 
-#include <atomic>
-#include <vector>
+SCENARIO("common::threading::thread_pool", "[common][threading][thread_pool]") {
+    auto pool = phansar::common::threading::thread_pool{};
 
-#define THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS (10000)
+    GIVEN("a new thread pool") {
+        WHEN("it receives work") {
+            pool.push_work([] {});
 
-TEST_CASE("common_threading_thread_pool", "[common][threading][thread_pool]") {
-    auto tp    = phansar::common::threading::thread_pool{};
-    auto count = std::atomic_uint64_t{0};
-
-    SECTION("can push_work") {
-        for (auto i = std::size_t{0}; i < THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS; ++i) {
-            tp.push_work([&count] { count.fetch_add(1); });
+            THEN("the work is scheduled") {
+                AND_THEN("it is completed") {}
+            }
         }
+        WHEN("it receives a task") {
+            auto fut = pool.push_task([] { return 50; });
 
-        tp.wait_done();
+            THEN("the task is scheduled") {
+                AND_THEN("a future is returned") {
+                    fut.wait();
 
-        REQUIRE(count.load() == THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS);
-    }
-
-    SECTION("can push_task") {
-        auto futs       = std::vector<std::future<std::uint64_t>>{};
-        auto futs_count = std::uint64_t{0};
-
-        for (auto i = std::size_t{0}; i < THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS; ++i) {
-            auto fut = tp.push_task([&count] {
-                count.fetch_add(1);
-                return std::uint64_t{1};
-            });
-            futs.push_back(std::move(fut));
+                    AND_WHEN("the task is completed") {
+                        THEN("the future will resolve") {
+                            REQUIRE(fut.get() == 50);
+                        }
+                    }
+                }
+            }
         }
-
-        for (auto & f : futs) {
-            futs_count += f.get();
-        }
-
-        tp.wait_done();
-
-        REQUIRE(count.load() == THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS);
-        REQUIRE(futs_count == THREADING_THREAD_POOL_UNITTEST_MAX_ITERATIONS);
     }
 }

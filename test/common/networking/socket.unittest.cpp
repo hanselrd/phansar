@@ -2,4 +2,4 @@
 
 #include <phansar/vendor/catch2.hpp>
 
-TEST_CASE("common_networking_socket", "[common][networking][socket]") {}
+SCENARIO("common::networking::socket", "[common][networking][socket]") {}
