@@ -117,7 +117,7 @@ if(ENABLE_CLANG_FORMAT)
                 check-clang-format-${counter}
                 COMMAND ${CLANG_FORMAT_EXECUTABLE} -style=file ${clang_format_file} >
                         ${CMAKE_BINARY_DIR}/check-clang-format/${counter}
-                COMMAND ${CMAKE_COMMAND} -E compare_files ${clang_format_file}
+                COMMAND ${CMAKE_COMMAND} -E compare_files --ignore-eol ${clang_format_file}
                         ${CMAKE_BINARY_DIR}/check-clang-format/${counter}
                 DEPENDS check-clang-format-tmpdir
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -193,7 +193,7 @@ if(ENABLE_CLANG_TIDY)
                 COMMAND ${CMAKE_COMMAND} -E touch
                         ${CMAKE_BINARY_DIR}/check-clang-tidy/${counter}.yaml
                 COMMAND
-                    ${CMAKE_COMMAND} -E compare_files
+                    ${CMAKE_COMMAND} -E compare_files --ignore-eol
                     ${CMAKE_BINARY_DIR}/check-clang-tidy/${counter}.yaml
                     ${CMAKE_BINARY_DIR}/check-clang-tidy/empty
                 DEPENDS check-clang-tidy-tmpdir
