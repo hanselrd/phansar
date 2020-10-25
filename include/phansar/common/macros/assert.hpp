@@ -54,4 +54,6 @@
 #    define ASSERT_IF(ignore1, ignore2)           ((void)0)
 #endif
 
+#undef TERMINATE
+
 #endif

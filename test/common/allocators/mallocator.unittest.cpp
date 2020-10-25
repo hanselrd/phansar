@@ -2,19 +2,22 @@
 
 #include <phansar/vendor/catch2.hpp>
 
-#include <string>
-#include <tuple>
-#include <vector>
+SCENARIO("common::allocators::mallocator", "[common][allocators][mallocator]") {
+    auto alloc = phansar::common::allocators::mallocator<int>{};
 
-using types = std::tuple<int, std::string, std::vector<int>, std::vector<std::string>>;
+    GIVEN("a new mallocator") {
+        WHEN("it allocates") {
+            auto * ptr = alloc.allocate(5);
 
-TEMPLATE_LIST_TEST_CASE("common_allocators_mallocator", "[common][allocators][mallocator]", types) {
-    auto a = phansar::common::allocators::mallocator<TestType>{};
+            THEN("a pointer is returned") {
+                REQUIRE(ptr != nullptr);
 
-    SECTION("can allocate and deallocate") {
-        auto * ptr = a.allocate(2);
-        a.deallocate(ptr, 2);
+                AND_WHEN("it deallocates") {
+                    alloc.deallocate(ptr, 5);
 
-        REQUIRE(ptr != nullptr);
+                    THEN("the pointer is freed") {}
+                }
+            }
+        }
     }
 }
