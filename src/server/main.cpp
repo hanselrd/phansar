@@ -5,8 +5,10 @@
 #include <phansar/common/system.hpp>
 #include <phansar/common/threading/thread_pool.hpp>
 
+#include <phansar/vendor/fmt.hpp>
 #include <phansar/vendor/pqxx.hpp>
 #include <phansar/vendor/pybind11.hpp>
+#include <phansar/vendor/taskflow.hpp>
 #include <phansar/vendor/xsimd.hpp>
 
 #include <random>
@@ -75,6 +77,46 @@ auto main(int argc, char * argv[]) -> int {
     LOGI("a: {}", a);
     LOGI("b: {}", b);
     LOGI("c: {}", c);
+
+    struct observer : public tf::ObserverInterface {
+        explicit observer(const std::string & name) {
+            LOGI("constructing: {}", name);
+        }
+
+        void set_up(std::size_t num_workers) final {
+            LOGI("setting up with {} workers", num_workers);
+        }
+
+        void on_entry(std::size_t w, tf::TaskView tv) final {
+            phansar::common::log::set_thread_name(fmt::format("WORKER{}", w));
+            LOGI("worker {} ready to run {}", w, tv.name());
+        }
+
+        void on_exit(std::size_t w, tf::TaskView tv) final {
+            LOGI("worker {} finished running {}", w, tv.name());
+        }
+    };
+
+    auto executor = tf::Executor{};
+    auto taskflow = tf::Taskflow{};
+
+    auto [A, B, C, D] = taskflow.emplace([]() { LOGI("Task A"); },
+                                         []() { LOGI("Task B"); },
+                                         []() { LOGI("Task C"); },
+                                         []() { LOGI("Task D"); });
+
+    A.name("A");
+    B.name("B");
+    C.name("C");
+    D.name("D");
+
+    A.precede(B, C);
+    D.succeed(B, C);
+
+    auto obs = executor.make_observer<observer>("observer");
+
+    executor.run(taskflow).wait();
+    LOGI("\n{}", taskflow.dump());
 
     phansar::common::system::shutdown();
 
