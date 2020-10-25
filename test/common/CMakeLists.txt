@@ -3,7 +3,6 @@ set(unittest_sources
     allocators/mallocator.unittest.cpp
     networking/socket.unittest.cpp
     threading/synchronized.unittest.cpp
-    threading/thread_pool.unittest.cpp
     timer.unittest.cpp)
 # cmake-format: on
 
