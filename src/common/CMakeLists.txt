@@ -13,13 +13,13 @@ set(sources
     timer.cpp)
 
 set(system_libs
+    # ph_vendor_plibsys
     ph_vendor_cppcodec
     ph_vendor_docopt
     ph_vendor_enet
     ph_vendor_fmt
     ph_vendor_hedley
     ph_vendor_json
-    ph_vendor_plibsys
     ph_vendor_pybind11
     ph_vendor_rangev3
     ph_vendor_taskflow

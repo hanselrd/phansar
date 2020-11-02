@@ -13,8 +13,8 @@ void init(int _argc, const char * const * _argv, bool _enable_config) {
             log::create(cli::instance()->log_level(),
                         cli::instance()->binary_name(),
                         cli::instance()->log_file_path(),
-                        5 * 1024 * 1024,
-                        3);
+                        10 * 1024,
+                        9);
         }
     }
 }
