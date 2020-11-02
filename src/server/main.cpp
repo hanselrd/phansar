@@ -95,40 +95,25 @@ auto main(int _argc, char * _argv[]) -> int {
     A.precede(B, C);
     D.succeed(B, C);
 
-    /* for (auto i = std::size_t{0}; i < 100; ++i) { */
-    /*     executor.async([i]() { */
-    /*         LOG_INFO("Task {}", i); */
-    /*         LOG_WARNING("Task {}", i); */
-    /*         LOG_CRITICAL("Task {}", i); */
-    /*     }); */
-    /* } */
+    auto sync_vector = phansar::common::threading::synchronized<std::vector<std::size_t>>{};
 
-    executor.run(taskflow).wait();
+    for (auto i = std::size_t{0}; i < 100'000; ++i) {
+        executor.async([i, &sync_vector]() {
+            LOG_INFO("Task {}", i);
+            auto lock = sync_vector.lock();
+            lock->push_back(i);
+        });
+    }
+
+    executor.run(taskflow);
+    executor.wait_for_all();
     LOG_INFO("\n{}", taskflow.dump());
 
-    LOG_INFO("end");
+    auto lock = sync_vector.lock_shared();
+    LOG_INFO("sync_vector: {}", lock->size());
 
     enet_initialize();
     enet_deinitialize();
-
-    auto sync_vector = phansar::common::threading::synchronized<std::vector<int>>{};
-    {
-        auto proxy = sync_vector.lock();
-        proxy.get()->push_back(1);
-        (*proxy).push_back(2);
-        proxy->push_back(3);
-        LOG_INFO("Write {}: {} {}", proxy->size(), *proxy, *(proxy.get()));
-    }
-    {
-        auto proxy = sync_vector.lock_shared();
-        /* proxy.get()->push_back(1); */
-        /* (*proxy).push_back(2); */
-        /* proxy->push_back(3); */
-        LOG_INFO("Read {}: {} {}", proxy->size(), *proxy, *(proxy.get()));
-    }
-
-    auto alloc = phansar::common::allocators::mallocator<int>{};
-    alloc.deallocate(alloc.allocate(12), 12);
 
     phansar::common::system::shutdown();
 
