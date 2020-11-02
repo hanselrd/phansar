@@ -1,3 +1,4 @@
+#include <phansar/common/allocators/mallocator.hpp>
 #include <phansar/common/cli.hpp>
 #include <phansar/common/histogram.hpp>
 #include <phansar/common/log.hpp>
@@ -125,6 +126,9 @@ auto main(int _argc, char * _argv[]) -> int {
         /* proxy->push_back(3); */
         LOG_INFO("Read {}: {} {}", proxy->size(), *proxy, *(proxy.get()));
     }
+
+    auto alloc = phansar::common::allocators::mallocator<int>{};
+    alloc.deallocate(alloc.allocate(12), 12);
 
     phansar::common::system::shutdown();
 
