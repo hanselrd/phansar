@@ -4,7 +4,6 @@
 #include <chrono>
 
 namespace phansar::common {
-template <class Clock = std::chrono::steady_clock>
 class timer {
 public:
     void start();
@@ -13,8 +12,8 @@ public:
     [[nodiscard]] auto get_elapsed_time() const -> T;
 
 private:
-    std::chrono::time_point<Clock> _start_time, _end_time;
-    bool                           _running = false;
+    std::chrono::time_point<std::chrono::steady_clock> m_start_time, m_end_time;
+    bool                                               m_running = false;
 };
 } // namespace phansar::common
 

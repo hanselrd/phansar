@@ -1,8 +1,10 @@
-#include <phansar/common/config.hpp>
+#include <phansar/common/cli.hpp>
 #include <phansar/common/histogram.hpp>
 #include <phansar/common/log.hpp>
+#include <phansar/common/macros.hpp>
 #include <phansar/common/python.hpp>
 #include <phansar/common/system.hpp>
+#include <phansar/common/threading/synchronized.hpp>
 
 #include <phansar/vendor/enet.hpp>
 #include <phansar/vendor/fmt.hpp>
@@ -20,19 +22,20 @@ PYBIND11_EMBEDDED_MODULE(phansar, m) {
 
     auto server    = m.def_submodule("server");
     auto fast_calc = server.def_submodule("fast_calc");
-    fast_calc.def("add", [](int i, int j) { return i + j; });
+    fast_calc.def("add", [](int _i, int _j) { return _i + _j; });
 }
 
-auto main(int argc, char * argv[]) -> int {
-    phansar::common::system::init(argc, argv);
+auto main(int _argc, char * _argv[]) -> int {
+    phansar::common::system::init(_argc, _argv);
 
-    LOGI("Binary Name: {}", phansar::common::config::get_binary_name());
-    LOGI("Config File: {}", phansar::common::config::get_config_file());
-    LOGI("Log File: {}", phansar::common::config::get_log_file());
-    LOGI("Log Level: {}", phansar::common::config::get_log_level());
-    LOGI("IP Address: {}", phansar::common::config::get_ip_address());
-    LOGI("Port: {}", phansar::common::config::get_port());
-    LOGI("Num Threads: {}", phansar::common::config::get_num_threads());
+    if (phansar::common::cli::instance() != nullptr) {
+        LOG_INFO("Binary Name: {}", phansar::common::cli::instance()->binary_name());
+        LOG_INFO("Log File: {}", phansar::common::cli::instance()->log_file_path());
+        LOG_INFO("Log Level: {}", phansar::common::cli::instance()->log_level());
+        LOG_INFO("Host: {}", phansar::common::cli::instance()->host());
+        LOG_INFO("Port: {}", phansar::common::cli::instance()->port());
+        LOG_INFO("Num Threads: {}", phansar::common::cli::instance()->num_threads());
+    }
 
     auto guard = py::scoped_interpreter{};
     py::exec(R"python(
@@ -55,13 +58,13 @@ auto main(int argc, char * argv[]) -> int {
     auto distrib = std::uniform_int_distribution{1, 6};
 
     auto h = phansar::common::histogram<int>{"XXXX", "xxxx", 6};
-    for (auto i = std::size_t{0}; i < 1000000; ++i) {
+    for (auto i = std::size_t{0}; i < 1'000'000; ++i) {
         h.push(distrib(gen));
     }
     /* for (auto && i : {5, 5, 10, 12, 8, 3, 2, 9, 8, 4, 1, 20, 3, 2, 4, 6}) { */
     /*     h.push(i); */
     /* } */
-    h.log();
+    LOG_INFO("{}", h);
 
     auto a = std::vector<double>{1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5};
     auto b = std::vector<double>{2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5};
@@ -70,37 +73,18 @@ auto main(int argc, char * argv[]) -> int {
                      std::cend(a),
                      std::cbegin(b),
                      std::begin(c),
-                     [](const auto & x, const auto & y) { return (x + y) / 2.; });
-    LOGI("a: {}", a);
-    LOGI("b: {}", b);
-    LOGI("c: {}", c);
-
-    struct observer : public tf::ObserverInterface {
-        explicit observer(const std::string & name) {
-            LOGI("constructing: {}", name);
-        }
-
-        void set_up(std::size_t num_workers) final {
-            LOGI("setting up with {} workers", num_workers);
-        }
-
-        void on_entry(std::size_t w, tf::TaskView tv) final {
-            phansar::common::log::set_thread_name(fmt::format("WORKER{}", w));
-            LOGI("worker {} ready to run {}", w, tv.name());
-        }
-
-        void on_exit(std::size_t w, tf::TaskView tv) final {
-            LOGI("worker {} finished running {}", w, tv.name());
-        }
-    };
+                     [](const auto & _x, const auto & _y) { return (_x + _y) / 2.; });
+    LOG_INFO("a: {}", a);
+    LOG_INFO("b: {}", b);
+    LOG_INFO("c: {}", c);
 
     auto executor = tf::Executor{};
     auto taskflow = tf::Taskflow{};
 
-    auto [A, B, C, D] = taskflow.emplace([]() { LOGI("Task A"); },
-                                         []() { LOGI("Task B"); },
-                                         []() { LOGI("Task C"); },
-                                         []() { LOGI("Task D"); });
+    auto [A, B, C, D] = taskflow.emplace([]() { LOG_INFO("Task A"); },
+                                         []() { LOG_INFO("Task B"); },
+                                         []() { LOG_INFO("Task C"); },
+                                         []() { LOG_INFO("Task D"); });
 
     A.name("A");
     B.name("B");
@@ -110,13 +94,37 @@ auto main(int argc, char * argv[]) -> int {
     A.precede(B, C);
     D.succeed(B, C);
 
-    auto obs = executor.make_observer<observer>("observer");
+    /* for (auto i = std::size_t{0}; i < 100; ++i) { */
+    /*     executor.async([i]() { */
+    /*         LOG_INFO("Task {}", i); */
+    /*         LOG_WARNING("Task {}", i); */
+    /*         LOG_CRITICAL("Task {}", i); */
+    /*     }); */
+    /* } */
 
     executor.run(taskflow).wait();
-    LOGI("\n{}", taskflow.dump());
+    LOG_INFO("\n{}", taskflow.dump());
+
+    LOG_INFO("end");
 
     enet_initialize();
     enet_deinitialize();
+
+    auto sync_vector = phansar::common::threading::synchronized<std::vector<int>>{};
+    {
+        auto proxy = sync_vector.lock();
+        proxy.get()->push_back(1);
+        (*proxy).push_back(2);
+        proxy->push_back(3);
+        LOG_INFO("Write {}: {} {}", proxy->size(), *proxy, *(proxy.get()));
+    }
+    {
+        auto proxy = sync_vector.lock_shared();
+        /* proxy.get()->push_back(1); */
+        /* (*proxy).push_back(2); */
+        /* proxy->push_back(3); */
+        LOG_INFO("Read {}: {} {}", proxy->size(), *proxy, *(proxy.get()));
+    }
 
     phansar::common::system::shutdown();
 

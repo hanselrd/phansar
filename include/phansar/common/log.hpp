@@ -1,78 +1,58 @@
 #ifndef PHANSAR_COMMON_LOG_HPP
 #define PHANSAR_COMMON_LOG_HPP
 
+#include <phansar/common/utility/singleton.hpp>
+
 #include <phansar/vendor/fmt.hpp>
 
+#include <chrono>
+#include <cstddef>
+#include <cstdint>
+#include <fstream>
+#include <mutex>
+#include <shared_mutex>
+#include <string>
 #include <string_view>
+#include <thread>
+#include <unordered_map>
 
-#define LOGT(...)                                                                                  \
-    phansar::common::log::print(__FILE__, __LINE__, phansar::common::log::level::trace, __VA_ARGS__)
-#define LOGD(...)                                                                                  \
-    phansar::common::log::print(__FILE__, __LINE__, phansar::common::log::level::debug, __VA_ARGS__)
-#define LOGI(...)                                                                                  \
-    phansar::common::log::print(__FILE__, __LINE__, phansar::common::log::level::info, __VA_ARGS__)
-#define LOGW(...)                                                                                  \
-    phansar::common::log::print(__FILE__,                                                          \
-                                __LINE__,                                                          \
-                                phansar::common::log::level::warning,                              \
-                                __VA_ARGS__)
-#define LOGE(...)                                                                                  \
-    phansar::common::log::print(__FILE__, __LINE__, phansar::common::log::level::error, __VA_ARGS__)
-#define LOGC(...)                                                                                  \
-    phansar::common::log::print(__FILE__,                                                          \
-                                __LINE__,                                                          \
-                                phansar::common::log::level::critical,                             \
-                                __VA_ARGS__)
-#define LOGT_IF(condition, ...)                                                                    \
-    do {                                                                                           \
-        if (condition) {                                                                           \
-            LOGT(__VA_ARGS__);                                                                     \
-        }                                                                                          \
-    } while (0)
-#define LOGD_IF(condition, ...)                                                                    \
-    do {                                                                                           \
-        if (condition) {                                                                           \
-            LOGD(__VA_ARGS__);                                                                     \
-        }                                                                                          \
-    } while (0)
-#define LOGI_IF(condition, ...)                                                                    \
-    do {                                                                                           \
-        if (condition) {                                                                           \
-            LOGI(__VA_ARGS__);                                                                     \
-        }                                                                                          \
-    } while (0)
-#define LOGW_IF(condition, ...)                                                                    \
-    do {                                                                                           \
-        if (condition) {                                                                           \
-            LOGW(__VA_ARGS__);                                                                     \
-        }                                                                                          \
-    } while (0)
-#define LOGE_IF(condition, ...)                                                                    \
-    do {                                                                                           \
-        if (condition) {                                                                           \
-            LOGE(__VA_ARGS__);                                                                     \
-        }                                                                                          \
-    } while (0)
-#define LOGC_IF(condition, ...)                                                                    \
-    do {                                                                                           \
-        if (condition) {                                                                           \
-            LOGC(__VA_ARGS__);                                                                     \
-        }                                                                                          \
-    } while (0)
+namespace phansar::common {
+class log : public utility::singleton<log> {
+public:
+    enum class level { trace, debug, info, warning, error, critical, off };
 
-namespace phansar::common::log {
-enum class level { trace, debug, info, warning, error, critical, off };
+    log(level            _level,
+        std::string_view _name,
+        std::string_view _file_path,
+        std::uintmax_t   _file_size,
+        std::size_t      _num_files);
 
-void init(std::string_view file_name, level level, std::string_view binary_name);
-void set_thread_name(std::string_view name);
-void vprint(std::string_view file,
-            int              line,
-            level            level,
-            std::string_view format,
-            fmt::format_args args);
-template <class... Args>
-void print(std::string_view file, int line, level level, std::string_view format, Args &&... args);
-} // namespace phansar::common::log
+    void set_thread_name(std::thread::id _thread_id, std::string_view _thread_name);
+    void vprint(level            _level,
+                std::string_view _source_file,
+                int              _source_line,
+                std::string_view _format,
+                fmt::format_args _args);
+    template <class... Args>
+    void print(level            _level,
+               std::string_view _source_file,
+               int              _source_line,
+               std::string_view _format,
+               Args &&... _args);
+
+private:
+    const level                                              m_level;
+    const std::string                                        m_name;
+    const std::string                                        m_file_path;
+    const std::uintmax_t                                     m_file_size;
+    const std::size_t                                        m_num_files;
+    std::ofstream                                            m_out_file;
+    const std::chrono::time_point<std::chrono::system_clock> m_start_time;
+    std::unordered_map<std::thread::id, std::string>         m_thread_name_map;
+    std::shared_mutex                                        m_thread_name_map_mutex;
+    std::mutex                                               m_print_mutex;
+};
+} // namespace phansar::common
 
 #include <phansar/common/detail/log.tpp>
 

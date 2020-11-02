@@ -1,31 +1,23 @@
-#include <phansar/common/config.hpp>
+#include <phansar/common/cli.hpp>
 #include <phansar/common/log.hpp>
-#include <phansar/common/macros/assert.hpp>
+#include <phansar/common/macros.hpp>
 #include <phansar/common/memory.hpp>
 #include <phansar/common/system.hpp>
 
-#include <phansar/vendor/plibsys.hpp>
-
-#include <cstdlib>
-#include <string>
-
 namespace phansar::common::system {
-void init(int argc, const char * const * argv, bool enable_config) {
-    if (enable_config) {
-        config::init(argc, argv);
+void init(int _argc, const char * const * _argv, bool _enable_config) {
+    if (_enable_config) {
+        cli::create(_argc, _argv);
 
-        log::init(config::get_log_file(), config::get_log_level(), config::get_binary_name());
+        if (cli::instance() != nullptr) {
+            log::create(cli::instance()->log_level(),
+                        cli::instance()->binary_name(),
+                        cli::instance()->log_file_path(),
+                        5 * 1024 * 1024,
+                        3);
+        }
     }
-
-    auto vtable    = PMemVTable{};
-    vtable.malloc  = &memory::malloc;
-    vtable.realloc = &memory::realloc;
-    vtable.free    = &memory::free;
-
-    p_libsys_init_full(&vtable);
 }
 
-void shutdown() {
-    p_libsys_shutdown();
-}
+void shutdown() {}
 } // namespace phansar::common::system

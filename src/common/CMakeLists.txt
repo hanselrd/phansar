@@ -4,12 +4,13 @@ find_package(Threads REQUIRED)
 
 # cmake-format: off
 set(sources
-    config.cpp
+    cli.cpp
     log.cpp
     memory.cpp
     networking/socket.cpp
     python.cpp
-    system.cpp)
+    system.cpp
+    timer.cpp)
 
 set(system_libs
     ph_vendor_cppcodec

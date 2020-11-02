@@ -1,7 +1,7 @@
 FetchContent_Declare(
     raylib_git
     GIT_REPOSITORY https://github.com/raysan5/raylib.git
-    GIT_TAG 482b8a5e7e569c7abd665645b7678468bafa2e1a)
+    GIT_TAG 05ab39ed9f995fc5577fa72a0a5338eff2460cd8)
 FetchContent_GetProperties(raylib_git)
 if(NOT raylib_git_POPULATED)
     FetchContent_Populate(raylib_git)

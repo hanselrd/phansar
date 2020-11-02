@@ -2,7 +2,7 @@
 #define PHANSAR_COMMON_SYSTEM_HPP
 
 namespace phansar::common::system {
-void init(int argc, const char * const * argv, bool enable_config = true);
+void init(int _argc, const char * const * _argv, bool _enable_config = true);
 void shutdown();
 } // namespace phansar::common::system
 

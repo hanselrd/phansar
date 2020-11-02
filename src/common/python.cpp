@@ -7,57 +7,27 @@
 #include <string_view>
 
 namespace phansar::common::python {
-void embed(py::module & m) {
-    auto common = m.def_submodule("common");
+void embed(py::module & _module) {
+    auto common = _module.def_submodule("common");
 
+    auto logger = [](log::level _level) {
+        return [_level](std::string_view _message) {
+            if (log::instance() != nullptr) {
+                auto inspect   = py::module::import("inspect");
+                auto frameinfo = inspect.attr("getframeinfo")(inspect.attr("currentframe")());
+                log::instance()->print(_level,
+                                       frameinfo.attr("filename").cast<std::string>(),
+                                       frameinfo.attr("lineno").cast<int>(),
+                                       _message);
+            }
+        };
+    };
     auto log = common.def_submodule("log");
-    log.def("trace", [](std::string_view message) {
-        auto inspect   = py::module::import("inspect");
-        auto frameinfo = inspect.attr("getframeinfo")(inspect.attr("currentframe")());
-        log::print(frameinfo.attr("filename").cast<std::string>(),
-                   frameinfo.attr("lineno").cast<int>(),
-                   log::level::trace,
-                   message);
-    });
-    log.def("debug", [](std::string_view message) {
-        auto inspect   = py::module::import("inspect");
-        auto frameinfo = inspect.attr("getframeinfo")(inspect.attr("currentframe")());
-        log::print(frameinfo.attr("filename").cast<std::string>(),
-                   frameinfo.attr("lineno").cast<int>(),
-                   log::level::debug,
-                   message);
-    });
-    log.def("info", [](std::string_view message) {
-        auto inspect   = py::module::import("inspect");
-        auto frameinfo = inspect.attr("getframeinfo")(inspect.attr("currentframe")());
-        log::print(frameinfo.attr("filename").cast<std::string>(),
-                   frameinfo.attr("lineno").cast<int>(),
-                   log::level::info,
-                   message);
-    });
-    log.def("warning", [](std::string_view message) {
-        auto inspect   = py::module::import("inspect");
-        auto frameinfo = inspect.attr("getframeinfo")(inspect.attr("currentframe")());
-        log::print(frameinfo.attr("filename").cast<std::string>(),
-                   frameinfo.attr("lineno").cast<int>(),
-                   log::level::warning,
-                   message);
-    });
-    log.def("error", [](std::string_view message) {
-        auto inspect   = py::module::import("inspect");
-        auto frameinfo = inspect.attr("getframeinfo")(inspect.attr("currentframe")());
-        log::print(frameinfo.attr("filename").cast<std::string>(),
-                   frameinfo.attr("lineno").cast<int>(),
-                   log::level::error,
-                   message);
-    });
-    log.def("critical", [](std::string_view message) {
-        auto inspect   = py::module::import("inspect");
-        auto frameinfo = inspect.attr("getframeinfo")(inspect.attr("currentframe")());
-        log::print(frameinfo.attr("filename").cast<std::string>(),
-                   frameinfo.attr("lineno").cast<int>(),
-                   log::level::critical,
-                   message);
-    });
+    log.def("trace", logger(log::level::trace));
+    log.def("debug", logger(log::level::debug));
+    log.def("info", logger(log::level::info));
+    log.def("warning", logger(log::level::warning));
+    log.def("error", logger(log::level::error));
+    log.def("critical", logger(log::level::critical));
 }
 } // namespace phansar::common::python

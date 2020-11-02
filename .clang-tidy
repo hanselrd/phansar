@@ -377,8 +377,22 @@ CheckOptions:
     value:           '800'
   - key:             readability-function-size.VariableThreshold
     value:           '4294967295'
+  - key:             readability-identifier-naming.ClassConstantPrefix
+    value:           'k_'
+  - key:             readability-identifier-naming.ClassMemberPrefix
+    value:           's_'
+  - key:             readability-identifier-naming.GlobalConstantPrefix
+    value:           'k_'
+  - key:             readability-identifier-naming.GlobalVariablePrefix
+    value:           'g_'
   - key:             readability-identifier-naming.IgnoreFailedSplit
     value:           '0'
+  - key:             readability-identifier-naming.ParameterPrefix
+    value:           '_'
+  - key:             readability-identifier-naming.PrivateMemberPrefix
+    value:           'm_'
+  - key:             readability-identifier-naming.ProtectedMemberPrefix
+    value:           'm_'
   - key:             readability-implicit-bool-conversion.AllowIntegerConditions
     value:           '0'
   - key:             readability-implicit-bool-conversion.AllowPointerConditions
@@ -386,7 +400,7 @@ CheckOptions:
   - key:             readability-inconsistent-declaration-parameter-name.IgnoreMacros
     value:           '1'
   - key:             readability-inconsistent-declaration-parameter-name.Strict
-    value:           '0'
+    value:           '1'
   - key:             readability-magic-numbers.IgnoredFloatingPointValues
     value:           '1.0;100.0;'
   - key:             readability-magic-numbers.IgnoredIntegerValues
