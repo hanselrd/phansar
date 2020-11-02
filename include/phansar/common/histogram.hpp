@@ -1,15 +1,16 @@
 #ifndef PHANSAR_COMMON_HISTOGRAM_HPP
 #define PHANSAR_COMMON_HISTOGRAM_HPP
 
-#include <phansar/common/log.hpp>
-
-#include <phansar/vendor/rangev3.hpp>
+#include <phansar/vendor/json.hpp>
 
 #include <cstdint>
+#include <iostream>
 #include <map>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <type_traits>
+#include <vector>
 
 namespace phansar::common {
 template <class T>
@@ -17,24 +18,36 @@ class histogram {
     static_assert(std::is_arithmetic_v<T>);
 
 public:
-    histogram(std::string_view name, std::string_view units, std::size_t num_bins);
+    using bin    = std::tuple<double, double, std::uintmax_t>;
+    using sample = std::tuple<T, std::uintmax_t>;
 
-    void               push(const T & sample);
-    [[nodiscard]] auto get_sample_count() const -> std::uint64_t;
-    auto               get_minimum() const -> T;
-    auto               get_maximum() const -> T;
-    auto               get_range() const -> T;
-    [[nodiscard]] auto get_mean() const -> double;
-    [[nodiscard]] auto get_variance() const -> double;
-    [[nodiscard]] auto get_standard_deviation() const -> double;
-    [[nodiscard]] auto get_percentile(double percentile) const -> double;
-    void               log() const;
+    histogram(std::string_view _name, std::string_view _units, std::size_t _num_bins);
+
+    void               push(const T & _sample);
+    [[nodiscard]] auto name() const -> const std::string &;
+    [[nodiscard]] auto units() const -> const std::string &;
+    [[nodiscard]] auto sample_count() const -> std::uintmax_t;
+    [[nodiscard]] auto minimum() const -> T;
+    [[nodiscard]] auto maximum() const -> T;
+    [[nodiscard]] auto range() const -> T;
+    [[nodiscard]] auto mean() const -> double;
+    [[nodiscard]] auto variance() const -> double;
+    [[nodiscard]] auto standard_deviation() const -> double;
+    [[nodiscard]] auto percentile(double _percentile) const -> double;
+    [[nodiscard]] auto bins() const -> std::vector<bin>;
+    [[nodiscard]] auto samples() const -> std::vector<sample>;
 
 private:
-    std::string                _name, _units;
-    std::size_t                _num_bins;
-    std::map<T, std::uint64_t> _samples;
+    std::string                 m_name, m_units;
+    std::size_t                 m_num_bins;
+    std::map<T, std::uintmax_t> m_samples;
 };
+
+template <class T>
+void to_json(nlohmann::ordered_json & _json, const histogram<T> & _histogram);
+
+template <class T>
+auto operator<<(std::ostream & _os, const histogram<T> & _histogram) -> std::ostream &;
 } // namespace phansar::common
 
 #include <phansar/common/detail/histogram.tpp>

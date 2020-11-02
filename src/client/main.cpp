@@ -20,58 +20,60 @@ PYBIND11_EMBEDDED_MODULE(phansar, m) {
 }
 
 HEDLEY_PRINTF_FORMAT(2, 0)
-static void trace_log_callback(int msg_type, const char * fmt, va_list args) {
+static void trace_log_callback(int _msg_type, const char * _fmt, va_list _args) {
     auto buf = std::array<char, BUF_SIZE>{};
-    std::vsnprintf(buf.data(), buf.size(), fmt, args);
+    std::vsnprintf(buf.data(), buf.size(), _fmt, _args);
 
-    switch (msg_type) {
-    case LOG_TRACE:
-        phansar::common::log::print("<raylib>",
-                                    1,
-                                    phansar::common::log::level::trace,
-                                    "{}",
-                                    buf.data());
-        break;
-    case LOG_DEBUG:
-        phansar::common::log::print("<raylib>",
-                                    1,
-                                    phansar::common::log::level::debug,
-                                    "{}",
-                                    buf.data());
-        break;
-    case LOG_INFO:
-        phansar::common::log::print("<raylib>",
-                                    1,
-                                    phansar::common::log::level::info,
-                                    "{}",
-                                    buf.data());
-        break;
-    case LOG_WARNING:
-        phansar::common::log::print("<raylib>",
-                                    1,
-                                    phansar::common::log::level::warning,
-                                    "{}",
-                                    buf.data());
-        break;
-    case LOG_ERROR:
-        phansar::common::log::print("<raylib>",
-                                    1,
-                                    phansar::common::log::level::error,
-                                    "{}",
-                                    buf.data());
-        break;
-    case LOG_FATAL:
-        phansar::common::log::print("<raylib>",
-                                    1,
-                                    phansar::common::log::level::critical,
-                                    "{}",
-                                    buf.data());
-        break;
+    if (phansar::common::log::instance() != nullptr) {
+        switch (_msg_type) {
+        case LOG_TRACE:
+            phansar::common::log::instance()->print(phansar::common::log::level::trace,
+                                                    "<raylib>",
+                                                    1,
+                                                    "{}",
+                                                    buf.data());
+            break;
+        case LOG_DEBUG:
+            phansar::common::log::instance()->print(phansar::common::log::level::debug,
+                                                    "<raylib>",
+                                                    1,
+                                                    "{}",
+                                                    buf.data());
+            break;
+        case LOG_INFO:
+            phansar::common::log::instance()->print(phansar::common::log::level::info,
+                                                    "<raylib>",
+                                                    1,
+                                                    "{}",
+                                                    buf.data());
+            break;
+        case LOG_WARNING:
+            phansar::common::log::instance()->print(phansar::common::log::level::warning,
+                                                    "<raylib>",
+                                                    1,
+                                                    "{}",
+                                                    buf.data());
+            break;
+        case LOG_ERROR:
+            phansar::common::log::instance()->print(phansar::common::log::level::error,
+                                                    "<raylib>",
+                                                    1,
+                                                    "{}",
+                                                    buf.data());
+            break;
+        case LOG_FATAL:
+            phansar::common::log::instance()->print(phansar::common::log::level::critical,
+                                                    "<raylib>",
+                                                    1,
+                                                    "{}",
+                                                    buf.data());
+            break;
+        }
     }
 }
 
-auto main(int argc, char * argv[]) -> int {
-    phansar::common::system::init(argc, argv);
+auto main(int _argc, char * _argv[]) -> int {
+    phansar::common::system::init(_argc, _argv);
 
     SetTraceLogCallback(&trace_log_callback);
 
@@ -150,8 +152,6 @@ auto main(int argc, char * argv[]) -> int {
     }
 
     CloseWindow();
-
-    hist_fps.log();
 
     phansar::common::system::shutdown();
 

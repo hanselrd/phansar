@@ -11,6 +11,9 @@ endif()
 set(JSON_BuildTests
     OFF
     CACHE BOOL "")
+set(JSON_ImplicitConversions
+    OFF
+    CACHE BOOL "")
 add_subdirectory(${json_git_SOURCE_DIR} ${json_git_BINARY_DIR} EXCLUDE_FROM_ALL)
 
 # cmake-format: off

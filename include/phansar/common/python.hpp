@@ -4,7 +4,7 @@
 #include <phansar/vendor/pybind11.hpp>
 
 namespace phansar::common::python {
-void embed(py::module & m);
+void embed(py::module & _module);
 }
 
 #endif
