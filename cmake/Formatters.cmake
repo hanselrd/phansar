@@ -150,14 +150,8 @@ if(ENABLE_CLANG_TIDY)
         NAMES clang-apply-replacements clang-apply-replacements-9 clang-apply-replacements-10
               clang-apply-replacements-11)
     if(CLANG_TIDY_EXECUTABLE AND CLANG_APPLY_REPLACEMENTS_EXECUTABLE)
-        file(
-            GLOB_RECURSE
-            clang_tidy_files
-            CONFIGURE_DEPENDS
-            "include/*.cpp"
-            "src/*.cpp"
-            "test/*.cpp"
-            "vendor/*.cpp")
+        file(GLOB_RECURSE clang_tidy_files CONFIGURE_DEPENDS "include/*.cpp" "src/*.cpp"
+             "test/*.cpp")
 
         add_custom_target(
             check-clang-tidy-tmpdir
@@ -179,7 +173,7 @@ if(ENABLE_CLANG_TIDY)
             COMMENT "Applying fixes ...")
 
         set(CLANG_TIDY_CHECKS
-            "-*,bugprone-*,-bugprone-branch-clone,-bugprone-exception-escape,-bugprone-sizeof-expression,cert-*,-cert-err58-cpp,clang-analyzer-*,google-explicit-constructor,google-readability-namespace-comments,google-runtime-int,llvm-header-guard,modernize-*,-modernize-avoid-c-arrays,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-magic-numbers,-readability-misleading-indentation"
+            "-*,bugprone-*,-bugprone-branch-clone,-bugprone-exception-escape,-bugprone-sizeof-expression,cert-*,-cert-err58-cpp,clang-analyzer-*,google-explicit-constructor,google-readability-casting,google-readability-namespace-comments,google-runtime-int,llvm-header-guard,modernize-*,-modernize-avoid-c-arrays,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-convert-member-functions-to-static,-readability-magic-numbers,-readability-misleading-indentation"
         )
 
         set(counter 1)
@@ -187,7 +181,8 @@ if(ENABLE_CLANG_TIDY)
             add_custom_target(
                 check-clang-tidy-${counter}
                 COMMAND
-                    ${CLANG_TIDY_EXECUTABLE} -header-filter=.* -checks=${CLANG_TIDY_CHECKS}
+                    ${CLANG_TIDY_EXECUTABLE} -header-filter=include/phansar -system-headers
+                    -checks=${CLANG_TIDY_CHECKS}
                     -export-fixes=${CMAKE_BINARY_DIR}/check-clang-tidy/${counter}.yaml
                     -extra-arg=-Wno-unknown-warning-option -p ${CMAKE_SOURCE_DIR} ${clang_tidy_file}
                 COMMAND ${CMAKE_COMMAND} -E touch
@@ -205,7 +200,8 @@ if(ENABLE_CLANG_TIDY)
             add_custom_target(
                 clang-tidy-${counter}
                 COMMAND
-                    ${CLANG_TIDY_EXECUTABLE} -header-filter=.* -checks=${CLANG_TIDY_CHECKS}
+                    ${CLANG_TIDY_EXECUTABLE} -header-filter=include/phansar -system-headers
+                    -checks=${CLANG_TIDY_CHECKS}
                     -export-fixes=${CMAKE_BINARY_DIR}/clang-tidy/${counter}.yaml
                     -extra-arg=-Wno-unknown-warning-option -p ${CMAKE_SOURCE_DIR} ${clang_tidy_file}
                 DEPENDS clang-tidy-tmpdir

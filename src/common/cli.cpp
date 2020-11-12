@@ -1,12 +1,5 @@
 #include <phansar/common/cli.hpp>
 
-#include <phansar/vendor/docopt.hpp>
-#include <phansar/vendor/fmt.hpp>
-
-#include <iterator>
-#include <string>
-#include <thread>
-
 namespace phansar::common {
 cli::cli(int _argc, const char * const * _argv) {
     static const auto * const usage =

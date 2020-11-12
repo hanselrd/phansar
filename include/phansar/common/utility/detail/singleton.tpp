@@ -1,7 +1,5 @@
 #include <phansar/common/utility/singleton.hpp>
 
-#include <functional>
-
 namespace phansar::common::utility {
 template <class T>
 std::unique_ptr<T> singleton<T>::s_instance = std::unique_ptr<T>{};

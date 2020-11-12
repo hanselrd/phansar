@@ -1,8 +1,6 @@
 #ifndef PHANSAR_COMMON_TIMER_HPP
 #define PHANSAR_COMMON_TIMER_HPP
 
-#include <chrono>
-
 namespace phansar::common {
 class timer {
 public:

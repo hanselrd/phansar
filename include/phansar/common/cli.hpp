@@ -4,13 +4,6 @@
 #include <phansar/common/log.hpp>
 #include <phansar/common/utility/singleton.hpp>
 
-#include <phansar/vendor/docopt.hpp>
-
-#include <cstddef>
-#include <cstdint>
-#include <map>
-#include <string>
-
 namespace phansar::common {
 class cli : public utility::singleton<cli> {
 public:

@@ -1,7 +1,5 @@
 #include <phansar/common/log.hpp>
 
-#include <functional>
-
 namespace phansar::common {
 template <class... Args>
 void log::print(level            _level,
