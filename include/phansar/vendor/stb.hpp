@@ -1,5 +1,5 @@
-#ifndef PHANSAR_VENDOR_RAYLIB_HPP
-#define PHANSAR_VENDOR_RAYLIB_HPP
+#ifndef PHANSAR_VENDOR_STB_HPP
+#define PHANSAR_VENDOR_STB_HPP
 
 #include <phansar/vendor/hedley.hpp>
 
@@ -7,7 +7,7 @@
 #    pragma warning(push, 0)
 #endif
 
-#include <raylib.h>
+#include <stb_image.h>
 
 #ifdef HEDLEY_MSVC_VERSION
 #    pragma warning(pop)

@@ -1,8 +1,5 @@
 #include <phansar/common/threading/synchronized.hpp>
 
-#include <functional>
-#include <utility>
-
 namespace phansar::common::threading {
 template <class T>
 template <class Tag>

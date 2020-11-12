@@ -1,5 +1,5 @@
-#ifndef PHANSAR_VENDOR_RAYGUI_HPP
-#define PHANSAR_VENDOR_RAYGUI_HPP
+#ifndef PHANSAR_VENDOR_GLAD_HPP
+#define PHANSAR_VENDOR_GLAD_HPP
 
 #include <phansar/vendor/hedley.hpp>
 
@@ -7,9 +7,7 @@
 #    pragma warning(push, 0)
 #endif
 
-#define RAYGUI_SUPPORT_ICONS
-#include <raygui.h>
-#include <ricons.h>
+#include <glad/glad.h>
 
 #ifdef HEDLEY_MSVC_VERSION
 #    pragma warning(pop)

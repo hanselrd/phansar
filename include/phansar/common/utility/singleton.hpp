@@ -4,8 +4,6 @@
 #include <phansar/common/utility/noncopyable.hpp>
 #include <phansar/common/utility/nonmovable.hpp>
 
-#include <memory>
-
 namespace phansar::common::utility {
 template <class T>
 class singleton : public noncopyable, public nonmovable {

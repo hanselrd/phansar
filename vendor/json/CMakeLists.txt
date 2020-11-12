@@ -1,7 +1,7 @@
 FetchContent_Declare(
     json_git
-    GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG 350ff4f7ced7c4117eae2fb93df02823c8021fcb)
+    GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent.git
+    GIT_TAG v3.9.1)
 FetchContent_GetProperties(json_git)
 if(NOT json_git_POPULATED)
     FetchContent_Populate(json_git)

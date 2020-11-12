@@ -1,5 +1,5 @@
-#ifndef PHANSAR_VENDOR_PLIBSYS_HPP
-#define PHANSAR_VENDOR_PLIBSYS_HPP
+#ifndef PHANSAR_VENDOR_ENTT_HPP
+#define PHANSAR_VENDOR_ENTT_HPP
 
 #include <phansar/vendor/hedley.hpp>
 
@@ -7,7 +7,7 @@
 #    pragma warning(push, 0)
 #endif
 
-#include <plibsys.h>
+#include <entt/entt.hpp>
 
 #ifdef HEDLEY_MSVC_VERSION
 #    pragma warning(pop)

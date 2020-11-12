@@ -3,10 +3,6 @@
 
 #include <phansar/common/utility/noncopyable.hpp>
 
-#include <optional>
-#include <shared_mutex>
-#include <type_traits>
-
 namespace phansar::common::threading {
 template <class T>
 class synchronized {
@@ -16,7 +12,8 @@ public:
 
     template <class Tag>
     class proxy : public utility::noncopyable {
-        static_assert(std::is_same_v<Tag, write_tag> || std::is_same_v<Tag, read_tag>);
+        static_assert(std::is_same_v<Tag, write_tag> || std::is_same_v<Tag, read_tag>,
+                      "Tag must be write_tag or read_tag");
 
         friend class synchronized;
 

@@ -1,11 +1,6 @@
 #include <phansar/common/log.hpp>
 #include <phansar/common/python.hpp>
 
-#include <phansar/vendor/pybind11.hpp>
-
-#include <string>
-#include <string_view>
-
 namespace phansar::common::python {
 void embed(py::module & _module) {
     auto common = _module.def_submodule("common");

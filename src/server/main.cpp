@@ -7,16 +7,6 @@
 #include <phansar/common/system.hpp>
 #include <phansar/common/threading/synchronized.hpp>
 
-#include <phansar/vendor/enet.hpp>
-#include <phansar/vendor/fmt.hpp>
-#include <phansar/vendor/pqxx.hpp>
-#include <phansar/vendor/pybind11.hpp>
-#include <phansar/vendor/taskflow.hpp>
-#include <phansar/vendor/xsimd.hpp>
-
-#include <random>
-#include <vector>
-
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
 PYBIND11_EMBEDDED_MODULE(phansar, m) {
     phansar::common::python::embed(m);
@@ -30,12 +20,12 @@ auto main(int _argc, char * _argv[]) -> int {
     phansar::common::system::init(_argc, _argv);
 
     if (phansar::common::cli::instance() != nullptr) {
-        LOG_INFO("Binary Name: {}", phansar::common::cli::instance()->binary_name());
-        LOG_INFO("Log File: {}", phansar::common::cli::instance()->log_file_path());
-        LOG_INFO("Log Level: {}", phansar::common::cli::instance()->log_level());
-        LOG_INFO("Host: {}", phansar::common::cli::instance()->host());
-        LOG_INFO("Port: {}", phansar::common::cli::instance()->port());
-        LOG_INFO("Num Threads: {}", phansar::common::cli::instance()->num_threads());
+        PH_LOG_INFO("Binary Name: {}", phansar::common::cli::instance()->binary_name());
+        PH_LOG_INFO("Log File: {}", phansar::common::cli::instance()->log_file_path());
+        PH_LOG_INFO("Log Level: {}", phansar::common::cli::instance()->log_level());
+        PH_LOG_INFO("Host: {}", phansar::common::cli::instance()->host());
+        PH_LOG_INFO("Port: {}", phansar::common::cli::instance()->port());
+        PH_LOG_INFO("Num Threads: {}", phansar::common::cli::instance()->num_threads());
     }
 
     auto guard = py::scoped_interpreter{};
@@ -65,7 +55,7 @@ auto main(int _argc, char * _argv[]) -> int {
     /* for (auto && i : {5, 5, 10, 12, 8, 3, 2, 9, 8, 4, 1, 20, 3, 2, 4, 6}) { */
     /*     h.push(i); */
     /* } */
-    LOG_INFO("{}", h);
+    PH_LOG_INFO("{}", h);
 
     auto a = std::vector<double>{1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5};
     auto b = std::vector<double>{2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5};
@@ -75,17 +65,17 @@ auto main(int _argc, char * _argv[]) -> int {
                      std::cbegin(b),
                      std::begin(c),
                      [](const auto & _x, const auto & _y) { return (_x + _y) / 2.; });
-    LOG_INFO("a: {}", a);
-    LOG_INFO("b: {}", b);
-    LOG_INFO("c: {}", c);
+    PH_LOG_INFO("a: {}", a);
+    PH_LOG_INFO("b: {}", b);
+    PH_LOG_INFO("c: {}", c);
 
     auto executor = tf::Executor{};
     auto taskflow = tf::Taskflow{};
 
-    auto [A, B, C, D] = taskflow.emplace([]() { LOG_INFO("Task A"); },
-                                         []() { LOG_INFO("Task B"); },
-                                         []() { LOG_INFO("Task C"); },
-                                         []() { LOG_INFO("Task D"); });
+    auto [A, B, C, D] = taskflow.emplace([]() { PH_LOG_INFO("Task A"); },
+                                         []() { PH_LOG_INFO("Task B"); },
+                                         []() { PH_LOG_INFO("Task C"); },
+                                         []() { PH_LOG_INFO("Task D"); });
 
     A.name("A");
     B.name("B");
@@ -99,7 +89,7 @@ auto main(int _argc, char * _argv[]) -> int {
 
     for (auto i = std::size_t{0}; i < 100'000; ++i) {
         executor.async([i, &sync_vector]() {
-            LOG_INFO("Task {}", i);
+            PH_LOG_INFO("Task {}", i);
             auto lock = sync_vector.lock();
             lock->push_back(i);
         });
@@ -107,10 +97,10 @@ auto main(int _argc, char * _argv[]) -> int {
 
     executor.run(taskflow);
     executor.wait_for_all();
-    LOG_INFO("\n{}", taskflow.dump());
+    PH_LOG_INFO("\n{}", taskflow.dump());
 
     auto lock = sync_vector.lock_shared();
-    LOG_INFO("sync_vector: {}", lock->size());
+    PH_LOG_INFO("sync_vector: {}", lock->size());
 
     enet_initialize();
     enet_deinitialize();

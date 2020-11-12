@@ -1,7 +1,5 @@
 #include <phansar/common/allocators/mallocator.hpp>
 
-#include <cstdlib>
-
 namespace phansar::common::allocators {
 template <class T>
 template <class U>

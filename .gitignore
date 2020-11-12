@@ -33,6 +33,7 @@
 
 # Custom
 *.lock
+.cache
 .clangd
 __pycache__
 build

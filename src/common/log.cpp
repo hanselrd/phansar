@@ -1,10 +1,5 @@
 #include <phansar/common/log.hpp>
 
-#include <phansar/vendor/rangev3.hpp>
-
-#include <cstring>
-#include <filesystem>
-
 namespace phansar::common {
 log::log(level            _level,
          std::string_view _name,
@@ -47,7 +42,7 @@ void log::vprint(level            _level,
     auto base_name = (std::strrchr(_source_file.data(), '/') != nullptr) // TODO: don't use .data()
                          ? std::string_view{std::strrchr(_source_file.data(), '/') + 1}
                          : _source_file;
-    auto message                         = fmt::vformat(_format, _args);
+    auto message   = fmt::vformat(_format, _args);
     const auto & [level_str, text_style] = style_map.at(_level);
 
     auto thread_name = std::string{};
@@ -77,7 +72,7 @@ void log::vprint(level            _level,
             1000.;
 
         for (const auto & m :
-             message | ranges::view::split('\n') | ranges::to<std::vector<std::string>>()) {
+             message | ranges::views::split('\n') | ranges::to<std::vector<std::string>>()) {
             fmt::print(format,
                        time_info,
                        uptime,

@@ -1,21 +1,10 @@
 #ifndef PHANSAR_COMMON_HISTOGRAM_HPP
 #define PHANSAR_COMMON_HISTOGRAM_HPP
 
-#include <phansar/vendor/json.hpp>
-
-#include <cstdint>
-#include <iostream>
-#include <map>
-#include <string>
-#include <string_view>
-#include <tuple>
-#include <type_traits>
-#include <vector>
-
 namespace phansar::common {
 template <class T>
 class histogram {
-    static_assert(std::is_arithmetic_v<T>);
+    static_assert(std::is_arithmetic_v<T>, "T must be arithmetic type");
 
 public:
     using bin    = std::tuple<double, double, std::uintmax_t>;

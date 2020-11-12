@@ -3,19 +3,6 @@
 
 #include <phansar/common/utility/singleton.hpp>
 
-#include <phansar/vendor/fmt.hpp>
-
-#include <chrono>
-#include <cstddef>
-#include <cstdint>
-#include <fstream>
-#include <mutex>
-#include <shared_mutex>
-#include <string>
-#include <string_view>
-#include <thread>
-#include <unordered_map>
-
 namespace phansar::common {
 class log : public utility::singleton<log> {
 public:

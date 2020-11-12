@@ -1,10 +1,5 @@
 #include <phansar/common/histogram.hpp>
 
-#include <phansar/vendor/fmt.hpp>
-#include <phansar/vendor/rangev3.hpp>
-
-#include <cmath>
-
 namespace phansar::common {
 template <class T>
 histogram<T>::histogram(std::string_view _name, std::string_view _units, std::size_t _num_bins)

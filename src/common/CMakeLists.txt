@@ -12,8 +12,10 @@ set(sources
     system.cpp
     timer.cpp)
 
+set(pch
+    <phansar/common/pch.hpp>)
+
 set(system_libs
-    # ph_vendor_plibsys
     ph_vendor_cppcodec
     ph_vendor_docopt
     ph_vendor_enet
@@ -27,4 +29,4 @@ set(system_libs
     Threads::Threads)
 # cmake-format: on
 
-ph_add_generic_library(ph_common "${sources}" "" "${system_libs}")
+ph_add_generic_library(ph_common "${sources}" "${pch}" "" "${system_libs}")

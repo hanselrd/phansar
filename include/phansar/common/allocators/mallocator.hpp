@@ -1,8 +1,6 @@
 #ifndef PHANSAR_COMMON_ALLOCATORS_MALLOCATOR_HPP
 #define PHANSAR_COMMON_ALLOCATORS_MALLOCATOR_HPP
 
-#include <cstddef>
-
 namespace phansar::common::allocators {
 template <class T>
 class mallocator {
