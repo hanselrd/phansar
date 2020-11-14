@@ -1,8 +1,6 @@
 # cmake-format: off
 set(sources
     opengl/shader.cpp
-    opengl/vertex_array.cpp
-    opengl/vertex_buffer_layout.cpp
     main.cpp)
 
 set(pch
@@ -15,6 +13,7 @@ set(system_libs
     ph_vendor_entt
     ph_vendor_glad
     ph_vendor_glfw
+    ph_vendor_glm
     ph_vendor_stb)
 # cmake-format: on
 

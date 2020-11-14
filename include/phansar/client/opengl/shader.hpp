@@ -16,12 +16,10 @@ public:
     void set_uniform(std::string_view _name, Args &&... _args);
 
 private:
-    GLuint                                 m_id = 0;
-    std::unordered_map<std::string, GLint> m_uniform_location_map;
+    GLuint m_id = 0;
 
     auto parse(std::string_view _file_path) -> std::unordered_map<std::string, std::string>;
     auto compile(GLenum _type, std::string_view _source) -> GLuint;
-    auto uniform_location(std::string_view _name) -> GLint;
 };
 } // namespace phansar::client::opengl
 

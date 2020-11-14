@@ -14,6 +14,15 @@ set(GLAD_PROFILE
 set(GLAD_API
     "gl=3.3"
     CACHE STRING "")
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+    set(GLAD_GENERATOR
+        "c-debug"
+        CACHE STRING "")
+else()
+    set(GLAD_GENERATOR
+        "c"
+        CACHE STRING "")
+endif()
 set(GLAD_REPRODUCIBLE
     ON
     CACHE BOOL "")

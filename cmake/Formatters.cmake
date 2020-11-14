@@ -173,7 +173,7 @@ if(ENABLE_CLANG_TIDY)
             COMMENT "Applying fixes ...")
 
         set(CLANG_TIDY_CHECKS
-            "-*,bugprone-*,-bugprone-branch-clone,-bugprone-exception-escape,-bugprone-sizeof-expression,cert-*,-cert-err58-cpp,clang-analyzer-*,google-explicit-constructor,google-readability-casting,google-readability-namespace-comments,google-runtime-int,llvm-header-guard,modernize-*,-modernize-avoid-c-arrays,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-convert-member-functions-to-static,-readability-magic-numbers,-readability-misleading-indentation"
+            "-*,bugprone-*,-bugprone-branch-clone,-bugprone-exception-escape,-bugprone-sizeof-expression,cert-*,-cert-dcl50-cpp,-cert-err58-cpp,clang-analyzer-*,google-explicit-constructor,google-readability-casting,google-readability-namespace-comments,google-runtime-int,llvm-header-guard,modernize-*,-modernize-avoid-c-arrays,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-convert-member-functions-to-static,-readability-magic-numbers,-readability-misleading-indentation"
         )
 
         set(counter 1)

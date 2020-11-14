@@ -1,4 +1,3 @@
-#include <phansar/client/opengl/macros.hpp>
 #include <phansar/client/opengl/shader.hpp>
 
 namespace phansar::client::opengl {
@@ -11,40 +10,40 @@ void shader::set_uniform(std::string_view _name, Args &&... _args) {
     static_assert(sizeof...(Args) >= 1 && sizeof...(Args) <= 4, "Args count must be >= 1 and <= 4");
 
     bind();
-    auto location = uniform_location(_name);
+    auto location = glGetUniformLocation(m_id, std::string{_name}.c_str());
     auto data     = {_args...};
 
     if constexpr (sizeof...(Args) == 1) {
         if constexpr ((std::is_same_v<Args, GLfloat> && ...)) {
-            GL_CALL(glUniform1fv(location, 1, std::cbegin(data)));
+            glUniform1fv(location, 1, std::cbegin(data));
         } else if constexpr ((std::is_same_v<Args, GLint> && ...)) {
-            GL_CALL(glUniform1iv(location, 1, std::cbegin(data)));
+            glUniform1iv(location, 1, std::cbegin(data));
         } else if constexpr ((std::is_same_v<Args, GLuint> && ...)) {
-            GL_CALL(glUniform1uiv(location, 1, std::cbegin(data)));
+            glUniform1uiv(location, 1, std::cbegin(data));
         }
     } else if constexpr (sizeof...(Args) == 2) {
         if constexpr ((std::is_same_v<Args, GLfloat> && ...)) {
-            GL_CALL(glUniform2fv(location, 1, std::cbegin(data)));
+            glUniform2fv(location, 1, std::cbegin(data));
         } else if constexpr ((std::is_same_v<Args, GLint> && ...)) {
-            GL_CALL(glUniform2iv(location, 1, std::cbegin(data)));
+            glUniform2iv(location, 1, std::cbegin(data));
         } else if constexpr ((std::is_same_v<Args, GLuint> && ...)) {
-            GL_CALL(glUniform2uiv(location, 1, std::cbegin(data)));
+            glUniform2uiv(location, 1, std::cbegin(data));
         }
     } else if constexpr (sizeof...(Args) == 3) {
         if constexpr ((std::is_same_v<Args, GLfloat> && ...)) {
-            GL_CALL(glUniform3fv(location, 1, std::cbegin(data)));
+            glUniform3fv(location, 1, std::cbegin(data));
         } else if constexpr ((std::is_same_v<Args, GLint> && ...)) {
-            GL_CALL(glUniform3iv(location, 1, std::cbegin(data)));
+            glUniform3iv(location, 1, std::cbegin(data));
         } else if constexpr ((std::is_same_v<Args, GLuint> && ...)) {
-            GL_CALL(glUniform3uiv(location, 1, std::cbegin(data)));
+            glUniform3uiv(location, 1, std::cbegin(data));
         }
     } else if constexpr (sizeof...(Args) == 4) {
         if constexpr ((std::is_same_v<Args, GLfloat> && ...)) {
-            GL_CALL(glUniform4fv(location, 1, std::cbegin(data)));
+            glUniform4fv(location, 1, std::cbegin(data));
         } else if constexpr ((std::is_same_v<Args, GLint> && ...)) {
-            GL_CALL(glUniform4iv(location, 1, std::cbegin(data)));
+            glUniform4iv(location, 1, std::cbegin(data));
         } else if constexpr ((std::is_same_v<Args, GLuint> && ...)) {
-            GL_CALL(glUniform4uiv(location, 1, std::cbegin(data)));
+            glUniform4uiv(location, 1, std::cbegin(data));
         }
     }
 
