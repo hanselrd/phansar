@@ -4,6 +4,7 @@
 #include <phansar/vendor/entt.hpp>
 #include <phansar/vendor/glad.hpp>
 #include <phansar/vendor/glfw.hpp>
+#include <phansar/vendor/glm.hpp>
 #include <phansar/vendor/stb.hpp>
 
 #endif

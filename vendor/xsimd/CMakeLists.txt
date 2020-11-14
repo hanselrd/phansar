@@ -1,7 +1,7 @@
 FetchContent_Declare(
     xsimd_git
     GIT_REPOSITORY https://github.com/xtensor-stack/xsimd.git
-    GIT_TAG 10ae40f5959f77cda69ac9b67873da728412a3c1)
+    GIT_TAG 5f3f32e294ce444a2eef0e08e5c70520b5bfd4f1)
 FetchContent_GetProperties(xsimd_git)
 if(NOT xsimd_git_POPULATED)
     FetchContent_Populate(xsimd_git)

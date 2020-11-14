@@ -18,6 +18,8 @@
 #include <map>
 #include <mutex>
 #include <random>
+#include <ratio>
+#include <regex>
 #include <shared_mutex>
 #include <string>
 #include <string_view>
