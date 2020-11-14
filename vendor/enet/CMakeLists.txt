@@ -17,6 +17,12 @@ set(includes
 
 set(system_libs
     enet)
+if (WIN32)
+    set(system_libs
+        ${system_libs}
+        ws2_32
+        winmm)
+endif()
 # cmake-format: on
 
 ph_add_generic_vendor_interface_library(ph_vendor_enet "${includes}" "" "${system_libs}")

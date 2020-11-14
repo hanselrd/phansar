@@ -16,5 +16,3 @@ set(system_libs
 # cmake-format: on
 
 ph_add_generic_vendor_interface_library(ph_vendor_pybind11 "" "" "${system_libs}")
-
-target_link_libraries(ph_vendor_pybind11 INTERFACE ${PYTHON_LIBRARIES})
