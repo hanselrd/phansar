@@ -7,8 +7,8 @@
 
 #ifdef GLAD_DEBUG
 static void glad_debug_pre_callback(const char * _name, void * _funcptr, int _len_args, ...) {
-    while (glad_glGetError() != GL_NO_ERROR)
-        ;
+    while (glad_glGetError() != GL_NO_ERROR) {
+    }
     phansar::common::log::instance()
         ->print(phansar::common::log::level::trace, "<opengl>", 0, "{} <{}>", _name, _funcptr);
 }

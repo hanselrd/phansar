@@ -113,6 +113,18 @@ auto shader::parse(std::string_view _file_path) -> std::unordered_map<std::strin
     auto source_map     = std::unordered_map<std::string, std::string>{{"__common", ""}};
     auto source_map_itr = source_map.find("__common");
 
+    /* auto uniform_regex = */
+    /*     std::regex{R"regex(uniform\s+(\w+)\s+(\w+)\s*(?:\[)?\s*(\d+)?\s*(?:\])?\s*;)regex"}; */
+    /* auto uend = std::sregex_token_iterator{}; */
+    /* for (auto itr = */
+    /*          std::sregex_token_iterator{std::cbegin(source), std::cend(source), uniform_regex,
+     * 2}; */
+    /*      itr != uend; */
+    /*      ++itr) { */
+    /*     PH_LOG_INFO("match: {}", *itr); */
+    /* } */
+    /* std::exit(1); */
+
     auto pragma_shader_regex =
         std::regex{R"regex(#\s*pragma\s+shader\s*\(\s*(vertex|geometry|fragment)\s*\))regex"};
     auto end = std::sregex_token_iterator{};
