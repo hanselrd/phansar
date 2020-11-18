@@ -68,6 +68,9 @@ jobs:
             python-version: '3.x'
             architecture: 'x64'
 
+        - if: runner.os == 'Windows'
+          uses: microsoft/setup-msbuild@v1.0.2
+
         - name: Install
           shell: bash
           run: |
@@ -136,11 +139,11 @@ jobs:
                   echo "CXX=clang++" >> $GITHUB_ENV
               fi
 
-        - name: Configure (Windows)
-          if: runner.os == 'Windows'
-          shell: powershell
-          run: |
-              .github\workflows\vsenv.bat -arch=x64 -host_arch=x64
+        # - name: Configure (Windows)
+        #   if: runner.os == 'Windows'
+        #   shell: powershell
+        #   run: |
+        #       .github\workflows\vsenv.bat -arch=x64 -host_arch=x64
 
         - name: Check formatting
           shell: bash
