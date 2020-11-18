@@ -15,6 +15,6 @@ private:
 };
 } // namespace phansar::common
 
-#include <phansar/common/detail/timer.tpp>
+#include <phansar/common/timer.tpp>
 
 #endif

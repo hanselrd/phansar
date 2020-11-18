@@ -41,6 +41,6 @@ private:
 };
 } // namespace phansar::common
 
-#include <phansar/common/detail/log.tpp>
+#include <phansar/common/log.tpp>
 
 #endif

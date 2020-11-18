@@ -39,6 +39,6 @@ template <class T>
 auto operator<<(std::ostream & _os, const histogram<T> & _histogram) -> std::ostream &;
 } // namespace phansar::common
 
-#include <phansar/common/detail/histogram.tpp>
+#include <phansar/common/histogram.tpp>
 
 #endif

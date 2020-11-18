@@ -1,7 +1,7 @@
 FetchContent_Declare(
     taskflow_git
     GIT_REPOSITORY https://github.com/taskflow/taskflow.git
-    GIT_TAG 7a3b036619ca3e0f14aa87217374331286f897f1)
+    GIT_TAG b550ac01e387818e770f9aa0c99a03d70d80dd8a)
 FetchContent_GetProperties(taskflow_git)
 if(NOT taskflow_git_POPULATED)
     FetchContent_Populate(taskflow_git)

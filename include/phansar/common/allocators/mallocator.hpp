@@ -20,6 +20,6 @@ template <class T, class U>
 auto operator!=(const mallocator<T> & /*unused*/, const mallocator<U> & /*unused*/) -> bool;
 } // namespace phansar::common::allocators
 
-#include <phansar/common/allocators/detail/mallocator.tpp>
+#include <phansar/common/allocators/mallocator.tpp>
 
 #endif

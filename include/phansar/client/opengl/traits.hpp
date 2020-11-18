@@ -1,7 +1,7 @@
-#ifndef PHANSAR_CLIENT_OPENGL_CONVERTER_HPP
-#define PHANSAR_CLIENT_OPENGL_CONVERTER_HPP
+#ifndef PHANSAR_CLIENT_OPENGL_TRAITS_HPP
+#define PHANSAR_CLIENT_OPENGL_TRAITS_HPP
 
-namespace phansar::client::opengl::converter {
+namespace phansar::client::opengl::traits {
 namespace detail {
 template <GLenum E>
 struct enum_to_type {};
@@ -89,6 +89,6 @@ inline constexpr GLenum type_to_enum_v = detail::type_to_enum<T>::value;
 
 template <GLuint I>
 using index_to_type_t = typename detail::index_to_type<I>::type;
-} // namespace phansar::client::opengl::converter
+} // namespace phansar::client::opengl::traits
 
 #endif

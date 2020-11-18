@@ -1,7 +1,7 @@
 #ifndef PHANSAR_CLIENT_OPENGL_VERTEX_ARRAY_HPP
 #define PHANSAR_CLIENT_OPENGL_VERTEX_ARRAY_HPP
 
-#include <phansar/client/opengl/converter.hpp>
+#include <phansar/client/opengl/traits.hpp>
 #include <phansar/common/utility/noncopyable.hpp>
 #include <phansar/common/utility/nonmovable.hpp>
 
@@ -11,7 +11,7 @@ class vertex_array : public common::utility::noncopyable, public common::utility
     static_assert(std::is_standard_layout_v<T>, "T must be a standard layout type");
 
 public:
-    using index_type         = converter::index_to_type_t<IndexCount>;
+    using index_type         = traits::index_to_type_t<IndexCount>;
     using vertex_buffer_type = std::vector<T>;
     using index_buffer_type  = std::vector<index_type>;
 
@@ -40,6 +40,6 @@ private:
 };
 } // namespace phansar::client::opengl
 
-#include <phansar/client/opengl/detail/vertex_array.tpp>
+#include <phansar/client/opengl/vertex_array.tpp>
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef PHANSAR_CLENT_OPENGL_CONVERTER_HPP
-#define PHANSAR_CLENT_OPENGL_CONVERTER_HPP
+#ifndef PHANSAR_CLIENT_OPENGL_SERIALIZER_HPP
+#define PHANSAR_CLIENT_OPENGL_SERIALIZER_HPP
 
 namespace phansar::client::opengl {
 namespace detail {
@@ -34,81 +34,59 @@ struct has_serializer<T,
 
 template <>
 struct serializer<GLbyte> {
-    static serializer_data serialize(const GLbyte & value) {
-        return {GL_BYTE, sizeof(GLbyte), 1, &value};
-    }
+    static auto serialize(const GLbyte & _value) -> serializer_data;
 };
 
 template <>
 struct serializer<GLubyte> {
-    static serializer_data serialize(const GLubyte & value) {
-        return {GL_UNSIGNED_BYTE, sizeof(GLubyte), 1, &value};
-    }
+    static auto serialize(const GLubyte & _value) -> serializer_data;
 };
 
 template <>
 struct serializer<GLshort> {
-    static serializer_data serialize(const GLshort & value) {
-        return {GL_SHORT, sizeof(GLshort), 1, &value};
-    }
+    static auto serialize(const GLshort & _value) -> serializer_data;
 };
 
 template <>
 struct serializer<GLushort> {
-    static serializer_data serialize(const GLushort & value) {
-        return {GL_UNSIGNED_SHORT, sizeof(GLushort), 1, &value};
-    }
+    static auto serialize(const GLushort & _value) -> serializer_data;
 };
 
 template <>
 struct serializer<GLint> {
-    static serializer_data serialize(const GLint & value) {
-        return {GL_INT, sizeof(GLint), 1, &value};
-    }
+    static auto serialize(const GLint & _value) -> serializer_data;
 };
 
 template <>
 struct serializer<GLuint> {
-    static serializer_data serialize(const GLuint & value) {
-        return {GL_UNSIGNED_INT, sizeof(GLuint), 1, &value};
-    }
+    static auto serialize(const GLuint & _value) -> serializer_data;
 };
 
 template <>
 struct serializer<GLfloat> {
-    static serializer_data serialize(const GLfloat & value) {
-        return {GL_FLOAT, sizeof(GLfloat), 1, &value};
-    }
+    static auto serialize(const GLfloat & _value) -> serializer_data;
 };
 
 template <>
 struct serializer<GLdouble> {
-    static serializer_data serialize(const GLdouble & value) {
-        return {GL_DOUBLE, sizeof(GLdouble), 1, &value};
-    }
+    static auto serialize(const GLdouble & _value) -> serializer_data;
 };
 
 template <class T, std::size_t N>
 struct serializer<T[N]> {
     static_assert(detail::has_serializer<T>::value, "T has no serializer");
 
-    static serializer_data serialize(const T (&value)[N]) {
-        auto sa  = serializer<T>::serialize(value[0]);
-        sa.count = N;
-        return sa;
-    }
+    static auto serialize(const T (&_value)[N]) -> serializer_data;
 };
 
 template <class T, std::size_t N>
 struct serializer<std::array<T, N>> {
     static_assert(detail::has_serializer<T>::value, "T has no serializer");
 
-    static serializer_data serialize(const std::array<T, N> & value) {
-        auto sa  = serializer<T>::serialize(value.at(0));
-        sa.count = N;
-        return sa;
-    }
+    static auto serialize(const std::array<T, N> & _value) -> serializer_data;
 };
 } // namespace phansar::client::opengl
+
+#include <phansar/client/opengl/serializer.tpp>
 
 #endif

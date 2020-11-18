@@ -1,3 +1,4 @@
+#include <phansar/client/opengl/serializer.hpp>
 #include <phansar/client/opengl/shader.hpp>
 #include <phansar/client/opengl/vertex_array.hpp>
 #include <phansar/common/histogram.hpp>

@@ -56,6 +56,6 @@ private:
 };
 } // namespace phansar::common::threading
 
-#include <phansar/common/threading/detail/synchronized.tpp>
+#include <phansar/common/threading/synchronized.tpp>
 
 #endif
