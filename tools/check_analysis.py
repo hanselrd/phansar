@@ -90,7 +90,7 @@ if __name__ == "__main__":
         split = re.split("[./]", re.split("include/phansar/", h)[1])
         for t in templates:
             if (
-                "{prefix}/detail/{suffix}.tpp".format(
+                "{prefix}/{suffix}.tpp".format(
                     prefix="/".join(split[:-2]), suffix="/".join(split[2:-1])
                 )
                 in t

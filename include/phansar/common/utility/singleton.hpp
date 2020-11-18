@@ -23,6 +23,6 @@ private:
 };
 } // namespace phansar::common::utility
 
-#include <phansar/common/utility/detail/singleton.tpp>
+#include <phansar/common/utility/singleton.tpp>
 
 #endif

@@ -23,6 +23,6 @@ private:
 };
 } // namespace phansar::client::opengl
 
-#include <phansar/client/opengl/detail/shader.tpp>
+#include <phansar/client/opengl/shader.tpp>
 
 #endif

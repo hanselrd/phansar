@@ -74,7 +74,7 @@ void vertex_array<T, VertexCount, IndexCount>::push_attribute(U T::*_member, boo
     glVertexAttribPointer(
         m_attrib_count,
         sizeof(U) / sizeof(stripped_U_type),
-        converter::type_to_enum_v<stripped_U_type>,
+        traits::type_to_enum_v<stripped_U_type>,
         _normalized ? GL_TRUE : GL_FALSE,
         sizeof(T),
         reinterpret_cast<const GLvoid *>(reinterpret_cast<std::uint8_t *>(&(t.*_member)) -
@@ -104,7 +104,7 @@ void vertex_array<T, VertexCount, IndexCount>::clear_attributes() {
 
 template <class T, std::size_t VertexCount, std::size_t IndexCount>
 auto vertex_array<T, VertexCount, IndexCount>::type() const -> GLenum {
-    return converter::type_to_enum_v<index_type>;
+    return traits::type_to_enum_v<index_type>;
 }
 
 template <class T, std::size_t VertexCount, std::size_t IndexCount>
