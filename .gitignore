@@ -32,7 +32,10 @@
 *.app
 
 # Custom
+*.lock
+.cache
 .clangd
+__pycache__
 build
 compile_commands.json
 tags
