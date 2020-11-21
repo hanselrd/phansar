@@ -1,9 +1,12 @@
 # cmake-format: off
 set(sources
+    graphics/camera.cpp
     opengl/buffer.cpp
     opengl/index_buffer.cpp
     opengl/renderer.cpp
     opengl/shader.cpp
+    opengl/texture.cpp
+    opengl/texture2d.cpp
     opengl/vertex_array.cpp
     opengl/vertex_buffer.cpp
     window.cpp

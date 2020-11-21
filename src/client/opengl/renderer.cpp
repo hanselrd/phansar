@@ -37,6 +37,9 @@ renderer::renderer(window & _window) : m_window{&_window} {
     glad_set_post_callback(&glad_debug_post_callback);
 #endif
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     PH_LOG_INFO("OpenGL:");
     PH_LOG_INFO("  Vendor: {}", glGetString(GL_VENDOR));
     PH_LOG_INFO("  Renderer: {}", glGetString(GL_RENDERER));
@@ -49,20 +52,30 @@ void renderer::clear_color(const glm::vec4 & _color) const {
 }
 
 void renderer::clear() const {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void renderer::swap_buffers() const {
     glfwSwapBuffers(m_window->get());
 }
 
-void renderer::begin() const {}
+void renderer::begin(graphics::camera & _camera) {
+    m_camera = &_camera;
+}
 
-void renderer::end() const {}
+void renderer::end() {
+    m_camera = nullptr;
+}
 
-void renderer::submit(vertex_array & _va, shader & _shader) const {
+void renderer::submit(vertex_array & _va, shader & _shader, const glm::mat4 & _model) const {
     _va.bind();
     _shader.bind();
+
+    _shader.uniform("u_model", _model);
+    if (m_camera != nullptr) {
+        _shader.uniform("u_view", m_camera->view());
+        _shader.uniform("u_projection", m_camera->projection());
+    }
 
     glDrawElements(GL_TRIANGLES, _va.indices().count(), _va.indices().type(), nullptr);
 }
