@@ -14,4 +14,9 @@ void timer::stop() {
         m_running  = false;
     }
 }
+
+void timer::restart() {
+    stop();
+    start();
+}
 } // namespace phansar::common
