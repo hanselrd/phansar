@@ -1,6 +1,8 @@
+#include <phansar/client/graphics/camera.hpp>
 #include <phansar/client/opengl/index_buffer.hpp>
 #include <phansar/client/opengl/renderer.hpp>
 #include <phansar/client/opengl/shader.hpp>
+#include <phansar/client/opengl/texture2d.hpp>
 #include <phansar/client/opengl/vertex_array.hpp>
 #include <phansar/client/opengl/vertex_buffer.hpp>
 #include <phansar/client/window.hpp>
@@ -22,15 +24,15 @@ auto main(int _argc, char * _argv[]) -> int {
     auto renderer = phansar::client::opengl::renderer{window};
 
     struct vertex {
-        float        position[2];
-        std::uint8_t color[4];
+        float position[2];
+        float texcoord[2];
     };
 
     vertex vertex_data1[] = {
-        {-0.5F, -0.5F, 255, 0, 0, 255}, // TL [0]
-        {-0.5F, 0.5F, 0, 255, 0, 255},  // BL [1]
-        {0.5F, 0.5F, 0, 0, 255, 255},   // BR [2]
-        {0.5F, -0.5F, 255, 0, 255, 255} // TR [3]
+        {-0.5F, -0.5F, 0.0F, 0.0F}, // TL [0]
+        {-0.5F, 0.5F, 0.0F, 1.0F},  // BL [1]
+        {0.5F, 0.5F, 1.0F, 1.0F},   // BR [2]
+        {0.5F, -0.5F, 1.0F, 0.0F}   // TR [3]
     };
 
     std::uint8_t indices1[] = {0, 1, 3, 1, 2, 3};
@@ -42,42 +44,37 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto va1 = phansar::client::opengl::vertex_array{vb1, ib1};
     va1.push_attribute(&vertex::position);
-    va1.push_attribute(&vertex::color, true);
+    va1.push_attribute(&vertex::texcoord); // TODO: fix
 
-    vertex vertex_data2[] = {
-        {-0.2F, -0.2F, 100, 0, 0, 100}, // TL [0]
-        {-0.2F, 0.2F, 0, 100, 0, 100},  // BL [1]
-        {0.2F, 0.2F, 0, 0, 100, 100},   // BR [2]
-        {0.2F, -0.2F, 100, 0, 100, 100} // TR [3]
-    };
+    /* vertex vertex_data2[] = { */
+    /*     {-0.2F, -0.2F, 100, 0, 0, 100}, // TL [0] */
+    /*     {-0.2F, 0.2F, 0, 100, 0, 100},  // BL [1] */
+    /*     {0.2F, 0.2F, 0, 0, 100, 100},   // BR [2] */
+    /*     {0.2F, -0.2F, 100, 0, 100, 100} // TR [3] */
+    /* }; */
 
-    std::uint8_t indices2[] = {1, 2, 3};
+    /* std::uint8_t indices2[] = {1, 2, 3}; */
 
-    auto vb2 = phansar::client::opengl::vertex_buffer{sizeof(vertex_data2), vertex_data2};
-    auto ib2 = phansar::client::opengl::index_buffer{sizeof(indices2) / sizeof(std::uint8_t),
-                                                     GL_UNSIGNED_BYTE,
-                                                     indices2};
+    /* auto vb2 = phansar::client::opengl::vertex_buffer{sizeof(vertex_data2), vertex_data2}; */
+    /* auto ib2 = phansar::client::opengl::index_buffer{sizeof(indices2) / sizeof(std::uint8_t), */
+    /*                                                  GL_UNSIGNED_BYTE, */
+    /*                                                  indices2}; */
 
-    auto va2 = phansar::client::opengl::vertex_array{vb2, ib2};
-    va2.push_attribute(&vertex::position);
-    va2.push_attribute(&vertex::color, true);
+    /* auto va2 = phansar::client::opengl::vertex_array{vb2, ib2}; */
+    /* va2.push_attribute(&vertex::position); */
+    /* va2.push_attribute(&vertex::color, true); */
 
-    auto camera_proj     = glm::mat4{glm::ortho(-2.0F, 2.0F, -2.0F, 2.0F, -1.0F, 1.0F)};
-    auto camera_view     = glm::mat4{};
-    auto camera_position = glm::vec3{};
-    auto camera_rotation = float{20.0F};
+    auto camera = phansar::client::graphics::camera{
+        glm::ortho(-1.0F * 4.0F, 1.0F * 4.0F, -1.0F * 3.0F, 1.0F * 3.0F, -1.0F, 1.0F)};
 
-    auto transform =
-        glm::translate(glm::mat4{1.0F}, camera_position) *
-        glm::rotate(glm::mat4{1.0F}, glm::radians(camera_rotation), glm::vec3{0.0F, 0.0F, 1.0F});
-    camera_view                 = glm::inverse(transform);
-    auto camera_view_projection = glm::mat4{camera_proj * camera_view};
+    auto texture = phansar::client::opengl::texture2d{"assets/tilesets/city.png"};
 
-    auto shader = phansar::client::opengl::shader{"assets/shaders/basic.glsl"};
-    shader.uniform("u_color", glm::vec4{0.2F, 0.3F, 0.8F, 1.0F});
-    shader.uniform("u_view_projection", camera_view_projection);
+    auto shader = phansar::client::opengl::shader{"assets/shaders/texture.glsl"};
+    /* shader.uniform("u_color", glm::vec4{0.2F, 0.3F, 0.8F, 1.0F}); */
+    shader.uniform("u_texture", 0);
 
-    renderer.clear_color(glm::vec4{0.2F, 0.3F, 0.3F, 1.0F});
+    /* renderer.clear_color(glm::vec4{0.2F, 0.3F, 0.3F, 1.0F}); */
+    renderer.clear_color(glm::vec4{0.0F, 0.0F, 0.0F, 0.0F});
 
     auto timer = phansar::common::timer{};
     timer.start();
@@ -87,38 +84,31 @@ auto main(int _argc, char * _argv[]) -> int {
 
         window.poll_events();
 
-        if (glfwGetKey(window.get(), GLFW_KEY_LEFT)) {
-            camera_position.x -= 2 * delta_time;
+        if (glfwGetKey(window.get(), GLFW_KEY_LEFT) != 0) {
+            camera.position().x -= 2 * delta_time;
         }
-        if (glfwGetKey(window.get(), GLFW_KEY_RIGHT)) {
-            camera_position.x += 2 * delta_time;
+        if (glfwGetKey(window.get(), GLFW_KEY_RIGHT) != 0) {
+            camera.position().x += 2 * delta_time;
         }
-        if (glfwGetKey(window.get(), GLFW_KEY_UP)) {
-            camera_position.y += 2 * delta_time;
+        if (glfwGetKey(window.get(), GLFW_KEY_UP) != 0) {
+            camera.position().y += 2 * delta_time;
         }
-        if (glfwGetKey(window.get(), GLFW_KEY_DOWN)) {
-            camera_position.y -= 2 * delta_time;
+        if (glfwGetKey(window.get(), GLFW_KEY_DOWN) != 0) {
+            camera.position().y -= 2 * delta_time;
         }
-        if (glfwGetKey(window.get(), GLFW_KEY_A)) {
-            camera_rotation += 50 * delta_time;
+        if (glfwGetKey(window.get(), GLFW_KEY_A) != 0) {
+            camera.rotation() += 50 * delta_time;
         }
-        if (glfwGetKey(window.get(), GLFW_KEY_D)) {
-            camera_rotation -= 50 * delta_time;
+        if (glfwGetKey(window.get(), GLFW_KEY_D) != 0) {
+            camera.rotation() -= 50 * delta_time;
         }
 
         renderer.clear();
 
-        transform = glm::translate(glm::mat4{1.0F}, camera_position) *
-                    glm::rotate(glm::mat4{1.0F},
-                                glm::radians(camera_rotation),
-                                glm::vec3{0.0F, 0.0F, 1.0F});
-        camera_view            = glm::inverse(transform);
-        camera_view_projection = glm::mat4{camera_proj * camera_view};
-
-        renderer.begin();
-        shader.uniform("u_view_projection", camera_view_projection);
-        renderer.submit(va1, shader);
-        renderer.submit(va2, shader);
+        renderer.begin(camera);
+        texture.bind();
+        renderer.submit(va1, shader, glm::scale(glm::mat4{1.0F}, glm::vec3{1.5F, 1.5F, 1.0F}));
+        /* renderer.submit(va2, shader); */
         renderer.end();
 
         renderer.swap_buffers();

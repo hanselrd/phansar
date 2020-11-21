@@ -1,6 +1,7 @@
 #ifndef PHANSAR_CLIENT_OPENGL_RENDERER_HPP
 #define PHANSAR_CLIENT_OPENGL_RENDERER_HPP
 
+#include <phansar/client/graphics/camera.hpp>
 #include <phansar/client/opengl/shader.hpp>
 #include <phansar/client/opengl/vertex_array.hpp>
 #include <phansar/client/window.hpp>
@@ -15,12 +16,14 @@ public:
     void clear_color(const glm::vec4 & _color) const;
     void clear() const;
     void swap_buffers() const;
-    void begin() const;
-    void end() const;
-    void submit(vertex_array & _va, shader & _shader) const;
+    void begin(graphics::camera & _camera);
+    void end();
+    void
+    submit(vertex_array & _va, shader & _shader, const glm::mat4 & _model = glm::mat4{1.0F}) const;
 
 private:
-    window * m_window;
+    window *           m_window;
+    graphics::camera * m_camera;
 };
 } // namespace phansar::client::opengl
 
