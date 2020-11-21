@@ -91,10 +91,11 @@ shader::shader(std::string_view _file_path) {
         glDetachShader(m_id, fragment_shader_id);
         glDeleteShader(fragment_shader_id);
     }
+
+    glUseProgram(m_id);
 }
 
 shader::~shader() {
-    unbind();
     glDeleteProgram(m_id);
 }
 

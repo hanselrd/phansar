@@ -1,6 +1,12 @@
 # cmake-format: off
 set(sources
+    opengl/buffer.cpp
+    opengl/index_buffer.cpp
+    opengl/renderer.cpp
     opengl/shader.cpp
+    opengl/vertex_array.cpp
+    opengl/vertex_buffer.cpp
+    window.cpp
     main.cpp)
 
 set(pch

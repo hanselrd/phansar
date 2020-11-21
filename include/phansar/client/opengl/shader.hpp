@@ -12,8 +12,13 @@ public:
 
     void bind() const;
     void unbind() const;
-    template <class... Args>
-    void set_uniform(std::string_view _name, Args &&... _args);
+    template <class T>
+    void uniform(std::string_view _name, const T & _value);
+    template <glm::length_t L, class T, glm::qualifier Q>
+    void uniform(std::string_view _name, const glm::vec<L, T, Q> & _value);
+    template <glm::length_t C, glm::length_t R, class T, glm::qualifier Q>
+    void
+    uniform(std::string_view _name, const glm::mat<C, R, T, Q> & _value, bool _transpose = false);
 
 private:
     auto parse(std::string_view _file_path) -> std::unordered_map<std::string, std::string>;

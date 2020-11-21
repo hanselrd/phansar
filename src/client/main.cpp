@@ -1,33 +1,13 @@
-#include <phansar/client/opengl/serializer.hpp>
+#include <phansar/client/opengl/index_buffer.hpp>
+#include <phansar/client/opengl/renderer.hpp>
 #include <phansar/client/opengl/shader.hpp>
 #include <phansar/client/opengl/vertex_array.hpp>
-#include <phansar/common/histogram.hpp>
+#include <phansar/client/opengl/vertex_buffer.hpp>
+#include <phansar/client/window.hpp>
 #include <phansar/common/macros.hpp>
 #include <phansar/common/python.hpp>
 #include <phansar/common/system.hpp>
-
-#ifdef GLAD_DEBUG
-static void glad_debug_pre_callback(const char * _name, void * _funcptr, int _len_args, ...) {
-    while (glad_glGetError() != GL_NO_ERROR) {
-    }
-    phansar::common::log::instance()
-        ->print(phansar::common::log::level::trace, "<opengl>", 0, "{} <{}>", _name, _funcptr);
-}
-
-static void glad_debug_post_callback(const char * _name, void * _funcptr, int _len_args, ...) {
-    if (auto error = glad_glGetError(); error != GL_NO_ERROR) {
-        phansar::common::log::instance()->print(phansar::common::log::level::critical,
-                                                "<opengl>",
-                                                0,
-                                                "{} ({:#0{}x}) <{}>",
-                                                _name,
-                                                error,
-                                                sizeof(error) + 2,
-                                                _funcptr);
-        std::terminate();
-    }
-}
-#endif
+#include <phansar/common/timer.hpp>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
 PYBIND11_EMBEDDED_MODULE(phansar, m) {
@@ -37,83 +17,112 @@ PYBIND11_EMBEDDED_MODULE(phansar, m) {
 auto main(int _argc, char * _argv[]) -> int {
     phansar::common::system::init(_argc, _argv);
 
-    if (glfwInit() == 0) {
-        return -1;
-    }
+    auto window = phansar::client::window{800, 600, "Phansar"};
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    auto renderer = phansar::client::opengl::renderer{window};
 
-    auto * window = glfwCreateWindow(800, 600, "Phansar", nullptr, nullptr);
-    if (window == nullptr) {
-        glfwTerminate();
-        return -1;
-    }
+    struct vertex {
+        float        position[2];
+        std::uint8_t color[4];
+    };
 
-    glfwMakeContextCurrent(window);
+    vertex vertex_data1[] = {
+        {-0.5F, -0.5F, 255, 0, 0, 255}, // TL [0]
+        {-0.5F, 0.5F, 0, 255, 0, 255},  // BL [1]
+        {0.5F, 0.5F, 0, 0, 255, 255},   // BR [2]
+        {0.5F, -0.5F, 255, 0, 255, 255} // TR [3]
+    };
 
-    glfwSwapInterval(1);
+    std::uint8_t indices1[] = {0, 1, 3, 1, 2, 3};
 
-    gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+    auto vb1 = phansar::client::opengl::vertex_buffer{sizeof(vertex_data1), vertex_data1};
+    auto ib1 = phansar::client::opengl::index_buffer{sizeof(indices1) / sizeof(std::uint8_t),
+                                                     GL_UNSIGNED_BYTE,
+                                                     indices1};
 
-#ifdef GLAD_DEBUG
-    glad_set_pre_callback(&glad_debug_pre_callback);
-    glad_set_post_callback(&glad_debug_post_callback);
-#endif
+    auto va1 = phansar::client::opengl::vertex_array{vb1, ib1};
+    va1.push_attribute(&vertex::position);
+    va1.push_attribute(&vertex::color, true);
 
-    PH_LOG_INFO("██████╗ ██╗  ██╗ █████╗ ███╗   ██╗███████╗ █████╗ ██████╗ ");
-    PH_LOG_INFO("██╔══██╗██║  ██║██╔══██╗████╗  ██║██╔════╝██╔══██╗██╔══██╗");
-    PH_LOG_INFO("██████╔╝███████║███████║██╔██╗ ██║███████╗███████║██████╔╝");
-    PH_LOG_INFO("██╔═══╝ ██╔══██║██╔══██║██║╚██╗██║╚════██║██╔══██║██╔══██╗");
-    PH_LOG_INFO("██║     ██║  ██║██║  ██║██║ ╚████║███████║██║  ██║██║  ██║");
-    PH_LOG_INFO("╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝");
+    vertex vertex_data2[] = {
+        {-0.2F, -0.2F, 100, 0, 0, 100}, // TL [0]
+        {-0.2F, 0.2F, 0, 100, 0, 100},  // BL [1]
+        {0.2F, 0.2F, 0, 0, 100, 100},   // BR [2]
+        {0.2F, -0.2F, 100, 0, 100, 100} // TR [3]
+    };
 
-    PH_LOG_INFO("OpenGL:");
-    PH_LOG_INFO("  Vendor: {}", glGetString(GL_VENDOR));
-    PH_LOG_INFO("  Renderer: {}", glGetString(GL_RENDERER));
-    PH_LOG_INFO("  Version: {}", glGetString(GL_VERSION));
-    PH_LOG_INFO("  Shading Language Version: {}", glGetString(GL_SHADING_LANGUAGE_VERSION));
+    std::uint8_t indices2[] = {1, 2, 3};
 
-    {
-        struct vertex {
-            float        position[2];
-            std::uint8_t color[4];
-        };
+    auto vb2 = phansar::client::opengl::vertex_buffer{sizeof(vertex_data2), vertex_data2};
+    auto ib2 = phansar::client::opengl::index_buffer{sizeof(indices2) / sizeof(std::uint8_t),
+                                                     GL_UNSIGNED_BYTE,
+                                                     indices2};
 
-        auto va = phansar::client::opengl::vertex_array<vertex, 10000, 40000>{
-            {
-                {-0.5F, -0.5F, 255, 0, 0, 255}, // TL [0]
-                {-0.5F, 0.5F, 0, 255, 0, 255},  // BL [1]
-                {0.5F, 0.5F, 0, 0, 255, 255},   // BR [2]
-                {0.5F, -0.5F, 255, 0, 255, 255} // TR [3]
-            },
-            {0, 1, 3, 1, 2, 3}};
-        va.push_attribute(&vertex::position);
-        va.push_attribute(&vertex::color, true);
+    auto va2 = phansar::client::opengl::vertex_array{vb2, ib2};
+    va2.push_attribute(&vertex::position);
+    va2.push_attribute(&vertex::color, true);
 
-        auto shader = phansar::client::opengl::shader{"assets/shaders/basic.glsl"};
-        shader.bind();
-        shader.set_uniform("u_color", 0.2F, 0.3F, 0.8F, 1.0F);
-        shader.unbind();
+    auto camera_proj     = glm::mat4{glm::ortho(-2.0F, 2.0F, -2.0F, 2.0F, -1.0F, 1.0F)};
+    auto camera_view     = glm::mat4{};
+    auto camera_position = glm::vec3{};
+    auto camera_rotation = float{20.0F};
 
-        while (glfwWindowShouldClose(window) == 0) {
-            glfwSwapBuffers(window);
+    auto transform =
+        glm::translate(glm::mat4{1.0F}, camera_position) *
+        glm::rotate(glm::mat4{1.0F}, glm::radians(camera_rotation), glm::vec3{0.0F, 0.0F, 1.0F});
+    camera_view                 = glm::inverse(transform);
+    auto camera_view_projection = glm::mat4{camera_proj * camera_view};
 
-            glClearColor(0.2F, 0.3F, 0.3F, 1.0F);
-            glClear(GL_COLOR_BUFFER_BIT);
+    auto shader = phansar::client::opengl::shader{"assets/shaders/basic.glsl"};
+    shader.uniform("u_color", glm::vec4{0.2F, 0.3F, 0.8F, 1.0F});
+    shader.uniform("u_view_projection", camera_view_projection);
 
-            va.bind();
-            shader.bind();
+    renderer.clear_color(glm::vec4{0.2F, 0.3F, 0.3F, 1.0F});
 
-            glDrawElements(GL_TRIANGLES, va.indices().size(), va.type(), nullptr);
+    auto timer = phansar::common::timer{};
+    timer.start();
+    while (window.open()) {
+        auto delta_time = timer.elapsed_time<float>() / std::chrono::nanoseconds::period::den;
+        timer.restart();
 
-            glfwPollEvents();
+        window.poll_events();
+
+        if (glfwGetKey(window.get(), GLFW_KEY_LEFT)) {
+            camera_position.x -= 2 * delta_time;
         }
-    }
+        if (glfwGetKey(window.get(), GLFW_KEY_RIGHT)) {
+            camera_position.x += 2 * delta_time;
+        }
+        if (glfwGetKey(window.get(), GLFW_KEY_UP)) {
+            camera_position.y += 2 * delta_time;
+        }
+        if (glfwGetKey(window.get(), GLFW_KEY_DOWN)) {
+            camera_position.y -= 2 * delta_time;
+        }
+        if (glfwGetKey(window.get(), GLFW_KEY_A)) {
+            camera_rotation += 50 * delta_time;
+        }
+        if (glfwGetKey(window.get(), GLFW_KEY_D)) {
+            camera_rotation -= 50 * delta_time;
+        }
 
-    glfwTerminate();
+        renderer.clear();
+
+        transform = glm::translate(glm::mat4{1.0F}, camera_position) *
+                    glm::rotate(glm::mat4{1.0F},
+                                glm::radians(camera_rotation),
+                                glm::vec3{0.0F, 0.0F, 1.0F});
+        camera_view            = glm::inverse(transform);
+        camera_view_projection = glm::mat4{camera_proj * camera_view};
+
+        renderer.begin();
+        shader.uniform("u_view_projection", camera_view_projection);
+        renderer.submit(va1, shader);
+        renderer.submit(va2, shader);
+        renderer.end();
+
+        renderer.swap_buffers();
+    }
 
     phansar::common::system::shutdown();
 
