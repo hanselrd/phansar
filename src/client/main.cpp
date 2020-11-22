@@ -1,4 +1,4 @@
-#include <phansar/client/graphics/camera.hpp>
+#include <phansar/client/graphics/orthographic_camera.hpp>
 #include <phansar/client/opengl/index_buffer.hpp>
 #include <phansar/client/opengl/renderer.hpp>
 #include <phansar/client/opengl/shader.hpp>
@@ -8,6 +8,7 @@
 #include <phansar/client/window.hpp>
 #include <phansar/common/macros.hpp>
 #include <phansar/common/python.hpp>
+#include <phansar/common/ref.hpp>
 #include <phansar/common/system.hpp>
 #include <phansar/common/timer.hpp>
 
@@ -64,8 +65,12 @@ auto main(int _argc, char * _argv[]) -> int {
     /* va2.push_attribute(&vertex::position); */
     /* va2.push_attribute(&vertex::color, true); */
 
-    auto camera = phansar::client::graphics::camera{
-        glm::ortho(-1.0F * 4.0F, 1.0F * 4.0F, -1.0F * 3.0F, 1.0F * 3.0F, -1.0F, 1.0F)};
+    auto aspect_ratio = 800.0F / 600.0F;
+    auto zoom         = 1.0F;
+    auto camera       = phansar::client::graphics::orthographic_camera{-aspect_ratio * zoom,
+                                                                 aspect_ratio * zoom,
+                                                                 -zoom,
+                                                                 zoom};
 
     auto texture = phansar::client::opengl::texture2d{"assets/tilesets/city.png"};
 
@@ -84,22 +89,22 @@ auto main(int _argc, char * _argv[]) -> int {
 
         window.poll_events();
 
-        if (glfwGetKey(window.get(), GLFW_KEY_LEFT) != 0) {
+        if (glfwGetKey(window.get(), GLFW_KEY_A) != 0) {
             camera.position().x -= 2 * delta_time;
         }
-        if (glfwGetKey(window.get(), GLFW_KEY_RIGHT) != 0) {
+        if (glfwGetKey(window.get(), GLFW_KEY_D) != 0) {
             camera.position().x += 2 * delta_time;
         }
-        if (glfwGetKey(window.get(), GLFW_KEY_UP) != 0) {
+        if (glfwGetKey(window.get(), GLFW_KEY_W) != 0) {
             camera.position().y += 2 * delta_time;
         }
-        if (glfwGetKey(window.get(), GLFW_KEY_DOWN) != 0) {
+        if (glfwGetKey(window.get(), GLFW_KEY_S) != 0) {
             camera.position().y -= 2 * delta_time;
         }
-        if (glfwGetKey(window.get(), GLFW_KEY_A) != 0) {
+        if (glfwGetKey(window.get(), GLFW_KEY_Q) != 0) {
             camera.rotation() += 50 * delta_time;
         }
-        if (glfwGetKey(window.get(), GLFW_KEY_D) != 0) {
+        if (glfwGetKey(window.get(), GLFW_KEY_E) != 0) {
             camera.rotation() -= 50 * delta_time;
         }
 
