@@ -1,7 +1,8 @@
 #include <phansar/client/graphics/camera.hpp>
 
 namespace phansar::client::graphics {
-camera::camera(const glm::mat4 & _projection) : m_projection{_projection}, m_position{0.0F} {}
+camera::camera(const glm::mat4 & _projection, const glm::vec3 & _position, float _rotation)
+    : m_projection{_projection}, m_position{_position}, m_rotation{_rotation} {}
 
 auto camera::view() -> const glm::mat4 & {
     m_view = glm::inverse(
