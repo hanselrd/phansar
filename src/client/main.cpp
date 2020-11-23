@@ -114,12 +114,18 @@ auto main(int _argc, char * _argv[]) -> int {
         if (glfwGetKey(window.get(), GLFW_KEY_E) != 0) {
             camera.rotation() -= 50 * delta_time;
         }
+        if (glfwGetKey(window.get(), GLFW_KEY_Z) != 0) {
+            camera.zoom() += 0.4 * delta_time;
+        }
+        if (glfwGetKey(window.get(), GLFW_KEY_C) != 0) {
+            camera.zoom() -= 0.4 * delta_time;
+        }
 
         renderer.clear();
 
         renderer.begin(camera);
         texture.bind();
-        renderer.submit(va1, shader, glm::scale(glm::mat4{1.0F}, glm::vec3{1.5F, 1.5F, 1.0F}));
+        renderer.submit(va1, shader, glm::scale(glm::mat4{1.0F}, glm::vec3{1.5F, 1.5F, 0.0F}));
         /* renderer.submit(va2, shader); */
         renderer.end();
 
