@@ -23,6 +23,15 @@ auto main(int _argc, char * _argv[]) -> int {
     auto window = phansar::client::window{800, 600, "Phansar"};
 
     auto renderer = phansar::client::opengl::renderer{window};
+    renderer.viewport(0, 0, 800, 600);
+
+    glfwSetWindowUserPointer(window.get(), &renderer);
+
+    glfwSetWindowSizeCallback(window.get(), [](GLFWwindow * _window, int _width, int _height) {
+        auto * renderer = reinterpret_cast<phansar::client::opengl::renderer *>(
+            glfwGetWindowUserPointer(_window));
+        renderer->viewport(0, 0, _width, _height);
+    });
 
     struct vertex {
         float position[2];
@@ -87,8 +96,6 @@ auto main(int _argc, char * _argv[]) -> int {
         auto delta_time = timer.elapsed_time<float>() / std::chrono::nanoseconds::period::den;
         timer.restart();
 
-        window.poll_events();
-
         if (glfwGetKey(window.get(), GLFW_KEY_A) != 0) {
             camera.position().x -= 2 * delta_time;
         }
@@ -116,7 +123,7 @@ auto main(int _argc, char * _argv[]) -> int {
         /* renderer.submit(va2, shader); */
         renderer.end();
 
-        renderer.swap_buffers();
+        window.update();
     }
 
     phansar::common::system::shutdown();
