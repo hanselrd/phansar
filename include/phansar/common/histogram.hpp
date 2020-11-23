@@ -7,8 +7,8 @@ class histogram {
     static_assert(std::is_arithmetic_v<T>, "T must be arithmetic type");
 
 public:
-    using bin    = std::tuple<double, double, std::uintmax_t>;
-    using sample = std::tuple<T, std::uintmax_t>;
+    using bin_type    = std::tuple<double, double, std::uintmax_t>;
+    using sample_type = std::tuple<T, std::uintmax_t>;
 
     histogram(std::string_view _name, std::string_view _units, std::size_t _num_bins);
 
@@ -23,8 +23,8 @@ public:
     [[nodiscard]] auto variance() const -> double;
     [[nodiscard]] auto standard_deviation() const -> double;
     [[nodiscard]] auto percentile(double _percentile) const -> double;
-    [[nodiscard]] auto bins() const -> std::vector<bin>;
-    [[nodiscard]] auto samples() const -> std::vector<sample>;
+    [[nodiscard]] auto bins() const -> std::vector<bin_type>;
+    [[nodiscard]] auto samples() const -> std::vector<sample_type>;
 
 private:
     std::string                 m_name, m_units;

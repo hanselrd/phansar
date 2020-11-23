@@ -13,9 +13,9 @@ class renderer : public common::utility::noncopyable, public common::utility::no
 public:
     explicit renderer(window & _window);
 
+    void viewport(std::size_t _x, std::size_t _y, std::size_t _width, std::size_t _height);
     void clear_color(const glm::vec4 & _color) const;
     void clear() const;
-    void swap_buffers() const;
     void begin(graphics::camera & _camera);
     void end();
     void

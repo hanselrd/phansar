@@ -17,7 +17,7 @@ set(includes
 
 set(system_libs
     enet)
-if (WIN32)
+if(WIN32)
     set(system_libs
         ${system_libs}
         ws2_32

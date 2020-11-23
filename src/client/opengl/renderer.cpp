@@ -27,9 +27,6 @@ static void glad_debug_post_callback(const char * _name, void * _funcptr, int _l
 #endif
 
 renderer::renderer(window & _window) : m_window{&_window} {
-    glfwMakeContextCurrent(m_window->get());
-    glfwSwapInterval(1);
-
     gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
 #ifdef GLAD_DEBUG
@@ -47,16 +44,19 @@ renderer::renderer(window & _window) : m_window{&_window} {
     PH_LOG_INFO("  Shading Language Version: {}", glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
+void renderer::viewport(std::size_t _x, std::size_t _y, std::size_t _width, std::size_t _height) {
+    glViewport(static_cast<GLint>(_x),
+               static_cast<GLint>(_y),
+               static_cast<GLsizei>(_width),
+               static_cast<GLsizei>(_height));
+}
+
 void renderer::clear_color(const glm::vec4 & _color) const {
     glClearColor(_color.r, _color.g, _color.b, _color.a);
 }
 
 void renderer::clear() const {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void renderer::swap_buffers() const {
-    glfwSwapBuffers(m_window->get());
 }
 
 void renderer::begin(graphics::camera & _camera) {

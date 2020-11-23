@@ -11,8 +11,8 @@ public:
     ~window() override;
 
     auto open() -> bool;
-    void poll_events();
-    auto get() -> GLFWwindow *;
+    void update();
+    auto get() -> GLFWwindow *; // TODO: remove
 
 private:
     static std::uint8_t s_instance_count;

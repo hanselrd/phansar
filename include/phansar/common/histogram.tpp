@@ -101,9 +101,9 @@ auto histogram<T>::percentile(double _percentile) const -> double {
 }
 
 template <class T>
-auto histogram<T>::bins() const -> std::vector<bin> {
+auto histogram<T>::bins() const -> std::vector<bin_type> {
     auto width          = range() / (static_cast<double>(m_num_bins) - 1.);
-    auto bins           = std::vector<bin>(m_num_bins);
+    auto bins           = std::vector<bin_type>(m_num_bins);
     auto cached_minimum = minimum();
     for (auto && [index, b] : bins | ranges::views::enumerate) {
         std::get<0>(b) = cached_minimum + (static_cast<double>(index) * width);
@@ -118,9 +118,9 @@ auto histogram<T>::bins() const -> std::vector<bin> {
 }
 
 template <class T>
-auto histogram<T>::samples() const -> std::vector<sample> {
+auto histogram<T>::samples() const -> std::vector<sample_type> {
     return m_samples | ranges::views::transform([](const auto & _s) {
-               return sample{_s.first, _s.second};
+               return sample_type{_s.first, _s.second};
            }) |
            ranges::to_vector;
 }

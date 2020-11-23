@@ -28,16 +28,16 @@ public:
                Args &&... _args);
 
 private:
-    const level                                              m_level;
-    const std::string                                        m_name;
-    const std::string                                        m_file_path;
-    const std::uintmax_t                                     m_file_size;
-    const std::size_t                                        m_num_files;
-    std::ofstream                                            m_out_file;
-    const std::chrono::time_point<std::chrono::system_clock> m_start_time;
-    std::unordered_map<std::thread::id, std::string>         m_thread_name_map;
-    std::shared_mutex                                        m_thread_name_map_mutex;
-    std::mutex                                               m_print_mutex;
+    level                                              m_level;
+    std::string                                        m_name;
+    std::string                                        m_file_path;
+    std::uintmax_t                                     m_file_size;
+    std::size_t                                        m_num_files;
+    std::ofstream                                      m_out_file;
+    std::chrono::time_point<std::chrono::system_clock> m_start_time;
+    std::unordered_map<std::thread::id, std::string>   m_thread_name_map;
+    std::shared_mutex                                  m_thread_name_map_mutex;
+    std::mutex                                         m_print_mutex;
 };
 } // namespace phansar::common
 
