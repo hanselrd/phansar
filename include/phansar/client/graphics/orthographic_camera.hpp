@@ -13,7 +13,8 @@ public:
                         float             _near     = -1.0F,
                         float             _far      = 1.0F,
                         const glm::vec3 & _position = glm::vec3{},
-                        float             _rotation = 0.0F);
+                        float             _rotation = 0.0F,
+                        float             _zoom     = 1.0F);
 };
 } // namespace phansar::client::graphics
 
