@@ -40,10 +40,10 @@ auto main(int _argc, char * _argv[]) -> int {
     };
 
     vertex vertex_data1[] = {
-        {-0.5F, -0.5F, 0.0F, 0.0F}, // TL [0]
-        {-0.5F, 0.5F, 0.0F, 1.0F},  // BL [1]
-        {0.5F, 0.5F, 1.0F, 1.0F},   // BR [2]
-        {0.5F, -0.5F, 1.0F, 0.0F}   // TR [3]
+        {-1.0F, -1.0F, 0.0F, 0.0F}, // TL [0]
+        {-1.0F, 1.0F, 0.0F, 1.0F},  // BL [1]
+        {1.0F, 1.0F, 1.0F, 1.0F},   // BR [2]
+        {1.0F, -1.0F, 1.0F, 0.0F}   // TR [3]
     };
 
     std::uint8_t indices1[] = {0, 1, 3, 1, 2, 3};
@@ -76,12 +76,20 @@ auto main(int _argc, char * _argv[]) -> int {
                 texture1.width(),
                 texture1.height(),
                 texture1.depth());
+
     auto texture2 = phansar::client::opengl::texture2d{
         phansar::client::graphics::image{"assets/tilesets/city.png"}};
     PH_LOG_INFO("texture2 w: {} h: {} d: {}",
                 texture2.width(),
                 texture2.height(),
                 texture2.depth());
+
+    auto texture3 = phansar::client::opengl::texture2d{
+        phansar::client::graphics::image{"assets/tilesets/rural.png"}};
+    PH_LOG_INFO("texture3 w: {} h: {} d: {}",
+                texture3.width(),
+                texture3.height(),
+                texture3.depth());
 
     auto shader = phansar::client::opengl::shader{"assets/shaders/renderer2d.glsl"};
     shader.uniform("u_texture", 0);
@@ -125,18 +133,20 @@ auto main(int _argc, char * _argv[]) -> int {
         shader.bind();
         shader.uniform("u_color", glm::vec4{0.8F, 0.2F, 0.3F, 1.0F});
         texture1.bind();
-        renderer.submit(va1,
-                        shader,
-                        glm::translate(glm::mat4{1.0F}, glm::vec3{-1.0F, 0.0F, 0.0F}) *
-                            glm::scale(glm::mat4{1.0F}, glm::vec3{0.8F, 0.8F, 1.0F}));
+        renderer.submit(
+            va1,
+            shader,
+            glm::translate(glm::mat4{1.0F}, glm::vec3{-0.5F, 0.0F, 0.0F}) *
+                glm::rotate(glm::mat4{1.0f}, glm::radians(45.0f), glm::vec3{0.0f, 0.0f, 1.0f}) *
+                glm::scale(glm::mat4{1.0F}, glm::vec3{0.3F, 0.3F, 1.0F}));
         shader.bind();
         texture2.bind();
         /* shader.uniform("u_color", glm::vec4{0.2F, 0.3F, 0.8F, 1.0F}); */
         shader.uniform("u_color", glm::vec4{1.0F});
         renderer.submit(va1,
                         shader,
-                        glm::translate(glm::mat4{1.0F}, glm::vec3{0.5F, -0.5F, 0.0F}) *
-                            glm::scale(glm::mat4{1.0F}, glm::vec3{0.5F, 0.75F, 1.0F}));
+                        glm::translate(glm::mat4{1.0F}, glm::vec3{0.5F, -0.2F, 0.0F}) *
+                            glm::scale(glm::mat4{1.0F}, glm::vec3{0.5F, 0.4F, 1.0F}));
         renderer.end();
 
         window.update();

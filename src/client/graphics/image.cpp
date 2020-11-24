@@ -3,7 +3,6 @@
 namespace phansar::client::graphics {
 image::image(std::string_view _file_path) {
     stbi_set_flip_vertically_on_load(1);
-
     m_data = stbi_load(std::string{_file_path}.c_str(), &m_width, &m_height, &m_channels, 0);
 }
 
