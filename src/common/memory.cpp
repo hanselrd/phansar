@@ -37,6 +37,7 @@ auto realloc(void * _ptr, std::size_t _num_bytes) -> void * {
 }
 
 void free(void * _ptr) {
+    // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
     PH_ASSERT(_ptr != nullptr);
 
     // NOLINTNEXTLINE(clang-analyzer-unix.Malloc)

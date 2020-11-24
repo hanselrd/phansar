@@ -28,7 +28,7 @@ public:
                              GLsizei        _width,
                              GLsizei        _height,
                              GLsizei        _depth,
-                             const GLvoid * _data);
+                             const GLvoid * _data) const;
     [[nodiscard]] auto width() const -> GLsizei;
     [[nodiscard]] auto height() const -> GLsizei;
     [[nodiscard]] auto depth() const -> GLsizei;
