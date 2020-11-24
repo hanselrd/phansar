@@ -37,7 +37,8 @@
 #define PH_ASSERT_ALWAYS(_condition, ...)                                                          \
     do {                                                                                           \
         if (HEDLEY_UNLIKELY(! (_condition))) {                                                     \
-            PH_LOG_CRITICAL("Assertion `" #_condition "' failed: {}", fmt::format(__VA_ARGS__));   \
+            PH_LOG_CRITICAL("Assertion `" #_condition                                              \
+                            "' failed" __VA_OPT__(": {}", fmt::format(__VA_ARGS__)));              \
             std::terminate();                                                                      \
         }                                                                                          \
     } while (false)

@@ -1,3 +1,4 @@
+#include <phansar/client/graphics/image.hpp>
 #include <phansar/client/graphics/orthographic_camera.hpp>
 #include <phansar/client/opengl/index_buffer.hpp>
 #include <phansar/client/opengl/renderer.hpp>
@@ -56,24 +57,6 @@ auto main(int _argc, char * _argv[]) -> int {
     va1.push_attribute(&vertex::position);
     va1.push_attribute(&vertex::texcoord); // TODO: fix
 
-    /* vertex vertex_data2[] = { */
-    /*     {-0.2F, -0.2F, 100, 0, 0, 100}, // TL [0] */
-    /*     {-0.2F, 0.2F, 0, 100, 0, 100},  // BL [1] */
-    /*     {0.2F, 0.2F, 0, 0, 100, 100},   // BR [2] */
-    /*     {0.2F, -0.2F, 100, 0, 100, 100} // TR [3] */
-    /* }; */
-
-    /* std::uint8_t indices2[] = {1, 2, 3}; */
-
-    /* auto vb2 = phansar::client::opengl::vertex_buffer{sizeof(vertex_data2), vertex_data2}; */
-    /* auto ib2 = phansar::client::opengl::index_buffer{sizeof(indices2) / sizeof(std::uint8_t), */
-    /*                                                  GL_UNSIGNED_BYTE, */
-    /*                                                  indices2}; */
-
-    /* auto va2 = phansar::client::opengl::vertex_array{vb2, ib2}; */
-    /* va2.push_attribute(&vertex::position); */
-    /* va2.push_attribute(&vertex::color, true); */
-
     auto aspect_ratio = 800.0F / 600.0F;
     auto zoom         = 1.0F;
     auto camera       = phansar::client::graphics::orthographic_camera{-aspect_ratio * zoom,
@@ -81,13 +64,28 @@ auto main(int _argc, char * _argv[]) -> int {
                                                                  -zoom,
                                                                  zoom};
 
-    auto texture = phansar::client::opengl::texture2d{"assets/tilesets/city.png"};
+    auto white_pixel = std::uint32_t{0xffffffff};
+    auto texture1    = phansar::client::opengl::texture2d{0,
+                                                       GL_RGBA8,
+                                                       1,
+                                                       1,
+                                                       GL_RGBA,
+                                                       GL_UNSIGNED_BYTE /*, &white_pixel*/};
+    texture1.write(0, 0, 0, 0, 1, 1, 0, &white_pixel);
+    PH_LOG_INFO("texture1 w: {} h: {} d: {}",
+                texture1.width(),
+                texture1.height(),
+                texture1.depth());
+    auto texture2 = phansar::client::opengl::texture2d{
+        phansar::client::graphics::image{"assets/tilesets/city.png"}};
+    PH_LOG_INFO("texture2 w: {} h: {} d: {}",
+                texture2.width(),
+                texture2.height(),
+                texture2.depth());
 
-    auto shader = phansar::client::opengl::shader{"assets/shaders/texture.glsl"};
-    /* shader.uniform("u_color", glm::vec4{0.2F, 0.3F, 0.8F, 1.0F}); */
+    auto shader = phansar::client::opengl::shader{"assets/shaders/renderer2d.glsl"};
     shader.uniform("u_texture", 0);
 
-    /* renderer.clear_color(glm::vec4{0.2F, 0.3F, 0.3F, 1.0F}); */
     renderer.clear_color(glm::vec4{0.0F, 0.0F, 0.0F, 0.0F});
 
     auto timer = phansar::common::timer{};
@@ -115,18 +113,30 @@ auto main(int _argc, char * _argv[]) -> int {
             camera.rotation() -= 50 * delta_time;
         }
         if (glfwGetKey(window.get(), GLFW_KEY_Z) != 0) {
-            camera.zoom() += 0.4 * delta_time;
+            camera.zoom() += 0.4F * delta_time;
         }
         if (glfwGetKey(window.get(), GLFW_KEY_C) != 0) {
-            camera.zoom() -= 0.4 * delta_time;
+            camera.zoom() -= 0.4F * delta_time;
         }
 
         renderer.clear();
 
         renderer.begin(camera);
-        texture.bind();
-        renderer.submit(va1, shader, glm::scale(glm::mat4{1.0F}, glm::vec3{1.5F, 1.5F, 0.0F}));
-        /* renderer.submit(va2, shader); */
+        shader.bind();
+        shader.uniform("u_color", glm::vec4{0.8F, 0.2F, 0.3F, 1.0F});
+        texture1.bind();
+        renderer.submit(va1,
+                        shader,
+                        glm::translate(glm::mat4{1.0F}, glm::vec3{-1.0F, 0.0F, 0.0F}) *
+                            glm::scale(glm::mat4{1.0F}, glm::vec3{0.8F, 0.8F, 1.0F}));
+        shader.bind();
+        texture2.bind();
+        /* shader.uniform("u_color", glm::vec4{0.2F, 0.3F, 0.8F, 1.0F}); */
+        shader.uniform("u_color", glm::vec4{1.0F});
+        renderer.submit(va1,
+                        shader,
+                        glm::translate(glm::mat4{1.0F}, glm::vec3{0.5F, -0.5F, 0.0F}) *
+                            glm::scale(glm::mat4{1.0F}, glm::vec3{0.5F, 0.75F, 1.0F}));
         renderer.end();
 
         window.update();
