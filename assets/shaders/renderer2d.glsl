@@ -23,7 +23,8 @@ in vec2 v_texcoord;
 layout(location = 0) out vec4 f_color;
 
 uniform sampler2D u_texture;
+uniform vec4 u_color;
 
 void main() {
-    f_color = texture(u_texture, v_texcoord);
+    f_color = texture(u_texture, v_texcoord) * u_color;
 }

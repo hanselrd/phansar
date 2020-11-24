@@ -1,6 +1,7 @@
 # cmake-format: off
 set(sources
     graphics/camera.cpp
+    graphics/image.cpp
     graphics/orthographic_camera.cpp
     opengl/buffer.cpp
     opengl/index_buffer.cpp

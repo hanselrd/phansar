@@ -1,5 +1,6 @@
 #include <phansar/client/opengl/renderer.hpp>
 #include <phansar/common/log.hpp>
+#include <phansar/common/macros.hpp>
 
 namespace phansar::client::opengl {
 #ifdef GLAD_DEBUG
@@ -26,7 +27,7 @@ static void glad_debug_post_callback(const char * _name, void * _funcptr, int _l
 }
 #endif
 
-renderer::renderer(window & _window) : m_window{&_window} {
+renderer::renderer(window & _window) : m_window{&_window}, m_camera{nullptr} {
     gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
 #ifdef GLAD_DEBUG
@@ -36,6 +37,8 @@ renderer::renderer(window & _window) : m_window{&_window} {
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_DEPTH_TEST);
 
     PH_LOG_INFO("OpenGL:");
     PH_LOG_INFO("  Vendor: {}", glGetString(GL_VENDOR));
@@ -68,6 +71,8 @@ void renderer::end() {
 }
 
 void renderer::submit(vertex_array & _va, shader & _shader, const glm::mat4 & _model) const {
+    PH_ASSERT(m_camera != nullptr);
+
     _va.bind();
     _shader.bind();
 
