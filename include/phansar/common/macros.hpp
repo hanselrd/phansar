@@ -34,13 +34,24 @@
 #define PH_LOG_ERROR_IF(_condition, ...)    PH_LOG_IF(error, _condition, __VA_ARGS__)
 #define PH_LOG_CRITICAL_IF(_condition, ...) PH_LOG_IF(critical, _condition, __VA_ARGS__)
 
-#define PH_ASSERT_ALWAYS(_condition, ...)                                                          \
-    do {                                                                                           \
-        if (HEDLEY_UNLIKELY(! (_condition))) {                                                     \
-            PH_LOG_CRITICAL("Assertion `" #_condition "' failed");                                 \
-            std::terminate();                                                                      \
-        }                                                                                          \
-    } while (false)
+#ifndef HEDLEY_MSVC_VERSION
+#    define PH_ASSERT_ALWAYS(_condition, ...)                                                      \
+        do {                                                                                       \
+            if (HEDLEY_UNLIKELY(! (_condition))) {                                                 \
+                PH_LOG_CRITICAL("Assertion `" #_condition                                          \
+                                "' failed" __VA_OPT__(": {}", fmt::format(__VA_ARGS__)));          \
+                std::terminate();                                                                  \
+            }                                                                                      \
+        } while (false)
+#else
+#    define PH_ASSERT_ALWAYS(_condition, ...)                                                      \
+        do {                                                                                       \
+            if (HEDLEY_UNLIKELY(! (_condition))) {                                                 \
+                PH_LOG_CRITICAL("Assertion `" #_condition "' failed");                             \
+                std::terminate();                                                                  \
+            }                                                                                      \
+        } while (false)
+#endif
 
 #define PH_ASSERT_ALWAYS_IF(_enable, _condition, ...)                                              \
     do {                                                                                           \

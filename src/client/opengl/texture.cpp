@@ -94,7 +94,7 @@ void texture::write(GLint          _level,
                     GLsizei        _width,
                     GLsizei        _height,
                     GLsizei        _depth,
-                    const GLvoid * _data) {
+                    const GLvoid * _data) const {
     PH_ASSERT(_level >= 0);
     PH_ASSERT(_xoffset >= 0 && _xoffset <= m_width);
     PH_ASSERT(_yoffset >= 0 && _yoffset <= m_height);
