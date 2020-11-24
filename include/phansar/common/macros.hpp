@@ -5,11 +5,11 @@
 
 #define PH_LOG(_level, ...)                                                                        \
     do {                                                                                           \
-        if (phansar::common::log::instance() != nullptr) {                                         \
-            phansar::common::log::instance()->print(phansar::common::log::level::_level,           \
-                                                    __FILE__,                                      \
-                                                    __LINE__,                                      \
-                                                    __VA_ARGS__);                                  \
+        if (::phansar::common::log::instance() != nullptr) {                                       \
+            ::phansar::common::log::instance()->print(::phansar::common::log::level::_level,       \
+                                                      __FILE__,                                    \
+                                                      __LINE__,                                    \
+                                                      __VA_ARGS__);                                \
         }                                                                                          \
     } while (false)
 
@@ -37,8 +37,7 @@
 #define PH_ASSERT_ALWAYS(_condition, ...)                                                          \
     do {                                                                                           \
         if (HEDLEY_UNLIKELY(! (_condition))) {                                                     \
-            PH_LOG_CRITICAL("Assertion `" #_condition                                              \
-                            "' failed" __VA_OPT__(": {}", fmt::format(__VA_ARGS__)));              \
+            PH_LOG_CRITICAL("Assertion `" #_condition "' failed");                                 \
             std::terminate();                                                                      \
         }                                                                                          \
     } while (false)
