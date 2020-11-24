@@ -123,6 +123,7 @@ function(ph_target_compile_options name)
     endif()
     append_compile_option(PHANSAR_HAS_PIPE "-pipe")
     append_compile_option(PHANSAR_HAS_WALL_MSVC "/Wall")
+    append_compile_option(PHANSAR_HAS_ZC_PREPROCESSOR_MSVC "/Zc:preprocessor")
 endfunction()
 
 function(ph_add_generic_interface_library name pch libs system_libs)
