@@ -4,12 +4,11 @@
 namespace phansar::client::opengl {
 index_buffer::index_buffer(GLsizei _count, GLenum _type, const GLvoid * _data)
     : buffer{GL_ELEMENT_ARRAY_BUFFER,
-             static_cast<GLsizeiptr>(_count *
-                                     ((_type == GL_UNSIGNED_BYTE)
-                                          ? sizeof(traits::enum_to_type_t<GL_UNSIGNED_BYTE>)
-                                      : (_type == GL_UNSIGNED_SHORT)
-                                          ? sizeof(traits::enum_to_type_t<GL_UNSIGNED_SHORT>)
-                                          : sizeof(traits::enum_to_type_t<GL_UNSIGNED_INT>))),
+             static_cast<GLsizeiptr>(_count * ((_type == GL_UNSIGNED_BYTE)
+                                                   ? sizeof(traits::enum_t<GL_UNSIGNED_BYTE>)
+                                               : (_type == GL_UNSIGNED_SHORT)
+                                                   ? sizeof(traits::enum_t<GL_UNSIGNED_SHORT>)
+                                                   : sizeof(traits::enum_t<GL_UNSIGNED_INT>))),
              _data},
       m_count{_count}, m_type{_type} {}
 

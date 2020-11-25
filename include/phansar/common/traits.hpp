@@ -4,7 +4,7 @@
 namespace phansar::common::traits {
 template <class... Ts>
 // NOLINTNEXTLINE(readability-identifier-naming)
-inline constexpr bool false_v = false;
+inline constexpr auto false_v = bool{false};
 } // namespace phansar::common::traits
 
 #endif

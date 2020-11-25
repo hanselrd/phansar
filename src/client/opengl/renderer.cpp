@@ -45,6 +45,10 @@ renderer::renderer(window & _window) : m_window{&_window}, m_camera{nullptr} {
     PH_LOG_INFO("  Renderer: {}", glGetString(GL_RENDERER));
     PH_LOG_INFO("  Version: {}", glGetString(GL_VERSION));
     PH_LOG_INFO("  Shading Language Version: {}", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+    auto data = GLint{};
+    glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &data);
+    PH_LOG_INFO("  Maximum Texture Image Units: {}", data);
 }
 
 void renderer::viewport(std::size_t _x, std::size_t _y, std::size_t _width, std::size_t _height) {
