@@ -2,93 +2,88 @@
 #define PHANSAR_CLIENT_OPENGL_TRAITS_HPP
 
 namespace phansar::client::opengl::traits {
-namespace detail {
 template <GLenum E>
-struct enum_to_type {};
-
-template <>
-struct enum_to_type<GL_BYTE> {
-    using type = GLbyte;
-};
-
-template <>
-struct enum_to_type<GL_UNSIGNED_BYTE> {
-    using type = GLubyte;
-};
-
-template <>
-struct enum_to_type<GL_SHORT> {
-    using type = GLshort;
-};
-
-template <>
-struct enum_to_type<GL_UNSIGNED_SHORT> {
-    using type = GLushort;
-};
-
-template <>
-struct enum_to_type<GL_INT> {
-    using type = GLint;
-};
-
-template <>
-struct enum_to_type<GL_UNSIGNED_INT> {
-    using type = GLuint;
-};
-
-template <>
-struct enum_to_type<GL_FLOAT> {
-    using type = GLfloat;
-};
-
-template <>
-struct enum_to_type<GL_DOUBLE> {
-    using type = GLdouble;
-};
-
-template <class T>
-struct type_to_enum {};
-
-template <>
-struct type_to_enum<GLbyte> : std::integral_constant<GLenum, GL_BYTE> {};
-
-template <>
-struct type_to_enum<GLubyte> : std::integral_constant<GLenum, GL_UNSIGNED_BYTE> {};
-
-template <>
-struct type_to_enum<GLshort> : std::integral_constant<GLenum, GL_SHORT> {};
-
-template <>
-struct type_to_enum<GLushort> : std::integral_constant<GLenum, GL_UNSIGNED_SHORT> {};
-
-template <>
-struct type_to_enum<GLint> : std::integral_constant<GLenum, GL_INT> {};
-
-template <>
-struct type_to_enum<GLuint> : std::integral_constant<GLenum, GL_UNSIGNED_INT> {};
-
-template <>
-struct type_to_enum<GLfloat> : std::integral_constant<GLenum, GL_FLOAT> {};
-
-template <>
-struct type_to_enum<GLdouble> : std::integral_constant<GLenum, GL_DOUBLE> {};
-
-template <GLuint I>
-struct index_to_type {
-    using type =
-        std::conditional_t<I <= 0xff, GLubyte, std::conditional_t<I <= 0xffff, GLushort, GLuint>>;
-};
-} // namespace detail
-
-template <GLenum E>
-using enum_to_type_t = typename detail::enum_to_type<E>::type;
+using enum_t = std::conditional_t<
+    E == GL_BYTE,
+    GLbyte,
+    std::conditional_t<
+        E == GL_UNSIGNED_BYTE,
+        GLubyte,
+        std::conditional_t<
+            E == GL_SHORT,
+            GLshort,
+            std::conditional_t<
+                E == GL_UNSIGNED_SHORT,
+                GLushort,
+                std::conditional_t<
+                    E == GL_INT,
+                    GLint,
+                    std::conditional_t<
+                        E == GL_UNSIGNED_INT,
+                        GLuint,
+                        std::conditional_t<
+                            E == GL_FLOAT,
+                            GLfloat,
+                            std::conditional_t<E == GL_DOUBLE, GLdouble, void>>>>>>>>;
 
 template <class T>
 // NOLINTNEXTLINE(readability-identifier-naming)
-inline constexpr GLenum type_to_enum_v = detail::type_to_enum<T>::value;
+inline constexpr auto enum_v = std::conditional_t<
+    std::is_same_v<T, GLbyte>,
+    std::integral_constant<GLenum, GL_BYTE>,
+    std::conditional_t<
+        std::is_same_v<T, GLubyte>,
+        std::integral_constant<GLenum, GL_UNSIGNED_BYTE>,
+        std::conditional_t<
+            std::is_same_v<T, GLshort>,
+            std::integral_constant<GLenum, GL_SHORT>,
+            std::conditional_t<
+                std::is_same_v<T, GLushort>,
+                std::integral_constant<GLenum, GL_UNSIGNED_SHORT>,
+                std::conditional_t<
+                    std::is_same_v<T, GLint>,
+                    std::integral_constant<GLenum, GL_INT>,
+                    std::conditional_t<
+                        std::is_same_v<T, GLuint>,
+                        std::integral_constant<GLenum, GL_UNSIGNED_INT>,
+                        std::conditional_t<
+                            std::is_same_v<T, GLfloat>,
+                            std::integral_constant<GLenum, GL_FLOAT>,
+                            std::conditional_t<std::is_same_v<T, GLdouble>,
+                                               std::integral_constant<GLenum, GL_DOUBLE>,
+                                               void>>>>>>>>::value;
+
+template <class T, std::size_t N>
+// NOLINTNEXTLINE(readability-identifier-naming)
+inline constexpr auto enum_v<T[N]> = enum_v<T>;
+
+template <glm::length_t L, class T, glm::qualifier Q>
+// NOLINTNEXTLINE(readability-identifier-naming)
+inline constexpr auto enum_v<glm::vec<L, T, Q>> = enum_v<T>;
+
+template <glm::length_t C, glm::length_t R, class T, glm::qualifier Q>
+// NOLINTNEXTLINE(readability-identifier-naming)
+inline constexpr auto enum_v<glm::mat<C, R, T, Q>> = enum_v<T>;
+
+template <class T>
+// NOLINTNEXTLINE(readability-identifier-naming)
+inline constexpr auto count_v = std::size_t{1};
+
+template <class T, std::size_t N>
+// NOLINTNEXTLINE(readability-identifier-naming)
+inline constexpr auto count_v<T[N]> = N;
+
+template <glm::length_t L, class T, glm::qualifier Q>
+// NOLINTNEXTLINE(readability-identifier-naming)
+inline constexpr auto count_v<glm::vec<L, T, Q>> = L;
+
+template <glm::length_t C, glm::length_t R, class T, glm::qualifier Q>
+// NOLINTNEXTLINE(readability-identifier-naming)
+inline constexpr auto count_v<glm::mat<C, R, T, Q>> = C * R;
 
 template <GLuint I>
-using index_to_type_t = typename detail::index_to_type<I>::type;
+using index_t =
+    std::conditional_t<I <= 0xFF, GLubyte, std::conditional_t<I <= 0xFFFF, GLushort, GLuint>>;
 } // namespace phansar::client::opengl::traits
 
 #endif

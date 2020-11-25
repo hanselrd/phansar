@@ -35,15 +35,16 @@ auto main(int _argc, char * _argv[]) -> int {
     });
 
     struct vertex {
-        float position[2];
-        float texcoord[2];
+        glm::vec3 position;
+        glm::vec4 color;
+        glm::vec2 texcoord;
     };
 
     vertex vertex_data1[] = {
-        {-1.0F, -1.0F, 0.0F, 0.0F}, // TL [0]
-        {-1.0F, 1.0F, 0.0F, 1.0F},  // BL [1]
-        {1.0F, 1.0F, 1.0F, 1.0F},   // BR [2]
-        {1.0F, -1.0F, 1.0F, 0.0F}   // TR [3]
+        {glm::vec3{-1.0F, -1.0F, 0.0F}, glm::vec4{0.8F}, glm::vec2{0.0F, 0.0F}}, // TL [0]
+        {glm::vec3{-1.0F, 1.0F, 0.0F}, glm::vec4{1.0F}, glm::vec2{0.0F, 1.0F}},  // BL [1]
+        {glm::vec3{1.0F, 1.0F, 0.0F}, glm::vec4{0.8F}, glm::vec2{1.0F, 1.0F}},   // BR [2]
+        {glm::vec3{1.0F, -1.0F, 0.0F}, glm::vec4{1.0F}, glm::vec2{1.0F, 0.0F}}   // TR [3]
     };
 
     std::uint8_t indices1[] = {0, 1, 3, 1, 2, 3};
@@ -55,7 +56,8 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto va1 = phansar::client::opengl::vertex_array{vb1, ib1};
     va1.push_attribute(&vertex::position);
-    va1.push_attribute(&vertex::texcoord); // TODO: fix
+    va1.push_attribute(&vertex::color);
+    va1.push_attribute(&vertex::texcoord);
 
     auto aspect_ratio = 800.0F / 600.0F;
     auto zoom         = 1.0F;
@@ -137,7 +139,7 @@ auto main(int _argc, char * _argv[]) -> int {
             va1,
             shader,
             glm::translate(glm::mat4{1.0F}, glm::vec3{-0.5F, 0.0F, 0.0F}) *
-                glm::rotate(glm::mat4{1.0f}, glm::radians(45.0f), glm::vec3{0.0f, 0.0f, 1.0f}) *
+                glm::rotate(glm::mat4{1.0F}, glm::radians(45.0F), glm::vec3{0.0F, 0.0F, 1.0F}) *
                 glm::scale(glm::mat4{1.0F}, glm::vec3{0.3F, 0.3F, 1.0F}));
         shader.bind();
         texture2.bind();
