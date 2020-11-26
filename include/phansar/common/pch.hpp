@@ -2,6 +2,7 @@
 #define PHANSAR_COMMON_PCH_HPP
 
 #include <algorithm>
+#include <any>
 #include <array>
 #include <chrono>
 #include <cmath>
@@ -28,6 +29,7 @@
 #include <type_traits>
 #include <unordered_map>
 #include <utility>
+#include <variant>
 #include <vector>
 
 #include <phansar/vendor/cppcodec.hpp>

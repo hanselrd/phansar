@@ -18,6 +18,21 @@ void shader::uniform(std::string_view _name, const T & _value) {
     }
 }
 
+template <class T, std::size_t N>
+void shader::uniform(std::string_view _name, const T (&_value)[N]) {
+    auto location = glGetUniformLocation(m_id, std::string{_name}.c_str());
+
+    if constexpr (std::is_same_v<T, GLfloat>) {
+        glUniform1fv(location, N, _value);
+    } else if constexpr (std::is_same_v<T, GLint>) {
+        glUniform1iv(location, N, _value);
+    } else if constexpr (std::is_same_v<T, GLuint>) {
+        glUniform1uiv(location, N, _value);
+    } else {
+        static_assert(common::traits::false_v<T>, "Not supported");
+    }
+}
+
 template <glm::length_t L, class T, glm::qualifier Q>
 void shader::uniform(std::string_view _name, const glm::vec<L, T, Q> & _value) {
     auto location = glGetUniformLocation(m_id, std::string{_name}.c_str());
