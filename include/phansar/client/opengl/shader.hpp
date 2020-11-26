@@ -14,6 +14,8 @@ public:
     void unbind() const;
     template <class T>
     void uniform(std::string_view _name, const T & _value);
+    template <class T, std::size_t N>
+    void uniform(std::string_view _name, const T (&_value)[N]);
     template <glm::length_t L, class T, glm::qualifier Q>
     void uniform(std::string_view _name, const glm::vec<L, T, Q> & _value);
     template <glm::length_t C, glm::length_t R, class T, glm::qualifier Q>

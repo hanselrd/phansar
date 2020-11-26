@@ -9,7 +9,6 @@
 #include <phansar/client/window.hpp>
 #include <phansar/common/macros.hpp>
 #include <phansar/common/python.hpp>
-#include <phansar/common/ref.hpp>
 #include <phansar/common/system.hpp>
 #include <phansar/common/timer.hpp>
 
