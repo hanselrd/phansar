@@ -10,18 +10,10 @@ window::window(std::size_t _width, std::size_t _height, std::string_view _title)
 
     ++s_instance_count;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#ifdef PH_BUILD_DEBUG
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-#endif
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
     m_window = glfwCreateWindow(_width, _height, std::string{_title}.c_str(), nullptr, nullptr);
-
-    glfwMakeContextCurrent(m_window);
-    glfwSwapInterval(1);
 }
 
 window::~window() {
@@ -42,7 +34,6 @@ auto window::open() -> bool {
 
 void window::update() {
     glfwPollEvents();
-    glfwSwapBuffers(m_window);
 }
 
 auto window::get() -> GLFWwindow * {

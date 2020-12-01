@@ -52,7 +52,7 @@ add_custom_target(
     assets ALL
     COMMAND ${CMAKE_COMMAND} -E rm -rf assets
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/assets assets
-    DEPENDS assets
+    DEPENDS shaderc assets
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
 # find_package(Python REQUIRED COMPONENTS Interpreter) add_custom_target( assets ALL COMMAND
 # ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tools/compile_assets.py -o assets.json DEPENDS

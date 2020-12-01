@@ -8,7 +8,14 @@ orthographic_camera::orthographic_camera(float             _left,
                                          float             _near,
                                          float             _far,
                                          const glm::vec3 & _position,
-                                         float             _rotation,
-                                         float             _zoom)
-    : camera{glm::ortho(_left, _right, _bottom, _top, _near, _far), _position, _rotation, _zoom} {}
+                                         const glm::vec3 & _center,
+                                         const glm::vec3 & _up,
+                                         const glm::vec3 & _rotation,
+                                         const glm::vec3 & _scale)
+    : camera{glm::ortho(_left, _right, _bottom, _top, _near, _far),
+             _position,
+             _center,
+             _up,
+             _rotation,
+             _scale} {}
 } // namespace phansar::client::graphics

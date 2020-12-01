@@ -1,11 +1,9 @@
 #include <phansar/client/graphics/image.hpp>
 #include <phansar/client/graphics/orthographic_camera.hpp>
-#include <phansar/client/opengl/index_buffer.hpp>
-#include <phansar/client/opengl/renderer.hpp>
-#include <phansar/client/opengl/shader.hpp>
-#include <phansar/client/opengl/texture2d.hpp>
-#include <phansar/client/opengl/vertex_array.hpp>
-#include <phansar/client/opengl/vertex_buffer.hpp>
+#include <phansar/client/graphics/perspective_camera.hpp>
+#include <phansar/client/graphics/renderer.hpp>
+#include <phansar/client/graphics/shader.hpp>
+#include <phansar/client/graphics/texture.hpp>
 #include <phansar/client/window.hpp>
 #include <phansar/common/macros.hpp>
 #include <phansar/common/python.hpp>
@@ -22,80 +20,59 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto window = phansar::client::window{800, 600, "Phansar"};
 
-    auto renderer = phansar::client::opengl::renderer{window};
-    renderer.viewport(0, 0, 800, 600);
+    auto renderer = phansar::client::graphics::renderer{window};
 
-    glfwSetWindowUserPointer(window.get(), &renderer);
-
-    glfwSetWindowSizeCallback(window.get(), [](GLFWwindow * _window, int _width, int _height) {
-        auto * renderer = reinterpret_cast<phansar::client::opengl::renderer *>(
-            glfwGetWindowUserPointer(_window));
-        renderer->viewport(0, 0, _width, _height);
-    });
-
-    struct vertex {
-        glm::vec3 position;
-        glm::vec4 color;
-        glm::vec2 texcoord;
+    struct pos_color_texcoord_vertex {
+        glm::vec3     position;
+        std::uint32_t color;
+        glm::vec2     texcoord;
+        glm::vec3     normal;
     };
 
-    vertex vertex_data1[] = {
-        {glm::vec3{-1.0F, -1.0F, 0.0F}, glm::vec4{0.8F}, glm::vec2{0.0F, 0.0F}}, // TL [0]
-        {glm::vec3{-1.0F, 1.0F, 0.0F}, glm::vec4{1.0F}, glm::vec2{0.0F, 1.0F}},  // BL [1]
-        {glm::vec3{1.0F, 1.0F, 0.0F}, glm::vec4{0.8F}, glm::vec2{1.0F, 1.0F}},   // BR [2]
-        {glm::vec3{1.0F, -1.0F, 0.0F}, glm::vec4{1.0F}, glm::vec2{1.0F, 0.0F}}   // TR [3]
-    };
+    auto ms_layout = bgfx::VertexLayout{};
+    ms_layout.begin()
+        .add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
+        .add(bgfx::Attrib::Color0, 4, bgfx::AttribType::Uint8, true)
+        .add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
+        .add(bgfx::Attrib::Normal, 3, bgfx::AttribType::Float)
+        .end();
 
-    std::uint8_t indices1[] = {0, 1, 3, 1, 2, 3};
+    auto cube_vertices = std::array<pos_color_texcoord_vertex, 4>{
+        {{{-0.5F, 0.5F, 0.0F}, {0xffffffff}, {0.0F, 1.0F}, {0.0F, 0.0F, -1.0F}},
+         {{-0.5F, -0.5F, 0.0F}, {0xffffffff}, {0.0F, 0.0F}, {0.0F, 0.0F, -1.0F}},
+         {{0.5F, -0.5F, 0.0F}, {0xffffffff}, {1.0F, 0.0F}, {0.0F, 0.0F, -1.0F}},
+         {{0.5F, 0.5F, 0.0F}, {0xffffffff}, {1.0F, 1.0F}, {0.0F, 0.0F, -1.0F}}}};
 
-    auto vb1 = phansar::client::opengl::vertex_buffer{sizeof(vertex_data1), vertex_data1};
-    auto ib1 = phansar::client::opengl::index_buffer{sizeof(indices1) / sizeof(std::uint8_t),
-                                                     GL_UNSIGNED_BYTE,
-                                                     indices1};
+    auto cube_indices = std::array<std::uint16_t, 6>{0, 1, 2, 0, 2, 3};
 
-    auto va1 = phansar::client::opengl::vertex_array{vb1, ib1};
-    va1.push_attribute(&vertex::position);
-    va1.push_attribute(&vertex::color);
-    va1.push_attribute(&vertex::texcoord);
+    auto vbo = bgfx::createVertexBuffer(
+        bgfx::makeRef(cube_vertices.data(),
+                      cube_vertices.size() * sizeof(pos_color_texcoord_vertex)),
+        ms_layout);
+    auto ibo = bgfx::createIndexBuffer(
+        bgfx::makeRef(cube_indices.data(), cube_indices.size() * sizeof(std::uint16_t)));
 
-    auto aspect_ratio = 800.0F / 600.0F;
-    auto zoom         = 1.0F;
-    auto camera       = phansar::client::graphics::orthographic_camera{-aspect_ratio * zoom,
-                                                                 aspect_ratio * zoom,
-                                                                 -zoom,
-                                                                 zoom};
+    auto program = phansar::client::graphics::shader{"assets/shaders/vs_phansar.bin",
+                                                     "assets/shaders/fs_phansar.bin"};
 
-    auto white_pixel = std::uint32_t{0xffffffff};
-    auto texture1    = phansar::client::opengl::texture2d{0,
-                                                       GL_RGBA8,
-                                                       1,
-                                                       1,
-                                                       GL_RGBA,
-                                                       GL_UNSIGNED_BYTE /*, &white_pixel*/};
-    texture1.write(0, 0, 0, 0, 1, 1, 0, &white_pixel);
-    PH_LOG_INFO("texture1 w: {} h: {} d: {}",
-                texture1.width(),
-                texture1.height(),
-                texture1.depth());
+    auto texture0 = phansar::client::graphics::texture{"assets/tilesets/city.png"};
+    auto texture1 = phansar::client::graphics::texture{"assets/tilesets/rural.png"};
 
-    auto texture2 = phansar::client::opengl::texture2d{
-        phansar::client::graphics::image{"assets/tilesets/city.png"}};
-    PH_LOG_INFO("texture2 w: {} h: {} d: {}",
-                texture2.width(),
-                texture2.height(),
-                texture2.depth());
+    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x00000000 /*0x443355FF*/, 1.0F, 0);
 
-    auto texture3 = phansar::client::opengl::texture2d{
-        phansar::client::graphics::image{"assets/tilesets/rural.png"}};
-    PH_LOG_INFO("texture3 w: {} h: {} d: {}",
-                texture3.width(),
-                texture3.height(),
-                texture3.depth());
+    auto camera = phansar::client::graphics::perspective_camera{90.0F, 800.0F / 600.0F};
 
-    auto shader = phansar::client::opengl::shader{"assets/shaders/renderer2d.glsl"};
-    shader.uniform("u_texture", 0);
+    auto model_position = glm::vec3{};
+    auto model_rotation = glm::vec3{};
+    auto model_scale    = glm::vec3{1.0F};
 
-    renderer.clear_color(glm::vec4{0.0F, 0.0F, 0.0F, 0.0F});
+    auto model = glm::mat4{1.0F};
+    model =
+        glm::translate(glm::mat4{1.0F}, model_position) *
+        glm::rotate(glm::mat4{1.0F}, glm::radians(model_rotation.x), glm::vec3{1.0F, 0.0F, 0.0F}) *
+        glm::rotate(glm::mat4{1.0F}, glm::radians(model_rotation.y), glm::vec3{0.0F, 1.0F, 0.0F}) *
+        glm::rotate(glm::mat4{1.0F}, glm::radians(model_rotation.z), glm::vec3{0.0F, 0.0F, 1.0F}) *
+        glm::scale(glm::mat4{1.0F}, model_scale);
 
     auto timer = phansar::common::timer{};
     timer.start();
@@ -103,55 +80,74 @@ auto main(int _argc, char * _argv[]) -> int {
         auto delta_time = timer.elapsed_time<float>() / std::chrono::nanoseconds::period::den;
         timer.restart();
 
-        if (glfwGetKey(window.get(), GLFW_KEY_A) != 0) {
-            camera.position().x -= 2 * delta_time;
-        }
-        if (glfwGetKey(window.get(), GLFW_KEY_D) != 0) {
-            camera.position().x += 2 * delta_time;
+        window.update();
+
+        if (glfwGetKey(window.get(), GLFW_KEY_ESCAPE) != 0) {
+            glfwSetWindowShouldClose(window.get(), GLFW_TRUE);
         }
         if (glfwGetKey(window.get(), GLFW_KEY_W) != 0) {
-            camera.position().y += 2 * delta_time;
+            model_position.z -= 2 * delta_time;
+        }
+        if (glfwGetKey(window.get(), GLFW_KEY_A) != 0) {
+            model_position.x -= 2 * delta_time;
         }
         if (glfwGetKey(window.get(), GLFW_KEY_S) != 0) {
-            camera.position().y -= 2 * delta_time;
+            model_position.z += 2 * delta_time;
+        }
+        if (glfwGetKey(window.get(), GLFW_KEY_D) != 0) {
+            model_position.x += 2 * delta_time;
         }
         if (glfwGetKey(window.get(), GLFW_KEY_Q) != 0) {
-            camera.rotation() += 50 * delta_time;
+            model_rotation.y += 50 * delta_time;
         }
         if (glfwGetKey(window.get(), GLFW_KEY_E) != 0) {
-            camera.rotation() -= 50 * delta_time;
+            model_rotation.y -= 50 * delta_time;
         }
         if (glfwGetKey(window.get(), GLFW_KEY_Z) != 0) {
-            camera.zoom() += 0.4F * delta_time;
+            model_scale.x += 0.4F * delta_time;
+            model_scale.y += 0.4F * delta_time;
         }
         if (glfwGetKey(window.get(), GLFW_KEY_C) != 0) {
-            camera.zoom() -= 0.4F * delta_time;
+            model_scale.x -= 0.4F * delta_time;
+            model_scale.y -= 0.4F * delta_time;
         }
 
-        renderer.clear();
-
-        renderer.begin(camera);
-        shader.bind();
-        shader.uniform("u_color", glm::vec4{0.8F, 0.2F, 0.3F, 1.0F});
-        texture1.bind();
-        renderer.submit(
-            va1,
-            shader,
-            glm::translate(glm::mat4{1.0F}, glm::vec3{-0.5F, 0.0F, 0.0F}) *
-                glm::rotate(glm::mat4{1.0F}, glm::radians(45.0F), glm::vec3{0.0F, 0.0F, 1.0F}) *
-                glm::scale(glm::mat4{1.0F}, glm::vec3{0.3F, 0.3F, 1.0F}));
-        shader.bind();
-        texture2.bind();
-        /* shader.uniform("u_color", glm::vec4{0.2F, 0.3F, 0.8F, 1.0F}); */
-        shader.uniform("u_color", glm::vec4{1.0F});
-        renderer.submit(va1,
-                        shader,
-                        glm::translate(glm::mat4{1.0F}, glm::vec3{0.5F, -0.2F, 0.0F}) *
-                            glm::scale(glm::mat4{1.0F}, glm::vec3{0.5F, 0.4F, 1.0F}));
-        renderer.end();
-
-        window.update();
+        bgfx::touch(0);
+        bgfx::setViewTransform(0,
+                               glm::value_ptr(camera.view()),
+                               glm::value_ptr(camera.projection()));
+        model = glm::translate(glm::mat4{1.0F}, model_position) *
+                glm::rotate(glm::mat4{1.0F},
+                            glm::radians(model_rotation.x),
+                            glm::vec3{1.0F, 0.0F, 0.0F}) *
+                glm::rotate(glm::mat4{1.0F},
+                            glm::radians(model_rotation.y),
+                            glm::vec3{0.0F, 1.0F, 0.0F}) *
+                glm::rotate(glm::mat4{1.0F},
+                            glm::radians(model_rotation.z),
+                            glm::vec3{0.0F, 0.0F, 1.0F}) *
+                glm::scale(glm::mat4{1.0F}, model_scale);
+        bgfx::setTransform(glm::value_ptr(model));
+        bgfx::setVertexBuffer(0, vbo);
+        bgfx::setIndexBuffer(ibo);
+        program.set("s_material_diffuse", 0, texture0);
+        program.set("s_material_specular", 1, texture1);
+        program.set("u_material_ambient", glm::vec3{0.1F});
+        program.set("u_material_diffuse", glm::vec3{1.0F});
+        program.set("u_material_specular", glm::vec3{2.0F});
+        program.set("u_material_tint", glm::vec4{1.0F});
+        program.set("u_light_position", glm::vec3{0.0F, 0.0F, 1.0F});
+        program.set("u_camera", camera.position());
+        bgfx::setState(
+            BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z |
+            BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA |
+            BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
+        bgfx::submit(0, program.handle());
+        bgfx::frame();
     }
+
+    bgfx::destroy(ibo);
+    bgfx::destroy(vbo);
 
     phansar::common::system::shutdown();
 

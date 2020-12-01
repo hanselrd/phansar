@@ -1,7 +1,7 @@
 FetchContent_Declare(
     trompeloeil_git
     GIT_REPOSITORY https://github.com/rollbear/trompeloeil.git
-    GIT_TAG 0b8b66cfdb0d0a10fbd0d9268917eb1bf858aaf6)
+    GIT_TAG d739b6edf2a944e1a7108fba6f4f2ff501f376b6)
 FetchContent_GetProperties(trompeloeil_git)
 if(NOT trompeloeil_git_POPULATED)
     FetchContent_Populate(trompeloeil_git)

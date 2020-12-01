@@ -3,14 +3,10 @@ set(sources
     graphics/camera.cpp
     graphics/image.cpp
     graphics/orthographic_camera.cpp
-    opengl/buffer.cpp
-    opengl/index_buffer.cpp
-    opengl/renderer.cpp
-    opengl/shader.cpp
-    opengl/texture.cpp
-    opengl/texture2d.cpp
-    opengl/vertex_array.cpp
-    opengl/vertex_buffer.cpp
+    graphics/perspective_camera.cpp
+    graphics/renderer.cpp
+    graphics/shader.cpp
+    graphics/texture.cpp
     window.cpp
     main.cpp)
 
@@ -21,11 +17,10 @@ set(libs
     ph_common)
 
 set(system_libs
+    ph_vendor_bgfx
     ph_vendor_entt
-    ph_vendor_glad
     ph_vendor_glfw
-    ph_vendor_glm
-    ph_vendor_stb)
+    ph_vendor_glm)
 # cmake-format: on
 
 ph_add_generic_executable(ph_client "${sources}" "${pch}" "${libs}" "${system_libs}")
