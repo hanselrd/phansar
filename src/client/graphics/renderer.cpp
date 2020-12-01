@@ -10,7 +10,7 @@
 #include <GLFW/glfw3native.h>
 
 namespace phansar::client::graphics {
-renderer::renderer(window & _window) : m_window{&_window} {
+renderer::renderer(window & _window)  {
     bgfx::renderFrame();
 
     auto init = bgfx::Init{};
@@ -19,9 +19,9 @@ renderer::renderer(window & _window) : m_window{&_window} {
     init.platformData.nwh =
         reinterpret_cast<void *>(static_cast<uintptr_t>(glfwGetX11Window(_window.get())));
 #elif BX_PLATFORM_OSX
-    init.platformData.nwh = glfwGetCocoaWindow(window.get());
+    init.platformData.nwh = glfwGetCocoaWindow(_window.get());
 #elif BX_PLATFORM_WINDOWS
-    init.platformData.nwh = glfwGetWin32Window(window.get());
+    init.platformData.nwh = glfwGetWin32Window(_window.get());
 #endif
 
     auto width  = int{0};

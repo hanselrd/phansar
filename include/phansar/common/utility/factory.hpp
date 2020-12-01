@@ -9,10 +9,10 @@ public:
 
 protected:
     template <class U>
-    void               create(U * _derived);
-    void               destroy();
-    [[nodiscard]] auto instance() const -> const T *;
-    [[nodiscard]] auto instance() -> T *;
+    void create(U * _derived);
+    void destroy();
+    auto instance() const -> const T *;
+    auto instance() -> T *;
 
 private:
     std::unique_ptr<T> m_instance;

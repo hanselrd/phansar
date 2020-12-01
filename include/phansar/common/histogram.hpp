@@ -12,19 +12,19 @@ public:
 
     histogram(std::string_view _name, std::string_view _units, std::size_t _num_bins);
 
-    void               push(const T & _sample);
+    void push(const T & _sample);
     [[nodiscard]] auto name() const -> const std::string &;
     [[nodiscard]] auto units() const -> const std::string &;
     [[nodiscard]] auto sample_count() const -> std::uintmax_t;
-    [[nodiscard]] auto minimum() const -> T;
-    [[nodiscard]] auto maximum() const -> T;
-    [[nodiscard]] auto range() const -> T;
+    auto minimum() const -> T;
+    auto maximum() const -> T;
+    auto range() const -> T;
     [[nodiscard]] auto mean() const -> double;
     [[nodiscard]] auto variance() const -> double;
     [[nodiscard]] auto standard_deviation() const -> double;
     [[nodiscard]] auto percentile(double _percentile) const -> double;
     [[nodiscard]] auto bins() const -> std::vector<bin_type>;
-    [[nodiscard]] auto samples() const -> std::vector<sample_type>;
+    auto samples() const -> std::vector<sample_type>;
 
 private:
     std::string                 m_name, m_units;

@@ -13,7 +13,7 @@ public:
     ~texture() override;
 
     [[nodiscard]] auto handle() const -> const bgfx::TextureHandle &;
-    auto               handle() -> bgfx::TextureHandle &;
+    auto handle() -> bgfx::TextureHandle &;
 
 private:
     bgfx::TextureHandle m_handle;
