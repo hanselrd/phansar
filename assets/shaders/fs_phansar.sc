@@ -18,15 +18,15 @@ vec3 calc_ambient(vec3 u_material_ambient) {
 }
 
 vec3 calc_diffuse(vec3 u_material_diffuse, vec3 v_position, vec3 v_normal, vec3 u_light_position) {
-    vec3 pos_light_dir = normalize(v_position - u_light_position);
+    vec3 pos_light_dir = normalize(u_light_position - v_position);
     float diffuse = clamp(dot(pos_light_dir, v_normal), 0, 1);
     return u_material_diffuse * diffuse;
 }
 
 vec3 calc_specular(vec3 u_material_specular, vec3 v_position, vec3 v_normal, vec3 u_light_position, vec3 u_camera_position) {
-    vec3 light_pos_dir = normalize(u_light_position - v_position);
+    vec3 light_pos_dir = normalize(v_position - u_light_position);
     vec3 reflect_dir = normalize(reflect(light_pos_dir, normalize(v_normal)));
-    vec3 pos_view_dir = normalize(v_position - u_camera_position);
+    vec3 pos_view_dir = normalize(u_camera_position - v_position);
     float specular = pow(max(dot(pos_view_dir, reflect_dir), 0), 100);
     return u_material_specular * specular;
 }

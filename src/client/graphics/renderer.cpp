@@ -10,7 +10,7 @@
 #include <GLFW/glfw3native.h>
 
 namespace phansar::client::graphics {
-renderer::renderer(window & _window)  {
+renderer::renderer(window & _window) {
     bgfx::renderFrame();
 
     auto init = bgfx::Init{};
