@@ -137,7 +137,7 @@ auto main(int _argc, char * _argv[]) -> int {
         program.set("u_material_specular", glm::vec3{2.0F});
         program.set("u_material_tint", glm::vec4{1.0F});
         program.set("u_light_position", glm::vec3{0.0F, 0.0F, 1.0F});
-        program.set("u_camera", camera.position());
+        program.set("u_camera_position", camera.position());
         bgfx::setState(
             BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z |
             BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA |
