@@ -8,7 +8,7 @@ public:
     void stop();
     void restart();
     template <class T = double, class Duration = std::chrono::nanoseconds>
-    [[nodiscard]] auto elapsed_time() const -> T;
+    auto elapsed_time() const -> T;
 
 private:
     std::chrono::time_point<std::chrono::steady_clock> m_start_time, m_end_time;

@@ -11,14 +11,14 @@ public:
     shader(std::string_view _vertex_file_path, std::string_view _fragment_file_path);
     ~shader() override;
 
-    [[nodiscard]] auto handle() const -> const bgfx::ProgramHandle &;
-    auto               handle() -> bgfx::ProgramHandle &;
-    void               set(std::string_view _name, std::uint8_t _value, const texture & _texture);
-    void               set(std::string_view _name, const glm::vec2 & _value);
-    void               set(std::string_view _name, const glm::vec3 & _value);
-    void               set(std::string_view _name, const glm::vec4 & _value);
-    void               set(std::string_view _name, const glm::mat3 & _value);
-    void               set(std::string_view _name, const glm::mat4 & _value);
+    auto handle() const -> const bgfx::ProgramHandle &;
+    auto handle() -> bgfx::ProgramHandle &;
+    void set(std::string_view _name, std::uint8_t _value, const texture & _texture);
+    void set(std::string_view _name, const glm::vec2 & _value);
+    void set(std::string_view _name, const glm::vec3 & _value);
+    void set(std::string_view _name, const glm::vec4 & _value);
+    void set(std::string_view _name, const glm::mat3 & _value);
+    void set(std::string_view _name, const glm::mat4 & _value);
 
 private:
     bgfx::ProgramHandle                                  m_handle;

@@ -10,9 +10,6 @@ class renderer : public common::utility::noncopyable, public common::utility::no
 public:
     explicit renderer(window & _window);
     ~renderer() override;
-
-private:
-    window * m_window;
 };
 } // namespace phansar::client::graphics
 
