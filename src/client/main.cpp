@@ -37,13 +37,113 @@ auto main(int _argc, char * _argv[]) -> int {
         .add(bgfx::Attrib::Normal, 3, bgfx::AttribType::Float)
         .end();
 
-    auto cube_vertices = std::array<pos_color_texcoord_vertex, 4>{
-        {{{-0.5F, 0.5F, 0.0F}, {0xffffffff}, {0.0F, 1.0F}, {0.0F, 0.0F, -1.0F}},
-         {{-0.5F, -0.5F, 0.0F}, {0xffffffff}, {0.0F, 0.0F}, {0.0F, 0.0F, -1.0F}},
-         {{0.5F, -0.5F, 0.0F}, {0xffffffff}, {1.0F, 0.0F}, {0.0F, 0.0F, -1.0F}},
-         {{0.5F, 0.5F, 0.0F}, {0xffffffff}, {1.0F, 1.0F}, {0.0F, 0.0F, -1.0F}}}};
+    auto cube_vertices = std::array<pos_color_texcoord_vertex, 24>{{
+        {{-0.5F, 0.5F, 0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 16.0F / 475.0F},
+         {0.0F, 0.0F, 1.0F}}, // TL_front
+        {{-0.5F, -0.5F, 0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 0.0F / 475.0F},
+         {0.0F, 0.0F, 1.0F}}, // BL_front
+        {{0.5F, -0.5F, 0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 0.0F / 475.0F},
+         {0.0F, 0.0F, 1.0F}}, // BR_front
+        {{0.5F, 0.5F, 0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 16.0F / 475.0F},
+         {0.0F, 0.0F, 1.0F}}, // TR_front
+        {{-0.5F, 0.5F, -0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 16.0F / 475.0F},
+         {0.0F, 1.0F, 0.0F}}, //  TL_top
+        {{-0.5F, 0.5F, 0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 0.0F / 475.0F},
+         {0.0F, 1.0F, 0.0F}}, // BL_top
+        {{0.5F, 0.5F, 0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 0.0F / 475.0F},
+         {0.0F, 1.0F, 0.0F}}, // BR_top
+        {{0.5F, 0.5F, -0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 16.0F / 475.0F},
+         {0.0F, 1.0F, 0.0F}}, // TR_top
+        {{0.5F, 0.5F, 0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 16.0F / 475.0F},
+         {1.0F, 0.0F, 0.0F}}, //  TL_right
+        {{0.5F, -0.5F, 0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 0.0F / 475.0F},
+         {1.0F, 0.0F, 0.0F}}, // BL_right
+        {{0.5F, -0.5F, -0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 0.0F / 475.0F},
+         {1.0F, 0.0F, 0.0F}}, // BR_right
+        {{0.5F, 0.5F, -0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 16.0F / 475.0F},
+         {1.0F, 0.0F, 0.0F}}, // TR_right
+        {{0.5F, 0.5F, -0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 16.0F / 475.0F},
+         {0.0F, 0.0F, -1.0F}}, // TL_back
+        {{0.5F, -0.5F, -0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 0.0F / 475.0F},
+         {0.0F, 0.0F, -1.0F}}, // BL_back
+        {{-0.5F, -0.5F, -0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 0.0F / 475.0F},
+         {0.0F, 0.0F, -1.0F}}, // BR_back
+        {{-0.5F, 0.5F, -0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 16.0F / 475.0F},
+         {0.0F, 0.0F, -1.0F}}, // TR_back
+        {{0.5F, -0.5F, 0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 16.0F / 475.0F},
+         {0.0F, -1.0F, 0.0F}}, //  TL_bottom
+        {{0.5F, -0.5F, -0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 0.0F / 475.0F},
+         {0.0F, -1.0F, 0.0F}}, // BL_bottom
+        {{-0.5F, -0.5F, -0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 0.0F / 475.0F},
+         {0.0F, -1.0F, 0.0F}}, // BR_bottom
+        {{-0.5F, -0.5F, 0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 16.0F / 475.0F},
+         {0.0F, -1.0F, 0.0F}}, // TR_bottom
+        {{-0.5F, 0.5F, -0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 16.0F / 475.0F},
+         {-1.0F, 0.0F, 0.0F}}, //  TL_left
+        {{-0.5F, -0.5F, -0.5F},
+         {0xffffffff},
+         {0.0F / 628.0F, 0.0F / 475.0F},
+         {-1.0F, 0.0F, 0.0F}}, // BL_left
+        {{-0.5F, -0.5F, 0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 0.0F / 475.0F},
+         {-1.0F, 0.0F, 0.0F}}, // BR_left
+        {{-0.5F, 0.5F, 0.5F},
+         {0xffffffff},
+         {16.0F / 628.0F, 16.0F / 475.0F},
+         {-1.0F, 0.0F, 0.0F}} // TR_left
+    }};
 
-    auto cube_indices = std::array<std::uint16_t, 6>{0, 1, 2, 0, 2, 3};
+    auto cube_indices = std::array<std::uint16_t, 36>{
+        0,  1,  2,  0,  2,  3,  // front
+        4,  5,  6,  4,  6,  7,  // top
+        8,  9,  10, 8,  10, 11, // right
+        12, 13, 14, 12, 14, 15, // back
+        16, 17, 18, 16, 18, 19, // bottom
+        20, 21, 22, 20, 22, 23  // left
+    };
 
     auto vbo = bgfx::createVertexBuffer(
         bgfx::makeRef(cube_vertices.data(),
@@ -62,7 +162,7 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto camera = phansar::client::graphics::perspective_camera{90.0F, 800.0F / 600.0F};
 
-    auto model_position = glm::vec3{};
+    auto model_position = glm::vec3{0.0F, 0.0F, -1.0F};
     auto model_rotation = glm::vec3{};
     auto model_scale    = glm::vec3{1.0F};
 
@@ -104,12 +204,12 @@ auto main(int _argc, char * _argv[]) -> int {
             model_rotation.y -= 50 * delta_time;
         }
         if (glfwGetKey(window.get(), GLFW_KEY_Z) != 0) {
-            model_scale.x += 0.4F * delta_time;
-            model_scale.y += 0.4F * delta_time;
+            model_rotation.x += 50 * delta_time;
+            model_rotation.z += 50 * delta_time;
         }
         if (glfwGetKey(window.get(), GLFW_KEY_C) != 0) {
-            model_scale.x -= 0.4F * delta_time;
-            model_scale.y -= 0.4F * delta_time;
+            model_rotation.x -= 50 * delta_time;
+            model_rotation.z -= 50 * delta_time;
         }
 
         bgfx::touch(0);
