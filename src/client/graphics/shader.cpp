@@ -44,6 +44,17 @@ void shader::set(std::string_view _name, std::uint8_t _value, const texture & _t
     bgfx::setTexture(_value, m_uniform_map.at(std::string{_name}), _texture.handle());
 }
 
+void shader::set(std::string_view _name, float _value) {
+    if (m_uniform_map.count(std::string{_name}) == 0) {
+        m_uniform_map.insert_or_assign(
+            std::string{_name},
+            bgfx::createUniform(std::string{_name}.c_str(), bgfx::UniformType::Vec4));
+    }
+
+    bgfx::setUniform(m_uniform_map.at(std::string{_name}),
+                     glm::value_ptr(glm::vec4{_value, 0.0F, 0.0F, 0.0F}));
+}
+
 void shader::set(std::string_view _name, const glm::vec2 & _value) {
     if (m_uniform_map.count(std::string{_name}) == 0) {
         m_uniform_map.insert_or_assign(
