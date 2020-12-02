@@ -14,6 +14,7 @@ public:
     [[nodiscard]] auto handle() const -> const bgfx::ProgramHandle &;
     auto               handle() -> bgfx::ProgramHandle &;
     void               set(std::string_view _name, std::uint8_t _value, const texture & _texture);
+    void               set(std::string_view _name, float _value);
     void               set(std::string_view _name, const glm::vec2 & _value);
     void               set(std::string_view _name, const glm::vec3 & _value);
     void               set(std::string_view _name, const glm::vec4 & _value);

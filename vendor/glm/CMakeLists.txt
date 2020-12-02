@@ -1,7 +1,7 @@
 FetchContent_Declare(
     glm_git
     GIT_REPOSITORY https://github.com/g-truc/glm.git
-    GIT_TAG 6dedba1b941424ffbead5a25e20033e02841a297)
+    GIT_TAG 24a4befe80171966758983173f381ce1ef6c839f)
 FetchContent_GetProperties(glm_git)
 if(NOT glm_git_POPULATED)
     FetchContent_Populate(glm_git)
