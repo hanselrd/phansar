@@ -3,13 +3,14 @@
 
 #include <phansar/client/graphics/vertex.hpp>
 #include <phansar/common/utility/noncopyable.hpp>
-#include <phansar/common/utility/nonmovable.hpp>
 
 namespace phansar::client::graphics {
-class mesh : public common::utility::noncopyable, public common::utility::nonmovable {
+class mesh : public common::utility::noncopyable {
 public:
     explicit mesh(const std::vector<vertex> &        _vertices,
                   const std::vector<std::uint32_t> & _indices = {});
+    mesh(mesh && _other) noexcept;
+    auto operator=(mesh && _other) noexcept -> mesh &;
     ~mesh() override;
 
     [[nodiscard]] auto vbo_handle() const -> const bgfx::VertexBufferHandle &;

@@ -34,6 +34,10 @@ renderer::renderer(window & _window) {
 
     bgfx::init(init);
 
+#ifdef PH_BUILD_DEBUG
+    bgfx::setDebug(BGFX_DEBUG_TEXT);
+#endif
+
     bgfx::reset(width, height, BGFX_RESET_VSYNC);
     bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
 
@@ -65,7 +69,13 @@ void renderer::begin(camera & _camera) {
     m_camera = &_camera;
 }
 
-void renderer::submit(const mesh & _mesh, shader & _shader, const glm::mat4 & _model) {
+void renderer::submit(const mesh &      _mesh,
+                      shader &          _shader,
+                      const glm::mat4 & _model,
+                      std::uint32_t     _depth,
+                      std::uint32_t     _stencil,
+                      std::uint64_t     _state,
+                      std::uint8_t      _flags) {
     PH_ASSERT(m_camera);
     PH_ASSERT(bgfx::isValid(_mesh.vbo_handle()));
 
@@ -79,13 +89,11 @@ void renderer::submit(const mesh & _mesh, shader & _shader, const glm::mat4 & _m
         bgfx::setIndexBuffer(_mesh.ibo_handle());
     }
 
-    bgfx::setState(
-        BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z |
-        BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA |
-        BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
+    bgfx::setStencil(_stencil);
+    bgfx::setState(_state);
 
     _shader.set("u_normal", glm::inverseTranspose(glm::mat3{m_camera->view() * _model}));
-    bgfx::submit(0, _shader.handle());
+    bgfx::submit(0, _shader.handle(), _depth, _flags);
 }
 
 void renderer::end() {

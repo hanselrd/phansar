@@ -38,6 +38,20 @@ texture::texture(const image & _image, std::uint64_t _flags) {
 texture::texture(std::string_view _file_path, std::uint64_t _flags)
     : texture{image{_file_path}, _flags} {}
 
+texture::texture(std::uint16_t             _width,
+                 std::uint16_t             _height,
+                 bgfx::TextureFormat::Enum _format,
+                 const void *              _data,
+                 std::size_t               _size,
+                 std::uint64_t             _flags)
+    : m_handle{bgfx::createTexture2D(_width,
+                                     _height,
+                                     false,
+                                     1,
+                                     _format,
+                                     _flags,
+                                     bgfx::copy(_data, _size))} {}
+
 texture::~texture() {
     if (bgfx::isValid(m_handle)) {
         bgfx::destroy(m_handle);

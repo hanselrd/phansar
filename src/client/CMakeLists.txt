@@ -3,6 +3,7 @@ set(sources
     graphics/camera.cpp
     graphics/image.cpp
     graphics/mesh.cpp
+    graphics/model.cpp
     graphics/orthographic_camera.cpp
     graphics/perspective_camera.cpp
     graphics/renderer.cpp
