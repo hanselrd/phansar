@@ -16,7 +16,7 @@ public:
     auto               handle() -> bgfx::TextureHandle &;
 
 private:
-    bgfx::TextureHandle m_handle;
+    bgfx::TextureHandle m_handle{BGFX_INVALID_HANDLE};
 };
 } // namespace phansar::client::graphics
 

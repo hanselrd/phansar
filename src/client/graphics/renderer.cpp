@@ -1,4 +1,5 @@
 #include <phansar/client/graphics/renderer.hpp>
+#include <phansar/common/macros.hpp>
 
 #if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 #    define GLFW_EXPOSE_NATIVE_X11
@@ -44,5 +45,58 @@ renderer::renderer(window & _window) {
 
 renderer::~renderer() {
     bgfx::shutdown();
+}
+
+void renderer::view_clear(std::uint32_t _rgba, float _depth, std::uint8_t _stencil) {
+    bgfx::setViewClear(0,
+                       BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH | BGFX_CLEAR_STENCIL,
+                       _rgba,
+                       _depth,
+                       _stencil);
+}
+
+void renderer::touch() {
+    bgfx::touch(0);
+}
+
+void renderer::begin(camera & _camera) {
+    PH_ASSERT(! m_camera);
+
+    m_camera = &_camera;
+}
+
+void renderer::submit(const mesh & _mesh, shader & _shader, const glm::mat4 & _model) {
+    PH_ASSERT(m_camera);
+    PH_ASSERT(bgfx::isValid(_mesh.vbo_handle()));
+
+    bgfx::setViewTransform(0,
+                           glm::value_ptr(m_camera->view()),
+                           glm::value_ptr(m_camera->projection()));
+    bgfx::setTransform(glm::value_ptr(_model));
+
+    bgfx::setVertexBuffer(0, _mesh.vbo_handle());
+    if (bgfx::isValid(_mesh.ibo_handle())) {
+        bgfx::setIndexBuffer(_mesh.ibo_handle());
+    }
+
+    bgfx::setState(
+        BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BGFX_STATE_WRITE_Z |
+        BGFX_STATE_DEPTH_TEST_LESS | BGFX_STATE_MSAA |
+        BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA));
+
+    _shader.set("u_normal", glm::inverseTranspose(glm::mat3{m_camera->view() * _model}));
+    bgfx::submit(0, _shader.handle());
+}
+
+void renderer::end() {
+    PH_ASSERT(m_camera);
+
+    m_camera = nullptr;
+}
+
+void renderer::flush() {
+    PH_ASSERT(! m_camera);
+
+    bgfx::frame();
 }
 } // namespace phansar::client::graphics

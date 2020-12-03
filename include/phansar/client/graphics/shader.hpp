@@ -22,8 +22,8 @@ public:
     void               set(std::string_view _name, const glm::mat4 & _value);
 
 private:
-    bgfx::ProgramHandle                                  m_handle;
-    std::unordered_map<std::string, bgfx::UniformHandle> m_uniform_map;
+    bgfx::ProgramHandle                                  m_handle{BGFX_INVALID_HANDLE};
+    std::unordered_map<std::string, bgfx::UniformHandle> m_uniform_map{};
 };
 } // namespace phansar::client::graphics
 
