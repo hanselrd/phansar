@@ -1,7 +1,7 @@
 #include <phansar/client/graphics/image.hpp>
 
 namespace phansar::client::graphics {
-bx::DefaultAllocator image::s_allocator;
+bx::DefaultAllocator image::s_allocator{};
 
 image::image(std::string_view _file_path) {
     auto ifs = std::ifstream{std::string{_file_path}, std::ios::binary};

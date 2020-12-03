@@ -17,7 +17,13 @@ public:
     void view_clear(std::uint32_t _rgba, float _depth = 1.0F, std::uint8_t _stencil = 0);
     void touch();
     void begin(camera & _camera);
-    void submit(const mesh & _mesh, shader & _shader, const glm::mat4 & _model = glm::mat4{1.0F});
+    void submit(const mesh &      _mesh,
+                shader &          _shader,
+                const glm::mat4 & _model   = glm::mat4{1.0F},
+                std::uint32_t     _depth   = 0,
+                std::uint32_t     _stencil = BGFX_STENCIL_NONE,
+                std::uint64_t     _state   = BGFX_STATE_DEFAULT,
+                std::uint8_t      _flags   = BGFX_DISCARD_ALL);
     void end();
     void flush();
 

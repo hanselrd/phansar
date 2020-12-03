@@ -15,6 +15,26 @@ mesh::mesh(const std::vector<vertex> & _vertices, const std::vector<std::uint32_
     }
 }
 
+mesh::mesh(mesh && _other) noexcept
+    : m_vbo_handle{std::exchange(_other.m_vbo_handle, BGFX_INVALID_HANDLE)},
+      m_ibo_handle{std::exchange(_other.m_ibo_handle, BGFX_INVALID_HANDLE)} {}
+
+auto mesh::operator=(mesh && _other) noexcept -> mesh & {
+    if (this != &_other) {
+        if (bgfx::isValid(m_vbo_handle)) {
+            bgfx::destroy(m_vbo_handle);
+        }
+
+        if (bgfx::isValid(m_ibo_handle)) {
+            bgfx::destroy(m_ibo_handle);
+        }
+
+        m_vbo_handle = std::exchange(_other.m_vbo_handle, BGFX_INVALID_HANDLE);
+        m_ibo_handle = std::exchange(_other.m_ibo_handle, BGFX_INVALID_HANDLE);
+    }
+    return *this;
+}
+
 mesh::~mesh() {
     if (bgfx::isValid(m_vbo_handle)) {
         bgfx::destroy(m_vbo_handle);
