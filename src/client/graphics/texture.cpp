@@ -39,7 +39,9 @@ texture::texture(std::string_view _file_path, std::uint64_t _flags)
     : texture{image{_file_path}, _flags} {}
 
 texture::~texture() {
-    bgfx::destroy(m_handle);
+    if (bgfx::isValid(m_handle)) {
+        bgfx::destroy(m_handle);
+    }
 }
 
 auto texture::handle() const -> const bgfx::TextureHandle & {

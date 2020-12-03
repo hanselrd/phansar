@@ -20,6 +20,7 @@ function(check_git_commit_hash name source_dir branch)
 endfunction()
 
 add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
+add_subdirectory(assimp EXCLUDE_FROM_ALL)
 add_subdirectory(bgfx EXCLUDE_FROM_ALL)
 add_subdirectory(cppcodec EXCLUDE_FROM_ALL)
 add_subdirectory(docopt.cpp EXCLUDE_FROM_ALL)

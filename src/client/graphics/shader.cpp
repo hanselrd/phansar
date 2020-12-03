@@ -19,10 +19,14 @@ shader::shader(std::string_view _vertex_file_path, std::string_view _fragment_fi
 }
 
 shader::~shader() {
-    bgfx::destroy(m_handle);
+    if (bgfx::isValid(m_handle)) {
+        bgfx::destroy(m_handle);
+    }
 
-    for (auto & [name, uniform] : m_uniform_map) {
-        bgfx::destroy(uniform);
+    for (auto & [name, uniform_handle] : m_uniform_map) {
+        if (bgfx::isValid(uniform_handle)) {
+            bgfx::destroy(uniform_handle);
+        }
     }
 }
 

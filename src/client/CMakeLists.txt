@@ -2,11 +2,13 @@
 set(sources
     graphics/camera.cpp
     graphics/image.cpp
+    graphics/mesh.cpp
     graphics/orthographic_camera.cpp
     graphics/perspective_camera.cpp
     graphics/renderer.cpp
     graphics/shader.cpp
     graphics/texture.cpp
+    graphics/vertex.cpp
     window.cpp
     main.cpp)
 
@@ -17,6 +19,7 @@ set(libs
     ph_common)
 
 set(system_libs
+    ph_vendor_assimp
     ph_vendor_bgfx
     ph_vendor_entt
     ph_vendor_glfw
