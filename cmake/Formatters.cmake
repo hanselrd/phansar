@@ -8,6 +8,7 @@ if(ENABLE_CMAKE_FORMAT)
             GLOB_RECURSE
             cmake_format_files
             CONFIGURE_DEPENDS
+            "assets/CMakeLists.txt"
             "cmake/*.cmake"
             "include/CMakeLists.txt"
             "src/CMakeLists.txt"

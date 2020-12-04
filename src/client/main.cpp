@@ -1,5 +1,4 @@
 #include <phansar/client/graphics/image.hpp>
-#include <phansar/client/graphics/mesh.hpp>
 #include <phansar/client/graphics/model.hpp>
 #include <phansar/client/graphics/orthographic_camera.hpp>
 #include <phansar/client/graphics/perspective_camera.hpp>
@@ -25,53 +24,19 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto renderer = phansar::client::graphics::renderer{window};
 
-    auto mesh = phansar::client::graphics::mesh{
-        {{
-            {{-0.5F, 0.5F, 0.5F}, {0.0F, 0.0F, 1.0F}, {}, {}, {0.0F, 1.0F}},    // TL_front
-            {{-0.5F, -0.5F, 0.5F}, {0.0F, 0.0F, 1.0F}, {}, {}, {0.0F, 0.0F}},   // BL_front
-            {{0.5F, -0.5F, 0.5F}, {0.0F, 0.0F, 1.0F}, {}, {}, {1.0F, 0.0F}},    // BR_front
-            {{0.5F, 0.5F, 0.5F}, {0.0F, 0.0F, 1.0F}, {}, {}, {1.0F, 1.0F}},     // TR_front
-            {{-0.5F, 0.5F, -0.5F}, {0.0F, 1.0F, 0.0F}, {}, {}, {0.0F, 1.0F}},   //  TL_top
-            {{-0.5F, 0.5F, 0.5F}, {0.0F, 1.0F, 0.0F}, {}, {}, {0.0F, 0.0F}},    // BL_top
-            {{0.5F, 0.5F, 0.5F}, {0.0F, 1.0F, 0.0F}, {}, {}, {1.0F, 0.0F}},     // BR_top
-            {{0.5F, 0.5F, -0.5F}, {0.0F, 1.0F, 0.0F}, {}, {}, {1.0F, 1.0F}},    // TR_top
-            {{0.5F, 0.5F, 0.5F}, {1.0F, 0.0F, 0.0F}, {}, {}, {0.0F, 1.0F}},     //  TL_right
-            {{0.5F, -0.5F, 0.5F}, {1.0F, 0.0F, 0.0F}, {}, {}, {0.0F, 0.0F}},    // BL_right
-            {{0.5F, -0.5F, -0.5F}, {1.0F, 0.0F, 0.0F}, {}, {}, {1.0F, 0.0F}},   // BR_right
-            {{0.5F, 0.5F, -0.5F}, {1.0F, 0.0F, 0.0F}, {}, {}, {1.0F, 1.0F}},    // TR_right
-            {{0.5F, 0.5F, -0.5F}, {0.0F, 0.0F, -1.0F}, {}, {}, {0.0F, 1.0F}},   // TL_back
-            {{0.5F, -0.5F, -0.5F}, {0.0F, 0.0F, -1.0F}, {}, {}, {0.0F, 0.0F}},  // BL_back
-            {{-0.5F, -0.5F, -0.5F}, {0.0F, 0.0F, -1.0F}, {}, {}, {1.0F, 0.0F}}, // BR_back
-            {{-0.5F, 0.5F, -0.5F}, {0.0F, 0.0F, -1.0F}, {}, {}, {1.0F, 1.0F}},  // TR_back
-            {{0.5F, -0.5F, 0.5F}, {0.0F, -1.0F, 0.0F}, {}, {}, {0.0F, 1.0F}},   //  TL_bottom
-            {{0.5F, -0.5F, -0.5F}, {0.0F, -1.0F, 0.0F}, {}, {}, {0.0F, 0.0F}},  // BL_bottom
-            {{-0.5F, -0.5F, -0.5F}, {0.0F, -1.0F, 0.0F}, {}, {}, {1.0F, 0.0F}}, // BR_bottom
-            {{-0.5F, -0.5F, 0.5F}, {0.0F, -1.0F, 0.0F}, {}, {}, {1.0F, 1.0F}},  // TR_bottom
-            {{-0.5F, 0.5F, -0.5F}, {-1.0F, 0.0F, 0.0F}, {}, {}, {0.0F, 1.0F}},  //  TL_left
-            {{-0.5F, -0.5F, -0.5F}, {-1.0F, 0.0F, 0.0F}, {}, {}, {0.0F, 0.0F}}, // BL_left
-            {{-0.5F, -0.5F, 0.5F}, {-1.0F, 0.0F, 0.0F}, {}, {}, {1.0F, 0.0F}},  // BR_left
-            {{-0.5F, 0.5F, 0.5F}, {-1.0F, 0.0F, 0.0F}, {}, {}, {1.0F, 1.0F}}    // TR_left
-        }},
-        {{
-            0,  1,  2,  0,  2,  3,  // front
-            4,  5,  6,  4,  6,  7,  // top
-            8,  9,  10, 8,  10, 11, // right
-            12, 13, 14, 12, 14, 15, // back
-            16, 17, 18, 16, 18, 19, // bottom
-            20, 21, 22, 20, 22, 23  // left
-        }}};
-
-    auto model = phansar::client::graphics::model{"assets/models/backpack.obj"};
+    auto model     = phansar::client::graphics::model{"assets/models/backpack/backpack.obj"};
+    auto icosphere = phansar::client::graphics::model{"assets/models/icosphere/Ico.fbx.fbx"};
 
     auto point_light_positions = std::array<glm::vec3, 4>{glm::vec3{0.7F, 0.2F, 2.0F},
                                                           glm::vec3{2.3F, -3.3F, -4.0F},
                                                           glm::vec3{-4.0F, 2.0F, -12.0F},
                                                           glm::vec3{0.0F, 0.0F, -3.0F}};
 
-    auto program      = phansar::client::graphics::shader{"assets/shaders/vs_phansar.bin",
-                                                     "assets/shaders/fs_phansar.bin"};
-    auto flat_program = phansar::client::graphics::shader{"assets/shaders/vs_phansar.bin",
-                                                          "assets/shaders/fs_phansar_flat.bin"};
+    auto program = phansar::client::graphics::shader{"assets/shaders/glsl/vs_phansar.bin",
+                                                     "assets/shaders/glsl/fs_phansar.bin"};
+    auto flat_program =
+        phansar::client::graphics::shader{"assets/shaders/glsl/vs_phansar.bin",
+                                          "assets/shaders/glsl/fs_phansar_flat.bin"};
 
     /* auto texture0 = phansar::client::graphics::texture{"assets/tilesets/city.png"}; */
     /* auto texture1 = phansar::client::graphics::texture{"assets/tilesets/rural.png"}; */
@@ -99,7 +64,7 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto model_position = glm::vec3{0.0F, 0.0F, -1.0F};
     auto model_rotation = glm::vec3{};
-    auto model_scale    = glm::vec3{1.0F};
+    auto model_scale    = glm::vec3{0.6F};
 
     auto timer = phansar::common::timer{};
     timer.start();
@@ -148,10 +113,10 @@ auto main(int _argc, char * _argv[]) -> int {
         program.set("s_material_diffuse", 0, white_texture);
         program.set("s_material_specular", 1, white_texture);
         program.set("s_material_emissive", 2, black_texture);
-        program.set("u_material_ambient", glm::vec3{0.0215F, 0.1745F, 0.0215F});
-        program.set("u_material_diffuse", glm::vec3{0.07568F, 0.61424F, 0.07568F});
-        program.set("u_material_specular", glm::vec3{0.633F, 0.727811F, 0.633F});
-        program.set("u_material_shininess", 0.6F * 128.0F);
+        program.set("u_material_ambient", glm::vec3{0.2F, 0.2F, 0.2F});
+        program.set("u_material_diffuse", glm::vec3{1.0F, 0.2F, 0.2F});
+        program.set("u_material_specular", glm::vec3{1.0F, 1.0F, 1.0F});
+        program.set("u_material_shininess", 48.0F);
         program.set("u_directional_light_direction", glm::vec3{-0.2F, -1.0F, -0.3F});
         program.set("u_directional_light_ambient", glm::vec3{0.05F});
         program.set("u_directional_light_diffuse", glm::vec3{0.4F});
@@ -169,25 +134,29 @@ auto main(int _argc, char * _argv[]) -> int {
         program.set("u_spot_light_attenuation", glm::vec3{1.0F, 0.09F, 0.032F});
         program.set("u_spot_light_cutoff",
                     glm::vec2{glm::cos(glm::radians(12.5F)), glm::cos(glm::radians(15.0F))});
-        renderer.submit(mesh,
-                        program,
-                        glm::translate(glm::mat4{1.0F}, model_position) *
-                            glm::rotate(glm::mat4{1.0F},
-                                        glm::radians(model_rotation.x),
-                                        glm::vec3{1.0F, 0.0F, 0.0F}) *
-                            glm::rotate(glm::mat4{1.0F},
-                                        glm::radians(model_rotation.y),
-                                        glm::vec3{0.0F, 1.0F, 0.0F}) *
-                            glm::rotate(glm::mat4{1.0F},
-                                        glm::radians(model_rotation.z),
-                                        glm::vec3{0.0F, 0.0F, 1.0F}) *
-                            glm::scale(glm::mat4{1.0F}, model_scale));
+        for (const auto & mesh : icosphere.meshes()) {
+            renderer.submit(mesh,
+                            program,
+                            glm::translate(glm::mat4{1.0F}, model_position) *
+                                glm::rotate(glm::mat4{1.0F},
+                                            glm::radians(model_rotation.x),
+                                            glm::vec3{1.0F, 0.0F, 0.0F}) *
+                                glm::rotate(glm::mat4{1.0F},
+                                            glm::radians(model_rotation.y),
+                                            glm::vec3{0.0F, 1.0F, 0.0F}) *
+                                glm::rotate(glm::mat4{1.0F},
+                                            glm::radians(model_rotation.z),
+                                            glm::vec3{0.0F, 0.0F, 1.0F}) *
+                                glm::scale(glm::mat4{1.0F}, model_scale));
+        }
         for (auto i = std::size_t{0}; i < point_light_positions.size(); ++i) {
             flat_program.set("u_material_color", glm::vec4{point_light_positions[i], 1.0F});
-            renderer.submit(mesh,
-                            flat_program,
-                            glm::translate(glm::mat4{1.0F}, point_light_positions[i]) *
-                                glm::scale(glm::mat4{1.0F}, glm::vec3{0.2F}));
+            for (const auto & mesh : icosphere.meshes()) {
+                renderer.submit(mesh,
+                                flat_program,
+                                glm::translate(glm::mat4{1.0F}, point_light_positions[i]) *
+                                    glm::scale(glm::mat4{1.0F}, glm::vec3{0.2F}));
+            }
         }
         for (const auto & mesh : model.meshes()) {
             renderer.submit(

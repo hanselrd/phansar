@@ -105,13 +105,13 @@ vec3 calculate_spot_light(vec3 _light_position, vec3 _light_direction, vec3 _lig
 void main() {
     vec3 result = vec3_splat(0.0);
 
-    // for (int i = 0; i < DIRECTIONAL_LIGHT_COUNT; ++i) {
-    //     result += calculate_directional_light(u_directional_light_direction[i].xyz, u_directional_light_ambient[i].xyz, u_directional_light_diffuse[i].xyz, u_directional_light_specular[i].xyz, v_position, v_normal, v_texcoord0);
-    // }
-
-    for (int i = 0; i < POINT_LIGHT_COUNT; ++i) {
-        result += calculate_point_light(u_point_light_position[i].xyz, u_point_light_ambient[i].xyz, u_point_light_diffuse[i].xyz, u_point_light_specular[i].xyz, u_point_light_attenuation_kc(i), u_point_light_attenuation_kl(i), u_point_light_attenuation_kq(i), v_position, v_normal, v_texcoord0);
+    for (int i = 0; i < DIRECTIONAL_LIGHT_COUNT; ++i) {
+        result += calculate_directional_light(u_directional_light_direction[i].xyz, u_directional_light_ambient[i].xyz, u_directional_light_diffuse[i].xyz, u_directional_light_specular[i].xyz, v_position, v_normal, v_texcoord0);
     }
+
+    // for (int i = 0; i < POINT_LIGHT_COUNT; ++i) {
+    //     result += calculate_point_light(u_point_light_position[i].xyz, u_point_light_ambient[i].xyz, u_point_light_diffuse[i].xyz, u_point_light_specular[i].xyz, u_point_light_attenuation_kc(i), u_point_light_attenuation_kl(i), u_point_light_attenuation_kq(i), v_position, v_normal, v_texcoord0);
+    // }
 
     // for (int i = 0; i < SPOT_LIGHT_COUNT; ++i) {
     //     result += calculate_spot_light(u_spot_light_position[i].xyz, u_spot_light_direction[i].xyz, u_spot_light_ambient[i].xyz, u_spot_light_diffuse[i].xyz, u_spot_light_specular[i].xyz, u_spot_light_attenuation_kc(i), u_spot_light_attenuation_kl(i), u_spot_light_attenuation_kq(i), u_spot_light_cutoff_inner(i), u_spot_light_cutoff_outer(i), v_position, v_normal, v_texcoord0);
