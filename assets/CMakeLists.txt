@@ -23,8 +23,6 @@ add_custom_target(
     COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/essl
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
 
-add_dependencies(ph_assets ph_assets_dirs)
-
 set(counter 1)
 foreach(source ${sources})
     if(${source} MATCHES "^shaders/(v|f|c)(s_.*)\.sc$")
@@ -67,7 +65,7 @@ foreach(source ${sources})
                     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/varying.def.sc" -f
                     "${CMAKE_CURRENT_SOURCE_DIR}/${source}" -o
                     "${PROJECT_BINARY_DIR}/assets/shaders/essl/${name}.bin" --platform android
-                DEPENDS ph_vendor_bgfx
+                DEPENDS ph_assets_dirs
                 COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/${source} ...")
 
             add_dependencies(ph_assets ph_assets-${counter})
@@ -107,7 +105,7 @@ foreach(source ${sources})
                     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/varying.def.sc" -f
                     "${CMAKE_CURRENT_SOURCE_DIR}/${source}" -o
                     "${PROJECT_BINARY_DIR}/assets/shaders/essl/${name}.bin" --platform android
-                DEPENDS ph_vendor_bgfx
+                DEPENDS ph_assets_dirs
                 COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/${source} ...")
 
             add_dependencies(ph_assets ph_assets-${counter})
@@ -141,19 +139,18 @@ foreach(source ${sources})
                     "${CMAKE_CURRENT_SOURCE_DIR}/shaders/varying.def.sc" -f
                     "${CMAKE_CURRENT_SOURCE_DIR}/${source}" -o
                     "${PROJECT_BINARY_DIR}/assets/shaders/essl/${name}.bin" --platform android
-                DEPENDS ph_vendor_bgfx
+                DEPENDS ph_assets_dirs
                 COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/${source} ...")
 
             add_dependencies(ph_assets ph_assets-${counter})
         endif()
     else()
         add_custom_target(
-            ph_assets-${counter}-copy
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/${source}
-                    assets/${source}
+            ph_assets-${counter}
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/${source} assets/${source}
             WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
 
-        add_dependencies(ph_assets ph_assets-${counter}-copy)
+        add_dependencies(ph_assets ph_assets-${counter})
     endif()
 
     math(EXPR counter "${counter}+1")
