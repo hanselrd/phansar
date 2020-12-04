@@ -139,6 +139,17 @@ jobs:
                   echo "CXX=clang++" >> $GITHUB_ENV
               fi
 
+        - name: Prepare ccache
+          shell: bash
+          run: |
+              ccache -o base_dir=$GITHUB_WORKSPACE -o cache_dir=$GITHUB_WORKSPACE/.ccache -o compression=true -o max_size=5G
+
+        - uses: actions/cache@v2
+          id: ccache
+          with:
+            path: ${{ github.workspace }}/.ccache
+            key: ${{ runner.os }}-ccache
+
         - name: Check formatting
           shell: bash
           run: |
