@@ -22,8 +22,10 @@ public:
                 const glm::mat4 & _model   = glm::mat4{1.0F},
                 std::uint32_t     _depth   = 0,
                 std::uint32_t     _stencil = BGFX_STENCIL_NONE,
-                std::uint64_t     _state   = BGFX_STATE_DEFAULT,
-                std::uint8_t      _flags   = BGFX_DISCARD_ALL);
+                std::uint64_t     _state   = BGFX_STATE_DEFAULT |
+                                       BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA,
+                                                             BGFX_STATE_BLEND_INV_SRC_ALPHA),
+                std::uint8_t _flags = BGFX_DISCARD_ALL);
     void end();
     void flush();
 
