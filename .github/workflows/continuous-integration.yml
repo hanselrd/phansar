@@ -148,8 +148,9 @@ jobs:
           id: ccache
           with:
             path: ${{ github.workspace }}/.ccache
-            key: ${{ matrix.os }}-${{ matrix.compiler }}
+            key: ${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
             restore-keys: |
+                ${{ matrix.os }}-${{ matrix.compiler }}-
                 ${{ matrix.os }}-
 
         - name: Check formatting
@@ -205,3 +206,8 @@ jobs:
               cmake --build build
               cd build
               ctest --output-on-failure --timeout 30 -E "pkg-config"
+
+        - name: Summary
+          shell: bash
+          run: |
+              ccache -s
