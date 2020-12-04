@@ -148,7 +148,9 @@ jobs:
           id: ccache
           with:
             path: ${{ github.workspace }}/.ccache
-            key: ${{ runner.os }}-ccache
+            key: ${{ matrix.os }}-${{ matrix.compiler }}
+            restore-keys: |
+                ${{ matrix.os }}-
 
         - name: Check formatting
           shell: bash
