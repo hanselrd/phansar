@@ -28,8 +28,8 @@ renderer::renderer(window & _window) {
     auto width  = int{0};
     auto height = int{0};
     glfwGetWindowSize(_window.get(), &width, &height);
-    init.resolution.width  = width;
-    init.resolution.height = height;
+    init.resolution.width  = static_cast<std::uint32_t>(width);
+    init.resolution.height = static_cast<std::uint32_t>(height);
     init.resolution.reset  = BGFX_RESET_VSYNC;
 
     bgfx::init(init);
@@ -38,11 +38,15 @@ renderer::renderer(window & _window) {
     bgfx::setDebug(BGFX_DEBUG_TEXT);
 #endif
 
-    bgfx::reset(width, height, BGFX_RESET_VSYNC);
+    bgfx::reset(static_cast<std::uint32_t>(width),
+                static_cast<std::uint32_t>(height),
+                BGFX_RESET_VSYNC);
     bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
 
     glfwSetWindowSizeCallback(_window.get(), [](GLFWwindow * /*unused*/, int _width, int _height) {
-        bgfx::reset(_width, _height, BGFX_RESET_VSYNC);
+        bgfx::reset(static_cast<std::uint32_t>(_width),
+                    static_cast<std::uint32_t>(_height),
+                    BGFX_RESET_VSYNC);
         bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
     });
 }
