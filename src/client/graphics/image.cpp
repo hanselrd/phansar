@@ -7,7 +7,8 @@ image::image(std::string_view _file_path) {
     auto ifs = std::ifstream{std::string{_file_path}, std::ios::binary};
     auto blob =
         std::vector<char>{std::istreambuf_iterator<char>{ifs}, std::istreambuf_iterator<char>{}};
-    m_container = bimg::imageParse(&s_allocator, blob.data(), blob.size());
+    m_container =
+        bimg::imageParse(&s_allocator, blob.data(), static_cast<std::uint32_t>(blob.size()));
 }
 
 image::~image() {

@@ -145,13 +145,10 @@ foreach(source ${sources})
             add_dependencies(ph_assets ph_assets-${counter})
         endif()
     else()
-        get_filename_component(basename ${source} DIRECTORY)
-
         add_custom_target(
             ph_assets-${counter}
-            COMMAND ${CMAKE_COMMAND} -E make_directory assets/${basename}
-            COMMAND ${CMAKE_COMMAND} --verbose -E copy_if_different
-                    ${CMAKE_CURRENT_SOURCE_DIR}/${source} assets/${source}
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/${source}
+                    assets/${source}
             WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
 
         add_dependencies(ph_assets ph_assets-${counter})

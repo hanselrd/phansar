@@ -33,6 +33,7 @@
 
 # Custom
 *.lock
+*.log
 .cache
 .clangd
 __pycache__

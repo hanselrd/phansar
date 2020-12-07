@@ -4,7 +4,7 @@ namespace phansar::client::graphics {
 texture::texture(const image & _image, std::uint64_t _flags) {
     if (_image.container()->m_cubeMap) {
         m_handle = bgfx::createTextureCube(
-            _image.container()->m_width,
+            static_cast<std::uint16_t>(_image.container()->m_width),
             _image.container()->m_numMips > 1,
             _image.container()->m_numLayers,
             bgfx::TextureFormat::Enum(_image.container()->m_format),
@@ -12,9 +12,9 @@ texture::texture(const image & _image, std::uint64_t _flags) {
             bgfx::copy(_image.container()->m_data, _image.container()->m_size));
     } else if (_image.container()->m_depth > 1) {
         m_handle = bgfx::createTexture3D(
-            _image.container()->m_width,
-            _image.container()->m_height,
-            _image.container()->m_depth,
+            static_cast<std::uint16_t>(_image.container()->m_width),
+            static_cast<std::uint16_t>(_image.container()->m_height),
+            static_cast<std::uint16_t>(_image.container()->m_depth),
             _image.container()->m_numMips > 1,
             bgfx::TextureFormat::Enum(_image.container()->m_format),
             _flags,
@@ -25,8 +25,8 @@ texture::texture(const image & _image, std::uint64_t _flags) {
                                     bgfx::TextureFormat::Enum(_image.container()->m_format),
                                     _flags)) {
         m_handle = bgfx::createTexture2D(
-            _image.container()->m_width,
-            _image.container()->m_height,
+            static_cast<std::uint16_t>(_image.container()->m_width),
+            static_cast<std::uint16_t>(_image.container()->m_height),
             _image.container()->m_numMips > 1,
             _image.container()->m_numLayers,
             bgfx::TextureFormat::Enum(_image.container()->m_format),
@@ -50,7 +50,7 @@ texture::texture(std::uint16_t             _width,
                                      1,
                                      _format,
                                      _flags,
-                                     bgfx::copy(_data, _size))} {}
+                                     bgfx::copy(_data, static_cast<std::uint32_t>(_size)))} {}
 
 texture::~texture() {
     if (bgfx::isValid(m_handle)) {
