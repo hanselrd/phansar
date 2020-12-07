@@ -19,8 +19,8 @@ public:
     auto               ibo_handle() -> bgfx::IndexBufferHandle &;
 
 private:
-    bgfx::VertexBufferHandle m_vbo_handle{BGFX_INVALID_HANDLE};
-    bgfx::IndexBufferHandle  m_ibo_handle{BGFX_INVALID_HANDLE};
+    bgfx::VertexBufferHandle m_vbo_handle;
+    bgfx::IndexBufferHandle  m_ibo_handle;
 };
 } // namespace phansar::client::graphics
 
