@@ -9,8 +9,10 @@ shader::shader(std::string_view _vertex_file_path, std::string_view _fragment_fi
     auto fragment_blob =
         std::vector<char>{std::istreambuf_iterator<char>{ifs}, std::istreambuf_iterator<char>{}};
 
-    const auto * vertex_mem   = bgfx::copy(vertex_blob.data(), vertex_blob.size() + 1);
-    const auto * fragment_mem = bgfx::copy(fragment_blob.data(), fragment_blob.size() + 1);
+    const auto * vertex_mem =
+        bgfx::copy(vertex_blob.data(), static_cast<std::uint32_t>(vertex_blob.size() + 1));
+    const auto * fragment_mem =
+        bgfx::copy(fragment_blob.data(), static_cast<std::uint32_t>(fragment_blob.size() + 1));
     vertex_mem->data[vertex_mem->size - 1]     = '\0';
     fragment_mem->data[fragment_mem->size - 1] = '\0';
 

@@ -4,13 +4,15 @@ namespace phansar::client::graphics {
 mesh::mesh(const std::vector<vertex> & _vertices, const std::vector<std::uint32_t> & _indices) {
     if (! _vertices.empty()) {
         m_vbo_handle = bgfx::createVertexBuffer(
-            bgfx::copy(_vertices.data(), _vertices.size() * sizeof(vertex)),
+            bgfx::copy(_vertices.data(),
+                       static_cast<std::uint32_t>(_vertices.size() * sizeof(vertex))),
             vertex::k_layout);
     }
 
     if (! _indices.empty()) {
         m_ibo_handle = bgfx::createIndexBuffer(
-            bgfx::copy(_indices.data(), _indices.size() * sizeof(std::uint32_t)),
+            bgfx::copy(_indices.data(),
+                       static_cast<std::uint32_t>(_indices.size() * sizeof(std::uint32_t))),
             BGFX_BUFFER_INDEX32);
     }
 }

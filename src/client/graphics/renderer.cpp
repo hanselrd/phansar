@@ -41,7 +41,7 @@ renderer::renderer(window & _window) {
     bgfx::reset(width, height, BGFX_RESET_VSYNC);
     bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
 
-    glfwSetWindowSizeCallback(_window.get(), [](GLFWwindow * _window, int _width, int _height) {
+    glfwSetWindowSizeCallback(_window.get(), [](GLFWwindow * /*unused*/, int _width, int _height) {
         bgfx::reset(_width, _height, BGFX_RESET_VSYNC);
         bgfx::setViewRect(0, 0, 0, bgfx::BackbufferRatio::Equal);
     });
