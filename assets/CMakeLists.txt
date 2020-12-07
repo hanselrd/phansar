@@ -149,7 +149,7 @@ foreach(source ${sources})
 
         add_custom_target(
             ph_assets-${counter}
-            COMMAND ${CMAKE_COMMAND} -E make_directory ${basename}
+            COMMAND ${CMAKE_COMMAND} -E make_directory assets/${basename}
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/${source}
                     assets/${source}
             WORKING_DIRECTORY ${PROJECT_BINARY_DIR})

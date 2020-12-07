@@ -117,6 +117,8 @@ function(ph_target_compile_options name)
     append_compile_option(PHANSAR_HAS_WCONVERSION "-Wconversion")
     append_compile_option(PHANSAR_HAS_WFORMAT_OVERFLOW_2 "-Wformat-overflow=2")
     append_compile_option(PHANSAR_HAS_WFORMAT_TRUNCATION_2 "-Wformat-truncation=2")
+    append_compile_option(PHANSAR_HAS_WNO_GNU_ZERO_VARIADIC_MACRO_ARGUMENTS
+                          "-Wno-gnu-zero-variadic-macro-arguments")
     if(ENABLE_NATIVE_OPTIMIZATIONS)
         append_compile_option(PHANSAR_HAS_MARCH_NATIVE "-march=native")
         append_compile_option(PHANSAR_HAS_MTUNE_NATIVE "-mtune=native")
