@@ -150,7 +150,7 @@ foreach(source ${sources})
         add_custom_target(
             ph_assets-${counter}
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/${source}
-                    assets/${source} || ${CMAKE_COMMAND} -E true
+                    assets/${source}
             WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
 
         add_dependencies(ph_assets ph_assets-${counter})
