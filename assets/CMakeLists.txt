@@ -15,12 +15,14 @@ add_custom_target(ph_assets)
 
 add_custom_target(
     ph_assets_dirs
-    COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/dx9
+    COMMAND ${CMAKE_COMMAND} -E make_directory assets/models
     COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/dx11
-    COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/metal
-    COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/glsl
-    COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/spirv
+    COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/dx9
     COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/essl
+    COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/glsl
+    COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/metal
+    COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/spirv
+    COMMAND ${CMAKE_COMMAND} -E make_directory assets/textures
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
 
 set(counter 1)
@@ -145,11 +147,8 @@ foreach(source ${sources})
             add_dependencies(ph_assets ph_assets-${counter})
         endif()
     else()
-        get_filename_component(basename ${source} DIRECTORY)
-
         add_custom_target(
             ph_assets-${counter}
-            COMMAND ${CMAKE_COMMAND} -E make_directory assets/${basename}
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/${source}
                     assets/${source} || ${CMAKE_COMMAND} -E true
             WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
