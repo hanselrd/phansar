@@ -1,7 +1,7 @@
 FetchContent_Declare(
     assimp_git
     GIT_REPOSITORY https://github.com/assimp/assimp.git
-    GIT_TAG 00b626c3c5ea10df011933bf6cff20a044e28a07)
+    GIT_TAG 10092cd1eca21b338a4bdfa6e62acd362cf8390d)
 FetchContent_GetProperties(assimp_git)
 if(NOT assimp_git_POPULATED)
     FetchContent_Populate(assimp_git)
