@@ -15,7 +15,8 @@ add_custom_target(ph_assets)
 
 add_custom_target(
     ph_assets_dirs
-    COMMAND ${CMAKE_COMMAND} -E make_directory assets/models
+    COMMAND ${CMAKE_COMMAND} -E make_directory assets/models/backpack
+    COMMAND ${CMAKE_COMMAND} -E make_directory assets/models/icosphere
     COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/dx11
     COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/dx9
     COMMAND ${CMAKE_COMMAND} -E make_directory assets/shaders/essl
