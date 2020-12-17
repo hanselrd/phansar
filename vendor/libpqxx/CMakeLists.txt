@@ -1,7 +1,7 @@
 FetchContent_Declare(
     libpqxx_git
     GIT_REPOSITORY https://github.com/jtv/libpqxx.git
-    GIT_TAG aa8aa6cb48fcb8ccabc22a0df78f1250279cd233)
+    GIT_TAG 58d2a028d1600225ac3a478d6b3a06ba2f0c01f6)
 FetchContent_GetProperties(libpqxx_git)
 if(NOT libpqxx_git_POPULATED)
     FetchContent_Populate(libpqxx_git)
