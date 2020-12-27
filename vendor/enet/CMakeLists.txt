@@ -1,7 +1,7 @@
 FetchContent_Declare(
     enet_git
     GIT_REPOSITORY https://github.com/lsalzman/enet.git
-    GIT_TAG e0e7045b7e056b454b5093cb34df49dc4cee0bee)
+    GIT_TAG 2cc0e7c78045fe2275e7959eb7b9992fe4fd038d)
 FetchContent_GetProperties(enet_git)
 if(NOT enet_git_POPULATED)
     FetchContent_Populate(enet_git)

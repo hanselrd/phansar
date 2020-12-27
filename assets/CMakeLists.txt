@@ -158,3 +158,9 @@ foreach(source ${sources})
 endforeach()
 
 add_dependencies(ph_client ph_assets)
+
+install(
+    DIRECTORY ${PROJECT_BINARY_DIR}/assets
+    DESTINATION "."
+    PATTERN "*.cmake" EXCLUDE
+    PATTERN "CMake*" EXCLUDE)
