@@ -3,6 +3,7 @@
 #include <phansar/common/macros.hpp>
 #include <phansar/common/memory.hpp>
 #include <phansar/common/system.hpp>
+#include <phansar/common/version.hpp>
 
 namespace phansar::common::system {
 void init(int _argc, const char * const * _argv, bool _enable_config) {
@@ -24,6 +25,9 @@ void init(int _argc, const char * const * _argv, bool _enable_config) {
     PH_LOG_INFO("██╔═══╝ ██╔══██║██╔══██║██║╚██╗██║╚════██║██╔══██║██╔══██╗");
     PH_LOG_INFO("██║     ██║  ██║██║  ██║██║ ╚████║███████║██║  ██║██║  ██║");
     PH_LOG_INFO("╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝");
+
+    PH_LOG_INFO("Version: {}", version::k_version);
+    PH_LOG_INFO("Build timestamp: {}", version::k_timestamp);
 }
 
 void shutdown() {}

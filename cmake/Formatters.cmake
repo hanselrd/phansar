@@ -97,6 +97,7 @@ if(ENABLE_CLANG_FORMAT)
             "src/*.hpp"
             "src/*.tpp"
             "src/*.cpp"
+            "src/*.cpp.in"
             "test/*.hpp"
             "test/*.tpp"
             "test/*.cpp"
@@ -151,8 +152,14 @@ if(ENABLE_CLANG_TIDY)
         NAMES clang-apply-replacements clang-apply-replacements-9 clang-apply-replacements-10
               clang-apply-replacements-11)
     if(CLANG_TIDY_EXECUTABLE AND CLANG_APPLY_REPLACEMENTS_EXECUTABLE)
-        file(GLOB_RECURSE clang_tidy_files CONFIGURE_DEPENDS "include/*.cpp" "src/*.cpp"
-             "test/*.cpp")
+        file(
+            GLOB_RECURSE
+            clang_tidy_files
+            CONFIGURE_DEPENDS
+            "include/*.cpp"
+            "src/*.cpp"
+            "src/*.cpp.in"
+            "test/*.cpp")
 
         add_custom_target(
             check-clang-tidy-tmpdir

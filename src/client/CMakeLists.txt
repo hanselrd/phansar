@@ -28,3 +28,5 @@ set(system_libs
 # cmake-format: on
 
 ph_add_generic_executable(ph_client "${sources}" "${pch}" "${libs}" "${system_libs}")
+
+install(TARGETS ph_client RUNTIME DESTINATION bin)

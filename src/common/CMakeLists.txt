@@ -4,6 +4,7 @@ find_package(Threads REQUIRED)
 
 # cmake-format: off
 set(sources
+    ${CMAKE_BINARY_DIR}/version.cpp
     cli.cpp
     log.cpp
     memory.cpp
