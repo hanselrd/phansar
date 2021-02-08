@@ -23,6 +23,7 @@ set(system_libs
     ph_vendor_fmt
     ph_vendor_hedley
     ph_vendor_json
+    ph_vendor_kangaru
     ph_vendor_pybind11
     ph_vendor_rangev3
     ph_vendor_taskflow

@@ -1,7 +1,7 @@
 FetchContent_Declare(
     hedley_git
     GIT_REPOSITORY https://github.com/nemequ/hedley
-    GIT_TAG 4a59eb6d8e3e73b6c60aed2c92a6590d26df93d8)
+    GIT_TAG 8fb0604a8095f6c907378cc3f0391520ae843f6f)
 FetchContent_GetProperties(hedley_git)
 if(NOT hedley_git_POPULATED)
     FetchContent_Populate(hedley_git)
