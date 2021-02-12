@@ -1,7 +1,7 @@
 FetchContent_Declare(
     entt_git
     GIT_REPOSITORY https://github.com/skypjack/entt.git
-    GIT_TAG e94c0d003a73959f70ea6924b0f11071b119ac32)
+    GIT_TAG b6ec91fcd0c353e00393ac8c718832f35ebb4c01)
 FetchContent_GetProperties(entt_git)
 if(NOT entt_git_POPULATED)
     FetchContent_Populate(entt_git)

@@ -2,10 +2,13 @@
 #define PHANSAR_COMMON_THREADING_SYNCHRONIZED_HPP
 
 #include <phansar/common/utility/noncopyable.hpp>
+#include <phansar/common/utility/nonsynchronizable.hpp>
 
 namespace phansar::common::threading {
 template <class T>
 class synchronized {
+    static_assert(! std::is_base_of_v<utility::nonsynchronizable, T>, "T must be synchronizable");
+
 public:
     struct write_tag {};
     struct read_tag {};
