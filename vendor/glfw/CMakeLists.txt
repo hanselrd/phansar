@@ -1,7 +1,7 @@
 FetchContent_Declare(
     glfw_git
     GIT_REPOSITORY https://github.com/glfw/glfw.git
-    GIT_TAG 94773111300fee0453844a4c9407af7e880b4df8)
+    GIT_TAG 2c7f3ce91b4f22773855c43d6480824ed4ac9907)
 FetchContent_GetProperties(glfw_git)
 if(NOT glfw_git_POPULATED)
     FetchContent_Populate(glfw_git)

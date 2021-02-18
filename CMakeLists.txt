@@ -10,6 +10,10 @@ option(ENABLE_BLACK "Enable black" OFF)
 option(ENABLE_CLANG_FORMAT "Enable clang-format" OFF)
 option(ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
 option(ENABLE_NATIVE_OPTIMIZATIONS "Enable native optimizations" OFF)
+option(ENABLE_ASAN "Enable address sanitizer" OFF)
+option(ENABLE_MSAN "Enable memory sanitizer" OFF)
+option(ENABLE_TSAN "Enable thread sanitizer" OFF)
+option(ENABLE_UBSAN "Enable undefined behavior sanitizer" OFF)
 
 if(NOT WIN32)
     find_program(CCACHE_EXECUTABLE ccache)
@@ -56,9 +60,10 @@ set(CPACK_GENERATOR "TGZ")
 set(CPACK_PACKAGE_NAME ${CMAKE_PROJECT_NAME})
 set(CPACK_PACKAGE_VENDOR "Phansar")
 set(CPACK_PACKAGE_DESCRIPTION "Game written using a modern C++ stack")
+string(TOLOWER ${CMAKE_BUILD_TYPE} CPACK_BUILD_TYPE)
 string(TOLOWER ${CMAKE_SYSTEM_NAME} CPACK_SYSTEM_NAME)
 set(CPACK_PACKAGE_FILE_NAME
-    "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}.${GIT_SHORT_HASH}.${GIT_BRANCH}-${CPACK_SYSTEM_NAME}"
+    "${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}.${GIT_SHORT_HASH}.${CPACK_BUILD_TYPE}-${CPACK_SYSTEM_NAME}"
 )
 set(CPACK_PACKAGE_CHECKSUM "SHA1")
 set(CPACK_PACKAGE_CONTACT "Hansel De La Cruz")
