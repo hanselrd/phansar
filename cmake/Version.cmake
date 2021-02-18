@@ -3,6 +3,7 @@ include(GetGitRevisionDescription)
 get_git_head_revision(GIT_REFSPEC GIT_HASH)
 git_local_changes(GIT_CHANGES)
 
+string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
 string(TIMESTAMP BUILD_TIMESTAMP UTC)
 string(REPLACE "refs/heads/" "" GIT_BRANCH ${GIT_REFSPEC})
 string(SUBSTRING ${GIT_HASH} 0 12 GIT_SHORT_HASH)
