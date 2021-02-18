@@ -26,7 +26,10 @@ void init(int _argc, const char * const * _argv, bool _enable_config) {
     PH_LOG_INFO("██║     ██║  ██║██║  ██║██║ ╚████║███████║██║  ██║██║  ██║");
     PH_LOG_INFO("╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝");
 
-    PH_LOG_INFO("Version: {} [{}]", version::k_version, version::k_git_changes);
+    PH_LOG_INFO("Version: {} [{}] [{}]",
+                version::k_version,
+                version::k_git_branch,
+                version::k_git_changes);
     PH_LOG_INFO("Build timestamp: {}", version::k_timestamp);
 }
 
