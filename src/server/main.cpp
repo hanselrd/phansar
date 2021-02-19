@@ -87,13 +87,17 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto sync_vector = phansar::common::threading::synchronized<std::vector<std::size_t>>{};
 
-    for (auto i = std::size_t{0}; i < 100'000; ++i) {
-        executor.async([i, &sync_vector]() {
-            PH_LOG_INFO("Task {}", i);
-            auto lock = sync_vector.lock();
-            lock->push_back(i);
-        });
-    }
+    /* for (auto i = std::size_t{0}; i < 100'000; ++i) { */
+    /*     executor.async([i, &sync_vector]() { */
+    /*         PH_LOG_INFO("Task {}", i); */
+    /*         auto lock = sync_vector.lock(); */
+    /*         lock->push_back(i); */
+    /*     }); */
+    /* } */
+
+    /* entt::monostate<entt::hashed_string{"test"}>{} = true; */
+    /* auto empty                                     =
+     * entt::service_locator<std::nullopt_t>::empty(); */
 
     executor.run(taskflow);
     executor.wait_for_all();

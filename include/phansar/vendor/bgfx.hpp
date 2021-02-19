@@ -14,6 +14,7 @@
 #include <bx/allocator.h>
 #include <bx/bx.h>
 #include <bx/math.h>
+#include <bx/process.h>
 
 #ifdef HEDLEY_MSVC_VERSION
 #    pragma warning(pop)

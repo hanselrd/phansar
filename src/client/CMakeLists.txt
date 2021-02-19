@@ -22,7 +22,6 @@ set(libs
 set(system_libs
     ph_vendor_assimp
     ph_vendor_bgfx
-    ph_vendor_entt
     ph_vendor_glfw
     ph_vendor_glm)
 # cmake-format: on

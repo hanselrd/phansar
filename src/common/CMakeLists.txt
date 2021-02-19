@@ -5,6 +5,7 @@ find_package(Threads REQUIRED)
 # cmake-format: off
 set(sources
     ${CMAKE_BINARY_DIR}/version.cpp
+    application.cpp
     cli.cpp
     log.cpp
     memory.cpp
@@ -20,6 +21,7 @@ set(system_libs
     ph_vendor_cppcodec
     ph_vendor_docopt
     ph_vendor_enet
+    ph_vendor_entt
     ph_vendor_fmt
     ph_vendor_hedley
     ph_vendor_json
