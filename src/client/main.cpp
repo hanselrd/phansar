@@ -170,6 +170,9 @@ auto main(int _argc, char * _argv[]) -> int {
         renderer.flush();
     }
 
+    /* auto process_reader = bx::ProcessReader(); */
+    /* (void)process_reader; */
+
     phansar::common::system::shutdown();
 
     return 0;

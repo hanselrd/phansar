@@ -35,6 +35,7 @@
 #include <phansar/vendor/cppcodec.hpp>
 #include <phansar/vendor/docopt.hpp>
 #include <phansar/vendor/enet.hpp>
+#include <phansar/vendor/entt.hpp>
 #include <phansar/vendor/fmt.hpp>
 #include <phansar/vendor/hedley.hpp>
 #include <phansar/vendor/json.hpp>
