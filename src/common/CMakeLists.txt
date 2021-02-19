@@ -11,7 +11,6 @@ set(sources
     memory.cpp
     networking/socket.cpp
     python.cpp
-    system.cpp
     timer.cpp)
 
 set(pch

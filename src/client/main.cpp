@@ -1,3 +1,4 @@
+#include <phansar/client/application.hpp>
 #include <phansar/client/graphics/image.hpp>
 #include <phansar/client/graphics/model.hpp>
 #include <phansar/client/graphics/orthographic_camera.hpp>
@@ -9,7 +10,6 @@
 #include <phansar/client/window.hpp>
 #include <phansar/common/macros.hpp>
 #include <phansar/common/python.hpp>
-#include <phansar/common/system.hpp>
 #include <phansar/common/timer.hpp>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
@@ -18,7 +18,8 @@ PYBIND11_EMBEDDED_MODULE(phansar, m) {
 }
 
 auto main(int _argc, char * _argv[]) -> int {
-    phansar::common::system::init(_argc, _argv);
+    auto app = phansar::client::application{_argc, _argv};
+    app.run();
 
     auto window = phansar::client::window{800, 600, "Phansar"};
 
@@ -172,8 +173,6 @@ auto main(int _argc, char * _argv[]) -> int {
 
     /* auto process_reader = bx::ProcessReader(); */
     /* (void)process_reader; */
-
-    phansar::common::system::shutdown();
 
     return 0;
 }

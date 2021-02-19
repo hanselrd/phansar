@@ -16,7 +16,7 @@ public:
             const void *              _data,
             std::size_t               _size,
             std::uint64_t             _flags = BGFX_TEXTURE_NONE | BGFX_SAMPLER_NONE);
-    ~texture() override;
+    ~texture();
 
     [[nodiscard]] auto handle() const -> const bgfx::TextureHandle &;
     auto               handle() -> bgfx::TextureHandle &;

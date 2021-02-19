@@ -4,8 +4,8 @@
 #include <phansar/common/log.hpp>
 #include <phansar/common/macros.hpp>
 #include <phansar/common/python.hpp>
-#include <phansar/common/system.hpp>
 #include <phansar/common/threading/synchronized.hpp>
+#include <phansar/server/application.hpp>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
 PYBIND11_EMBEDDED_MODULE(phansar, m) {
@@ -17,7 +17,8 @@ PYBIND11_EMBEDDED_MODULE(phansar, m) {
 }
 
 auto main(int _argc, char * _argv[]) -> int {
-    phansar::common::system::init(_argc, _argv);
+    auto app = phansar::server::application{_argc, _argv};
+    app.run();
 
     if (phansar::common::cli::instance() != nullptr) {
         PH_LOG_INFO("Binary Name: {}", phansar::common::cli::instance()->binary_name());
@@ -108,8 +109,6 @@ auto main(int _argc, char * _argv[]) -> int {
 
     enet_initialize();
     enet_deinitialize();
-
-    phansar::common::system::shutdown();
 
     return 0;
 }

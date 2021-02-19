@@ -4,9 +4,6 @@
 namespace phansar::common::utility {
 template <class T>
 class factory {
-public:
-    virtual ~factory() = default;
-
 protected:
     template <class U>
     void create(U * _derived);

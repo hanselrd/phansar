@@ -11,7 +11,7 @@ public:
                   const std::vector<std::uint32_t> & _indices = {});
     mesh(mesh && _other) noexcept;
     auto operator=(mesh && _other) noexcept -> mesh &;
-    ~mesh() override;
+    ~mesh();
 
     [[nodiscard]] auto vbo_handle() const -> const bgfx::VertexBufferHandle &;
     auto               vbo_handle() -> bgfx::VertexBufferHandle &;

@@ -1,5 +1,6 @@
 # cmake-format: off
 set(sources
+    application.cpp
     graphics/camera.cpp
     graphics/image.cpp
     graphics/mesh.cpp

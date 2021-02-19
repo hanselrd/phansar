@@ -1,5 +1,6 @@
 # cmake-format: off
 set(sources
+    application.cpp
     main.cpp)
 
 set(pch

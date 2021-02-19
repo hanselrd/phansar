@@ -12,7 +12,7 @@ namespace phansar::client::graphics {
 class renderer : public common::utility::noncopyable, public common::utility::nonmovable {
 public:
     explicit renderer(window & _window);
-    ~renderer() override;
+    ~renderer();
 
     void view_clear(std::uint32_t _rgba, float _depth = 1.0F, std::uint8_t _stencil = 0);
     void touch();
