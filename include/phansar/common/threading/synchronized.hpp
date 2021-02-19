@@ -23,7 +23,7 @@ public:
     public:
         proxy(proxy && _other) noexcept;
         auto operator=(proxy && _other) noexcept -> proxy &;
-        ~proxy() override;
+        ~proxy();
 
         template <class U = Tag>
         auto get() const -> std::enable_if_t<std::is_same_v<U, write_tag>, T *>;

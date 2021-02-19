@@ -8,7 +8,7 @@ namespace phansar::client {
 class window : public common::utility::noncopyable, public common::utility::nonmovable {
 public:
     window(std::size_t _width, std::size_t _height, std::string_view _title);
-    ~window() override;
+    ~window();
 
     auto open() -> bool;
     void update();

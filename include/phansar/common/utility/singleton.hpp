@@ -8,8 +8,6 @@ namespace phansar::common::utility {
 template <class T>
 class singleton : public noncopyable, public nonmovable {
 public:
-    ~singleton() override = default;
-
     template <class... Args>
     static void create(Args &&... _args);
     static void destroy();

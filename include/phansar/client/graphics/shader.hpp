@@ -9,7 +9,7 @@ namespace phansar::client::graphics {
 class shader : public common::utility::noncopyable, public common::utility::nonmovable {
 public:
     shader(std::string_view _vertex_file_path, std::string_view _fragment_file_path);
-    ~shader() override;
+    ~shader();
 
     [[nodiscard]] auto handle() const -> const bgfx::ProgramHandle &;
     auto               handle() -> bgfx::ProgramHandle &;

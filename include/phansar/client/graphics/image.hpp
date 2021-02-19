@@ -8,7 +8,7 @@ namespace phansar::client::graphics {
 class image : public common::utility::noncopyable, public common::utility::nonmovable {
 public:
     explicit image(std::string_view _file_path);
-    ~image() override;
+    ~image();
 
     [[nodiscard]] auto width() const -> std::size_t;
     [[nodiscard]] auto height() const -> std::size_t;
