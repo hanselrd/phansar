@@ -19,7 +19,12 @@ function(ph_target_precompile_headers name type)
 
     if(ENABLE_CLANG_TIDY)
         macro(check_compile_option testname flag)
-            string(REGEX REPLACE "^-Wno-" "-W" alt ${flag})
+            string(
+                REGEX
+                REPLACE "^-Wno-"
+                        "-W"
+                        alt
+                        ${flag})
             check_cxx_compiler_flag(${alt} ${testname})
         endmacro()
 
@@ -54,7 +59,11 @@ function(ph_target_link_system_libraries name type)
         if(TARGET ${lib})
             get_target_property(lib_include_dirs ${lib} INTERFACE_INCLUDE_DIRECTORIES)
             if(lib_include_dirs)
-                target_include_directories(${name} SYSTEM ${type} ${lib_include_dirs})
+                target_include_directories(
+                    ${name}
+                    SYSTEM
+                    ${type}
+                    ${lib_include_dirs})
             endif()
         endif()
         target_link_libraries(${name} ${type} ${lib})
@@ -83,7 +92,12 @@ endfunction()
 
 function(ph_target_compile_options name)
     macro(append_compile_option testname flag)
-        string(REGEX REPLACE "^-Wno-" "-W" alt ${flag})
+        string(
+            REGEX
+            REPLACE "^-Wno-"
+                    "-W"
+                    alt
+                    ${flag})
         check_cxx_compiler_flag(${alt} ${testname})
         if(${testname})
             target_compile_options(${name} PRIVATE "SHELL:${flag}")
@@ -169,7 +183,12 @@ function(ph_target_compile_options name)
     append_compile_option(PHANSAR_HAS_ZC_PREPROCESSOR_MSVC "/Zc:preprocessor")
 endfunction()
 
-function(ph_add_generic_interface_library name pch libs system_libs)
+function(
+    ph_add_generic_interface_library
+    name
+    pch
+    libs
+    system_libs)
     ph_add_library(${name} INTERFACE)
 
     ph_target_include_directories(${name} INTERFACE ${CMAKE_SOURCE_DIR}/include)
@@ -187,7 +206,13 @@ function(ph_add_generic_interface_library name pch libs system_libs)
     endif()
 endfunction()
 
-function(ph_add_generic_library name sources pch libs system_libs)
+function(
+    ph_add_generic_library
+    name
+    sources
+    pch
+    libs
+    system_libs)
     ph_add_library(${name} STATIC ${sources})
 
     ph_target_include_directories(${name} PUBLIC ${CMAKE_SOURCE_DIR}/include)
@@ -213,7 +238,12 @@ function(ph_add_generic_library name sources pch libs system_libs)
     ph_target_compile_options(${name})
 endfunction()
 
-function(ph_add_generic_vendor_interface_library name includes libs system_libs)
+function(
+    ph_add_generic_vendor_interface_library
+    name
+    includes
+    libs
+    system_libs)
     ph_add_library(${name} INTERFACE)
 
     if(includes)
@@ -229,7 +259,13 @@ function(ph_add_generic_vendor_interface_library name includes libs system_libs)
     endif()
 endfunction()
 
-function(ph_add_generic_vendor_library name sources includes libs system_libs)
+function(
+    ph_add_generic_vendor_library
+    name
+    sources
+    includes
+    libs
+    system_libs)
     ph_add_library(${name} STATIC ${sources})
 
     if(includes)
@@ -251,7 +287,13 @@ function(ph_add_generic_vendor_library name sources includes libs system_libs)
     ph_target_compile_features(${name})
 endfunction()
 
-function(ph_add_generic_executable name sources pch libs system_libs)
+function(
+    ph_add_generic_executable
+    name
+    sources
+    pch
+    libs
+    system_libs)
     ph_add_executable(${name} ${sources})
 
     ph_target_include_directories(${name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
@@ -282,7 +324,12 @@ function(ph_add_generic_tests name sources)
 
     ph_target_include_directories(test_${name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-    ph_target_link_libraries(test_${name} PRIVATE ph_vendor_catch2 ph_vendor_trompeloeil ${name})
+    ph_target_link_libraries(
+        test_${name}
+        PRIVATE
+        ph_vendor_catch2
+        ph_vendor_trompeloeil
+        ${name})
 
     string(TOUPPER ${name} uppername)
 

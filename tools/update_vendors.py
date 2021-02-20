@@ -65,18 +65,20 @@ if __name__ == "__main__":
             with open(f, "r") as file:
                 data = file.read()
                 groups = re.search(
-                    "GIT_REPOSITORY\s*(.*)\s*GIT_TAG\s*(.*)\)\s*.*\s*.*\s*.*\s*check_git_commit_hash\((?:\w|-|\.)*\s*\${\w*}\s*(.*)\)",
+                    "GITHUB_REPOSITORY\s*(\S*)\s*#\s*(\S*)\s*GIT_TAG\s*([^\s\)]*)",
                     data,
                 ).groups()
-                shell(f"git clone {groups[0]} -b {groups[2]} {tmpdir}")
-                shell(f"cd {tmpdir} && git checkout {groups[1]}")
+                shell(
+                    f"git clone https://github.com/{groups[0]}.git -b {groups[1]} {tmpdir}"
+                )
+                shell(f"cd {tmpdir} && git checkout {groups[2]}")
                 _, stdout, _ = shell(f"cd {tmpdir} && git rev-parse HEAD")
                 HEAD_HASH = stdout.split("\n")[0]
-                _, stdout, _ = shell(f"cd {tmpdir} && git rev-parse origin/{groups[2]}")
+                _, stdout, _ = shell(f"cd {tmpdir} && git rev-parse origin/{groups[1]}")
                 ORIGIN_HASH = stdout.split("\n")[0]
 
             if HEAD_HASH != ORIGIN_HASH:
-                data = data.replace(groups[1], ORIGIN_HASH)
+                data = data.replace(groups[2], ORIGIN_HASH)
 
                 with open(f, "w") as file:
                     file.write(data)

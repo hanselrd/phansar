@@ -50,7 +50,12 @@ endif()
 if(ENABLE_BLACK)
     find_program(BLACK_EXECUTABLE black)
     if(BLACK_EXECUTABLE)
-        file(GLOB_RECURSE black_files CONFIGURE_DEPENDS "tools/*.py")
+        file(
+            GLOB_RECURSE
+            black_files
+            CONFIGURE_DEPENDS
+            ".cmake-format.py"
+            "tools/*.py")
 
         add_custom_target(check-black)
         add_custom_target(black)
@@ -84,8 +89,12 @@ if(ENABLE_BLACK)
 endif()
 
 if(ENABLE_CLANG_FORMAT)
-    find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format clang-format-9 clang-format-10
-                                               clang-format-11)
+    find_program(
+        CLANG_FORMAT_EXECUTABLE
+        NAMES clang-format
+              clang-format-9
+              clang-format-10
+              clang-format-11)
     if(CLANG_FORMAT_EXECUTABLE)
         file(
             GLOB_RECURSE
@@ -146,10 +155,17 @@ if(ENABLE_CLANG_FORMAT)
 endif()
 
 if(ENABLE_CLANG_TIDY)
-    find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy clang-tidy-9 clang-tidy-10 clang-tidy-11)
+    find_program(
+        CLANG_TIDY_EXECUTABLE
+        NAMES clang-tidy
+              clang-tidy-9
+              clang-tidy-10
+              clang-tidy-11)
     find_program(
         CLANG_APPLY_REPLACEMENTS_EXECUTABLE
-        NAMES clang-apply-replacements clang-apply-replacements-9 clang-apply-replacements-10
+        NAMES clang-apply-replacements
+              clang-apply-replacements-9
+              clang-apply-replacements-10
               clang-apply-replacements-11)
     if(CLANG_TIDY_EXECUTABLE AND CLANG_APPLY_REPLACEMENTS_EXECUTABLE)
         file(
