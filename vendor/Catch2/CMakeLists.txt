@@ -1,32 +1,20 @@
-FetchContent_Declare(
-    Catch2_git
-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG 68975e3ff3a9d026965ad142b04f548e685b5095)
-FetchContent_GetProperties(Catch2_git)
-if(NOT catch2_git_POPULATED)
-    FetchContent_Populate(Catch2_git)
-    check_git_commit_hash(Catch2 ${catch2_git_SOURCE_DIR} v2.x)
+CPMAddPackage(
+    NAME Catch2
+    GITHUB_REPOSITORY catchorg/Catch2 # v2.x
+    GIT_TAG 68975e3ff3a9d026965ad142b04f548e685b5095
+    OPTIONS "CATCH_BUILD_TESTING OFF" "CATCH_INSTALL_DOCS OFF" "CATCH_INSTALL_HELPERS OFF")
+
+if(Catch2_ADDED)
+    include(${Catch2_SOURCE_DIR}/contrib/Catch.cmake)
 endif()
-
-set(CATCH_BUILD_TESTING
-    OFF
-    CACHE BOOL "")
-set(CATCH_INSTALL_DOCS
-    OFF
-    CACHE BOOL "")
-set(CATCH_INSTALL_HELPERS
-    OFF
-    CACHE BOOL "")
-add_subdirectory(${catch2_git_SOURCE_DIR} ${catch2_git_BINARY_DIR} EXCLUDE_FROM_ALL)
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${catch2_git_SOURCE_DIR}/contrib)
-set(CMAKE_MODULE_PATH
-    ${CMAKE_MODULE_PATH}
-    PARENT_SCOPE)
 
 # cmake-format: off
 set(system_libs
     Catch2)
 # cmake-format: on
 
-ph_add_generic_vendor_interface_library(ph_vendor_catch2 "" "" "${system_libs}")
+ph_add_generic_vendor_interface_library(
+    ph_vendor_catch2
+    ""
+    ""
+    "${system_libs}")

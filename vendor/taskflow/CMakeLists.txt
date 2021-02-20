@@ -1,24 +1,16 @@
-FetchContent_Declare(
-    taskflow_git
-    GIT_REPOSITORY https://github.com/taskflow/taskflow.git
-    GIT_TAG 33353d2b061eecc9e3671b78e2b8bb141128a6bc)
-FetchContent_GetProperties(taskflow_git)
-if(NOT taskflow_git_POPULATED)
-    FetchContent_Populate(taskflow_git)
-    check_git_commit_hash(taskflow ${taskflow_git_SOURCE_DIR} master)
-endif()
-
-set(TF_BUILD_TESTS
-    OFF
-    CACHE BOOL "")
-set(TF_BUILD_EXAMPLES
-    OFF
-    CACHE BOOL "")
-add_subdirectory(${taskflow_git_SOURCE_DIR} ${taskflow_git_BINARY_DIR} EXCLUDE_FROM_ALL)
+CPMAddPackage(
+    NAME taskflow
+    GITHUB_REPOSITORY taskflow/taskflow # master
+    GIT_TAG 33353d2b061eecc9e3671b78e2b8bb141128a6bc
+    OPTIONS "TF_BUILD_TESTS OFF" "TF_BUILD_EXAMPLES OFF")
 
 # cmake-format: off
 set(system_libs
     Taskflow)
 # cmake-format: on
 
-ph_add_generic_vendor_interface_library(ph_vendor_taskflow "" "" "${system_libs}")
+ph_add_generic_vendor_interface_library(
+    ph_vendor_taskflow
+    ""
+    ""
+    "${system_libs}")

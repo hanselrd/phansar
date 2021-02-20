@@ -1,39 +1,22 @@
-FetchContent_Declare(
-    assimp_git
-    GIT_REPOSITORY https://github.com/assimp/assimp.git
-    GIT_TAG 1d376fa91f7410a718691fc848c63da8760b38ba)
-FetchContent_GetProperties(assimp_git)
-if(NOT assimp_git_POPULATED)
-    FetchContent_Populate(assimp_git)
-    check_git_commit_hash(assimp ${assimp_git_SOURCE_DIR} master)
-endif()
-
-set(BUILD_SHARED_LIBS
-    OFF
-    CACHE BOOL "")
-set(ASSIMP_BUILD_ZLIB
-    OFF
-    CACHE BOOL "")
-set(ASSIMP_BUILD_ASSIMP_TOOLS
-    OFF
-    CACHE BOOL "")
-set(ASSIMP_BUILD_TESTS
-    OFF
-    CACHE BOOL "")
-set(ASSIMP_INSTALL
-    OFF
-    CACHE BOOL "")
-set(ASSIMP_INJECT_DEBUG_POSTFIX
-    OFF
-    CACHE BOOL "")
-set(ASSIMP_IGNORE_GIT_HASH
-    OFF
-    CACHE BOOL "")
-add_subdirectory(${assimp_git_SOURCE_DIR} ${assimp_git_BINARY_DIR} EXCLUDE_FROM_ALL)
+CPMAddPackage(
+    NAME assimp
+    GITHUB_REPOSITORY assimp/assimp # master
+    GIT_TAG 26ebeaea5cb92f841fc5e2da9da379718223e831
+    OPTIONS "BUILD_SHARED_LIBS OFF"
+            "ASSIMP_BUILD_ZLIB OFF"
+            "ASSIMP_BUILD_ASSIMP_TOOLS OFF"
+            "ASSIMP_BUILD_TESTS OFF"
+            "ASSIMP_INSTALL OFF"
+            "ASSIMP_INJECT_DEBUG_POSTFIX OFF"
+            "ASSIMP_IGNORE_GIT_HASH OFF")
 
 # cmake-format: off
 set(system_libs
     assimp)
 # cmake-format: on
 
-ph_add_generic_vendor_interface_library(ph_vendor_assimp "" "" "${system_libs}")
+ph_add_generic_vendor_interface_library(
+    ph_vendor_assimp
+    ""
+    ""
+    "${system_libs}")

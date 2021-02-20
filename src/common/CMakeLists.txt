@@ -32,4 +32,9 @@ set(system_libs
     Threads::Threads)
 # cmake-format: on
 
-ph_add_generic_library(ph_common "${sources}" "${pch}" "" "${system_libs}")
+ph_add_generic_library(
+    ph_common
+    "${sources}"
+    "${pch}"
+    ""
+    "${system_libs}")

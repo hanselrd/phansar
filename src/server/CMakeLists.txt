@@ -13,6 +13,11 @@ set(system_libs
     ph_vendor_libpqxx)
 # cmake-format: on
 
-ph_add_generic_executable(ph_server "${sources}" "${pch}" "${libs}" "${system_libs}")
+ph_add_generic_executable(
+    ph_server
+    "${sources}"
+    "${pch}"
+    "${libs}"
+    "${system_libs}")
 
 install(TARGETS ph_server RUNTIME DESTINATION bin)
