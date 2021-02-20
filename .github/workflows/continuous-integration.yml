@@ -140,9 +140,10 @@ jobs:
               fi
 
         - name: Prepare ccache
+          if: runner.os != 'Linux'
           shell: bash
           run: |
-              ccache -o base_dir=$GITHUB_WORKSPACE -o cache_dir=$GITHUB_WORKSPACE/.ccache -o max_size=1G
+              ccache -o base_dir=$GITHUB_WORKSPACE -o cache_dir=$GITHUB_WORKSPACE/.ccache -o compression=true -o max_size=2G
 
         - uses: actions/cache@v2
           id: ccache
