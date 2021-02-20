@@ -103,7 +103,7 @@ jobs:
           shell: bash
           run: |
               wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-              sudo add-apt-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-$LLVM_VERSION main"
+              sudo add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-$LLVM_VERSION main"
 
               sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
               wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
