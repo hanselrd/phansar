@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME bgfx
-    GITHUB_REPOSITORY widberg/bgfx.cmake # master
-    GIT_TAG 66f18daf5c380b34f4745ac0922b8a9853b51ad9)
+    GITHUB_REPOSITORY pr0g/bgfx.cmake # main
+    GIT_TAG e909b52676d3ea05c7f156b4b43a6e4d5abd5d78)
 
 # cmake-format: off
 set(system_libs
