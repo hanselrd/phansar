@@ -54,7 +54,7 @@ if(ENABLE_BLACK)
             GLOB_RECURSE
             black_files
             CONFIGURE_DEPENDS
-            ".cmake-format.py"
+            "${CMAKE_SOURCE_DIR}/.cmake-format.py"
             "tools/*.py")
 
         add_custom_target(check-black)
