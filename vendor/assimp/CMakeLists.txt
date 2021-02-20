@@ -3,12 +3,18 @@ CPMAddPackage(
     GITHUB_REPOSITORY assimp/assimp # master
     GIT_TAG 26ebeaea5cb92f841fc5e2da9da379718223e831
     OPTIONS "BUILD_SHARED_LIBS OFF"
-            "ASSIMP_BUILD_ZLIB OFF"
+            "ASSIMP_BUILD_ZLIB ON"
             "ASSIMP_BUILD_ASSIMP_TOOLS OFF"
             "ASSIMP_BUILD_TESTS OFF"
             "ASSIMP_INSTALL OFF"
             "ASSIMP_INJECT_DEBUG_POSTFIX OFF"
-            "ASSIMP_IGNORE_GIT_HASH OFF")
+            "ASSIMP_IGNORE_GIT_HASH OFF"
+            "ASSIMP_BUILD_DRACO OFF"
+            "ASSIMP_NO_EXPORT ON"
+            "ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF"
+            "ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF"
+            "ASSIMP_BUILD_FBX_IMPORTER ON"
+            "ASSIMP_BUILD_OBJ_IMPORTER ON")
 
 # cmake-format: off
 set(system_libs
