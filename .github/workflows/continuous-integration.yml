@@ -7,6 +7,11 @@ env:
     GCC_VERSION: 10
     LLVM_VERSION: 11
     POSTGRES_VERSION: 12
+    CCACHE_BASEDIR: ${{ github.workspace }}
+    CCACHE_DIR: ${{ github.workspace }}/.ccache
+    CCACHE_COMPRESS: true
+    CCACHE_COMPRESSLEVEL: 6
+    CCACHE_MAXSIZE: 2G
 
 jobs:
     build:
@@ -139,10 +144,10 @@ jobs:
                   echo "CXX=clang++" >> $GITHUB_ENV
               fi
 
-        - name: Prepare ccache
-          shell: bash
-          run: |
-              ccache -o base_dir=$GITHUB_WORKSPACE -o cache_dir=$GITHUB_WORKSPACE/.ccache -o compression=true -o max_size=2G
+        # - name: Prepare ccache
+        #   shell: bash
+        #   run: |
+        #       ccache -o base_dir=$GITHUB_WORKSPACE -o cache_dir=$GITHUB_WORKSPACE/.ccache -o compression=true -o max_size=2G
 
         - uses: actions/cache@v2
           id: ccache
