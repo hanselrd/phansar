@@ -17,7 +17,7 @@ jobs:
             fail-fast: false
             matrix:
                 name: [
-                    windows-latest-cl,
+                    # windows-latest-cl,
                     # windows-latest-clang-cl,
                     # windows-latest-clang,
                     # windows-latest-gcc,
@@ -28,9 +28,9 @@ jobs:
                 ]
 
                 include:
-                    - name: windows-latest-cl
-                      os: windows-latest
-                      compiler: cl
+                    # - name: windows-latest-cl
+                    #   os: windows-latest
+                    #   compiler: cl
 
                     # - name: windows-latest-clang-cl
                     #   os: windows-latest
@@ -142,7 +142,7 @@ jobs:
         - name: Prepare ccache
           shell: bash
           run: |
-              ccache -o base_dir=$GITHUB_WORKSPACE -o cache_dir=$GITHUB_WORKSPACE/.ccache -o compression=true -o max_size=1G
+              ccache -o base_dir=$GITHUB_WORKSPACE -o cache_dir=$GITHUB_WORKSPACE/.ccache -o max_size=1G
 
         - uses: actions/cache@v2
           id: ccache
