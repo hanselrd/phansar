@@ -33,7 +33,7 @@
 #include <vector>
 
 #include <phansar/vendor/cppcodec.hpp>
-#include <phansar/vendor/docopt.hpp>
+#include <phansar/vendor/cxxopts.hpp>
 #include <phansar/vendor/enet.hpp>
 #include <phansar/vendor/entt.hpp>
 #include <phansar/vendor/fmt.hpp>

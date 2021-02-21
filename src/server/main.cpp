@@ -1,5 +1,5 @@
 #include <phansar/common/allocators/mallocator.hpp>
-#include <phansar/common/cli.hpp>
+#include <phansar/common/command_line.hpp>
 #include <phansar/common/histogram.hpp>
 #include <phansar/common/log.hpp>
 #include <phansar/common/macros.hpp>
@@ -20,13 +20,12 @@ auto main(int _argc, char * _argv[]) -> int {
     auto app = phansar::server::application{_argc, _argv};
     app.run();
 
-    if (phansar::common::cli::instance() != nullptr) {
-        PH_LOG_INFO("Binary Name: {}", phansar::common::cli::instance()->binary_name());
-        PH_LOG_INFO("Log File: {}", phansar::common::cli::instance()->log_file_path());
-        PH_LOG_INFO("Log Level: {}", phansar::common::cli::instance()->log_level());
-        PH_LOG_INFO("Host: {}", phansar::common::cli::instance()->host());
-        PH_LOG_INFO("Port: {}", phansar::common::cli::instance()->port());
-        PH_LOG_INFO("Num Threads: {}", phansar::common::cli::instance()->num_threads());
+    if (phansar::common::command_line::instance() != nullptr) {
+        PH_LOG_INFO("Log Level: {}", phansar::common::command_line::instance()->log_level());
+        PH_LOG_INFO("Log File: {}", phansar::common::command_line::instance()->log_file());
+        PH_LOG_INFO("Host: {}", phansar::common::command_line::instance()->host());
+        PH_LOG_INFO("Port: {}", phansar::common::command_line::instance()->port());
+        PH_LOG_INFO("Jobs: {}", phansar::common::command_line::instance()->jobs());
     }
 
     auto guard = py::scoped_interpreter{};

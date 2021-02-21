@@ -6,7 +6,7 @@ find_package(Threads REQUIRED)
 set(sources
     ${CMAKE_BINARY_DIR}/version.cpp
     application.cpp
-    cli.cpp
+    command_line.cpp
     log.cpp
     memory.cpp
     networking/socket.cpp
@@ -18,7 +18,7 @@ set(pch
 
 set(system_libs
     ph_vendor_cppcodec
-    ph_vendor_docopt
+    ph_vendor_cxxopts
     ph_vendor_enet
     ph_vendor_entt
     ph_vendor_fmt
