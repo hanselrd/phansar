@@ -7,7 +7,7 @@
 #    pragma warning(push, 0)
 #endif
 
-#include <docopt.h>
+#include <cxxopts.hpp>
 
 #ifdef HEDLEY_MSVC_VERSION
 #    pragma warning(pop)

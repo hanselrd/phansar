@@ -1,16 +1,16 @@
 #include <phansar/common/application.hpp>
-#include <phansar/common/cli.hpp>
+#include <phansar/common/command_line.hpp>
 #include <phansar/common/log.hpp>
 #include <phansar/common/macros.hpp>
 #include <phansar/common/version.hpp>
 
 namespace phansar::common {
 application::application(int _argc, const char * const * _argv) {
-    cli::create(_argc, _argv);
-    if (cli::instance() != nullptr) {
-        log::create(cli::instance()->log_level(),
-                    cli::instance()->binary_name(),
-                    cli::instance()->log_file_path(),
+    command_line::create(_argc, _argv);
+    if (command_line::instance() != nullptr) {
+        log::create(command_line::instance()->log_level(),
+                    command_line::instance()->program_name(),
+                    command_line::instance()->log_file(),
                     10 * 1024,
                     9);
     }
