@@ -13,6 +13,9 @@ public:
     application(int _argc, const char * const * _argv);
 
     virtual void run() = 0;
+
+private:
+    std::unique_ptr<tf::Executor> _executor;
 };
 } // namespace phansar::common
 

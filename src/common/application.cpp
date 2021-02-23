@@ -7,12 +7,14 @@
 namespace phansar::common {
 application::application(int _argc, const char * const * _argv) {
     command_line::create(_argc, _argv);
-    if (command_line::instance() != nullptr) {
-        log::create(command_line::instance()->log_level(),
-                    command_line::instance()->program_name(),
-                    command_line::instance()->log_file(),
-                    10 * 1024,
-                    9);
+    log::create(command_line::instance()->log_level(),
+                command_line::instance()->program_name(),
+                command_line::instance()->log_file(),
+                10 * 1024,
+                9);
+
+    if (command_line::instance()->jobs() > 0) {
+        _executor = std::make_unique<tf::Executor>(command_line::instance()->jobs());
     }
 
     PH_LOG_INFO("██████╗ ██╗  ██╗ █████╗ ███╗   ██╗███████╗ █████╗ ██████╗ ");
