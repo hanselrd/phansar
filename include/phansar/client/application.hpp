@@ -9,6 +9,9 @@ public:
     application(int _argc, const char * const * _argv);
 
     void run() override;
+
+private:
+    capnp::EzRpcClient m_client;
 };
 } // namespace phansar::client
 

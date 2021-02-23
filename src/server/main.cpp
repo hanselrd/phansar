@@ -1,13 +1,16 @@
-#include <phansar/common/allocators/mallocator.hpp>
-#include <phansar/common/command_line.hpp>
-#include <phansar/common/histogram.hpp>
-#include <phansar/common/log.hpp>
-#include <phansar/common/macros.hpp>
-#include <phansar/common/python.hpp>
-#include <phansar/common/threading/synchronized.hpp>
 #include <phansar/server/application.hpp>
+/* #include <phansar/common/allocators/mallocator.hpp> */
+/* #include <phansar/common/command_line.hpp> */
+/* #include <phansar/common/histogram.hpp> */
+/* #include <phansar/common/log.hpp> */
+/* #include <phansar/common/macros.hpp> */
+/* #include <phansar/common/networking/service.hpp> */
+/* #include <phansar/common/networking/stream.hpp> */
+/* #include <phansar/common/python.hpp> */
+/* #include <phansar/common/threading/synchronized.hpp> */
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
+#if 0
 PYBIND11_EMBEDDED_MODULE(phansar, m) {
     phansar::common::python::embed(m);
 
@@ -15,11 +18,13 @@ PYBIND11_EMBEDDED_MODULE(phansar, m) {
     auto fast_calc = server.def_submodule("fast_calc");
     fast_calc.def("add", [](int _i, int _j) { return _i + _j; });
 }
+#endif
 
 auto main(int _argc, char * _argv[]) -> int {
     auto app = phansar::server::application{_argc, _argv};
     app.run();
 
+#if 0
     if (phansar::common::command_line::instance() != nullptr) {
         PH_LOG_INFO("Log Level: {}", phansar::common::command_line::instance()->log_level());
         PH_LOG_INFO("Log File: {}", phansar::common::command_line::instance()->log_file());
@@ -105,9 +110,7 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto lock = sync_vector.lock_shared();
     PH_LOG_INFO("sync_vector: {}", lock->size());
-
-    enet_initialize();
-    enet_deinitialize();
+#endif
 
     return 0;
 }
