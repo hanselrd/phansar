@@ -1,5 +1,5 @@
-#ifndef PHANSAR_VENDOR_DOCOPT_HPP
-#define PHANSAR_VENDOR_DOCOPT_HPP
+#ifndef PHANSAR_VENDOR_CXXOPTS_HPP
+#define PHANSAR_VENDOR_CXXOPTS_HPP
 
 #include <phansar/vendor/hedley.hpp>
 

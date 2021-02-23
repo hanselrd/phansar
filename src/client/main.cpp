@@ -1,27 +1,31 @@
 #include <phansar/client/application.hpp>
-#include <phansar/client/graphics/image.hpp>
-#include <phansar/client/graphics/model.hpp>
-#include <phansar/client/graphics/orthographic_camera.hpp>
-#include <phansar/client/graphics/perspective_camera.hpp>
-#include <phansar/client/graphics/renderer.hpp>
-#include <phansar/client/graphics/shader.hpp>
-#include <phansar/client/graphics/texture.hpp>
-#include <phansar/client/graphics/vertex.hpp>
-#include <phansar/client/window.hpp>
-#include <phansar/common/macros.hpp>
-#include <phansar/common/python.hpp>
-#include <phansar/common/timer.hpp>
+/* #include <phansar/common/command_line.hpp> */
+/* #include <phansar/common/macros.hpp> */
+/* #include <phansar/client/graphics/image.hpp> */
+/* #include <phansar/client/graphics/model.hpp> */
+/* #include <phansar/client/graphics/orthographic_camera.hpp> */
+/* #include <phansar/client/graphics/perspective_camera.hpp> */
+/* #include <phansar/client/graphics/renderer.hpp> */
+/* #include <phansar/client/graphics/shader.hpp> */
+/* #include <phansar/client/graphics/texture.hpp> */
+/* #include <phansar/client/graphics/vertex.hpp> */
+/* #include <phansar/client/window.hpp> */
+/* #include <phansar/common/python.hpp> */
+/* #include <phansar/common/timer.hpp> */
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
+#if 0
 PYBIND11_EMBEDDED_MODULE(phansar, m) {
     phansar::common::python::embed(m);
 }
+#endif
 
 auto main(int _argc, char * _argv[]) -> int {
     auto app = phansar::client::application{_argc, _argv};
     app.run();
 
-    auto window = phansar::client::window{800, 600, "Phansar"};
+#if 0
+    auto window = phansar::client::window{800, 600, "Service"};
 
     auto renderer = phansar::client::graphics::renderer{window};
 
@@ -163,7 +167,7 @@ auto main(int _argc, char * _argv[]) -> int {
             renderer.submit(
                 mesh,
                 program,
-                glm::translate(glm::mat4{1.0F}, model_position - glm::vec3{-2.0F, 0.0F, 0.0F}) *
+                 glm::translate(glm::mat4{1.0F}, model_position - glm::vec3{-2.0F, 0.0F, 0.0F}) *
                     glm::scale(glm::mat4{1.0F}, glm::vec3{0.2F}));
         }
         renderer.end();
@@ -173,6 +177,7 @@ auto main(int _argc, char * _argv[]) -> int {
 
     /* auto process_reader = bx::ProcessReader(); */
     /* (void)process_reader; */
+#endif
 
     return 0;
 }

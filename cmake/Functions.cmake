@@ -7,6 +7,7 @@ function(ph_add_executable name)
 endfunction()
 
 function(ph_target_include_directories name type)
+    target_include_directories(${name} ${type} ${CMAKE_CURRENT_BINARY_DIR})
     target_include_directories(${name} ${type} ${ARGN})
 endfunction()
 
