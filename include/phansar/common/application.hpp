@@ -15,7 +15,7 @@ public:
     virtual void run() = 0;
 
 private:
-    std::unique_ptr<tf::Executor> _executor;
+    std::unique_ptr<tf::Executor> m_executor;
 };
 } // namespace phansar::common
 

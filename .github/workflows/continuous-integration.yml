@@ -167,7 +167,7 @@ jobs:
 
               if [ "${{ runner.os }}" == "macOS" ]; then
                   cmake --build build --target check-clang-format
-                  # cmake --build build --target check-clang-tidy
+                  cmake --build build --target check-clang-tidy
               fi
 
         - name: Build and test Debug

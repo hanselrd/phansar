@@ -13,6 +13,7 @@ set(sources
     log.cpp
     memory.cpp
     networking/service.cpp
+    networking/session.cpp
     networking/socket.cpp
     python.cpp
     timer.cpp)

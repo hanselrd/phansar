@@ -1,7 +1,7 @@
-#include <phansar.capnp.h>
 #include <phansar/client/application.hpp>
 #include <phansar/common/command_line.hpp>
-#include <phansar/common/networking/stream.hpp>
+#include <phansar/common/macros.hpp>
+#include <phansar/common/networking/service.hpp>
 
 namespace phansar::client {
 application::application(int _argc, const char * const * _argv)
@@ -13,49 +13,37 @@ void application::run() {
 
     auto cap = m_client.getMain<common::schema::Service>();
 
-    {
-        auto request = cap.funcRequest();
-        request.setId(123);
-        request.setName("Hello");
-        auto promise = request.send();
+    auto request = cap.loginRequest();
+    request.setUsername("bob");
+    request.setPassword("password");
 
-        auto response = promise.wait(wait_scope);
+    auto response = request.send().wait(wait_scope);
+    auto result   = response.getResult();
 
-        PH_LOG_INFO("[server] {{func}}: {}", response.toString().flatten().cStr());
-    }
+    PH_LOG_INFO("[server] {{login}}: {}", response.toString().flatten().cStr());
 
-    {
-        auto request = cap.streamDownRequest();
-        request.setStream(kj::heap<common::networking::stream<common::schema::Service::Message>>());
-        auto promise = request.send();
+    if (result.isOk()) {
+        auto session = result.getOk();
 
-        auto response = promise.wait(wait_scope);
+        auto request2 = session.uploadRequest<common::schema::Service::Message>();
 
-        PH_LOG_INFO("[server] {{streamDown}}: {}", response.toString().flatten().cStr());
-    }
+        auto response2 = request2.send().wait(wait_scope);
 
-    {
-        auto request = cap.streamUpRequest();
-
-        auto promise = request.send();
-
-        auto response = promise.wait(wait_scope);
+        auto stream = response2.getStream();
 
         for (auto i = std::size_t{0}; i < 10'000; ++i) {
-            auto req     = response.getStream().writeRequest();
-            auto message = req.initPayload();
+            auto request3 = stream.writeRequest();
+            auto message  = request3.initPayload();
             message.setId(static_cast<std::uint32_t>(i + 1));
             message.setAuthor("Client");
             message.setText("Thank you");
-            req.send().wait(wait_scope);
+
+            request3.send().wait(wait_scope);
         }
 
-        {
-            auto req = response.getStream().doneRequest();
-            req.send().ignoreResult().wait(wait_scope);
-        }
+        stream.doneRequest().send().ignoreResult().wait(wait_scope);
 
-        PH_LOG_INFO("[server] {{streamUp}}: {}", response.toString().flatten().cStr());
+        session.logoutRequest().send().ignoreResult().wait(wait_scope);
     }
 }
 } // namespace phansar::client
