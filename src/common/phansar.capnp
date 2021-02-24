@@ -6,8 +6,10 @@ $Cxx.namespace("phansar::common::schema");
 
 interface Service {
     struct Result(T, E) {
-        ok @0 :T;
-        err @1 :E;
+        union {
+            ok @0 :T;
+            err @1 :E;
+        }
     }
 
     using Id = UInt32;
@@ -28,11 +30,32 @@ interface Service {
         done @1 ();
     }
 
+    interface Streamable(T) {
+        download @0 (stream :Stream(T));
+        upload @1 () -> (stream :Stream(T));
+        bidi @2 (stream :Stream(T)) -> (stream :Stream(T));
+    }
+
+    interface StreamableFactory {
+        create @0 [T] () -> (streamable :Streamable(T));
+    }
+
     interface Session {
-        logout @0 () -> (result :Result(AnyPointer, Text));
+        logout @0 ();
         download @1 [T] (stream :Stream(T));
         upload @2 [T] () -> (stream :Stream(T));
-        bidi @3 [T, U] (stream: Stream(T)) -> (stream :Stream(U));
+        bidi @3 [T, U] (stream :Stream(T)) -> (stream :Stream(U));
+    }
+
+    interface ModeratorSession extends(Session) {
+    }
+
+    interface AdministratorSession extends(ModeratorSession) {
+        restart @0 ();
+    }
+
+    interface RootSession extends(AdministratorSession) {
+        shutdown @0 ();
     }
 
     login @0 (username :Text, password :Text) -> (result :Result(Session, Text));

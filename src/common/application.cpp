@@ -14,7 +14,7 @@ application::application(int _argc, const char * const * _argv) {
                 9);
 
     if (command_line::instance()->jobs() > 0) {
-        _executor = std::make_unique<tf::Executor>(command_line::instance()->jobs());
+        m_executor = std::make_unique<tf::Executor>(command_line::instance()->jobs());
     }
 
     PH_LOG_INFO("██████╗ ██╗  ██╗ █████╗ ███╗   ██╗███████╗ █████╗ ██████╗ ");
