@@ -5,6 +5,9 @@ using Cxx = import "/capnp/c++.capnp";
 $Cxx.namespace("phansar::common::schema");
 
 interface Service {
+    using Id = UInt32;
+    using Ref = List;
+
     struct Result(T, E) {
         union {
             ok @0 :T;
@@ -12,17 +15,21 @@ interface Service {
         }
     }
 
-    using Id = UInt32;
+    # struct Vector2 {
+    #     x @0 :Float32 = 0;
+    #     y @1 :Float32 = 0;
+    # }
 
-    struct Vector2 {
-        x @0 :Float32 = 0;
-        y @1 :Float32 = 0;
-    }
+    # struct Vector3 {
+    #     x @0 :Float32 = 0;
+    #     y @1 :Float32 = 0;
+    #     z @2 :Float32 = 0;
+    # }
 
-    struct Vector3 {
-        x @0 :Float32 = 0;
-        y @1 :Float32 = 0;
-        z @2 :Float32 = 0;
+    struct Message {
+        id @0 :Id;
+        author @1 :Text;
+        text @2 :Text;
     }
 
     interface Stream(T) {
@@ -36,40 +43,28 @@ interface Service {
         bidi @2 (stream :Stream(T)) -> (stream :Stream(T));
     }
 
-    interface StreamableFactory {
-        create @0 [T] () -> (streamable :Streamable(T));
-    }
+    # interface StreamableFactory {
+    #     create @0 [T] () -> (streamable :Streamable(T));
+    # }
 
-    interface Session {
+    interface Session extends (Streamable(Message)) {
         logout @0 ();
-        download @1 [T] (stream :Stream(T));
-        upload @2 [T] () -> (stream :Stream(T));
-        bidi @3 [T, U] (stream :Stream(T)) -> (stream :Stream(U));
     }
 
-    interface ModeratorSession extends(Session) {
-    }
+    # interface ModeratorSession extends (Session) {
+    #     ban @0 (name :Text) -> (result :Result(Ref(Bool), Text));
+    #     unban @1 (name :Text) -> (result :Result(Ref(Bool), Text));
+    # }
 
-    interface AdministratorSession extends(ModeratorSession) {
-        restart @0 ();
-    }
+    # interface AdministratorSession extends (ModeratorSession) {
+    #     restart @0 ();
+    # }
 
-    interface RootSession extends(AdministratorSession) {
-        shutdown @0 ();
-    }
+    # interface RootSession extends (AdministratorSession) {
+    #     shutdown @0 ();
+    # }
 
     login @0 (username :Text, password :Text) -> (result :Result(Session, Text));
-
-    struct Message {
-        id @0 :Id;
-        author @1 :Text;
-        text @2 :Text;
-    }
-
-    streamDown @1 (stream :Stream(Message));
-    streamUp @2 () -> (stream :Stream(Message));
-    streamBidi @3 (stream: Stream(Message)) -> (stream :Stream(Message));
-    func @4 (id :Id, name :Text) -> (id :Id, name :Text);
 }
 
 # struct Entity {

@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME capnproto
     GITHUB_REPOSITORY capnproto/capnproto # master
-    GIT_TAG 7a31fa889d13286f02a19444e7073d12a6e773c7
+    GIT_TAG 2670d0cebd7f1d8d9cdc4e68f42ba3e971f7fd12
     OPTIONS "BUILD_TESTING OFF" "CMAKE_CXX_EXTENSIONS ON" "CMAKE_C_EXTENSIONS ON")
 
 # cmake-format: off

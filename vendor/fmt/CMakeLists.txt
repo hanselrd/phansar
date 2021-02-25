@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME fmt
     GITHUB_REPOSITORY fmtlib/fmt # master
-    GIT_TAG d8e1c9f175a363e7cfe8ff340df2f77d682bc344)
+    GIT_TAG 640acba8509d7458a9c749b243355d223b1cfa25)
 
 # cmake-format: off
 set(system_libs

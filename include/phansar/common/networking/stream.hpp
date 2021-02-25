@@ -10,7 +10,7 @@ public:
     using WriteContext = typename schema::Service::Stream<T>::Server::WriteContext;
     using DoneContext  = typename schema::Service::Stream<T>::Server::DoneContext;
 
-    explicit stream(std::shared_ptr<std::vector<capnp::ReaderFor<T>>> container);
+    explicit stream(std::shared_ptr<std::vector<capnp::ReaderFor<T>>> _container);
 
     auto write(WriteContext _context) -> kj::Promise<void> override;
     auto done(DoneContext _context) -> kj::Promise<void> override;

@@ -25,23 +25,25 @@ void application::run() {
     if (result.isOk()) {
         auto session = result.getOk();
 
-        auto request2 = session.uploadRequest<common::schema::Service::Message>();
+        for (auto i = std::size_t{0}; i < 2; ++i) {
+            auto request2 = session.uploadRequest();
 
-        auto response2 = request2.send().wait(wait_scope);
+            auto response2 = request2.send().wait(wait_scope);
 
-        auto stream = response2.getStream();
+            auto stream = response2.getStream();
 
-        for (auto i = std::size_t{0}; i < 10'000; ++i) {
-            auto request3 = stream.writeRequest();
-            auto message  = request3.initPayload();
-            message.setId(static_cast<std::uint32_t>(i + 1));
-            message.setAuthor("Client");
-            message.setText("Thank you");
+            for (auto j = std::size_t{0}; j < 10'000; ++j) {
+                auto request3 = stream.writeRequest();
+                auto message  = request3.initPayload();
+                message.setId(static_cast<std::uint32_t>(j + 1));
+                message.setAuthor(fmt::format("Client [{}]", i));
+                message.setText("Thank you");
 
-            request3.send().wait(wait_scope);
+                request3.send().wait(wait_scope);
+            }
+
+            stream.doneRequest().send().ignoreResult().wait(wait_scope);
         }
-
-        stream.doneRequest().send().ignoreResult().wait(wait_scope);
 
         session.logoutRequest().send().ignoreResult().wait(wait_scope);
     }
