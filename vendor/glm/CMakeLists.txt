@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME glm
     GITHUB_REPOSITORY g-truc/glm # master
-    GIT_TAG 6347f62261da5be4e27a256e28aef6abc0ba884d)
+    GIT_TAG 0.9.9.8)
 
 # cmake-format: off
 set(system_libs

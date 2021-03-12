@@ -37,7 +37,7 @@ void log::vprint(level            _level,
             {log::level::critical,
              {"CRITICAL", fmt::fg(fmt::color::black) | fmt::bg(fmt::color::coral)}}};
     static const auto format =
-        std::string{"{:%Y-%m-%d %H:%M:%S %z} ({:>9.3f}s) [{}/{:<10}] {:>22}:{:<5} {:>8}| {}\n"};
+        std::string{"{:%Y-%m-%d %H:%M:%S %z} ({:>9.3f}s) [{}/{:<10}] {:>25}:{:<5} {:>8}| {}\n"};
 
     auto base_name = (std::strrchr(_source_file.data(), '/') != nullptr) // TODO: don't use .data()
                          ? std::string_view{std::strrchr(_source_file.data(), '/') + 1}

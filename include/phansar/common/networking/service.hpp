@@ -4,8 +4,10 @@
 #include <phansar.capnp.h>
 
 namespace phansar::common::networking {
-class service final : public schema::Service::Server {
+class service : public schema::Service::Server {
 public:
+    virtual ~service() = default;
+
     auto login(LoginContext _context) -> kj::Promise<void> override;
 };
 } // namespace phansar::common::networking

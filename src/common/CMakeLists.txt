@@ -12,9 +12,11 @@ set(sources
     command_line.cpp
     log.cpp
     memory.cpp
+    networking/administrator_session.cpp
+    networking/moderator_session.cpp
+    networking/root_session.cpp
     networking/service.cpp
     networking/session.cpp
-    networking/socket.cpp
     python.cpp
     timer.cpp)
 

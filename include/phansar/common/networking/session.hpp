@@ -2,13 +2,11 @@
 #define PHANSAR_COMMON_NETWORKING_SESSION_HPP
 
 #include <phansar.capnp.h>
-#include <phansar/common/networking/streamable.hpp>
 
 namespace phansar::common::networking {
-class session final : public schema::Service::Session::Server,
-                      public streamable<schema::Service::Message> {
+class session : public virtual schema::Service::Session::Server {
 public:
-    session();
+    virtual ~session() = default;
 
     auto logout(LogoutContext _context) -> kj::Promise<void> override;
 };

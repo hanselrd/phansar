@@ -1,6 +1,5 @@
 # cmake-format: off
 set(unittest_sources
-    networking/socket.unittest.cpp
     threading/synchronized.unittest.cpp)
 # cmake-format: on
 

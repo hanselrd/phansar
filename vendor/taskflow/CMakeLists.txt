@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME taskflow
     GITHUB_REPOSITORY taskflow/taskflow # master
-    GIT_TAG 4fafc47dbfc365f7e7a5a03e5ce176809d6b34d9
+    GIT_TAG 2b79a32b097aec6d617279b2588b6969f16f91e6
     OPTIONS "TF_BUILD_TESTS OFF" "TF_BUILD_EXAMPLES OFF")
 
 # cmake-format: off

@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME glfw
     GITHUB_REPOSITORY glfw/glfw # master
-    GIT_TAG 2c7f3ce91b4f22773855c43d6480824ed4ac9907
+    GIT_TAG 4afa227a056681d2628894b0893527bf69496a41
     OPTIONS "GLFW_BUILD_DOCS OFF" "GLFW_INSTALL OFF")
 
 # cmake-format: off
