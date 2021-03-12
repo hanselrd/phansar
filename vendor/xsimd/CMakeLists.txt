@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME xsimd
     GITHUB_REPOSITORY xtensor-stack/xsimd # master
-    GIT_TAG 1df22d69932bfd0f31b92a16afcfdb508432c47d)
+    GIT_TAG ccf4ff93a82d90fc7868e17d1ca785f5e13fef5d)
 
 # cmake-format: off
 set(system_libs

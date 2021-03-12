@@ -15,21 +15,44 @@ interface Service {
         }
     }
 
-    # struct Vector2 {
-    #     x @0 :Float32 = 0;
-    #     y @1 :Float32 = 0;
+    struct Vector2 {
+        x @0 :Float32 = 0;
+        y @1 :Float32 = 0;
+    }
+
+    struct Vector3 {
+        x @0 :Float32 = 0;
+        y @1 :Float32 = 0;
+        z @2 :Float32 = 0;
+    }
+
+    # struct Message {
+    #     id @0 :Id;
+    #     author @1 :Text;
+    #     text @2 :Text;
     # }
 
-    # struct Vector3 {
-    #     x @0 :Float32 = 0;
-    #     y @1 :Float32 = 0;
-    #     z @2 :Float32 = 0;
-    # }
+    struct Entity {
+        enum Type {
+            player @0;
+            npc @1;
+            mob @2;
+        }
 
-    struct Message {
+        struct Component {
+            union {
+                position @0 :Vector3;
+
+                health :group {
+                    value @1 :UInt32;
+                    maximum @2 :UInt32;
+                }
+            }
+        }
+
         id @0 :Id;
-        author @1 :Text;
-        text @2 :Text;
+        type @1 :Type;
+        components @2 :List(Component);
     }
 
     interface Stream(T) {
@@ -47,46 +70,22 @@ interface Service {
     #     create @0 [T] () -> (streamable :Streamable(T));
     # }
 
-    interface Session extends (Streamable(Message)) {
+    interface Session {# extends (Streamable(Message)) {
         logout @0 ();
     }
 
-    # interface ModeratorSession extends (Session) {
-    #     ban @0 (name :Text) -> (result :Result(Ref(Bool), Text));
-    #     unban @1 (name :Text) -> (result :Result(Ref(Bool), Text));
-    # }
+    interface ModeratorSession extends (Session) {
+        ban @0 (name :Text) -> (result :Result(Ref(Bool), Text));
+        unban @1 (name :Text) -> (result :Result(Ref(Bool), Text));
+    }
 
-    # interface AdministratorSession extends (ModeratorSession) {
-    #     restart @0 ();
-    # }
+    interface AdministratorSession extends (ModeratorSession) {
+        restart @0 ();
+    }
 
-    # interface RootSession extends (AdministratorSession) {
-    #     shutdown @0 ();
-    # }
+    interface RootSession extends (AdministratorSession) {
+        shutdown @0 ();
+    }
 
     login @0 (username :Text, password :Text) -> (result :Result(Session, Text));
 }
-
-# struct Entity {
-#     enum Type {
-#         player @0;
-#         npc @1;
-#         mob @2;
-#     }
-
-#     id @0 :Id;
-#     type @1 :Type;
-# }
-
-# struct Packet {
-#     entity @0 :Entity;
-
-#     union {
-#         heartbeat @1 :Void;
-
-#         position :group {
-#             absolute @2 :Vector3;
-#             delta @3 :Vector3;
-#         }
-#     }
-# }

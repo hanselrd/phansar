@@ -5,7 +5,7 @@
 
 namespace phansar::common::networking {
 template <class T>
-class streamable : public virtual schema::Service::Streamable<T>::Server {
+class streamable : public schema::Service::Streamable<T>::Server {
 public:
     using DownloadContext = typename schema::Service::Streamable<T>::Server::DownloadContext;
     using UploadContext   = typename schema::Service::Streamable<T>::Server::UploadContext;

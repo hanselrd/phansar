@@ -1,4 +1,7 @@
 #include <phansar/common/macros.hpp>
+#include <phansar/common/networking/administrator_session.hpp>
+#include <phansar/common/networking/moderator_session.hpp>
+#include <phansar/common/networking/root_session.hpp>
 #include <phansar/common/networking/service.hpp>
 #include <phansar/common/networking/session.hpp>
 
@@ -11,7 +14,10 @@ auto service::login(LoginContext _context) -> kj::Promise<void> {
     auto result  = results.initResult();
 
     if (params.getUsername() == "bob" && params.getPassword() == "password") {
-        result.setOk(kj::heap<session>());
+        /* result.setOk(kj::heap<session>()); */
+        /* result.setOk(kj::heap<moderator_session>()); */
+        /* result.setOk(kj::heap<administrator_session>()); */
+        result.setOk(kj::heap<root_session>());
     } else {
         result.setErr("Failed to login");
     }

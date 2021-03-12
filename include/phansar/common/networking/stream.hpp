@@ -5,7 +5,7 @@
 
 namespace phansar::common::networking {
 template <class T>
-class stream final : public schema::Service::Stream<T>::Server {
+class stream : public schema::Service::Stream<T>::Server {
 public:
     using WriteContext = typename schema::Service::Stream<T>::Server::WriteContext;
     using DoneContext  = typename schema::Service::Stream<T>::Server::DoneContext;
