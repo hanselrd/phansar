@@ -8,6 +8,7 @@ class session : public virtual schema::Service::Session::Server {
 public:
     virtual ~session() = default;
 
+    auto globalChat(GlobalChatContext _context) -> kj::Promise<void> override;
     auto logout(LogoutContext _context) -> kj::Promise<void> override;
 };
 } // namespace phansar::common::networking

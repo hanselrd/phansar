@@ -1,4 +1,4 @@
-@0xec2afc4a6f6c4290;
+@0xaa267f9513881475;
 
 using Cxx = import "/capnp/c++.capnp";
 
@@ -26,11 +26,11 @@ interface Service {
         z @2 :Float32 = 0;
     }
 
-    # struct Message {
-    #     id @0 :Id;
-    #     author @1 :Text;
-    #     text @2 :Text;
-    # }
+    struct Message {
+        id @0 :Id;
+        author @1 :Text;
+        text @2 :Text;
+    }
 
     struct Entity {
         enum Type {
@@ -55,28 +55,54 @@ interface Service {
         components @2 :List(Component);
     }
 
+    struct Map {
+        enum Type {
+            public @0;
+            protected @1;
+            private @2;
+        }
+
+        id @0 :Id;
+        type @1 :Type;
+        npcs @2 :List(Entity);
+        mobs @3 :List(Entity);
+    }
+
     interface Stream(T) {
         write @0 (payload :T) -> stream;
         done @1 ();
     }
 
-    interface Streamable(T) {
-        download @0 (stream :Stream(T));
-        upload @1 () -> (stream :Stream(T));
-        bidi @2 (stream :Stream(T)) -> (stream :Stream(T));
+    interface ClientStreamable(T) {
+        push @0 () -> (stream :Stream(T));
     }
 
-    # interface StreamableFactory {
-    #     create @0 [T] () -> (streamable :Streamable(T));
-    # }
+    interface ServerStreamable(T) {
+        pull @0 (stream :Stream(T));
+    }
 
-    interface Session {# extends (Streamable(Message)) {
-        logout @0 ();
+    interface BidiStreamable(T) {
+        pushPull @0 (stream :Stream(T)) -> (stream :Stream(T));
+    }
+
+    interface Chat extends (BidiStreamable(Packet)) {
+        struct Packet {
+            union {
+                noop @0 :Void;
+                message @1 :Message;
+            }
+        }
+    }
+
+    interface Session {
+        globalChat @0 () -> (result :Result(Chat, Text));
+        logout @1 ();
     }
 
     interface ModeratorSession extends (Session) {
-        ban @0 (name :Text) -> (result :Result(Ref(Bool), Text));
-        unban @1 (name :Text) -> (result :Result(Ref(Bool), Text));
+        staffChat @0 () -> (result :Result(Chat, Text));
+        ban @1 (name :Text) -> (result :Result(Ref(Bool), Text));
+        unban @2 (name :Text) -> (result :Result(Ref(Bool), Text));
     }
 
     interface AdministratorSession extends (ModeratorSession) {

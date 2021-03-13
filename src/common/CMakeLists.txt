@@ -13,6 +13,7 @@ set(sources
     log.cpp
     memory.cpp
     networking/administrator_session.cpp
+    networking/chat.cpp
     networking/moderator_session.cpp
     networking/root_session.cpp
     networking/service.cpp

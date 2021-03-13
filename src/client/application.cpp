@@ -2,6 +2,7 @@
 #include <phansar/common/command_line.hpp>
 #include <phansar/common/macros.hpp>
 #include <phansar/common/networking/service.hpp>
+#include <phansar/common/networking/stream.hpp>
 
 namespace phansar::client {
 application::application(int _argc, const char * const * _argv)
@@ -25,37 +26,60 @@ void application::run() {
     if (result.isOk()) {
         auto session = result.getOk().castAs<common::schema::Service::RootSession>();
 
-        /* for (auto i = std::size_t{0}; i < 2; ++i) { */
-        /*     auto request2 = session.uploadRequest(); */
+        auto request2 = session.globalChatRequest();
 
-        /*     auto response2 = request2.send().wait(wait_scope); */
+        auto response2 = request2.send().wait(wait_scope);
+        auto result2   = response2.getResult();
 
-        /*     auto stream = response2.getStream(); */
+        auto chat = result2.getOk();
 
-        /*     for (auto j = std::size_t{0}; j < 10'000; ++j) { */
-        /*         auto request3 = stream.writeRequest(); */
-        /*         auto message  = request3.initPayload(); */
-        /*         message.setId(static_cast<std::uint32_t>(j + 1)); */
-        /*         message.setAuthor(fmt::format("Client [{}]", i)); */
-        /*         message.setText("Thank you"); */
+        if (result2.isOk()) {
+            auto request3 = chat.pushPullRequest();
+            request3.setStream(
+                kj::heap<common::networking::stream<common::schema::Service::Chat::Packet>>(
+                    std::make_shared<std::vector<
+                        kj::Own<capnp::ReaderFor<common::schema::Service::Chat::Packet>>>>()));
+            request3.send().wait(wait_scope);
 
-        /*         request3.send().wait(wait_scope); */
-        /*     } */
+            /* for (auto i = std::size_t{0}; i < 2; ++i) { */
+            /*     auto request3 = chat.uploadRequest(); */
 
-        /*     stream.doneRequest().send().ignoreResult().wait(wait_scope); */
-        /* } */
+            /*     auto response3 = request3.send().wait(wait_scope); */
 
-        auto request4 = session.banRequest();
-        request4.setName("Ban me");
-        request4.send().wait(wait_scope);
+            /*     auto stream = response3.getStream(); */
 
-        auto request5 = session.unbanRequest();
-        request5.setName("Unban me");
-        request5.send().wait(wait_scope);
+            /*     for (auto j = std::size_t{0}; j < 10'000; ++j) { */
+            /*         auto request4 = stream.writeRequest(); */
+            /*         auto message  = request4.initPayload(); */
+            /*         message.setId(static_cast<std::uint32_t>(j + 1)); */
+            /*         message.setAuthor(fmt::format("Client [{}]", i)); */
+            /*         message.setText("Thank you"); */
 
-        session.restartRequest().send().ignoreResult().wait(wait_scope);
+            /*         request4.send().wait(wait_scope); */
+            /*     } */
 
-        session.shutdownRequest().send().ignoreResult().wait(wait_scope);
+            /*     stream.doneRequest().send().ignoreResult().wait(wait_scope); */
+            /* } */
+
+            /* auto request5 = chat.downloadRequest(); */
+            /* request5.setStream( */
+            /*     kj::heap<common::networking::stream<common::schema::Service::Message>>( */
+            /*         std::make_shared<std::vector< */
+            /*             kj::Own<capnp::ReaderFor<common::schema::Service::Message>>>>())); */
+            /* request5.send().wait(wait_scope); */
+        }
+
+        /* auto request6 = session.banRequest(); */
+        /* request6.setName("Ban me"); */
+        /* request6.send().wait(wait_scope); */
+
+        /* auto request7 = session.unbanRequest(); */
+        /* request7.setName("Unban me"); */
+        /* request7.send().wait(wait_scope); */
+
+        /* session.restartRequest().send().ignoreResult().wait(wait_scope); */
+
+        /* session.shutdownRequest().send().ignoreResult().wait(wait_scope); */
 
         session.logoutRequest().send().ignoreResult().wait(wait_scope);
     }
