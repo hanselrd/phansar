@@ -3,7 +3,7 @@
 
 namespace phansar::common::networking {
 template <class T>
-stream<T>::stream(std::shared_ptr<std::vector<capnp::ReaderFor<T>>> _container)
+stream<T>::stream(std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> _container)
     : m_container{std::move(_container)} {}
 
 template <class T>
@@ -11,7 +11,7 @@ auto stream<T>::write(WriteContext _context) -> kj::Promise<void> {
     PH_LOG_INFO("[stream] {{write}}: {}", _context.getParams().toString().flatten().cStr());
 
     auto params = _context.getParams();
-    m_container->push_back(params.getPayload());
+    m_container->push_back(capnp::clone(params.getPayload()));
 
     return kj::READY_NOW;
 }

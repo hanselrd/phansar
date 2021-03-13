@@ -10,13 +10,14 @@ public:
     using WriteContext = typename schema::Service::Stream<T>::Server::WriteContext;
     using DoneContext  = typename schema::Service::Stream<T>::Server::DoneContext;
 
-    explicit stream(std::shared_ptr<std::vector<capnp::ReaderFor<T>>> _container);
+    explicit stream(std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> _container);
+    virtual ~stream() = default;
 
     auto write(WriteContext _context) -> kj::Promise<void> override;
     auto done(DoneContext _context) -> kj::Promise<void> override;
 
 private:
-    std::shared_ptr<std::vector<capnp::ReaderFor<T>>> m_container;
+    std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> m_container;
 };
 } // namespace phansar::common::networking
 
