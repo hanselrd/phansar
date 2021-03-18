@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME entt
     GITHUB_REPOSITORY skypjack/entt # master
-    GIT_TAG 38ab02ff8837c269ecffd54165d8fe4f5f918be1
+    GIT_TAG 9d72ffb9fe0ce4a15bab3729b52fcb0adace4d7f
     DOWNLOAD_ONLY YES)
 
 # cmake-format: off
