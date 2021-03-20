@@ -15,16 +15,16 @@ interface Service {
         }
     }
 
-    struct Vector2 {
-        x @0 :Float32 = 0;
-        y @1 :Float32 = 0;
-    }
+    # struct Vector2 {
+    #     x @0 :Float32 = 0;
+    #     y @1 :Float32 = 0;
+    # }
 
-    struct Vector3 {
-        x @0 :Float32 = 0;
-        y @1 :Float32 = 0;
-        z @2 :Float32 = 0;
-    }
+    # struct Vector3 {
+    #     x @0 :Float32 = 0;
+    #     y @1 :Float32 = 0;
+    #     z @2 :Float32 = 0;
+    # }
 
     struct Message {
         id @0 :Id;
@@ -32,41 +32,41 @@ interface Service {
         text @2 :Text;
     }
 
-    struct Entity {
-        enum Type {
-            player @0;
-            npc @1;
-            mob @2;
-        }
+    # struct Entity {
+    #     enum Type {
+    #         player @0;
+    #         npc @1;
+    #         mob @2;
+    #     }
 
-        struct Component {
-            union {
-                position @0 :Vector3;
+    #     struct Component {
+    #         union {
+    #             position @0 :Vector3;
 
-                health :group {
-                    value @1 :UInt32;
-                    maximum @2 :UInt32;
-                }
-            }
-        }
+    #             health :group {
+    #                 value @1 :UInt32;
+    #                 maximum @2 :UInt32;
+    #             }
+    #         }
+    #     }
 
-        id @0 :Id;
-        type @1 :Type;
-        components @2 :List(Component);
-    }
+    #     id @0 :Id;
+    #     type @1 :Type;
+    #     components @2 :List(Component);
+    # }
 
-    struct Map {
-        enum Type {
-            public @0;
-            protected @1;
-            private @2;
-        }
+    # struct Map {
+    #     enum Type {
+    #         public @0;
+    #         protected @1;
+    #         private @2;
+    #     }
 
-        id @0 :Id;
-        type @1 :Type;
-        npcs @2 :List(Entity);
-        mobs @3 :List(Entity);
-    }
+    #     id @0 :Id;
+    #     type @1 :Type;
+    #     npcs @2 :List(Entity);
+    #     mobs @3 :List(Entity);
+    # }
 
     interface Stream(T) {
         write @0 (payload :T) -> stream;
