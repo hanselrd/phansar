@@ -3,6 +3,12 @@
 #include <phansar/common/networking/session.hpp>
 
 namespace phansar::common::networking {
+struct session::impl {};
+
+session::session() = default;
+
+session::~session() = default;
+
 auto session::globalChat(GlobalChatContext _context) -> kj::Promise<void> {
     PH_LOG_INFO("[session] {{globalChat}}: {}", _context.getParams().toString().flatten().cStr());
 

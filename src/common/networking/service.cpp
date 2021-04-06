@@ -6,6 +6,12 @@
 #include <phansar/common/networking/session.hpp>
 
 namespace phansar::common::networking {
+struct service::impl {};
+
+service::service() = default;
+
+service::~service() = default;
+
 auto service::login(LoginContext _context) -> kj::Promise<void> {
     PH_LOG_INFO("[service] {{login}}: {}", _context.getParams().toString().flatten().cStr());
 

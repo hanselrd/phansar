@@ -1,46 +1,70 @@
 #include <phansar/client/window.hpp>
+#define PH_VENDOR_GLFW_PRIVATE
+#include <phansar/vendor/glfw.hpp>
 
 namespace phansar::client {
-std::uint8_t window::s_instance_count = 0;
+struct window::impl {
+    GLFWwindow * window;
 
-window::window(std::size_t _width, std::size_t _height, std::string_view _title) {
-    if (s_instance_count == 0) {
+    static std::uint8_t s_instance_count;
+};
+
+std::uint8_t window::impl::s_instance_count = 0;
+
+window::window(std::size_t _width, std::size_t _height, std::string_view _title) : m_impl{nullptr} {
+    if (m_impl->s_instance_count == 0) {
         glfwInit();
     }
 
-    ++s_instance_count;
+    ++m_impl->s_instance_count;
 
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-    m_window = glfwCreateWindow(static_cast<int>(_width),
-                                static_cast<int>(_height),
-                                std::string{_title}.c_str(),
-                                nullptr,
-                                nullptr);
+    m_impl->window = glfwCreateWindow(static_cast<int>(_width),
+                                      static_cast<int>(_height),
+                                      std::string{_title}.c_str(),
+                                      nullptr,
+                                      nullptr);
 }
 
 window::~window() {
-    if (m_window != nullptr) {
-        glfwDestroyWindow(m_window);
+    if (m_impl->window != nullptr) {
+        glfwDestroyWindow(m_impl->window);
     }
 
-    --s_instance_count;
+    --m_impl->s_instance_count;
 
-    if (s_instance_count == 0) {
+    if (m_impl->s_instance_count == 0) {
         glfwTerminate();
     }
 }
 
 auto window::open() -> bool {
-    return glfwWindowShouldClose(m_window) == 0;
+    return glfwWindowShouldClose(m_impl->window) == 0;
 }
 
 void window::update() {
     glfwPollEvents();
 }
 
-auto window::get() -> GLFWwindow * {
-    return m_window;
+auto window::ndt() -> void * {
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
+    return glfwGetX11Display();
+#else
+    return nullptr;
+#endif
+}
+
+auto window::nwh() -> void * {
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
+    return reinterpret_cast<void *>(static_cast<uintptr_t>(glfwGetX11Window(m_impl->window)));
+#elif BX_PLATFORM_OSX
+    return glfwGetCocoaWindow(m_impl->window);
+#elif BX_PLATFORM_WINDOWS
+    return glfwGetWin32Window(m_impl->window);
+#else
+    return nullptr;
+#endif
 }
 } // namespace phansar::client

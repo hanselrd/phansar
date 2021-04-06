@@ -101,17 +101,17 @@ if(ENABLE_CLANG_FORMAT)
             clang_format_files
             CONFIGURE_DEPENDS
             "include/*.hpp"
-            "include/*.tpp"
+            "include/*.inl"
             "include/*.cpp"
             "src/*.hpp"
-            "src/*.tpp"
+            "src/*.inl"
             "src/*.cpp"
             "src/*.cpp.in"
             "test/*.hpp"
-            "test/*.tpp"
+            "test/*.inl"
             "test/*.cpp"
             "vendor/*.hpp"
-            "vendor/*.tpp"
+            "vendor/*.inl"
             "vendor/*.cpp")
 
         add_custom_target(
@@ -197,7 +197,7 @@ if(ENABLE_CLANG_TIDY)
             COMMENT "Applying fixes ...")
 
         set(CLANG_TIDY_CHECKS
-            "-*,bugprone-*,-bugprone-branch-clone,-bugprone-exception-escape,-bugprone-sizeof-expression,cert-*,-cert-dcl50-cpp,-cert-err58-cpp,clang-analyzer-*,google-explicit-constructor,google-readability-casting,google-readability-namespace-comments,google-runtime-int,llvm-header-guard,modernize-*,-modernize-avoid-c-arrays,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-convert-member-functions-to-static,-readability-magic-numbers,-readability-misleading-indentation"
+            "-*,bugprone-*,-bugprone-branch-clone,-bugprone-exception-escape,-bugprone-sizeof-expression,cert-*,-cert-dcl50-cpp,-cert-err58-cpp,clang-analyzer-*,cppcoreguidelines-*,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-avoid-non-const-global-variables,-cppcoreguidelines-macro-usage,-cppcoreguidelines-no-malloc,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-const-cast,-cppcoreguidelines-pro-type-union-access,-cppcoreguidelines-pro-type-reinterpret-cast,google-explicit-constructor,google-readability-casting,google-readability-namespace-comments,google-runtime-int,llvm-header-guard,modernize-*,-modernize-avoid-c-arrays,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-convert-member-functions-to-static,-readability-deleted-default,-readability-magic-numbers,-readability-misleading-indentation"
         )
 
         set(counter 1)

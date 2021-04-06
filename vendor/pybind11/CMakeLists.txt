@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME pybind11
     GITHUB_REPOSITORY pybind/pybind11 # master
-    GIT_TAG 0e01c243c7ffae3a2e52f998bacfe82f56aa96d9)
+    GIT_TAG ad6bf5cd39ca64b4a9bf846b84b11c4c8df1c8e1)
 
 # cmake-format: off
 set(system_libs

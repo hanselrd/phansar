@@ -52,7 +52,7 @@ add_subdirectory(vendor)
 include(cmake/Version.cmake)
 add_subdirectory(src)
 add_subdirectory(test)
-# add_subdirectory(assets)
+add_subdirectory(assets)
 
 set(CPACK_GENERATOR "TGZ")
 set(CPACK_PACKAGE_NAME ${CMAKE_PROJECT_NAME})

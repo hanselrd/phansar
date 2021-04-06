@@ -1,4 +1,4 @@
-#define CATCH_CONFIG_RUNNER
+#define PH_VENDOR_CATCH2_PRIVATE
 #include <phansar/vendor/catch2.hpp>
 
 auto main(int _argc, char * _argv[]) -> int {

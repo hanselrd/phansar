@@ -3,6 +3,7 @@
 
 #include <phansar/common/utility/noncopyable.hpp>
 #include <phansar/common/utility/nonsynchronizable.hpp>
+#include <phansar/common/utility/pimpl.hpp>
 
 namespace phansar::common::threading {
 template <class T>
@@ -21,6 +22,8 @@ public:
         friend class synchronized;
 
     public:
+        proxy(const proxy &) = default;
+        auto operator=(const proxy &) -> proxy & = default;
         proxy(proxy && _other) noexcept;
         auto operator=(proxy && _other) noexcept -> proxy &;
         ~proxy();
@@ -41,8 +44,8 @@ public:
     private:
         proxy(T & _obj, std::shared_mutex & _mutex);
 
-        T *                 m_obj_p;
-        std::shared_mutex * m_mutex_p;
+        struct impl;
+        utility::pimpl<impl> m_impl;
     };
 
     template <class... Args>
@@ -54,8 +57,8 @@ public:
     auto try_lock_shared() -> std::optional<proxy<read_tag>>;
 
 private:
-    T                 m_obj;
-    std::shared_mutex m_mutex;
+    struct impl;
+    utility::pimpl<impl> m_impl;
 };
 } // namespace phansar::common::threading
 

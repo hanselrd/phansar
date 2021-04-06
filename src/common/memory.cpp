@@ -45,31 +45,3 @@ void free(void * _ptr) {
     PH_LOG_TRACE("Freed {}", _ptr);
 }
 } // namespace phansar::common::memory
-
-/* auto operator new(std::size_t num_bytes) -> void * { */
-/*     return phansar::common::memory::malloc(num_bytes); */
-/* } */
-
-/* auto operator new[](std::size_t num_bytes) -> void * { */
-/*     return operator new(num_bytes); */
-/* } */
-
-/* void operator delete(void * ptr) noexcept { */
-/*     // NOLINTNEXTLINE(clang-analyzer-unix.Malloc) */
-/*     phansar::common::memory::free(ptr); */
-/* } */
-
-/* void operator delete(void * ptr, std::size_t) noexcept { */
-/*     // NOLINTNEXTLINE(clang-analyzer-unix.Malloc) */
-/*     operator delete(ptr); */
-/* } */
-
-/* void operator delete[](void * ptr) noexcept { */
-/*     // NOLINTNEXTLINE(clang-analyzer-unix.Malloc) */
-/*     operator delete(ptr); */
-/* } */
-
-/* void operator delete[](void * ptr, std::size_t) noexcept { */
-/*     // NOLINTNEXTLINE(clang-analyzer-unix.Malloc) */
-/*     operator delete(ptr); */
-/* } */

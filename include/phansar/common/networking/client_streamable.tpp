@@ -4,9 +4,14 @@
 
 namespace phansar::common::networking {
 template <class T>
+struct client_streamable<T>::impl {
+    std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> container;
+};
+
+template <class T>
 client_streamable<T>::client_streamable(
     std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> _container)
-    : m_container{std::move(_container)} {}
+    : m_impl{std::move(_container)} {}
 
 template <class T>
 auto client_streamable<T>::push(PushContext _context) -> kj::Promise<void> {
@@ -14,7 +19,7 @@ auto client_streamable<T>::push(PushContext _context) -> kj::Promise<void> {
                 _context.getParams().toString().flatten().cStr());
 
     auto results = _context.getResults();
-    results.setStream(kj::heap<stream<T>>(m_container));
+    results.setStream(kj::heap<stream<T>>(m_impl->container));
 
     return kj::READY_NOW;
 }

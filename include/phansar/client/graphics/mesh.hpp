@@ -3,12 +3,15 @@
 
 #include <phansar/client/graphics/vertex.hpp>
 #include <phansar/common/utility/noncopyable.hpp>
+#include <phansar/common/utility/pimpl.hpp>
 
 namespace phansar::client::graphics {
 class mesh : public common::utility::noncopyable {
 public:
     explicit mesh(const std::vector<vertex> &        _vertices,
                   const std::vector<std::uint32_t> & _indices = {});
+    mesh(const mesh &) = default;
+    auto operator=(const mesh &) -> mesh & = default;
     mesh(mesh && _other) noexcept;
     auto operator=(mesh && _other) noexcept -> mesh &;
     ~mesh();
@@ -19,8 +22,8 @@ public:
     auto               ibo_handle() -> bgfx::IndexBufferHandle &;
 
 private:
-    bgfx::VertexBufferHandle m_vbo_handle;
-    bgfx::IndexBufferHandle  m_ibo_handle;
+    struct impl;
+    common::utility::pimpl<impl> m_impl;
 };
 } // namespace phansar::client::graphics
 

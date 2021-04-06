@@ -1,8 +1,14 @@
 #include <phansar/client/graphics/model.hpp>
 #include <phansar/common/macros.hpp>
+#include <phansar/vendor/assimp.hpp>
 
 namespace phansar::client::graphics {
-model::model(std::string_view _file_path) {
+struct model::impl {
+    std::vector<mesh>     meshes;
+    std::vector<material> materials;
+};
+
+model::model(std::string_view _file_path) : m_impl{std::vector<mesh>{}, std::vector<material>{}} {
     auto         importer = Assimp::Importer{};
     const auto * scene =
         importer.ReadFile(std::string{_file_path}, aiProcessPreset_TargetRealtime_Fast);
@@ -74,19 +80,21 @@ model::model(std::string_view _file_path) {
             indices.push_back(face.mIndices[2]);
         }
 
-        m_meshes.emplace_back(vertices, indices);
+        m_impl->meshes.emplace_back(vertices, indices);
     }
 }
 
-auto model::meshes() const -> const std::vector<mesh> & {
-    PH_ASSERT(! m_meshes.empty());
+model::~model() = default;
 
-    return m_meshes;
+auto model::meshes() const -> const std::vector<mesh> & {
+    PH_ASSERT(! m_impl->meshes.empty());
+
+    return m_impl->meshes;
 }
 
 auto model::materials() const -> const std::vector<material> & {
-    PH_ASSERT(! m_materials.empty());
+    PH_ASSERT(! m_impl->materials.empty());
 
-    return m_materials;
+    return m_impl->materials;
 }
 } // namespace phansar::client::graphics

@@ -1,5 +1,4 @@
 #include <phansar/common/threading/synchronized.hpp>
-
 #include <phansar/vendor/catch2.hpp>
 
 SCENARIO("common::threading::synchronized", "[common][threading][synchronized]") {

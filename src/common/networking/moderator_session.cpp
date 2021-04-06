@@ -2,6 +2,12 @@
 #include <phansar/common/networking/moderator_session.hpp>
 
 namespace phansar::common::networking {
+struct moderator_session::impl {};
+
+moderator_session::moderator_session() = default;
+
+moderator_session::~moderator_session() = default;
+
 auto moderator_session::ban(BanContext _context) -> kj::Promise<void> {
     PH_LOG_INFO("[moderator_session] {{ban}}: {}",
                 _context.getParams().toString().flatten().cStr());

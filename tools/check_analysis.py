@@ -64,7 +64,7 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
     folders = ["include", "src", "test", "vendor"]
-    extensions = ["*.hpp", "*.tpp", "*.cpp"]
+    extensions = ["*.hpp", "*.inl", "*.cpp"]
     globs = [
         "{folder}/**/{extension}".format(folder=f, extension=e)
         for f in folders
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     ]
 
     headers = [f for f in files if f.endswith(".hpp")]
-    templates = [f for f in files if f.endswith(".tpp")]
+    templates = [f for f in files if f.endswith(".inl")]
     sources = [
         f for f in files if f.endswith(".cpp") and not f.endswith("unittest.cpp")
     ]
@@ -90,7 +90,7 @@ if __name__ == "__main__":
         split = re.split("[./]", re.split("include/phansar/", h)[1])
         for t in templates:
             if (
-                "{prefix}/{suffix}.tpp".format(
+                "{prefix}/{suffix}.inl".format(
                     prefix="/".join(split[:-2]), suffix="/".join(split[2:-1])
                 )
                 in t

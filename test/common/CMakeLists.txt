@@ -1,5 +1,6 @@
 # cmake-format: off
 set(unittest_sources
+    histogram.unittest.cpp
     threading/synchronized.unittest.cpp)
 # cmake-format: on
 
