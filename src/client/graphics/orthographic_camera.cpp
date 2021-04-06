@@ -1,6 +1,8 @@
 #include <phansar/client/graphics/orthographic_camera.hpp>
 
 namespace phansar::client::graphics {
+struct orthographic_camera::impl {};
+
 orthographic_camera::orthographic_camera(float             _left,
                                          float             _right,
                                          float             _bottom,
@@ -18,4 +20,6 @@ orthographic_camera::orthographic_camera(float             _left,
              _up,
              _rotation,
              _scale} {}
+
+orthographic_camera::~orthographic_camera() = default;
 } // namespace phansar::client::graphics

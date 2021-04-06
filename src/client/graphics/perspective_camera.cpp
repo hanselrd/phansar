@@ -1,6 +1,8 @@
 #include <phansar/client/graphics/perspective_camera.hpp>
 
 namespace phansar::client::graphics {
+struct perspective_camera::impl {};
+
 perspective_camera::perspective_camera(float             _fov,
                                        float             _aspect,
                                        float             _near,
@@ -16,4 +18,6 @@ perspective_camera::perspective_camera(float             _fov,
              _up,
              _rotation,
              _scale} {}
+
+perspective_camera::~perspective_camera() = default;
 } // namespace phansar::client::graphics

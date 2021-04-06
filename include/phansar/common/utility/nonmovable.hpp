@@ -4,8 +4,11 @@
 namespace phansar::common::utility {
 class nonmovable {
 public:
-    nonmovable(nonmovable &&) = delete;
+    nonmovable(const nonmovable &) = default;
+    auto operator=(const nonmovable &) -> nonmovable & = default;
+    nonmovable(nonmovable &&)                          = delete;
     auto operator=(nonmovable &&) -> nonmovable & = delete;
+    ~nonmovable()                                 = default;
 
 protected:
     nonmovable() = default;

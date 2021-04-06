@@ -1,6 +1,9 @@
 #ifndef PHANSAR_CLIENT_GRAPHICS_CAMERA_HPP
 #define PHANSAR_CLIENT_GRAPHICS_CAMERA_HPP
 
+#include <phansar/common/utility/pimpl.hpp>
+#include <phansar/vendor/glm.hpp>
+
 namespace phansar::client::graphics {
 class camera {
 public:
@@ -10,6 +13,11 @@ public:
                     const glm::vec3 & _up        = glm::vec3{0.0F, 1.0F, 0.0F},
                     const glm::vec3 & _rotation  = glm::vec3{},
                     const glm::vec3 & _scale     = glm::vec3{1.0F});
+    camera(const camera &) = default;
+    auto operator=(const camera &) -> camera & = default;
+    camera(camera &&)                          = default;
+    auto operator=(camera &&) -> camera & = default;
+    ~camera();
 
     auto view() -> const glm::mat4 &;
     auto projection() -> const glm::mat4 &;
@@ -19,13 +27,8 @@ public:
     auto scale() -> glm::vec3 &;
 
 private:
-    glm::mat4 m_view;
-    glm::mat4 m_projection;
-    glm::vec3 m_position;
-    glm::vec3 m_direction;
-    glm::vec3 m_up;
-    glm::vec3 m_rotation;
-    glm::vec3 m_scale;
+    struct impl;
+    common::utility::pimpl<impl> m_impl;
 };
 } // namespace phansar::client::graphics
 

@@ -5,14 +5,21 @@
 #include <phansar/common/networking/stream.hpp>
 
 namespace phansar::client {
+struct application::impl {
+    std::unique_ptr<capnp::EzRpcClient> client;
+};
+
 application::application(int _argc, const char * const * _argv)
-    : common::application{_argc, _argv}, m_client{common::command_line::instance()->host(),
-                                                  common::command_line::instance()->port()} {}
+    : common::application{_argc, _argv}, m_impl{std::make_unique<capnp::EzRpcClient>(
+                                             common::command_line::instance()->host(),
+                                             common::command_line::instance()->port())} {}
+
+application::~application() = default;
 
 void application::run() {
-    auto & wait_scope = m_client.getWaitScope();
+    auto & wait_scope = m_impl->client->getWaitScope();
 
-    auto cap = m_client.getMain<common::schema::Service>();
+    auto cap = m_impl->client->getMain<common::schema::Service>();
 
     auto request = cap.loginRequest();
     request.setUsername("bob");

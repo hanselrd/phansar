@@ -1,10 +1,12 @@
 #ifndef PHANSAR_COMMON_LOG_HPP
 #define PHANSAR_COMMON_LOG_HPP
 
+#include <phansar/common/utility/pimpl.hpp>
 #include <phansar/common/utility/singleton.hpp>
+#include <phansar/vendor/fmt.hpp>
 
 namespace phansar::common {
-class log : public utility::singleton<log> {
+class log : public utility::singleton<log> { // TODO: replace with spdlog
 public:
     enum class level { trace, debug, info, warning, error, critical, off };
 
@@ -13,6 +15,11 @@ public:
         std::string_view _file_path,
         std::uintmax_t   _file_size,
         std::size_t      _num_files);
+    log(const log &) = default;
+    auto operator=(const log &) -> log & = default;
+    log(log &&)                          = default;
+    auto operator=(log &&) -> log & = default;
+    ~log();
 
     void set_thread_name(std::thread::id _thread_id, std::string_view _thread_name);
     void vprint(level            _level,
@@ -28,16 +35,8 @@ public:
                Args &&... _args);
 
 private:
-    level                                              m_level;
-    std::string                                        m_name;
-    std::string                                        m_file_path;
-    std::uintmax_t                                     m_file_size;
-    std::size_t                                        m_num_files;
-    std::ofstream                                      m_out_file;
-    std::chrono::time_point<std::chrono::system_clock> m_start_time;
-    std::unordered_map<std::thread::id, std::string>   m_thread_name_map;
-    std::shared_mutex                                  m_thread_name_map_mutex;
-    std::mutex                                         m_print_mutex;
+    struct impl;
+    utility::pimpl<impl> m_impl;
 };
 } // namespace phansar::common
 

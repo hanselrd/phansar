@@ -4,7 +4,7 @@ namespace phansar::common::utility {
 template <class T>
 template <class U>
 void factory<T>::create(U * _derived) {
-    static_assert(std::is_base_of_v<T, U>);
+    static_assert(std::is_base_of_v<T, U>, "T must be a base of U");
 
     m_instance = std::unique_ptr<T>{_derived};
 }

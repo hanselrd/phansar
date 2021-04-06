@@ -2,6 +2,9 @@
 
 namespace phansar::common::allocators {
 template <class T>
+struct mallocator<T>::impl {};
+
+template <class T>
 template <class U>
 mallocator<T>::mallocator(const mallocator<U> & /*unused*/) {}
 

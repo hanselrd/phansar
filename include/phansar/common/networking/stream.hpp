@@ -2,6 +2,7 @@
 #define PHANSAR_COMMON_NETWORKING_STREAM_HPP
 
 #include <phansar.capnp.h>
+#include <phansar/common/utility/pimpl.hpp>
 
 namespace phansar::common::networking {
 template <class T>
@@ -11,13 +12,18 @@ public:
     using DoneContext  = typename schema::Service::Stream<T>::Server::DoneContext;
 
     explicit stream(std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> _container);
-    virtual ~stream() = default;
+    stream(const stream &) = default;
+    auto operator=(const stream &) -> stream & = default;
+    stream(stream &&) noexcept                 = default;
+    auto operator=(stream &&) noexcept -> stream & = default;
+    virtual ~stream()                              = default;
 
     auto write(WriteContext _context) -> kj::Promise<void> override;
     auto done(DoneContext _context) -> kj::Promise<void> override;
 
 private:
-    std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> m_container;
+    struct impl;
+    utility::pimpl<impl> m_impl;
 };
 } // namespace phansar::common::networking
 

@@ -9,7 +9,9 @@ set(sources
     ${CMAKE_BINARY_DIR}/version.cpp
     ${capnp_sources}
     application.cpp
+    bindings.cpp
     command_line.cpp
+    histogram.cpp
     log.cpp
     memory.cpp
     networking/administrator_session.cpp
@@ -35,6 +37,7 @@ set(system_libs
     ph_vendor_kangaru
     ph_vendor_pybind11
     ph_vendor_rangev3
+    ph_vendor_rttr
     ph_vendor_taskflow
     ph_vendor_xsimd
     Threads::Threads)

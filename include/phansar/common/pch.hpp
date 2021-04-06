@@ -7,8 +7,10 @@
 #include <chrono>
 #include <cmath>
 #include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <exception>
 #include <filesystem>
 #include <fstream>
 #include <functional>
@@ -17,7 +19,9 @@
 #include <iterator>
 #include <limits>
 #include <map>
+#include <memory>
 #include <mutex>
+#include <optional>
 #include <random>
 #include <ratio>
 #include <regex>
@@ -31,17 +35,12 @@
 #include <utility>
 #include <variant>
 #include <vector>
+#include <version>
 
-#include <phansar/vendor/capnproto.hpp>
-#include <phansar/vendor/cppcodec.hpp>
-#include <phansar/vendor/cxxopts.hpp>
-#include <phansar/vendor/entt.hpp>
-#include <phansar/vendor/fmt.hpp>
-#include <phansar/vendor/hedley.hpp>
-#include <phansar/vendor/json.hpp>
-#include <phansar/vendor/pybind11.hpp>
-#include <phansar/vendor/rangev3.hpp>
-#include <phansar/vendor/taskflow.hpp>
-#include <phansar/vendor/xsimd.hpp>
+#ifdef __has_include
+#    if __has_include(<experimental/propagate_const>)
+#        include <experimental/propagate_const>
+#    endif
+#endif
 
 #endif

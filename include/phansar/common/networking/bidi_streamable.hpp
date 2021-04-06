@@ -2,6 +2,7 @@
 #define PHANSAR_COMMON_NETWORKING_BIDI_STREAMABLE_HPP
 
 #include <phansar.capnp.h>
+#include <phansar/common/utility/pimpl.hpp>
 
 namespace phansar::common::networking {
 template <class T>
@@ -14,7 +15,8 @@ public:
     auto pushPull(PushPullContext _context) -> kj::Promise<void> override;
 
 private:
-    std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> m_container;
+    struct impl;
+    utility::pimpl<impl> m_impl;
 };
 } // namespace phansar::common::networking
 

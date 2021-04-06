@@ -7,11 +7,16 @@
 #include <phansar/client/window.hpp>
 #include <phansar/common/utility/noncopyable.hpp>
 #include <phansar/common/utility/nonmovable.hpp>
+#include <phansar/common/utility/pimpl.hpp>
 
 namespace phansar::client::graphics {
 class renderer : public common::utility::noncopyable, public common::utility::nonmovable {
 public:
     explicit renderer(window & _window);
+    renderer(const renderer &) = default;
+    auto operator=(const renderer &) -> renderer & = default;
+    renderer(renderer &&)                          = default;
+    auto operator=(renderer &&) -> renderer & = default;
     ~renderer();
 
     void view_clear(std::uint32_t _rgba, float _depth = 1.0F, std::uint8_t _stencil = 0);
@@ -30,7 +35,8 @@ public:
     void flush();
 
 private:
-    camera * m_camera{nullptr};
+    struct impl;
+    common::utility::pimpl<impl> m_impl;
 };
 } // namespace phansar::client::graphics
 

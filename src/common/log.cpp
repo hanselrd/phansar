@@ -1,21 +1,43 @@
 #include <phansar/common/log.hpp>
+#include <phansar/vendor/rangev3.hpp>
 
 namespace phansar::common {
+struct log::impl {
+    level                                              level;
+    std::string                                        name;
+    std::string                                        file_path;
+    std::uintmax_t                                     file_size;
+    std::size_t                                        num_files;
+    std::ofstream                                      out_file;
+    std::chrono::time_point<std::chrono::system_clock> start_time;
+    std::unordered_map<std::thread::id, std::string>   thread_name_map;
+    std::unique_ptr<std::shared_mutex>                 thread_name_map_mutex;
+    std::unique_ptr<std::mutex>                        print_mutex;
+};
+
 log::log(level            _level,
          std::string_view _name,
          std::string_view _file_path,
          std::uintmax_t   _file_size,
          std::size_t      _num_files)
-    : m_level{_level}, m_name{_name}, m_file_path{_file_path}, m_file_size{_file_size},
-      m_num_files{_num_files}, m_out_file{std::string{_file_path},
-                                          std::ofstream::out | std::ofstream::app},
-      m_start_time{std::chrono::system_clock::now()} {
+    : m_impl{_level,
+             std::string{_name},
+             std::string{_file_path},
+             _file_size,
+             _num_files,
+             std::ofstream{std::string{_file_path}, std::ofstream::out | std::ofstream::app},
+             std::chrono::system_clock::now(),
+             std::unordered_map<std::thread::id, std::string>{},
+             std::make_unique<std::shared_mutex>(),
+             std::make_unique<std::mutex>()} {
     set_thread_name(std::this_thread::get_id(), "MAIN");
 }
 
+log::~log() = default;
+
 void log::set_thread_name(std::thread::id _thread_id, std::string_view _thread_name) {
-    auto lock = std::unique_lock{m_thread_name_map_mutex};
-    m_thread_name_map.insert_or_assign(_thread_id, _thread_name);
+    auto lock = std::unique_lock{*m_impl->thread_name_map_mutex};
+    m_impl->thread_name_map.insert_or_assign(_thread_id, _thread_name);
 }
 
 void log::vprint(level            _level,
@@ -23,7 +45,7 @@ void log::vprint(level            _level,
                  int              _source_line,
                  std::string_view _format,
                  fmt::format_args _args) {
-    if (m_level == level::off || m_level > _level) {
+    if (m_impl->level == level::off || m_impl->level > _level) {
         return;
     }
 
@@ -47,46 +69,46 @@ void log::vprint(level            _level,
 
     auto thread_name = std::string{};
     {
-        auto read_lock = std::shared_lock{m_thread_name_map_mutex};
-        if (m_thread_name_map.count(std::this_thread::get_id()) == 0) {
+        auto read_lock = std::shared_lock{*m_impl->thread_name_map_mutex};
+        if (m_impl->thread_name_map.count(std::this_thread::get_id()) == 0) {
             read_lock.unlock();
             {
-                auto write_lock = std::unique_lock{m_thread_name_map_mutex};
-                m_thread_name_map.insert_or_assign(
+                auto write_lock = std::unique_lock{*m_impl->thread_name_map_mutex};
+                m_impl->thread_name_map.insert_or_assign(
                     std::this_thread::get_id(),
-                    fmt::format("WORKER{}", m_thread_name_map.size()));
+                    fmt::format("WORKER{}", m_impl->thread_name_map.size()));
             }
             read_lock.lock();
         }
-        thread_name = m_thread_name_map.at(std::this_thread::get_id());
+        thread_name = m_impl->thread_name_map.at(std::this_thread::get_id());
     }
 
     {
-        auto lock      = std::unique_lock{m_print_mutex};
+        auto lock      = std::unique_lock{*m_impl->print_mutex};
         auto now       = std::chrono::system_clock::now();
         auto now_tm    = std::chrono::system_clock::to_time_t(now);
         auto time_info = *std::localtime(&now_tm);
-        auto uptime =
-            static_cast<double>(
-                std::chrono::duration_cast<std::chrono::milliseconds>(now - m_start_time).count()) /
-            1000.;
+        auto uptime    = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(
+                                              now - m_impl->start_time)
+                                              .count()) /
+                      1000.;
 
         for (const auto & m :
              message | ranges::views::split('\n') | ranges::to<std::vector<std::string>>()) {
             fmt::print(format,
                        time_info,
                        uptime,
-                       m_name,
+                       m_impl->name,
                        thread_name,
                        base_name,
                        _source_line,
                        fmt::format(text_style, "{:>8}", level_str),
                        m);
-            fmt::print(m_out_file,
+            fmt::print(m_impl->out_file,
                        format,
                        time_info,
                        uptime,
-                       m_name,
+                       m_impl->name,
                        thread_name,
                        base_name,
                        _source_line,
@@ -94,19 +116,22 @@ void log::vprint(level            _level,
                        m);
         }
 
-        if (m_num_files > 0) {
+        if (m_impl->num_files > 0) {
             auto ec = std::error_code{};
-            if (std::filesystem::file_size(m_file_path, ec) > m_file_size) {
-                for (auto i = m_num_files; i > 1; --i) {
-                    if (std::filesystem::exists(fmt::format("{}.{}", m_file_path, i - 1), ec)) {
-                        std::filesystem::rename(fmt::format("{}.{}", m_file_path, i - 1),
-                                                fmt::format("{}.{}", m_file_path, i),
+            if (std::filesystem::file_size(m_impl->file_path, ec) > m_impl->file_size) {
+                for (auto i = m_impl->num_files; i > 1; --i) {
+                    if (std::filesystem::exists(fmt::format("{}.{}", m_impl->file_path, i - 1),
+                                                ec)) {
+                        std::filesystem::rename(fmt::format("{}.{}", m_impl->file_path, i - 1),
+                                                fmt::format("{}.{}", m_impl->file_path, i),
                                                 ec);
                     }
                 }
-                m_out_file.close();
-                std::filesystem::rename(m_file_path, fmt::format("{}.1", m_file_path), ec);
-                m_out_file.open(m_file_path, std::ofstream::out);
+                m_impl->out_file.close();
+                std::filesystem::rename(m_impl->file_path,
+                                        fmt::format("{}.1", m_impl->file_path),
+                                        ec);
+                m_impl->out_file.open(m_impl->file_path, std::ofstream::out);
             }
         }
     }

@@ -1,11 +1,17 @@
 #include <phansar/common/macros.hpp>
 #include <phansar/common/networking/server_streamable.hpp>
+#include <phansar/common/helpers.hpp>
 
 namespace phansar::common::networking {
 template <class T>
+struct server_streamable<T>::impl {
+    std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> container;
+};
+
+template <class T>
 server_streamable<T>::server_streamable(
     std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> _container)
-    : m_container{std::move(_container)} {}
+    : m_impl{std::move(_container)} {}
 
 template <class T>
 auto server_streamable<T>::pull(PullContext _context) -> kj::Promise<void> {
@@ -14,8 +20,8 @@ auto server_streamable<T>::pull(PullContext _context) -> kj::Promise<void> {
 
     auto params = _context.getParams();
 
-    return [container = m_container, stream = params.getStream()]() mutable {
-        const auto loop = [](const auto &                                               _self,
+    return [container = m_impl->container, stream = params.getStream()]() mutable {
+        const auto loop = helpers::y_combinator([](auto &&                                               loop,
                              std::shared_ptr<std::vector<kj::Own<capnp::ReaderFor<T>>>> _container,
                              typename schema::Service::Stream<T>::Client                _stream,
                              std::size_t _index = 0) {
@@ -26,15 +32,15 @@ auto server_streamable<T>::pull(PullContext _context) -> kj::Promise<void> {
             auto request = _stream.writeRequest();
             request.setPayload(*_container->at(_index).get());
 
-            return request.send().then([&_self,
+            return request.send().then([loop,
                                         container = std::move(_container),
                                         stream    = kj::mv(_stream),
                                         _index]() mutable {
-                return _self(_self, std::move(container), kj::mv(stream), _index + 1);
+                return loop(std::move(container), kj::mv(stream), _index + 1);
             });
-        };
+        });
 
-        return loop(loop, std::move(container), kj::mv(stream));
+        return loop(std::move(container), kj::mv(stream));
     }();
 }
 } // namespace phansar::common::networking

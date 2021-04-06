@@ -497,6 +497,10 @@ CheckOptions:
     value:           '_'
   - key:             readability-identifier-naming.PrivateMemberPrefix
     value:           'm_'
+  - key:             readability-identifier-naming.PrivateMethodPrefix
+    value:           '_'
+  - key:             readability-identifier-naming.PrivateMethodSuffix
+    value:           '_internal'
   - key:             readability-identifier-naming.ProtectedMemberPrefix
     value:           'm_'
   - key:             readability-implicit-bool-conversion.AllowIntegerConditions

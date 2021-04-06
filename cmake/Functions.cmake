@@ -55,9 +55,54 @@ function(ph_target_link_libraries name type)
 endfunction()
 
 function(ph_target_link_system_libraries name type)
+    function(get_link_libraries output_list target)
+        get_target_property(imported ${target} IMPORTED)
+        list(APPEND visited_targets ${target})
+        if(imported)
+            get_target_property(libs ${target} INTERFACE_LINK_LIBRARIES)
+        else()
+            get_target_property(libs ${target} LINK_LIBRARIES)
+        endif()
+        set(lib_files "")
+        foreach(lib ${libs})
+            if(TARGET ${lib})
+                list(
+                    FIND
+                    visited_targets
+                    ${lib}
+                    visited)
+                if(${visited} EQUAL -1)
+                    get_link_libraries(link_lib_files ${lib})
+                    list(
+                        APPEND
+                        lib_files
+                        ${lib}
+                        ${link_lib_files})
+                endif()
+            endif()
+        endforeach()
+        set(visited_targets
+            ${visited_targets}
+            PARENT_SCOPE)
+        set(${output_list}
+            ${lib_files}
+            PARENT_SCOPE)
+    endfunction()
+
     set(libs ${ARGN})
     foreach(lib ${libs})
         if(TARGET ${lib})
+            get_link_libraries(lib_targets ${lib})
+            foreach(lib_target ${lib_targets})
+                get_target_property(lib_include_dirs ${lib_target} INTERFACE_INCLUDE_DIRECTORIES)
+                if(lib_include_dirs)
+                    target_include_directories(
+                        ${name}
+                        SYSTEM
+                        ${type}
+                        ${lib_include_dirs})
+                endif()
+            endforeach()
             get_target_property(lib_include_dirs ${lib} INTERFACE_INCLUDE_DIRECTORIES)
             if(lib_include_dirs)
                 target_include_directories(
@@ -164,7 +209,9 @@ function(ph_target_compile_options name)
     append_compile_option(PHANSAR_HAS_WDOUBLE_PROMOTION "-Wdouble-promotion")
     append_compile_option(PHANSAR_HAS_WFORMAT_2 "-Wformat=2")
     append_compile_option(PHANSAR_HAS_WERROR_FORMAT_SECURITY "-Werror=format-security")
-    append_compile_option(PHANSAR_HAS_WUNDEF "-Wundef")
+    # append_compile_option(PHANSAR_HAS_WUNDEF "-Wundef")
+    append_compile_option(PHANSAR_HAS_WNO_DEFAULTED_FUNCTION_DELETED
+                          "-Wno-defaulted-function-deleted")
     append_compile_option(PHANSAR_HAS_FPCH_PREPROCESS "-fpch-preprocess")
     append_compile_option(PHANSAR_HAS_FNO_COMMON "-fno-common")
     append_compile_option(PHANSAR_HAS_WCONVERSION "-Wconversion")

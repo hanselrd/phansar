@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME range-v3
     GITHUB_REPOSITORY ericniebler/range-v3 # master
-    GIT_TAG 81b6d3f1bf636395645cc2ed245a5947c404a4b2)
+    GIT_TAG 1120609c7cb5dee9d2d216c579e935475cc39c4e)
 
 # cmake-format: off
 set(system_libs
