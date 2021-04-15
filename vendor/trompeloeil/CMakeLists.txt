@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME trompeloeil
     GITHUB_REPOSITORY rollbear/trompeloeil # master
-    GIT_TAG 8ae997b36a0419063d1805a3400661b1e2eb4933)
+    GIT_TAG 0e925c71f32ed5c0e9174f901014f8c54b7bc336)
 
 # cmake-format: off
 set(system_libs

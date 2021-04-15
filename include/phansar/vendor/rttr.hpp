@@ -7,7 +7,11 @@
 #    pragma warning(push, 0)
 #endif
 
-#include <rttr/registration>
+#include <rttr/type>
+#include <rttr/visitor.h>
+#ifdef PH_VENDOR_RTTR_PRIVATE
+#    include <rttr/registration>
+#endif
 
 #ifdef HEDLEY_MSVC_VERSION
 #    pragma warning(pop)
