@@ -3,6 +3,10 @@
 #include <phansar/vendor/fmt.hpp>
 #include <phansar/vendor/rangev3.hpp>
 
+namespace phansar::common::bindings {
+rttr_visitor::rttr_visitor(py::module & _module) : m_module{_module} {}
+} // namespace phansar::common::bindings
+
 namespace rttr {
 void to_json(nlohmann::ordered_json & _json, const instance & _obj) {
     const auto write = phansar::common::helpers::y_combinator(

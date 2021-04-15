@@ -11,6 +11,7 @@ set(sources
     graphics/shader.cpp
     graphics/texture.cpp
     graphics/vertex.cpp
+    python.cpp
     window.cpp
     main.cpp)
 

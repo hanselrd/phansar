@@ -1,5 +1,8 @@
+#include <phansar/common/bindings.hpp>
 #include <phansar/common/histogram.hpp>
 #include <phansar/vendor/rangev3.hpp>
+#undef PHANSAR_VENDOR_RTTR_HPP
+#define PH_VENDOR_RTTR_PRIVATE
 #include <phansar/vendor/rttr.hpp>
 
 namespace phansar::common {
@@ -125,12 +128,12 @@ auto histogram<double>::samples() const -> std::vector<sample> {
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables, readability-identifier-naming)
 RTTR_REGISTRATION {
-    rttr::registration::class_<histogram<double>::bin>("histogram::bin")
+    rttr::registration::class_<histogram<double>::bin>("histogram_bin")
         .property("lower", &histogram<double>::bin::lower)
         .property("upper", &histogram<double>::bin::upper)
         .property("count", &histogram<double>::bin::count);
 
-    rttr::registration::class_<histogram<double>::sample>("histogram::sample")
+    rttr::registration::class_<histogram<double>::sample>("histogram_sample")
         .property("value", &histogram<double>::sample::value)
         .property("count", &histogram<double>::sample::count);
 

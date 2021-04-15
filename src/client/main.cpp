@@ -13,16 +13,26 @@
 /* #include <phansar/common/python.hpp> */
 /* #include <phansar/common/timer.hpp> */
 
-// NOLINTNEXTLINE(modernize-use-trailing-return-type)
-#if 0
-PYBIND11_EMBEDDED_MODULE(phansar, m) {
-    phansar::common::python::embed(m);
-}
-#endif
-
 auto main(int _argc, char * _argv[]) -> int {
     auto app = phansar::client::application{_argc, _argv};
-    app.run();
+    /* app.run(); */
+
+    auto guard = py::scoped_interpreter{};
+    py::exec(R"python(
+        from phansar import histogram
+
+        h = histogram("Python", "bits", 10)
+        h.push(10.2)
+        h.push(11)
+        h.push(1)
+        h.push(3)
+        print(h.name)
+        print(h.bins)
+        print(h.samples)
+        print(h.variance)
+        print(h.standard_deviation)
+        print(h)
+    )python");
 
 #if 0
     auto window = phansar::client::window{800, 600, "Service"};
