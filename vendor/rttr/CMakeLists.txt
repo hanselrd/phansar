@@ -8,7 +8,8 @@ CPMAddPackage(
             "BUILD_EXAMPLES OFF"
             "BUILD_DOCUMENTATION OFF"
             "BUILD_INSTALLER OFF"
-            "BUILD_PACKAGE OFF")
+            "BUILD_PACKAGE OFF"
+    EXCLUDE_FROM_ALL YES)
 
 if(rttr_ADDED)
     set_target_properties(rttr_core_lib PROPERTIES COMPILE_OPTIONS "")

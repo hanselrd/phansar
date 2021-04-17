@@ -11,10 +11,24 @@ with section("parse"):
                 "NAME": "1",
                 "GITHUB_REPOSITORY": "1",
                 "GIT_TAG": "1",
+                "SOURCE_DIR": "1",
                 "OPTIONS": "*",
                 "DOWNLOAD_ONLY": "1",
+                "EXCLUDE_FROM_ALL": "1",
             },
-        }
+        },
+        "ph_add_formatter": {
+            "pargs": 0,
+            "kwargs": {
+                "NAME": "1",
+                "PROGRAMS": "*",
+                "CHECK_ARGS": "*",
+                "FIX_ARGS": "*",
+                "POSTFIX_COMMAND": "*",
+                "GLOBS": "*",
+                "FILES": "*",
+            },
+        },
     }
 
     # Override configurations per-command where available

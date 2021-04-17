@@ -4,6 +4,9 @@ find_package(Threads REQUIRED)
 
 capnp_generate_cpp(capnp_sources capnp_headers phansar.capnp)
 
+add_clang_executable(codegen codegen.cpp PARTIAL_SOURCES_INTENDED)
+target_link_libraries(codegen PRIVATE ph_vendor_fmt ph_vendor_llvm)
+
 # cmake-format: off
 set(sources
     ${CMAKE_BINARY_DIR}/version.cpp

@@ -2,6 +2,15 @@
 #define PHANSAR_COMMON_MACROS_HPP
 
 #include <phansar/common/log.hpp>
+#include <phansar/vendor/hedley.hpp>
+
+#if HEDLEY_HAS_ATTRIBUTE(annotate)
+#    define PH_ANNOTATE(...) __attribute__((annotate(#    __VA_ARGS__)))
+#else
+#    define PH_ANNOTATE(...)
+#endif
+
+#define PH_METADATA(...) PH_ANNOTATE(phansar, metadata, __VA_ARGS__)
 
 #define PH_LOG(_level, ...)                                                                        \
     do {                                                                                           \

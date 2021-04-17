@@ -2,7 +2,8 @@ CPMAddPackage(
     NAME json
     GITHUB_REPOSITORY ArthurSonzogni/nlohmann_json_cmake_fetchcontent # master
     GIT_TAG 391786c6c3abdd3eeb993a3154f1f2a4cfe137a0
-    OPTIONS "JSON_BuildTests OFF" "JSON_ImplicitConversions OFF")
+    OPTIONS "JSON_BuildTests OFF" "JSON_ImplicitConversions OFF"
+    EXCLUDE_FROM_ALL YES)
 
 # cmake-format: off
 set(system_libs
