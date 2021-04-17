@@ -160,14 +160,14 @@ jobs:
               cmake -E copy build/compile_commands.json .
 
               if [ "${{ runner.os }}" != "Windows" ]; then
-                  cmake --build build --target check-cmake-format
+                  cmake --build build --target check-format-cmake-format
               fi
 
-              cmake --build build --target check-black
+              cmake --build build --target check-format-black
 
               if [ "${{ runner.os }}" == "macOS" ]; then
-                  cmake --build build --target check-clang-format
-                  # cmake --build build --target check-clang-tidy
+                  cmake --build build --target check-format-clang-format
+                  # cmake --build build --target check-format-clang-tidy
               fi
 
         - name: Build and test Debug

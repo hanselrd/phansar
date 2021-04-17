@@ -24,6 +24,7 @@ if(NOT WIN32)
     endif()
 endif()
 
+include(CMakePrintHelpers)
 include(CheckCXXCompilerFlag)
 include(CheckCCompilerFlag)
 include(cmake/Functions.cmake)

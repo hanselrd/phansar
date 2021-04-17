@@ -1,7 +1,8 @@
 CPMAddPackage(
     NAME cxxopts
     GITHUB_REPOSITORY jarro2783/cxxopts # master
-    GIT_TAG dd45a0801c99d62109aaa29f8c410ba8def2fbf2)
+    GIT_TAG dd45a0801c99d62109aaa29f8c410ba8def2fbf2
+    EXCLUDE_FROM_ALL YES)
 
 # cmake-format: off
 set(system_libs

@@ -14,7 +14,8 @@ CPMAddPackage(
             "ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF"
             "ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF"
             "ASSIMP_BUILD_FBX_IMPORTER ON"
-            "ASSIMP_BUILD_OBJ_IMPORTER ON")
+            "ASSIMP_BUILD_OBJ_IMPORTER ON"
+    EXCLUDE_FROM_ALL YES)
 
 # cmake-format: off
 set(system_libs

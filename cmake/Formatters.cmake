@@ -1,245 +1,169 @@
-add_custom_target(check)
-add_custom_target(format)
+add_custom_target(check-format)
+add_custom_target(fix-format)
 
-if(ENABLE_CMAKE_FORMAT)
-    find_program(CMAKE_FORMAT_EXECUTABLE cmake-format)
-    if(CMAKE_FORMAT_EXECUTABLE)
+function(ph_add_formatter)
+    cmake_parse_arguments(
+        ARG
+        ""
+        "NAME"
+        "PROGRAMS;CHECK_ARGS;FIX_ARGS;POSTFIX_COMMAND;GLOBS;FILES"
+        ${ARGN})
+
+    find_program(${ARG_NAME}_EXECUTABLE NAMES ${ARG_PROGRAMS})
+    if(${ARG_NAME}_EXECUTABLE)
         file(
             GLOB_RECURSE
-            cmake_format_files
+            files
             CONFIGURE_DEPENDS
-            "assets/CMakeLists.txt"
-            "cmake/*.cmake"
-            "include/CMakeLists.txt"
-            "src/CMakeLists.txt"
-            "test/CMakeLists.txt"
-            "vendor/CMakeLists.txt")
-        list(APPEND cmake_format_files "${CMAKE_SOURCE_DIR}/CMakeLists.txt")
-
-        add_custom_target(check-cmake-format)
-        add_custom_target(cmake-format)
-
-        set(counter 1)
-        foreach(cmake_format_file ${cmake_format_files})
-            add_custom_target(
-                check-cmake-format-${counter}
-                COMMAND ${CMAKE_FORMAT_EXECUTABLE} --check ${cmake_format_file}
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                COMMENT "Checking ${cmake_format_file} ...")
-
-            add_dependencies(check-cmake-format check-cmake-format-${counter})
-
-            add_custom_target(
-                cmake-format-${counter}
-                COMMAND ${CMAKE_FORMAT_EXECUTABLE} -i ${cmake_format_file}
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                COMMENT "Formatting ${cmake_format_file} ...")
-
-            add_dependencies(cmake-format cmake-format-${counter})
-
-            math(EXPR counter "${counter}+1")
-        endforeach()
-
-        add_dependencies(check check-cmake-format)
-        add_dependencies(format cmake-format)
-    else()
-        message(FATAL_ERROR "cmake-format executable not found")
+            ${ARG_GLOBS})
+        list(APPEND files ${ARG_FILES})
     endif()
+
+    add_custom_target(
+        check-format-${ARG_NAME}-tmpdir
+        COMMAND ${CMAKE_COMMAND} -E rm -rf ${CMAKE_BINARY_DIR}/check-format-${ARG_NAME}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/check-format-${ARG_NAME})
+    add_custom_target(check-format-${ARG_NAME} DEPENDS check-format-${ARG_NAME}-tmpdir)
+
+    add_custom_target(
+        fix-format-${ARG_NAME}-tmpdir
+        COMMAND ${CMAKE_COMMAND} -E rm -rf ${CMAKE_BINARY_DIR}/fix-format-${ARG_NAME}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/fix-format-${ARG_NAME})
+    if(ARG_POSTFIX_COMMAND)
+        string(
+            REPLACE "%TMPDIR%"
+                    "${CMAKE_BINARY_DIR}/fix-format-${ARG_NAME}"
+                    ARG_POSTFIX_COMMAND
+                    "${ARG_POSTFIX_COMMAND}")
+        add_custom_target(
+            fix-format-${ARG_NAME}
+            COMMAND ${ARG_POSTFIX_COMMAND}
+            DEPENDS fix-format-${ARG_NAME}-tmpdir
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            COMMENT "Running POSTFIX command ...")
+    else()
+        add_custom_target(fix-format-${ARG_NAME} DEPENDS fix-format-${ARG_NAME}-tmpdir)
+    endif()
+
+    string(
+        REPLACE "%TMPDIR%"
+                "${CMAKE_BINARY_DIR}/check-format-${ARG_NAME}"
+                ARG_CHECK_ARGS
+                "${ARG_CHECK_ARGS}")
+    string(
+        REPLACE "%TMPDIR%"
+                "${CMAKE_BINARY_DIR}/fix-format-${ARG_NAME}"
+                ARG_FIX_ARGS
+                "${ARG_FIX_ARGS}")
+
+    foreach(file IN LISTS files)
+        string(SHA1 hash ${file})
+
+        string(
+            REPLACE "%ID%"
+                    "${hash}"
+                    check_args
+                    "${ARG_CHECK_ARGS}")
+        string(
+            REPLACE "%ID%"
+                    "${hash}"
+                    fix_args
+                    "${ARG_FIX_ARGS}")
+
+        add_custom_target(
+            check-format-${ARG_NAME}-${hash}
+            COMMAND ${${ARG_NAME}_EXECUTABLE} ${check_args} ${file}
+            DEPENDS check-format-${ARG_NAME}-tmpdir
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            COMMENT "Checking source code formatting of ${file} ...")
+        add_dependencies(check-format-${ARG_NAME} check-format-${ARG_NAME}-${hash})
+
+        add_custom_target(
+            fix-format-${ARG_NAME}-${hash}
+            COMMAND ${${ARG_NAME}_EXECUTABLE} ${fix_args} ${file}
+            DEPENDS fix-format-${ARG_NAME}-tmpdir
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            COMMENT "Fixing source code formatting of ${file} ...")
+        add_dependencies(fix-format-${ARG_NAME} fix-format-${ARG_NAME}-${hash})
+    endforeach()
+
+    add_dependencies(check-format check-format-${ARG_NAME})
+    add_dependencies(fix-format fix-format-${ARG_NAME})
+endfunction()
+
+if(ENABLE_CMAKE_FORMAT)
+    ph_add_formatter(
+        NAME cmake-format
+        PROGRAMS cmake-format
+        CHECK_ARGS --check
+        FIX_ARGS -i
+        GLOBS "assets/CMakeLists.txt"
+              "cmake/*.cmake"
+              "include/CMakeLists.txt"
+              "src/CMakeLists.txt"
+              "test/CMakeLists.txt"
+              "vendor/CMakeLists.txt"
+        FILES "${CMAKE_SOURCE_DIR}/CMakeLists.txt")
 endif()
 
 if(ENABLE_BLACK)
-    find_program(BLACK_EXECUTABLE black)
-    if(BLACK_EXECUTABLE)
-        file(
-            GLOB_RECURSE
-            black_files
-            CONFIGURE_DEPENDS
-            "tools/*.py")
-        list(APPEND black_files "${CMAKE_SOURCE_DIR}/.cmake-format.py")
-
-        add_custom_target(check-black)
-        add_custom_target(black)
-
-        set(counter 1)
-        foreach(black_file ${black_files})
-            add_custom_target(
-                check-black-${counter}
-                COMMAND ${BLACK_EXECUTABLE} --check ${black_file}
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                COMMENT "Checking ${black_file} ...")
-
-            add_dependencies(check-black check-black-${counter})
-
-            add_custom_target(
-                black-${counter}
-                COMMAND ${BLACK_EXECUTABLE} ${black_file}
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                COMMENT "Formatting ${black_file} ...")
-
-            add_dependencies(black black-${counter})
-
-            math(EXPR counter "${counter}+1")
-        endforeach()
-
-        add_dependencies(check check-black)
-        add_dependencies(format black)
-    else()
-        message(FATAL_ERROR "black executable not found")
-    endif()
+    ph_add_formatter(
+        NAME black
+        PROGRAMS black
+        CHECK_ARGS --check
+        GLOBS "tools/*.py"
+        FILES "${CMAKE_SOURCE_DIR}/.cmake-format.py")
 endif()
 
 if(ENABLE_CLANG_FORMAT)
-    find_program(
-        CLANG_FORMAT_EXECUTABLE
-        NAMES clang-format
-              clang-format-9
-              clang-format-10
-              clang-format-11)
-    if(CLANG_FORMAT_EXECUTABLE)
-        file(
-            GLOB_RECURSE
-            clang_format_files
-            CONFIGURE_DEPENDS
-            "include/*.hpp"
-            "include/*.inl"
-            "include/*.cpp"
-            "src/*.hpp"
-            "src/*.inl"
-            "src/*.cpp"
-            "src/*.cpp.in"
-            "test/*.hpp"
-            "test/*.inl"
-            "test/*.cpp"
-            "vendor/*.hpp"
-            "vendor/*.inl"
-            "vendor/*.cpp")
-
-        add_custom_target(
-            check-clang-format-tmpdir
-            COMMAND ${CMAKE_COMMAND} -E rm -rf ${CMAKE_BINARY_DIR}/check-clang-format
-            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/check-clang-format)
-
-        add_custom_target(check-clang-format DEPENDS check-clang-format-tmpdir)
-        add_custom_target(clang-format)
-
-        set(counter 1)
-        foreach(clang_format_file ${clang_format_files})
-            add_custom_target(
-                check-clang-format-${counter}
-                COMMAND ${CLANG_FORMAT_EXECUTABLE} -style=file ${clang_format_file} >
-                        ${CMAKE_BINARY_DIR}/check-clang-format/${counter}
-                COMMAND ${CMAKE_COMMAND} -E compare_files --ignore-eol ${clang_format_file}
-                        ${CMAKE_BINARY_DIR}/check-clang-format/${counter}
-                DEPENDS check-clang-format-tmpdir
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                COMMENT "Checking ${clang_format_file} ...")
-
-            add_dependencies(check-clang-format check-clang-format-${counter})
-
-            add_custom_target(
-                clang-format-${counter}
-                COMMAND ${CLANG_FORMAT_EXECUTABLE} -style=file -i ${clang_format_file}
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                COMMENT "Formatting ${clang_format_file} ...")
-
-            add_dependencies(clang-format clang-format-${counter})
-
-            math(EXPR counter "${counter}+1")
-        endforeach()
-
-        add_dependencies(check check-clang-format)
-        add_dependencies(format clang-format)
-    else()
-        message(FATAL_ERROR "clang-format executable not found")
-    endif()
+    ph_add_formatter(
+        NAME clang-format
+        PROGRAMS clang-format
+                 clang-format-10
+                 clang-format-11
+                 clang-format-12
+        CHECK_ARGS --style=file --dry-run --Werror
+        FIX_ARGS --style=file -i
+        GLOBS "include/*.hpp"
+              "include/*.inl"
+              "include/*.cpp"
+              "src/*.hpp"
+              "src/*.inl"
+              "src/*.cpp"
+              "src/*.cpp.in"
+              "test/*.hpp"
+              "test/*.inl"
+              "test/*.cpp"
+              "vendor/*.hpp"
+              "vendor/*.inl"
+              "vendor/*.cpp")
 endif()
 
 if(ENABLE_CLANG_TIDY)
     find_program(
-        CLANG_TIDY_EXECUTABLE
-        NAMES clang-tidy
-              clang-tidy-9
-              clang-tidy-10
-              clang-tidy-11)
-    find_program(
         CLANG_APPLY_REPLACEMENTS_EXECUTABLE
         NAMES clang-apply-replacements
-              clang-apply-replacements-9
               clang-apply-replacements-10
-              clang-apply-replacements-11)
-    if(CLANG_TIDY_EXECUTABLE AND CLANG_APPLY_REPLACEMENTS_EXECUTABLE)
-        file(
-            GLOB_RECURSE
-            clang_tidy_files
-            CONFIGURE_DEPENDS
-            "include/*.cpp"
-            "src/*.cpp"
-            "src/*.cpp.in"
-            "test/*.cpp")
-
-        add_custom_target(
-            check-clang-tidy-tmpdir
-            COMMAND ${CMAKE_COMMAND} -E rm -rf ${CMAKE_BINARY_DIR}/check-clang-tidy
-            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/check-clang-tidy
-            COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/check-clang-tidy/empty)
-        add_custom_target(
-            clang-tidy-tmpdir
-            COMMAND ${CMAKE_COMMAND} -E rm -rf ${CMAKE_BINARY_DIR}/clang-tidy
-            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/clang-tidy)
-
-        add_custom_target(check-clang-tidy DEPENDS check-clang-tidy-tmpdir)
-        add_custom_target(
-            clang-tidy
-            COMMAND ${CLANG_APPLY_REPLACEMENTS_EXECUTABLE} -format -style=file
-                    ${CMAKE_BINARY_DIR}/clang-tidy
-            DEPENDS clang-tidy-tmpdir
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-            COMMENT "Applying fixes ...")
-
-        set(CLANG_TIDY_CHECKS
-            "-*,bugprone-*,-bugprone-branch-clone,-bugprone-exception-escape,-bugprone-sizeof-expression,cert-*,-cert-dcl50-cpp,-cert-err58-cpp,clang-analyzer-*,cppcoreguidelines-*,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-avoid-non-const-global-variables,-cppcoreguidelines-macro-usage,-cppcoreguidelines-no-malloc,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-const-cast,-cppcoreguidelines-pro-type-union-access,-cppcoreguidelines-pro-type-reinterpret-cast,google-explicit-constructor,google-readability-casting,google-readability-namespace-comments,google-runtime-int,llvm-header-guard,modernize-*,-modernize-avoid-c-arrays,performance-*,portability-*,readability-*,-readability-braces-around-statements,-readability-convert-member-functions-to-static,-readability-deleted-default,-readability-magic-numbers,-readability-misleading-indentation"
-        )
-
-        set(counter 1)
-        foreach(clang_tidy_file ${clang_tidy_files})
-            add_custom_target(
-                check-clang-tidy-${counter}
-                COMMAND
-                    ${CLANG_TIDY_EXECUTABLE} -header-filter=include/phansar -system-headers
-                    -checks=${CLANG_TIDY_CHECKS}
-                    -export-fixes=${CMAKE_BINARY_DIR}/check-clang-tidy/${counter}.yaml
-                    -extra-arg=-Wno-unknown-warning-option -p ${CMAKE_SOURCE_DIR} ${clang_tidy_file}
-                COMMAND ${CMAKE_COMMAND} -E touch
-                        ${CMAKE_BINARY_DIR}/check-clang-tidy/${counter}.yaml
-                COMMAND
-                    ${CMAKE_COMMAND} -E compare_files --ignore-eol
-                    ${CMAKE_BINARY_DIR}/check-clang-tidy/${counter}.yaml
-                    ${CMAKE_BINARY_DIR}/check-clang-tidy/empty
-                DEPENDS check-clang-tidy-tmpdir
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                COMMENT "Checking ${clang_tidy_file} ...")
-
-            add_dependencies(check-clang-tidy check-clang-tidy-${counter})
-
-            add_custom_target(
-                clang-tidy-${counter}
-                COMMAND
-                    ${CLANG_TIDY_EXECUTABLE} -header-filter=include/phansar -system-headers
-                    -checks=${CLANG_TIDY_CHECKS}
-                    -export-fixes=${CMAKE_BINARY_DIR}/clang-tidy/${counter}.yaml
-                    -extra-arg=-Wno-unknown-warning-option -p ${CMAKE_SOURCE_DIR} ${clang_tidy_file}
-                DEPENDS clang-tidy-tmpdir
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                COMMENT "Formatting ${clang_tidy_file} ...")
-
-            add_dependencies(clang-tidy clang-tidy-${counter})
-
-            math(EXPR counter "${counter}+1")
-        endforeach()
-
-        add_dependencies(check check-clang-tidy)
-        add_dependencies(format clang-tidy)
-    else()
-        message(FATAL_ERROR "clang-tidy or clang-apply-replacements executable not found")
+              clang-apply-replacements-11
+              clang-apply-replacements-12)
+    if(CLANG_APPLY_REPLACEMENTS_EXECUTABLE)
+        ph_add_formatter(
+            NAME clang-tidy
+            PROGRAMS clang-tidy
+                     clang-tidy-10
+                     clang-tidy-11
+                     clang-tidy-12
+            CHECK_ARGS -system-headers -extra-arg=-Wno-unknown-warning-option
+            FIX_ARGS -system-headers -extra-arg=-Wno-unknown-warning-option
+                     -export-fixes=%TMPDIR%/%ID%.yaml
+            POSTFIX_COMMAND
+                ${CLANG_APPLY_REPLACEMENTS_EXECUTABLE}
+                -format
+                -style=file
+                %TMPDIR%
+            GLOBS "include/*.cpp"
+                  "src/*.cpp"
+                  "src/*.cpp.in"
+                  "test/*.cpp")
     endif()
 endif()
