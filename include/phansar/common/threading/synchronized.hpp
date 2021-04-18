@@ -5,6 +5,8 @@
 #include <phansar/common/utility/nonsynchronizable.hpp>
 #include <phansar/common/utility/pimpl.hpp>
 
+#include <shared_mutex>
+
 namespace phansar::common::threading {
 template <class T>
 class synchronized {

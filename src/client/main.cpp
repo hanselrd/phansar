@@ -12,6 +12,7 @@
 /* #include <phansar/client/window.hpp> */
 /* #include <phansar/common/python.hpp> */
 /* #include <phansar/common/timer.hpp> */
+#include <phansar/vendor/pybind11.hpp>
 
 auto main(int _argc, char * _argv[]) -> int {
     auto app = phansar::client::application{_argc, _argv};

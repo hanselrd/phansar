@@ -17,13 +17,7 @@ CPMAddPackage(
             "ASSIMP_BUILD_OBJ_IMPORTER ON"
     EXCLUDE_FROM_ALL YES)
 
-# cmake-format: off
-set(system_libs
-    assimp)
-# cmake-format: on
-
-ph_add_generic_vendor_interface_library(
-    ph_vendor_assimp
-    ""
-    ""
-    "${system_libs}")
+ph_add_library(
+    NAME ph_vendor_assimp
+    TYPE INTERFACE
+    LINK_LIBRARIES INTERFACE assimp)

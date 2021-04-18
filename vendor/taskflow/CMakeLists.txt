@@ -5,13 +5,7 @@ CPMAddPackage(
     OPTIONS "TF_BUILD_TESTS OFF" "TF_BUILD_EXAMPLES OFF"
     EXCLUDE_FROM_ALL YES)
 
-# cmake-format: off
-set(system_libs
-    Taskflow)
-# cmake-format: on
-
-ph_add_generic_vendor_interface_library(
-    ph_vendor_taskflow
-    ""
-    ""
-    "${system_libs}")
+ph_add_library(
+    NAME ph_vendor_taskflow
+    TYPE INTERFACE
+    LINK_LIBRARIES INTERFACE Taskflow)

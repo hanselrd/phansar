@@ -1,5 +1,9 @@
 #include <phansar/client/graphics/shader.hpp>
 
+#include <fstream>
+#include <unordered_map>
+#include <vector>
+
 namespace phansar::client::graphics {
 struct shader::impl {
     bgfx::ProgramHandle                                  handle;

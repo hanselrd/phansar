@@ -5,13 +5,7 @@ CPMAddPackage(
     OPTIONS "KANGARU_INSTALL OFF" "KANGARU_EXPORT OFF" "KANGARU_REVERSE_DESTRUCTION ON"
     EXCLUDE_FROM_ALL YES)
 
-# cmake-format: off
-set(system_libs
-    kangaru)
-# cmake-format: on
-
-ph_add_generic_vendor_interface_library(
-    ph_vendor_kangaru
-    ""
-    ""
-    "${system_libs}")
+ph_add_library(
+    NAME ph_vendor_kangaru
+    TYPE INTERFACE
+    LINK_LIBRARIES INTERFACE kangaru)

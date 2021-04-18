@@ -5,13 +5,7 @@ CPMAddPackage(
     OPTIONS "GLFW_BUILD_DOCS OFF" "GLFW_INSTALL OFF"
     EXCLUDE_FROM_ALL YES)
 
-# cmake-format: off
-set(system_libs
-    glfw)
-# cmake-format: on
-
-ph_add_generic_vendor_interface_library(
-    ph_vendor_glfw
-    ""
-    ""
-    "${system_libs}")
+ph_add_library(
+    NAME ph_vendor_glfw
+    TYPE INTERFACE
+    LINK_LIBRARIES INTERFACE glfw)

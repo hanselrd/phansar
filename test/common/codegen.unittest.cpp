@@ -1,34 +1,45 @@
-#include <phansar/common/macros.hpp>
+#include <phansar/vendor/hedley.hpp>
 
-namespace phansar::_ {
+#if HEDLEY_HAS_ATTRIBUTE(annotate)
+#    define PH_ANNOTATE(...) __attribute__((annotate(#    __VA_ARGS__)))
+#else
+#    define PH_ANNOTATE(...)
+#endif
+
+#define PH_METADATA(...) PH_ANNOTATE(phansar, metadata, __VA_ARGS__)
+
+namespace phansar::unittest {
 enum class colors { white, black, red, blue, green, yellow, cyan, magenta, pink };
 
-enum permissions { read, write, execute };
+/* enum permissions { read, write, execute }; */
 
 struct vec3 {
     float x, y, z;
 };
 
-struct material {
-    PH_METADATA(readonly) vec3 ambient;
-    PH_METADATA(readonly) vec3 diffuse;
-    PH_METADATA(readonly) vec3 specular;
-    float shininess;
-};
+auto g_k = []() { return 1; };
 
-class entity {
-    PH_METADATA(readonly) std::uint32_t id;
-    vec3 position;
-};
+/* struct material { */
+/*     PH_METADATA(readonly) vec3 ambient; */
+/*     PH_METADATA(readonly) vec3 diffuse; */
+/*     PH_METADATA(readonly) vec3 specular; */
+/*     float shininess; */
+/* }; */
 
-class access {
-public:
-    int pub_x;
+/* class entity { */
+/*     PH_METADATA(readonly) std::uint32_t id; */
+/*     vec3 position; */
+/* }; */
 
-protected:
-    int protected_x;
+/* class access { */
+/* public: */
+/*     int pub_x; */
 
-private:
-    int private_x;
-};
-} // namespace phansar::_
+/* protected: */
+/*     int protected_x; */
+
+/* private: */
+/*     int private_x; */
+/* }; */
+
+} // namespace phansar::unittest

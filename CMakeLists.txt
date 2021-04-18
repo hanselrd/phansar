@@ -5,10 +5,17 @@ project(
     VERSION 1.0.0
     LANGUAGES CXX C)
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+    message(FATAL_ERROR "In-source builds are not allowed")
+endif()
+
 option(ENABLE_CMAKE_FORMAT "Enable cmake-format" OFF)
 option(ENABLE_BLACK "Enable black" OFF)
 option(ENABLE_CLANG_FORMAT "Enable clang-format" OFF)
 option(ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
+# cmake-format: off
+# option(ENABLE_INCLUDE_WHAT_YOU_USE "Enable include-what-you-use" OFF)
+# cmake-format: on
 option(ENABLE_NATIVE_OPTIMIZATIONS "Enable native optimizations" OFF)
 option(ENABLE_ASAN "Enable address sanitizer" OFF)
 option(ENABLE_MSAN "Enable memory sanitizer" OFF)
@@ -53,7 +60,10 @@ add_subdirectory(vendor)
 include(cmake/Version.cmake)
 add_subdirectory(src)
 add_subdirectory(test)
-add_subdirectory(assets)
+# add_subdirectory(assets)
+
+unset(CMAKE_CXX_STANDARD CACHE)
+unset(CMAKE_C_STANDARD CACHE)
 
 set(CPACK_GENERATOR "TGZ")
 set(CPACK_PACKAGE_NAME ${CMAKE_PROJECT_NAME})

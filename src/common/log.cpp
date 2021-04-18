@@ -1,6 +1,9 @@
 #include <phansar/common/log.hpp>
 #include <phansar/vendor/rangev3.hpp>
 
+#include <filesystem>
+#include <fstream>
+
 namespace phansar::common {
 struct log::impl {
     level                                              level;

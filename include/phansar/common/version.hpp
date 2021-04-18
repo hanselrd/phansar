@@ -1,6 +1,8 @@
 #ifndef PHANSAR_COMMON_VERSION_HPP
 #define PHANSAR_COMMON_VERSION_HPP
 
+#include <string>
+
 namespace phansar::common::version {
 extern const std::string k_version;
 extern const std::string k_major;

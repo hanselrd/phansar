@@ -12,31 +12,22 @@ using namespace clang;
 using namespace clang::ast_matchers;
 using namespace clang::tooling;
 
-auto EnumMatcher   = enumDecl(isExpansionInMainFile()).bind("enum");
-auto RecordMatcher = recordDecl(isExpansionInMainFile(), unless(isImplicit())).bind("record");
+auto g_EnumMatcher   = enumDecl(isExpansionInMainFile()).bind("enum");
+auto g_RecordMatcher = cxxRecordDecl(isExpansionInMainFile(), unless(isImplicit())).bind("record");
 
 class Printer : public MatchFinder::MatchCallback {
 public:
-    virtual void onStartOfTranslationUnit() {
+    void onStartOfTranslationUnit() override {
         outs() << "PYBIND11_EMBEDDED_MODULE(phansar, m) {\n";
     }
 
-    virtual void onEndOfTranslationUnit() {
+    void onEndOfTranslationUnit() override {
         outs() << "}\n";
     }
 
-    virtual void run(const MatchFinder::MatchResult & Result) {
-        if (const auto * Enum = Result.Nodes.getNodeAs<EnumDecl>("enum")) {
-            /* Enum->dump(); */
-            /* outs() << "std::ostream & operator<<(std::ostream &os, " << Enum->getName() << " " */
-            /*        << Enum->getName() << ") {\n" */
-            /*        << "  switch (" << Enum->getName() << ") {\n"; */
-            /* for (const EnumConstantDecl * EnumConstant : Enum->enumerators()) { */
-            /*     outs() << "  case " << EnumConstant->getQualifiedNameAsString() << ": os << \""
-             */
-            /*            << EnumConstant->getName() << "\";\n"; */
-            /* } */
-            /* outs() << "  }\n  return os;\n}\n"; */
+    void run(const MatchFinder::MatchResult & _result) override {
+        if (const auto * Enum = _result.Nodes.getNodeAs<EnumDecl>("enum")) {
+            Enum->dump();
             outs() << fmt::format("{:{}}py::enum_<{}>(m, \"{}\")",
                                   "",
                                   4,
@@ -51,19 +42,8 @@ public:
             }
             outs() << ";\n";
         }
-        if (const auto * Record = Result.Nodes.getNodeAs<RecordDecl>("record")) {
-            /* Record->dump(); */
-            /* outs() << "std::ostream & operator<<(std::ostream &os, const " << Record->getName()
-             */
-            /*        << " &v) {\n" */
-            /*        << "  os << \"" << Record->getName() << "(\";\n"; */
-            /* for (const FieldDecl * Field : Record->fields()) { */
-            /*     bool IsFirst = Field == *Record->field_begin(); */
-            /*     outs() << "  os << \"" << (IsFirst ? "" : ", ") << Field->getName() << "=\" <<
-             * v." */
-            /*            << Field->getName() << ";\n"; */
-            /* } */
-            /* outs() << "  os << \")\"\n  return os;\n}\n"; */
+        if (const auto * Record = _result.Nodes.getNodeAs<CXXRecordDecl>("record")) {
+            Record->dump();
             outs() << fmt::format("{:{}}py::class_<{}>(m, \"{}\")",
                                   "",
                                   4,
@@ -129,23 +109,26 @@ public:
     }
 };
 
-static cl::OptionCategory CodegenCategory("codegen options");
-static cl::extrahelp      CommonHelp(CommonOptionsParser::HelpMessage);
+static cl::OptionCategory g_CodegenCategory("codegen options");
+static cl::extrahelp      g_CommonHelp(CommonOptionsParser::HelpMessage);
 
-int main(int argc, const char * argv[]) {
-    auto ExpectedParser = CommonOptionsParser::create(argc, argv, CodegenCategory);
-    if (! ExpectedParser) {
-        errs() << ExpectedParser.takeError();
+auto main(int _argc, const char * _argv[]) -> int {
+    auto expected_parser = CommonOptionsParser::create(_argc, _argv, g_CodegenCategory);
+    if (! expected_parser) {
+        errs() << expected_parser.takeError();
         return 1;
     }
-    auto &    OptionsParser = ExpectedParser.get();
-    ClangTool Tool(OptionsParser.getCompilations(), OptionsParser.getSourcePathList());
 
-    Printer     Printer;
-    MatchFinder Finder;
-    Finder.addMatcher(EnumMatcher, &Printer);
-    Finder.addMatcher(RecordMatcher, &Printer);
+    auto & options_parser = expected_parser.get();
+    auto   tool = ClangTool{options_parser.getCompilations(), options_parser.getSourcePathList()};
 
-    return Tool.run(newFrontendActionFactory(&Finder).get());
-    /* return Tool.run(newFrontendActionFactory<clang::SyntaxOnlyAction>().get()); */
+    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-I" STDINC0));
+    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-I" STDINC1));
+
+    auto printer = Printer{};
+    auto finder  = MatchFinder{};
+    finder.addMatcher(g_EnumMatcher, &printer);
+    finder.addMatcher(g_RecordMatcher, &printer);
+
+    return tool.run(newFrontendActionFactory(&finder).get());
 }

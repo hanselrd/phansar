@@ -1,5 +1,8 @@
 #include <phansar/client/graphics/image.hpp>
 
+#include <fstream>
+#include <vector>
+
 namespace phansar::client::graphics {
 struct image::impl {
     bimg::ImageContainer * container;
