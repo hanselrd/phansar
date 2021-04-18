@@ -3,6 +3,8 @@
 
 #include <filesystem>
 #include <fstream>
+#include <shared_mutex>
+#include <unordered_map>
 
 namespace phansar::common {
 struct log::impl {
