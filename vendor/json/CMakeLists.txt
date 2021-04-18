@@ -5,13 +5,7 @@ CPMAddPackage(
     OPTIONS "JSON_BuildTests OFF" "JSON_ImplicitConversions OFF"
     EXCLUDE_FROM_ALL YES)
 
-# cmake-format: off
-set(system_libs
-    nlohmann_json)
-# cmake-format: on
-
-ph_add_generic_vendor_interface_library(
-    ph_vendor_json
-    ""
-    ""
-    "${system_libs}")
+ph_add_library(
+    NAME ph_vendor_json
+    TYPE INTERFACE
+    LINK_LIBRARIES INTERFACE nlohmann_json)

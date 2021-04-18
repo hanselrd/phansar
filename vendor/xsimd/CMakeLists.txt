@@ -4,13 +4,7 @@ CPMAddPackage(
     GIT_TAG 423ed6747e5e0f30842eb98adf10bd110d01cadf
     EXCLUDE_FROM_ALL YES)
 
-# cmake-format: off
-set(system_libs
-    xsimd)
-# cmake-format: on
-
-ph_add_generic_vendor_interface_library(
-    ph_vendor_xsimd
-    ""
-    ""
-    "${system_libs}")
+ph_add_library(
+    NAME ph_vendor_xsimd
+    TYPE INTERFACE
+    LINK_LIBRARIES INTERFACE xsimd)

@@ -1,4 +1,0 @@
-#ifndef PHANSAR_CLIENT_PCH_HPP
-#define PHANSAR_CLIENT_PCH_HPP
-
-#endif

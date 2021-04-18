@@ -15,13 +15,7 @@ if(rttr_ADDED)
     set_target_properties(rttr_core_lib PROPERTIES COMPILE_OPTIONS "")
 endif()
 
-# cmake-format: off
-set(system_libs
-    rttr_core_lib)
-# cmake-format: on
-
-ph_add_generic_vendor_interface_library(
-    ph_vendor_rttr
-    ""
-    ""
-    "${system_libs}")
+ph_add_library(
+    NAME ph_vendor_rttr
+    TYPE INTERFACE
+    LINK_LIBRARIES INTERFACE rttr_core_lib)

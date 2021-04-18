@@ -3,6 +3,8 @@
 
 #include <phansar/common/utility/pimpl.hpp>
 
+#include <chrono>
+
 namespace phansar::common {
 class timer {
 public:

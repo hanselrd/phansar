@@ -4,51 +4,48 @@ find_package(Threads REQUIRED)
 
 capnp_generate_cpp(capnp_sources capnp_headers phansar.capnp)
 
-add_clang_executable(codegen codegen.cpp PARTIAL_SOURCES_INTENDED)
-target_link_libraries(codegen PRIVATE ph_vendor_fmt ph_vendor_llvm)
+# TODO: move to src/codegen folder
+ph_add_executable(
+    NAME ph_codegen
+    SOURCES PRIVATE codegen.cpp
+    COMPILE_FEATURES PRIVATE cxx_std_20 c_std_99
+    LINK_LIBRARIES PRIVATE ph_vendor_fmt ph_vendor_llvm)
 
-# cmake-format: off
-set(sources
-    ${CMAKE_BINARY_DIR}/version.cpp
-    ${capnp_sources}
-    application.cpp
-    bindings.cpp
-    command_line.cpp
-    histogram.cpp
-    log.cpp
-    memory.cpp
-    networking/administrator_session.cpp
-    networking/chat.cpp
-    networking/moderator_session.cpp
-    networking/root_session.cpp
-    networking/service.cpp
-    networking/session.cpp
-    python.cpp
-    timer.cpp)
-
-set(pch
-    <phansar/common/pch.hpp>)
-
-set(system_libs
-    ph_vendor_capnproto
-    ph_vendor_cppcodec
-    ph_vendor_cxxopts
-    ph_vendor_entt
-    ph_vendor_fmt
-    ph_vendor_hedley
-    ph_vendor_json
-    ph_vendor_kangaru
-    ph_vendor_pybind11
-    ph_vendor_rangev3
-    ph_vendor_rttr
-    ph_vendor_taskflow
-    ph_vendor_xsimd
-    Threads::Threads)
-# cmake-format: on
-
-ph_add_generic_library(
-    ph_common
-    "${sources}"
-    "${pch}"
-    ""
-    "${system_libs}")
+ph_add_library(
+    NAME ph_common
+    TYPE STATIC
+    INCLUDE_DIRECTORIES PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}
+    COMPILE_FEATURES PRIVATE cxx_std_20 c_std_99
+    SOURCES PRIVATE
+            ${CMAKE_BINARY_DIR}/version.cpp
+            ${capnp_sources}
+            application.cpp
+            bindings.cpp
+            command_line.cpp
+            histogram.cpp
+            log.cpp
+            memory.cpp
+            networking/administrator_session.cpp
+            networking/chat.cpp
+            networking/moderator_session.cpp
+            networking/root_session.cpp
+            networking/service.cpp
+            networking/session.cpp
+            python.cpp
+            timer.cpp
+    LINK_LIBRARIES
+        PUBLIC
+        ph_vendor_capnproto
+        ph_vendor_cppcodec
+        ph_vendor_cxxopts
+        ph_vendor_entt
+        ph_vendor_fmt
+        ph_vendor_hedley
+        ph_vendor_json
+        ph_vendor_kangaru
+        ph_vendor_pybind11
+        ph_vendor_rangev3
+        ph_vendor_rttr
+        ph_vendor_taskflow
+        ph_vendor_xsimd
+        Threads::Threads)

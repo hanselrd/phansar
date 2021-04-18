@@ -1,23 +1,7 @@
-# cmake-format: off
-set(sources
-    application.cpp
-    main.cpp)
-
-set(pch
-    <phansar/server/pch.hpp>)
-
-set(libs
-    ph_common)
-
-set(system_libs
-    ph_vendor_libpqxx)
-# cmake-format: on
-
-ph_add_generic_executable(
-    ph_server
-    "${sources}"
-    "${pch}"
-    "${libs}"
-    "${system_libs}")
-
-install(TARGETS ph_server RUNTIME DESTINATION bin)
+ph_add_executable(
+    NAME ph_server
+    INCLUDE_DIRECTORIES PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}
+    COMPILE_FEATURES PRIVATE cxx_std_20 c_std_99
+    SOURCES PRIVATE application.cpp main.cpp
+    LINK_LIBRARIES PRIVATE ph_common ph_vendor_libpqxx
+    INSTALL RUNTIME DESTINATION bin)

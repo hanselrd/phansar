@@ -1,6 +1,14 @@
 #ifndef PHANSAR_COMMON_UTILITY_PIMPL_HPP
 #define PHANSAR_COMMON_UTILITY_PIMPL_HPP
 
+#include <memory>
+
+#ifdef __has_include
+#    if __has_include(<experimental/propagate_const>)
+#        include <experimental/propagate_const>
+#    endif
+#endif
+
 namespace phansar::common::utility {
 template <class T>
 class pimpl {

@@ -5,6 +5,8 @@
 #include <phansar/common/utility/singleton.hpp>
 #include <phansar/vendor/fmt.hpp>
 
+#include <thread>
+
 namespace phansar::common {
 class log : public utility::singleton<log> { // TODO: replace with spdlog
 public:

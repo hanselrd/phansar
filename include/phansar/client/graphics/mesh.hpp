@@ -5,6 +5,8 @@
 #include <phansar/common/utility/noncopyable.hpp>
 #include <phansar/common/utility/pimpl.hpp>
 
+#include <vector>
+
 namespace phansar::client::graphics {
 class mesh : public common::utility::noncopyable {
 public:

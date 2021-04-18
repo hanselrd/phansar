@@ -9,13 +9,7 @@ if(Catch2_ADDED)
     include(${Catch2_SOURCE_DIR}/contrib/Catch.cmake)
 endif()
 
-# cmake-format: off
-set(system_libs
-    Catch2)
-# cmake-format: on
-
-ph_add_generic_vendor_interface_library(
-    ph_vendor_catch2
-    ""
-    ""
-    "${system_libs}")
+ph_add_library(
+    NAME ph_vendor_catch2
+    TYPE INTERFACE
+    LINK_LIBRARIES INTERFACE Catch2)
