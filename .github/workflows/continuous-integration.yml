@@ -12,6 +12,7 @@ env:
     CCACHE_COMPRESS: true
     CCACHE_COMPRESSLEVEL: 6
     CCACHE_MAXSIZE: 1G
+    CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
 
 jobs:
     build:
@@ -145,9 +146,11 @@ jobs:
               fi
 
         - uses: actions/cache@v2
-          id: ccache
           with:
-            path: ${{ github.workspace }}/.ccache
+            path: |
+                ${{ env.CCACHE_DIR }}
+                ${{ env.CPM_SOURCE_CACHE }}
+                ${{ github.workspace }}/build
             key: ${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
             restore-keys: |
                 ${{ matrix.os }}-${{ matrix.compiler }}-
@@ -167,7 +170,7 @@ jobs:
 
               if [ "${{ runner.os }}" == "macOS" ]; then
                   cmake --build build --target check-format-clang-format
-                  cmake --build build --target check-format-clang-tidy
+                  # cmake --build build --target check-format-clang-tidy
               fi
 
         - name: Build and test Debug
