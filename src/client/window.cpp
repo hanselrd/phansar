@@ -2,6 +2,8 @@
 #define PH_VENDOR_GLFW_PRIVATE
 #include <phansar/vendor/glfw.hpp>
 
+#include <string>
+
 namespace phansar::client {
 struct window::impl {
     GLFWwindow * window;

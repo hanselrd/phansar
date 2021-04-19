@@ -7,6 +7,7 @@ function(__target_compile_options target)
             OR arg STREQUAL "PUBLIC"
             OR arg STREQUAL "PRIVATE"))
             string(MAKE_C_IDENTIFIER ${arg} identifier)
+            string(TOUPPER ${identifier} identifier)
             string(SHA1 hash ${arg})
             if(${arg} MATCHES "[-/][a-zA-Z0-9=:_-]+")
                 string(
@@ -15,8 +16,8 @@ function(__target_compile_options target)
                             "-W"
                             alt
                             ${CMAKE_MATCH_0})
-                check_cxx_compiler_flag(${alt} ${identifier}_${hash})
-                if(${identifier}_${hash})
+                check_cxx_compiler_flag(${alt} PHANSAR_HAS_${identifier}_${hash})
+                if(PHANSAR_HAS_${identifier}_${hash})
                     list(APPEND args "SHELL:${arg}")
                 endif()
             endif()
