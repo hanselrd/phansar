@@ -38,7 +38,10 @@ function(__target_link_libraries target)
         list(APPEND visited ${target})
         get_target_property(interface_link_libs ${target} INTERFACE_LINK_LIBRARIES)
         get_target_property(type ${target} TYPE)
-        if(type STREQUAL "INTERFACE_LIBRARY")
+        if(NOT
+           type
+           STREQUAL
+           "INTERFACE_LIBRARY")
             get_target_property(link_libs ${target} LINK_LIBRARIES)
         endif()
         foreach(link_lib IN LISTS interface_link_libs link_libs)
