@@ -7,4 +7,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_cppcodec
     TYPE INTERFACE
-    INCLUDE_DIRECTORIES INTERFACE ${cppcodec_SOURCE_DIR})
+    INCLUDE_DIRECTORIES SYSTEM INTERFACE ${cppcodec_SOURCE_DIR})
