@@ -8,7 +8,7 @@
 
 namespace phansar::common {
 struct log::impl {
-    level                                              level;
+    level                                              lvl;
     std::string                                        name;
     std::string                                        file_path;
     std::uintmax_t                                     file_size;
@@ -50,7 +50,7 @@ void log::vprint(level            _level,
                  int              _source_line,
                  std::string_view _format,
                  fmt::format_args _args) {
-    if (m_impl->level == level::off || m_impl->level > _level) {
+    if (m_impl->lvl == level::off || m_impl->lvl > _level) {
         return;
     }
 
