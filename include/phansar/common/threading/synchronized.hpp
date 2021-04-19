@@ -5,6 +5,7 @@
 #include <phansar/common/utility/nonsynchronizable.hpp>
 #include <phansar/common/utility/pimpl.hpp>
 
+#include <optional>
 #include <shared_mutex>
 
 namespace phansar::common::threading {

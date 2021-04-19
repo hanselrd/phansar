@@ -7,4 +7,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_entt
     TYPE INTERFACE
-    INCLUDE_DIRECTORIES INTERFACE ${entt_SOURCE_DIR}/single_include)
+    INCLUDE_DIRECTORIES SYSTEM INTERFACE ${entt_SOURCE_DIR}/single_include)

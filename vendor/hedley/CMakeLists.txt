@@ -7,4 +7,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_hedley
     TYPE INTERFACE
-    INCLUDE_DIRECTORIES INTERFACE ${hedley_SOURCE_DIR})
+    INCLUDE_DIRECTORIES SYSTEM INTERFACE ${hedley_SOURCE_DIR})

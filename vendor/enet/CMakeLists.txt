@@ -7,7 +7,7 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_enet
     TYPE INTERFACE
-    INCLUDE_DIRECTORIES INTERFACE ${enet_SOURCE_DIR}/include
+    INCLUDE_DIRECTORIES SYSTEM INTERFACE ${enet_SOURCE_DIR}/include
     LINK_LIBRARIES
         INTERFACE
         enet

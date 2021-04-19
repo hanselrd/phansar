@@ -6,13 +6,18 @@ CPMAddPackage(
 set(LLVM_ENABLE_PROJECTS
     "clang;clang-tools-extra;libcxx"
     CACHE STRING "" FORCE)
+set(LLVM_TARGETS_TO_BUILD
+    "X86"
+    CACHE STRING "" FORCE)
 CPMAddPackage(
     NAME llvm-project-llvm
     SOURCE_DIR ${llvm-project_SOURCE_DIR}/llvm
     OPTIONS "CMAKE_POLICY_DEFAULT_CMP0116 OLD"
             "CMAKE_BUILD_TYPE Release"
-            "LLVM_PARALLEL_LINK_JOBS 1"
+            "LLVM_BUILD_TOOLS OFF"
+            "LLVM_ENABLE_ASSERTIONS OFF"
             "LLVM_ENABLE_RTTI ON"
+            "LLVM_PARALLEL_LINK_JOBS 1"
     EXCLUDE_FROM_ALL YES)
 
 if(llvm-project-llvm_ADDED)
@@ -23,6 +28,7 @@ ph_add_library(
     NAME ph_vendor_llvm
     TYPE INTERFACE
     INCLUDE_DIRECTORIES
+        SYSTEM
         INTERFACE
         ${llvm-project_SOURCE_DIR}/llvm/include
         ${llvm-project-llvm_BINARY_DIR}/include
