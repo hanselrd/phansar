@@ -6,6 +6,8 @@
 #include <phansar/common/utility/pimpl.hpp>
 #include <phansar/vendor/bgfx.hpp>
 
+#include <string_view>
+
 namespace phansar::client::graphics {
 class image : public common::utility::noncopyable, public common::utility::nonmovable {
 public:
