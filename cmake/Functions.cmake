@@ -1,3 +1,33 @@
+function(__target_compile_options target)
+    set(args)
+    foreach(arg IN LISTS ARGN)
+        if(NOT
+           (arg STREQUAL "BEFORE"
+            OR arg STREQUAL "INTERFACE"
+            OR arg STREQUAL "PUBLIC"
+            OR arg STREQUAL "PRIVATE"))
+            string(MAKE_C_IDENTIFIER ${arg} identifier)
+            string(SHA1 hash ${arg})
+            if(${arg} MATCHES "[-/][a-zA-Z0-9=:_-]+")
+                string(
+                    REGEX
+                    REPLACE "^-Wno-"
+                            "-W"
+                            alt
+                            ${CMAKE_MATCH_0})
+                check_cxx_compiler_flag(${alt} ${identifier}_${hash})
+                if(${identifier}_${hash})
+                    list(APPEND args "SHELL:${arg}")
+                endif()
+            endif()
+        else()
+            list(APPEND args ${arg})
+        endif()
+    endforeach()
+
+    target_compile_options(${target} ${args})
+endfunction()
+
 function(ph_add_library)
     cmake_parse_arguments(
         ARG
@@ -25,7 +55,7 @@ function(ph_add_library)
     endif()
 
     if(ARG_COMPILE_OPTIONS)
-        target_compile_options(${ARG_NAME} ${ARG_COMPILE_OPTIONS})
+        __target_compile_options(${ARG_NAME} ${ARG_COMPILE_OPTIONS})
     endif()
 
     if(ARG_PRECOMPILE_HEADERS)
@@ -84,7 +114,7 @@ function(ph_add_executable)
     endif()
 
     if(ARG_COMPILE_OPTIONS)
-        target_compile_options(${ARG_NAME} ${ARG_COMPILE_OPTIONS})
+        __target_compile_options(${ARG_NAME} ${ARG_COMPILE_OPTIONS})
     endif()
 
     if(ARG_PRECOMPILE_HEADERS)
@@ -382,6 +412,7 @@ endfunction()
 #     append_compile_option(PHANSAR_HAS_FSTACK_PROTECTOR_STRONG "-fstack-protector-strong")
 #     append_compile_option(PHANSAR_HAS_FSTACK_CLASH_PROTECTION "-fstack-clash-protection")
 #     append_compile_option(PHANSAR_HAS_FVISIBILITY_HIDDEN "-fvisibility=hidden")
+#     append_compile_option(PHANSAR_HAS_FVISIBILITY_INLINES_HIDDEN "-fvisibility-inlines-hidden")
 #     # append_compile_option(PHANSAR_HAS_FNO_EXCEPTIONS "-fno-exceptions")
 #     append_compile_option(PHANSAR_HAS_PIPE "-pipe")
 #     append_compile_option(PHANSAR_HAS_WALL_MSVC "/Wall")

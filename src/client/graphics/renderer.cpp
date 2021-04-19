@@ -3,7 +3,7 @@
 
 namespace phansar::client::graphics {
 struct renderer::impl {
-    camera * camera;
+    camera * cam;
 };
 
 renderer::renderer(window & _window) : m_impl{nullptr} {
@@ -66,9 +66,9 @@ void renderer::touch() {
 }
 
 void renderer::begin(camera & _camera) {
-    PH_ASSERT(! m_impl->camera);
+    PH_ASSERT(! m_impl->cam);
 
-    m_impl->camera = &_camera;
+    m_impl->cam = &_camera;
 }
 
 void renderer::submit(const mesh &      _mesh,
@@ -78,12 +78,12 @@ void renderer::submit(const mesh &      _mesh,
                       std::uint32_t     _stencil,
                       std::uint64_t     _state,
                       std::uint8_t      _flags) {
-    PH_ASSERT(m_impl->camera);
+    PH_ASSERT(m_impl->cam);
     PH_ASSERT(bgfx::isValid(_mesh.vbo_handle()));
 
     bgfx::setViewTransform(0,
-                           glm::value_ptr(m_impl->camera->view()),
-                           glm::value_ptr(m_impl->camera->projection()));
+                           glm::value_ptr(m_impl->cam->view()),
+                           glm::value_ptr(m_impl->cam->projection()));
     bgfx::setTransform(glm::value_ptr(_model));
 
     bgfx::setVertexBuffer(0, _mesh.vbo_handle());
@@ -94,18 +94,18 @@ void renderer::submit(const mesh &      _mesh,
     bgfx::setStencil(_stencil);
     bgfx::setState(_state);
 
-    _shader.set("u_normal", glm::inverseTranspose(glm::mat3{m_impl->camera->view() * _model}));
+    _shader.set("u_normal", glm::inverseTranspose(glm::mat3{m_impl->cam->view() * _model}));
     bgfx::submit(0, _shader.handle(), _depth, _flags);
 }
 
 void renderer::end() {
-    PH_ASSERT(m_impl->camera);
+    PH_ASSERT(m_impl->cam);
 
-    m_impl->camera = nullptr;
+    m_impl->cam = nullptr;
 }
 
 void renderer::flush() {
-    PH_ASSERT(! m_impl->camera);
+    PH_ASSERT(! m_impl->cam);
 
     bgfx::frame();
 }
