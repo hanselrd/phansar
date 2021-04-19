@@ -4,6 +4,8 @@
 #include <phansar.capnp.h>
 #include <phansar/common/utility/pimpl.hpp>
 
+#include <vector>
+
 namespace phansar::common::networking {
 template <class T>
 class stream : public schema::Service::Stream<T>::Server {
