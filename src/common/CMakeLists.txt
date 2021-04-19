@@ -49,7 +49,6 @@ ph_add_library(
         -Werror=format-security
         -Wundef
         -Wno-defaulted-function-deleted
-        # -fpch-preprocess
         -fno-common
         -Wconversion
         -Wformat-overflow=2
@@ -67,7 +66,6 @@ ph_add_library(
         -fstack-clash-protection
         -fvisibility=hidden
         -fvisibility-inlines-hidden
-        # -fno-exceptions
         -pipe
         /Wall
         /Zc:preprocessor
