@@ -5,6 +5,8 @@
 #include <phansar/common/utility/nonmovable.hpp>
 #include <phansar/common/utility/pimpl.hpp>
 
+#include <string_view>
+
 namespace phansar::client {
 class window : public common::utility::noncopyable, public common::utility::nonmovable {
 public:
