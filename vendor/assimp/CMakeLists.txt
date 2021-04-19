@@ -20,4 +20,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_assimp
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE assimp)
+    LINK_LIBRARIES SYSTEM INTERFACE assimp)

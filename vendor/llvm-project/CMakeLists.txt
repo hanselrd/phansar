@@ -39,6 +39,7 @@ ph_add_library(
         STDINC0="${llvm-project-llvm_BINARY_DIR}/include/c++/v1"
         STDINC1="${llvm-project-llvm_BINARY_DIR}/lib/clang/${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}/include"
     LINK_LIBRARIES
+        SYSTEM
         INTERFACE
         clangASTMatchers
         clangBasic

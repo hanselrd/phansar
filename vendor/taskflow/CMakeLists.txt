@@ -8,4 +8,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_taskflow
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE Taskflow)
+    LINK_LIBRARIES SYSTEM INTERFACE Taskflow)

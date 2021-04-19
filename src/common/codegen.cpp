@@ -124,6 +124,7 @@ auto main(int _argc, const char * _argv[]) -> int {
 
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-I" STDINC0));
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-I" STDINC1));
+    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-Wno-unknown-warning-option"));
 
     auto printer = Printer{};
     auto finder  = MatchFinder{};

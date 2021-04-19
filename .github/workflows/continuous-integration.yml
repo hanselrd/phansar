@@ -23,7 +23,7 @@ jobs:
             fail-fast: false
             matrix:
                 name: [
-                    # windows-latest-cl,
+                    windows-latest-cl,
                     # windows-latest-clang-cl,
                     # windows-latest-clang,
                     # windows-latest-gcc,
@@ -34,9 +34,9 @@ jobs:
                 ]
 
                 include:
-                    # - name: windows-latest-cl
-                    #   os: windows-latest
-                    #   compiler: cl
+                    - name: windows-latest-cl
+                      os: windows-latest
+                      compiler: cl
 
                     # - name: windows-latest-clang-cl
                     #   os: windows-latest

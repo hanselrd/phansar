@@ -8,4 +8,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_libpqxx
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE pqxx)
+    LINK_LIBRARIES SYSTEM INTERFACE pqxx)

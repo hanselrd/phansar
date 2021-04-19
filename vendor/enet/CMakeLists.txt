@@ -9,6 +9,7 @@ ph_add_library(
     TYPE INTERFACE
     INCLUDE_DIRECTORIES SYSTEM INTERFACE ${enet_SOURCE_DIR}/include
     LINK_LIBRARIES
+        SYSTEM
         INTERFACE
         enet
         $<$<BOOL:${WIN32}>:ws2_32>

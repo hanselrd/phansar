@@ -12,4 +12,4 @@ endif()
 ph_add_library(
     NAME ph_vendor_catch2
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE Catch2)
+    LINK_LIBRARIES SYSTEM INTERFACE Catch2)
