@@ -8,4 +8,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_glfw
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE glfw)
+    LINK_LIBRARIES SYSTEM INTERFACE glfw)

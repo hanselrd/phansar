@@ -7,4 +7,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_xsimd
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE xsimd)
+    LINK_LIBRARIES SYSTEM INTERFACE xsimd)

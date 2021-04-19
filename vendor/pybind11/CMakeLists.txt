@@ -7,4 +7,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_pybind11
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE pybind11::embed)
+    LINK_LIBRARIES SYSTEM INTERFACE pybind11::embed)

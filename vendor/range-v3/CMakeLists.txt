@@ -7,4 +7,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_rangev3
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE range-v3)
+    LINK_LIBRARIES SYSTEM INTERFACE range-v3)

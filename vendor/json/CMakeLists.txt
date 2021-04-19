@@ -8,4 +8,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_json
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE nlohmann_json)
+    LINK_LIBRARIES SYSTEM INTERFACE nlohmann_json)

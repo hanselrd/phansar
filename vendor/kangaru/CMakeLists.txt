@@ -8,4 +8,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_kangaru
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE kangaru)
+    LINK_LIBRARIES SYSTEM INTERFACE kangaru)

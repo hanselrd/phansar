@@ -7,4 +7,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_glm
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE glm)
+    LINK_LIBRARIES SYSTEM INTERFACE glm)

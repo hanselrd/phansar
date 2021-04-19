@@ -1,5 +1,6 @@
 function(__target_compile_options target)
     set(args)
+
     foreach(arg IN LISTS ARGN)
         if(NOT
            (arg STREQUAL "BEFORE"
@@ -9,6 +10,7 @@ function(__target_compile_options target)
             string(MAKE_C_IDENTIFIER ${arg} identifier)
             string(TOUPPER ${identifier} identifier)
             string(SHA1 hash ${arg})
+
             if(${arg} MATCHES "[-/][a-zA-Z0-9=:_-]+")
                 string(
                     REGEX
@@ -17,6 +19,7 @@ function(__target_compile_options target)
                             alt
                             ${CMAKE_MATCH_0})
                 check_cxx_compiler_flag(${alt} PHANSAR_HAS_${identifier}_${hash})
+
                 if(PHANSAR_HAS_${identifier}_${hash})
                     list(APPEND args "SHELL:${arg}")
                 endif()
@@ -27,6 +30,87 @@ function(__target_compile_options target)
     endforeach()
 
     target_compile_options(${target} ${args})
+endfunction()
+
+function(__target_link_libraries target)
+    function(__get_link_libraries target outputs)
+        set(_outputs)
+        list(APPEND visited ${target})
+        get_target_property(interface_link_libs ${target} INTERFACE_LINK_LIBRARIES)
+        get_target_property(link_libs ${target} LINK_LIBRARIES)
+        foreach(link_lib IN LISTS interface_link_libs link_libs)
+            if(TARGET ${link_lib})
+                list(
+                    FIND
+                    visited
+                    ${link_lib}
+                    result)
+                if(result EQUAL -1)
+                    __get_link_libraries(${link_lib} __outputs)
+                    list(
+                        APPEND
+                        _outputs
+                        ${link_lib}
+                        ${__outputs})
+                endif()
+            endif()
+        endforeach()
+
+        set(visited
+            ${visited}
+            PARENT_SCOPE)
+        set(${outputs}
+            ${_outputs}
+            PARENT_SCOPE)
+    endfunction()
+
+    set(args)
+    list(
+        GET
+        ARGN
+        0
+        arg0)
+
+    if(arg0 STREQUAL "SYSTEM")
+        set(system ON)
+    else()
+        set(system OFF)
+    endif()
+
+    foreach(arg IN LISTS ARGN)
+        if(arg STREQUAL "SYSTEM")
+            continue()
+        endif()
+
+        if(NOT
+           (arg STREQUAL "INTERFACE"
+            OR arg STREQUAL "PUBLIC"
+            OR arg STREQUAL "PRIVATE"))
+            if(TARGET ${arg})
+                if(system)
+                    __get_link_libraries(${arg} outputs)
+                    foreach(output IN LISTS outputs)
+                        get_target_property(interface_include_dirs ${output}
+                                            INTERFACE_INCLUDE_DIRECTORIES)
+                        if(interface_include_dirs)
+                            target_include_directories(${target} SYSTEM
+                                                       INTERFACE ${interface_include_dirs})
+                        endif()
+                    endforeach()
+                    get_target_property(interface_include_dirs ${arg} INTERFACE_INCLUDE_DIRECTORIES)
+                    if(interface_include_dirs)
+                        target_include_directories(${target} SYSTEM
+                                                   INTERFACE ${interface_include_dirs})
+                    endif()
+                endif()
+            endif()
+            list(APPEND args ${arg})
+        else()
+            list(APPEND args ${arg})
+        endif()
+    endforeach()
+
+    target_link_libraries(${target} ${args})
 endfunction()
 
 function(ph_add_library)
@@ -68,7 +152,7 @@ function(ph_add_library)
     endif()
 
     if(ARG_LINK_LIBRARIES)
-        target_link_libraries(${ARG_NAME} ${ARG_LINK_LIBRARIES})
+        __target_link_libraries(${ARG_NAME} ${ARG_LINK_LIBRARIES})
     endif()
 
     if(ARG_LINK_OPTIONS)
@@ -127,7 +211,7 @@ function(ph_add_executable)
     endif()
 
     if(ARG_LINK_LIBRARIES)
-        target_link_libraries(${ARG_NAME} ${ARG_LINK_LIBRARIES})
+        __target_link_libraries(${ARG_NAME} ${ARG_LINK_LIBRARIES})
     endif()
 
     if(ARG_LINK_OPTIONS)

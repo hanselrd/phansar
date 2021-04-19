@@ -7,4 +7,4 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_bgfx
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE bgfx)
+    LINK_LIBRARIES SYSTEM INTERFACE bgfx)

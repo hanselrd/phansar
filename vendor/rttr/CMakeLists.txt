@@ -18,4 +18,4 @@ endif()
 ph_add_library(
     NAME ph_vendor_rttr
     TYPE INTERFACE
-    LINK_LIBRARIES INTERFACE rttr_core_lib)
+    LINK_LIBRARIES SYSTEM INTERFACE rttr_core_lib)
