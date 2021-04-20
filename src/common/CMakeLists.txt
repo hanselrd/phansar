@@ -66,9 +66,10 @@ ph_add_library(
         -fstack-clash-protection
         -fvisibility=hidden
         -fvisibility-inlines-hidden
+        -fdiagnostics-color
         -pipe
         /Wall
-        /Zc:preprocessor
+        # /Zc:preprocessor
     SOURCES PRIVATE
             ${CMAKE_BINARY_DIR}/version.cpp
             # ${capnp_sources}

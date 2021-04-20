@@ -119,6 +119,10 @@ function(__target_link_libraries target)
     target_link_libraries(${target} ${args})
 endfunction()
 
+function(__target_sanitizers target)
+
+endfunction()
+
 function(ph_add_library)
     cmake_parse_arguments(
         ARG
