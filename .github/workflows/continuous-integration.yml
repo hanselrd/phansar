@@ -83,7 +83,13 @@ jobs:
           run: |
               python -m pip install --upgrade pip
               pip install pipenv cmake cmakelang black
-              wget -O ccache.tar.xz https://github.com/cristianadam/ccache/releases/download/v$CCACHE_VERSION/${{ runner.os }}.tar.xz
+
+              if [ "${{ runner.os }}" == "Windows" ]; then
+                  /C/msys64/usr/bin/wget -O ccache.tar.xz https://github.com/cristianadam/ccache/releases/download/v$CCACHE_VERSION/${{ runner.os }}.tar.xz
+              else
+                  wget -O ccache.tar.xz https://github.com/cristianadam/ccache/releases/download/v$CCACHE_VERSION/${{ runner.os }}.tar.xz
+              fi
+
               cmake -E tar xvf ccache.tar.xz
               echo "${{ github.workspace }}" >> $GITHUB_PATH
 
