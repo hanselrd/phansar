@@ -167,6 +167,7 @@ jobs:
         - name: Check formatting
           shell: bash
           run: |
+              ccache -s
               cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_CMAKE_FORMAT=ON -DENABLE_BLACK=ON -DENABLE_CLANG_FORMAT=ON -DENABLE_CLANG_TIDY=ON
               cmake -E copy build/compile_commands.json .
 
