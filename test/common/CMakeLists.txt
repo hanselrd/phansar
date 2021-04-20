@@ -22,7 +22,7 @@ ph_add_executable(
         $<$<CONFIG:Debug>:-D_GLIBCXX_ASSERTIONS>
         $<$<CONFIG:Debug>:/Od>
         $<$<CONFIG:Debug>:/Oy>
-        $<$<CONFIG:Debug>:/Zi>
+        $<$<CONFIG:Debug>:/Z7>
         $<$<CONFIG:Debug>:/FS>
         $<$<NOT:$<CONFIG:Debug>>:-D_FORTIFY_SOURCE=2>
         -Wall
@@ -66,4 +66,8 @@ ph_add_executable(
         ph_common
         ph_vendor_catch2
         ph_vendor_trompeloeil
+    SANITIZERS $<$<BOOL:${ENABLE_ASAN}>:address>
+               $<$<BOOL:${ENABLE_MSAN}>:memory>
+               $<$<BOOL:${ENABLE_TSAN}>:thread>
+               $<$<BOOL:${ENABLE_UBSAN}>:undefined>
     DISCOVER_TESTS WORKING_DIRECTORY ${CMAKE_BINARY_DIR})

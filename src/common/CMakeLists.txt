@@ -36,7 +36,7 @@ ph_add_library(
         $<$<CONFIG:Debug>:-D_GLIBCXX_ASSERTIONS>
         $<$<CONFIG:Debug>:/Od>
         $<$<CONFIG:Debug>:/Oy>
-        $<$<CONFIG:Debug>:/Zi>
+        $<$<CONFIG:Debug>:/Z7>
         $<$<CONFIG:Debug>:/FS>
         $<$<NOT:$<CONFIG:Debug>>:-D_FORTIFY_SOURCE=2>
         -Wall
@@ -99,4 +99,8 @@ ph_add_library(
         ph_vendor_rttr
         ph_vendor_taskflow
         ph_vendor_xsimd
-        Threads::Threads)
+        Threads::Threads
+    SANITIZERS $<$<BOOL:${ENABLE_ASAN}>:address>
+               $<$<BOOL:${ENABLE_MSAN}>:memory>
+               $<$<BOOL:${ENABLE_TSAN}>:thread>
+               $<$<BOOL:${ENABLE_UBSAN}>:undefined>)
