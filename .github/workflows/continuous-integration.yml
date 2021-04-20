@@ -150,8 +150,9 @@ jobs:
           shell: bash
           run: |
               wget -O ccache.tar.xz https://github.com/cristianadam/ccache/releases/download/v$CCACHE_VERSION/${{ runner.os }}.tar.xz
-              cmake -E tar xvf ccache.tar.xz
-              echo "${{ github.workspace }}" >> $GITHUB_PATH
+              cmake -E make_directory bin
+              tar -xf ccache.tar.xz -C bin
+              echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
 
         - uses: actions/cache@v2
           with:
