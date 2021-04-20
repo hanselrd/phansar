@@ -15,7 +15,7 @@
 #include <phansar/vendor/pybind11.hpp>
 
 auto main(int _argc, char * _argv[]) -> int {
-    auto app = phansar::client::application{_argc, _argv};
+    /* auto app = phansar::client::application{_argc, _argv}; */
     /* app.run(); */
 
     auto guard = py::scoped_interpreter{};

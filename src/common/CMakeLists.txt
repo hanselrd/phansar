@@ -71,19 +71,16 @@ ph_add_library(
         /Zc:preprocessor
     SOURCES PRIVATE
             ${CMAKE_BINARY_DIR}/version.cpp
-            ${capnp_sources}
+            # ${capnp_sources}
             application.cpp
             bindings.cpp
             command_line.cpp
             histogram.cpp
             log.cpp
             memory.cpp
-            networking/administrator_session.cpp
-            networking/chat.cpp
-            networking/moderator_session.cpp
-            networking/root_session.cpp
-            networking/service.cpp
-            networking/session.cpp
+            # networking/administrator_session.cpp networking/chat.cpp
+            # networking/moderator_session.cpp networking/root_session.cpp networking/service.cpp
+            # networking/session.cpp
             python.cpp
             timer.cpp
     LINK_LIBRARIES

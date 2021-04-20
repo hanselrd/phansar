@@ -56,7 +56,7 @@ ph_add_executable(
         /Wall
         /Zc:preprocessor
     SOURCES PRIVATE
-            application.cpp
+            # application.cpp
             graphics/camera.cpp
             graphics/image.cpp
             graphics/mesh.cpp
