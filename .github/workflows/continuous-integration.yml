@@ -78,25 +78,18 @@ jobs:
         - if: runner.os == 'Windows'
           uses: ilammy/msvc-dev-cmd@v1
 
-        - uses: wei/wget@v1.1.1
-          with:
-            args: -O ccache.tar.xz https://github.com/cristianadam/ccache/releases/download/v$CCACHE_VERSION/${{ runner.os }}.tar.xz
-
         - name: Install
           shell: bash
           run: |
               python -m pip install --upgrade pip
               pip install pipenv cmake cmakelang black
 
-              cmake -E tar xvf ccache.tar.xz
-              echo "${{ github.workspace }}" >> $GITHUB_PATH
-
         - name: Install (Windows)
           if: runner.os == 'Windows'
           shell: powershell
           run: |
               Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-              scoop install ninja llvm postgresql --global
+              scoop install wget ninja llvm postgresql --global
 
               if ("${{ matrix.compiler }}" -eq "gcc") {
                   scoop install gcc --global
@@ -152,6 +145,13 @@ jobs:
                   echo "CC=clang" >> $GITHUB_ENV
                   echo "CXX=clang++" >> $GITHUB_ENV
               fi
+
+        - name: Configure
+          shell: bash
+          run: |
+              wget -O ccache.tar.xz https://github.com/cristianadam/ccache/releases/download/v$CCACHE_VERSION/${{ runner.os }}.tar.xz
+              cmake -E tar xvf ccache.tar.xz
+              echo "${{ github.workspace }}" >> $GITHUB_PATH
 
         - uses: actions/cache@v2
           with:
