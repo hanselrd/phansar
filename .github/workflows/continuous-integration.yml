@@ -183,45 +183,37 @@ jobs:
                   # cmake --build build --target check-format-clang-tidy
               fi
 
-        - name: Build and test (Test)
+        - name: Build and test Debug
           shell: bash
           run: |
               cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
-              cmake --build build --target test_ph_common
+              cmake --build build
               cd build
               ctest --output-on-failure --timeout 30 -E "pkg-config"
 
-        # - name: Build and test Debug
-        #   shell: bash
-        #   run: |
-        #       cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
-        #       cmake --build build
-        #       cd build
-        #       ctest --output-on-failure --timeout 30 -E "pkg-config"
+        - name: Build and test Release
+          shell: bash
+          run: |
+              cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+              cmake --build build
+              cd build
+              ctest --output-on-failure --timeout 30 -E "pkg-config"
 
-        # - name: Build and test Release
-        #   shell: bash
-        #   run: |
-        #       cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-        #       cmake --build build
-        #       cd build
-        #       ctest --output-on-failure --timeout 30 -E "pkg-config"
+        - name: Build and test RelWithDebInfo
+          shell: bash
+          run: |
+              cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo
+              cmake --build build
+              cd build
+              ctest --output-on-failure --timeout 30 -E "pkg-config"
 
-        # - name: Build and test RelWithDebInfo
-        #   shell: bash
-        #   run: |
-        #       cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo
-        #       cmake --build build
-        #       cd build
-        #       ctest --output-on-failure --timeout 30 -E "pkg-config"
-
-        # - name: Build and test MinSizeRel
-        #   shell: bash
-        #   run: |
-        #       cmake -S . -B build -DCMAKE_BUILD_TYPE=MinSizeRel
-        #       cmake --build build
-        #       cd build
-        #       ctest --output-on-failure --timeout 30 -E "pkg-config"
+        - name: Build and test MinSizeRel
+          shell: bash
+          run: |
+              cmake -S . -B build -DCMAKE_BUILD_TYPE=MinSizeRel
+              cmake --build build
+              cd build
+              ctest --output-on-failure --timeout 30 -E "pkg-config"
 
         - name: Summary
           shell: bash
