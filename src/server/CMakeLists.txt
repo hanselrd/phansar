@@ -52,9 +52,10 @@ ph_add_executable(
         -fstack-clash-protection
         -fvisibility=hidden
         -fvisibility-inlines-hidden
+        -fdiagnostics-color
         -pipe
         /Wall
-        /Zc:preprocessor
+        # /Zc:preprocessor
     SOURCES PRIVATE
             # application.cpp
             main.cpp

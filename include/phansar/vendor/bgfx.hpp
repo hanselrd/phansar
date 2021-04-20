@@ -7,12 +7,12 @@
 #    pragma warning(push, 0)
 #endif
 
-#include <bx/bx.h>
 #include <bgfx/bgfx.h>
 #include <bgfx/platform.h>
 #include <bimg/bimg.h>
 #include <bimg/decode.h>
 #include <bx/allocator.h>
+#include <bx/bx.h>
 #include <bx/math.h>
 #include <bx/process.h>
 
