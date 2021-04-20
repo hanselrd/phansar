@@ -22,7 +22,7 @@ ph_add_executable(
         $<$<CONFIG:Debug>:-D_GLIBCXX_ASSERTIONS>
         $<$<CONFIG:Debug>:/Od>
         $<$<CONFIG:Debug>:/Oy>
-        $<$<CONFIG:Debug>:/Zi>
+        $<$<CONFIG:Debug>:/Z7>
         $<$<CONFIG:Debug>:/FS>
         $<$<NOT:$<CONFIG:Debug>>:-D_FORTIFY_SOURCE=2>
         -Wall
@@ -60,4 +60,8 @@ ph_add_executable(
             # application.cpp
             main.cpp
     LINK_LIBRARIES PRIVATE ph_common ph_vendor_libpqxx
+    SANITIZERS $<$<BOOL:${ENABLE_ASAN}>:address>
+               $<$<BOOL:${ENABLE_MSAN}>:memory>
+               $<$<BOOL:${ENABLE_TSAN}>:thread>
+               $<$<BOOL:${ENABLE_UBSAN}>:undefined>
     INSTALL RUNTIME DESTINATION bin)
