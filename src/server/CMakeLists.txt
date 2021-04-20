@@ -55,6 +55,8 @@ ph_add_executable(
         -pipe
         /Wall
         /Zc:preprocessor
-    SOURCES PRIVATE application.cpp main.cpp
+    SOURCES PRIVATE
+            # application.cpp
+            main.cpp
     LINK_LIBRARIES PRIVATE ph_common ph_vendor_libpqxx
     INSTALL RUNTIME DESTINATION bin)
