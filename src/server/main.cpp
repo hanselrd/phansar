@@ -21,8 +21,8 @@ PYBIND11_EMBEDDED_MODULE(phansar, m) {
 #endif
 
 auto main(int _argc, char * _argv[]) -> int {
-    /* auto app = phansar::server::application{_argc, _argv}; */
-    /* app.run(); */
+    auto app = phansar::server::application{_argc, _argv};
+    app.run();
 
 #if 0
     if (phansar::common::command_line::instance() != nullptr) {

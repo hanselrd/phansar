@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME llvm-project
     GITHUB_REPOSITORY llvm/llvm-project # main
-    GIT_TAG 519cf6e80781c008c59e3f563ce6f9932f848df5
+    GIT_TAG 8f6185c71378467e8c27e8996ff2dbaed3e41dbc
     DOWNLOAD_ONLY YES)
 set(LLVM_ENABLE_PROJECTS
     "clang;clang-tools-extra;libcxx"
@@ -38,6 +38,7 @@ ph_add_library(
         INTERFACE
         STDINC0="${llvm-project-llvm_BINARY_DIR}/include/c++/v1"
         STDINC1="${llvm-project-llvm_BINARY_DIR}/lib/clang/${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}/include"
+        STDLIB0="${llvm-project-llvm_BINARY_DIR}/lib"
     LINK_LIBRARIES
         SYSTEM
         INTERFACE

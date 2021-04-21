@@ -12,7 +12,7 @@ env:
     CCACHE_DIR: ${{ github.workspace }}/.ccache
     CCACHE_COMPRESS: true
     CCACHE_COMPRESSLEVEL: 6
-    CCACHE_MAXSIZE: 1G
+    CCACHE_MAXSIZE: 5G
     CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
 
 jobs:
@@ -155,6 +155,7 @@ jobs:
               echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
               echo "CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
               echo "CMAKE_C_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
+              ccache -zsxp
 
         - uses: actions/cache@v2
           with:
@@ -219,4 +220,4 @@ jobs:
         - name: Summary
           shell: bash
           run: |
-              ccache -s
+              ccache -sx
