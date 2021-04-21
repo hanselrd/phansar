@@ -122,8 +122,12 @@ auto main(int _argc, const char * _argv[]) -> int {
     auto & options_parser = expected_parser.get();
     auto   tool = ClangTool{options_parser.getCompilations(), options_parser.getSourcePathList()};
 
+    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-stdlib=libc++"));
+    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-nostdinc++"));
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-I" STDINC0));
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-I" STDINC1));
+    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-L" STDLIB0));
+    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-Wl,-rpath," STDLIB0));
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-Wno-unknown-warning-option"));
 
     auto printer = Printer{};

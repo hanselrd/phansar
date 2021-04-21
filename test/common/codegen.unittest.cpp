@@ -1,5 +1,8 @@
 #include <phansar/vendor/hedley.hpp>
 
+#include <string>
+#include <unordered_map>
+
 #if HEDLEY_HAS_ATTRIBUTE(annotate)
 #    define PH_ANNOTATE(...) __attribute__((annotate(#    __VA_ARGS__)))
 #else
@@ -17,7 +20,9 @@ struct vec3 {
     float x, y, z;
 };
 
-auto g_k = []() { return 1; };
+struct entity {
+    std::unordered_map<std::string, std::string> attrs;
+};
 
 /* struct material { */
 /*     PH_METADATA(readonly) vec3 ambient; */
