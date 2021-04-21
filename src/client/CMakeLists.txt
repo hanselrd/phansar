@@ -5,7 +5,7 @@ ph_add_executable(
     COMPILE_FEATURES PRIVATE ${default_compile_features}
     COMPILE_OPTIONS PRIVATE ${default_compile_options}
     SOURCES PRIVATE
-            application.cpp
+            # application.cpp
             graphics/camera.cpp
             graphics/image.cpp
             graphics/mesh.cpp

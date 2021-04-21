@@ -27,12 +27,9 @@ ph_add_library(
             histogram.cpp
             log.cpp
             memory.cpp
-            networking/administrator_session.cpp
-            networking/chat.cpp
-            networking/moderator_session.cpp
-            networking/root_session.cpp
-            networking/service.cpp
-            networking/session.cpp
+            # networking/administrator_session.cpp networking/chat.cpp
+            # networking/moderator_session.cpp networking/root_session.cpp networking/service.cpp
+            # networking/session.cpp
             python.cpp
             timer.cpp
     LINK_LIBRARIES

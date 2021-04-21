@@ -162,7 +162,7 @@ jobs:
               wget -O ccache.tar.xz https://github.com/cristianadam/ccache/releases/download/v$CCACHE_VERSION/${{ runner.os }}.tar.xz
               cmake -E make_directory bin
               tar -xf ccache.tar.xz -C bin
-              ./bin/ccache -zsxp
+              ./bin/ccache -pzsx
               echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
               echo "CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
               echo "CMAKE_C_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
