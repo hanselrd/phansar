@@ -146,6 +146,16 @@ jobs:
                   echo "CXX=clang++" >> $GITHUB_ENV
               fi
 
+        - uses: actions/cache@v2
+          with:
+            path: |
+                ${{ env.CCACHE_DIR }}
+                # ${{ env.CPM_SOURCE_CACHE }}
+            key: ${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
+            restore-keys: |
+                ${{ matrix.os }}-${{ matrix.compiler }}-
+                ${{ matrix.os }}-
+
         - name: Configure
           shell: bash
           run: |
@@ -156,16 +166,6 @@ jobs:
               echo "CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
               echo "CMAKE_C_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
               ccache -zsxp
-
-        - uses: actions/cache@v2
-          with:
-            path: |
-                ${{ env.CCACHE_DIR }}
-                # ${{ env.CPM_SOURCE_CACHE }}
-            key: ${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
-            restore-keys: |
-                ${{ matrix.os }}-${{ matrix.compiler }}-
-                ${{ matrix.os }}-
 
         - name: Check formatting
           shell: bash
