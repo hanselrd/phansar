@@ -129,6 +129,7 @@ auto main(int _argc, const char * _argv[]) -> int {
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-L" STDLIB0));
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-Wl,-rpath," STDLIB0));
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-Wno-unknown-warning-option"));
+    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-Wno-unused-command-line-argument"));
 
     auto printer = Printer{};
     auto finder  = MatchFinder{};
