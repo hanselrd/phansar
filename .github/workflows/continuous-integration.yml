@@ -192,16 +192,15 @@ jobs:
               cd build
               ctest --output-on-failure --timeout 30 -E "pkg-config"
 
-        # - name: Build and test Release
-        #   shell: bash
-        #   run: |
-        #       cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-        #       cmake --build build
-        #       cd build
-        #       ctest --output-on-failure --timeout 30 -E "pkg-config"
+        - name: Build and test Release
+          shell: bash
+          run: |
+              cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+              cmake --build build
+              cd build
+              ctest --output-on-failure --timeout 30 -E "pkg-config"
 
         - name: Build and test RelWithDebInfo
-          # if: runner.os != 'Windows'
           shell: bash
           run: |
               cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo
