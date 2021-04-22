@@ -18,6 +18,10 @@ CPMAddPackage(
             "LLVM_ENABLE_EH ON"
             "LLVM_ENABLE_RTTI ON"
             "LLVM_PARALLEL_LINK_JOBS 1"
+            "LLVM_OPTIMIZED_TABLEGEN ON"
+            "LLVM_USE_SPLIT_DWARF ON"
+            "CLANG_ENABLE_STATIC_ANALYZER OFF"
+            "CLANG_ENABLE_ARCMT OFF"
     EXCLUDE_FROM_ALL YES)
 
 if(llvm-project-llvm_ADDED)
