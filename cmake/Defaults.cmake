@@ -13,6 +13,7 @@ set(default_compile_options
     $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:-g3>
     $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:-ggdb>
     $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:-glldb>
+    $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:-gsplit-dwarf>
     $<$<CONFIG:Debug>:-fno-inline>
     $<$<CONFIG:Debug>:-fasynchronous-unwind-tables>
     $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
