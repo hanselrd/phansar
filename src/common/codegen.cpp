@@ -18,6 +18,9 @@ auto g_RecordMatcher = cxxRecordDecl(isExpansionInMainFile(), unless(isImplicit(
 class Printer : public MatchFinder::MatchCallback {
 public:
     void onStartOfTranslationUnit() override {
+        outs() << "#include <fmt/format.h>\n";
+        outs() << "#include <pybind11/embed.h>\n\n";
+
         outs() << "PYBIND11_EMBEDDED_MODULE(phansar, m) {\n";
     }
 
@@ -27,7 +30,7 @@ public:
 
     void run(const MatchFinder::MatchResult & _result) override {
         if (const auto * Enum = _result.Nodes.getNodeAs<EnumDecl>("enum")) {
-            Enum->dump();
+            /* Enum->dump(); */
             outs() << fmt::format("{:{}}py::enum_<{}>(m, \"{}\")",
                                   "",
                                   4,
@@ -43,7 +46,7 @@ public:
             outs() << ";\n";
         }
         if (const auto * Record = _result.Nodes.getNodeAs<CXXRecordDecl>("record")) {
-            Record->dump();
+            /* Record->dump(); */
             outs() << fmt::format("{:{}}py::class_<{}>(m, \"{}\")",
                                   "",
                                   4,
@@ -100,7 +103,7 @@ public:
                                   8,
                                   Record->getQualifiedNameAsString());
             outs() << fmt::format(
-                "\n{:{}}return fmt::format(\"{{}}\", typeid(decltype(o).name()));",
+                "\n{:{}}return fmt::format(\"{{}}\", typeid(decltype(o)).name());",
                 "",
                 12);
             outs() << fmt::format("\n{:{}}}})", "", 8);
@@ -122,12 +125,12 @@ auto main(int _argc, const char * _argv[]) -> int {
     auto & options_parser = expected_parser.get();
     auto   tool = ClangTool{options_parser.getCompilations(), options_parser.getSourcePathList()};
 
-    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-stdlib=libc++"));
+    /* tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-stdlib=libc++")); */
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-nostdinc++"));
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-I" STDINC0));
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-I" STDINC1));
-    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-L" STDLIB0));
-    tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-Wl,-rpath," STDLIB0));
+    /* tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-L" STDLIB0)); */
+    /* tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-Wl,-rpath," STDLIB0)); */
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-Wno-unknown-warning-option"));
     tool.appendArgumentsAdjuster(getInsertArgumentAdjuster("-Wno-unused-command-line-argument"));
 
