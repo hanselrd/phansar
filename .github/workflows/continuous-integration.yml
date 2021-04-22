@@ -188,6 +188,7 @@ jobs:
           if: runner.os != 'Windows'
           shell: bash
           run: |
+              cmake -E rm -rf build
               cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
               cmake --build build
               cd build
@@ -196,6 +197,7 @@ jobs:
         - name: Build and test Release
           shell: bash
           run: |
+              cmake -E rm -rf build
               cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
               cmake --build build
               cd build
@@ -204,6 +206,7 @@ jobs:
         - name: Build and test RelWithDebInfo
           shell: bash
           run: |
+              cmake -E rm -rf build
               cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo
               cmake --build build
               cd build
@@ -212,6 +215,7 @@ jobs:
         - name: Build and test MinSizeRel
           shell: bash
           run: |
+              cmake -E rm -rf build
               cmake -S . -B build -DCMAKE_BUILD_TYPE=MinSizeRel
               cmake --build build
               cd build
