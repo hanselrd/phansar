@@ -10,9 +10,9 @@ set(default_compile_features cxx_std_20 c_std_99)
 
 set(default_compile_options
     $<$<CONFIG:Debug>:-Og>
-    $<$<CONFIG:Debug>:-g3>
-    $<$<CONFIG:Debug>:-ggdb>
-    $<$<CONFIG:Debug>:-glldb>
+    $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:-g3>
+    $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:-ggdb>
+    $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:-glldb>
     $<$<CONFIG:Debug>:-fno-inline>
     $<$<CONFIG:Debug>:-fasynchronous-unwind-tables>
     $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
