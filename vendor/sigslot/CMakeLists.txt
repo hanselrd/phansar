@@ -1,0 +1,11 @@
+CPMAddPackage(
+    NAME sigslot
+    GITHUB_REPOSITORY palacaze/sigslot # master
+    GIT_TAG 19a6f0f5ea11fc121fe67f81fd5e491f2d7a4637
+    OPTIONS "SIGSLOT_COMPILE_EXAMPLES OFF" "SIGSLOT_COMPILE_TESTS OFF"
+    EXCLUDE_FROM_ALL YES)
+
+ph_add_library(
+    NAME ph_vendor_sigslot
+    TYPE INTERFACE
+    LINK_LIBRARIES SYSTEM INTERFACE sigslot)
