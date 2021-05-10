@@ -5,9 +5,8 @@ ph_add_executable(
     COMPILE_FEATURES PRIVATE ${default_compile_features}
     COMPILE_OPTIONS PRIVATE ${default_compile_options}
     SOURCES PRIVATE
-            codegen.unittest.cpp
-            histogram.unittest.cpp
-            threading/synchronized.unittest.cpp
+            logger.unittest.cpp
+            version.unittest.cpp
             ${CMAKE_SOURCE_DIR}/test/main.cpp
     LINK_LIBRARIES
         PRIVATE

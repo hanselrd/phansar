@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME enet
     GITHUB_REPOSITORY lsalzman/enet # master
-    GIT_TAG e3ada4ed750b976833e3d54a9c1179445289bbf6
+    GIT_TAG cf735e639e5c9e3d2d84d71f1dbf789e8c2f3fd0
     OPTIONS "CMAKE_POLICY_DEFAULT_CMP0048 NEW")
 
 ph_add_library(

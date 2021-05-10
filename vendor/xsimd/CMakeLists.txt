@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME xsimd
     GITHUB_REPOSITORY xtensor-stack/xsimd # master
-    GIT_TAG e8454046469dfe457a41faa548419c6666ac29a3
+    GIT_TAG 16ef83e209a05d46d2be7d4df157f0ec230c5283
     EXCLUDE_FROM_ALL YES)
 
 ph_add_library(

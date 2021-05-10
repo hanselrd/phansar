@@ -13,9 +13,7 @@ option(ENABLE_CMAKE_FORMAT "Enable cmake-format" OFF)
 option(ENABLE_BLACK "Enable black" OFF)
 option(ENABLE_CLANG_FORMAT "Enable clang-format" OFF)
 option(ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
-# cmake-format: off
-# option(ENABLE_INCLUDE_WHAT_YOU_USE "Enable include-what-you-use" OFF)
-# cmake-format: on
+option(ENABLE_INCLUDE_WHAT_YOU_USE "Enable include-what-you-use" OFF)
 option(ENABLE_NATIVE_OPTIMIZATIONS "Enable native optimizations" OFF)
 option(ENABLE_ASAN "Enable address sanitizer" OFF)
 option(ENABLE_MSAN "Enable memory sanitizer" OFF)

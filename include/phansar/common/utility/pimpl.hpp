@@ -4,9 +4,9 @@
 #include <memory>
 
 #ifdef __has_include
-#    if __has_include(<experimental/propagate_const>)
-#        include <experimental/propagate_const>
-#    endif
+    #if __has_include(<experimental/propagate_const>)
+        #include <experimental/propagate_const>
+    #endif
 #endif
 
 namespace phansar::common::utility {
@@ -28,15 +28,16 @@ public:
 
 private:
 #ifdef __has_include
-#    if __has_include(<experimental/propagate_const>)
-    std::experimental::propagate_const<std::unique_ptr<T>> m_instance;
-#    else
-    std::unique_ptr<T> m_instance;
-#    endif
+    #if __has_include(<experimental/propagate_const>)
+    std::experimental::propagate_const<std::unique_ptr<T>>
+    #else
+    std::unique_ptr<T>
+    #endif
 #endif
+        m_instance;
 };
 } // namespace phansar::common::utility
 
-#include <phansar/common/utility/pimpl.tpp>
+#include <phansar/common/utility/pimpl.inl>
 
 #endif

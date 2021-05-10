@@ -185,52 +185,50 @@ if(ENABLE_CLANG_TIDY)
     endif()
 endif()
 
-# cmake-format: off
-# if(ENABLE_INCLUDE_WHAT_YOU_USE)
-#     find_program(FIX_INCLUDES_EXECUTABLE NAMES fix_includes.py iwyu-fix-includes)
-#     if(FIX_INCLUDES_EXECUTABLE)
-#         ph_add_formatter(
-#             NAME include-what-you-use
-#             PROGRAMS iwyu_tool.py iwyu-tool
-#             CHECK_ARGS -p
-#                        ${CMAKE_BINARY_DIR}
-#                        %FILE%
-#                        --
-#                        -Xiwyu
-#                        --prefix_header_includes=remove
-#                        -Xiwyu
-#                        --transitive_includes_only
-#                        -Xiwyu
-#                        --no_fwd_decls
-#                        -Xiwyu
-#                        --quoted_includes_first
-#                        -Xiwyu
-#                        --cxx17ns
-#             FIX_ARGS -p
-#                      ${CMAKE_BINARY_DIR}
-#                      %FILE%
-#                      --
-#                      -Xiwyu
-#                      --prefix_header_includes=remove
-#                      -Xiwyu
-#                      --transitive_includes_only
-#                      -Xiwyu
-#                      --no_fwd_decls
-#                      -Xiwyu
-#                      --quoted_includes_first
-#                      -Xiwyu
-#                      --cxx17ns
-#                      |
-#                      ${FIX_INCLUDES_EXECUTABLE}
-#                      ||
-#                      ${CMAKE_COMMAND}
-#                      -E
-#                      true
-#             GLOBS "include/*.cpp"
-#                   "src/*.cpp"
-#                   "src/*.cpp.in"
-#                   "test/*.cpp"
-#                   "vendor/*.cpp")
-#     endif()
-# endif()
-# cmake-format: on
+if(ENABLE_INCLUDE_WHAT_YOU_USE)
+    find_program(FIX_INCLUDES_EXECUTABLE NAMES fix_includes.py iwyu-fix-includes)
+    if(FIX_INCLUDES_EXECUTABLE)
+        ph_add_formatter(
+            NAME include-what-you-use
+            PROGRAMS iwyu_tool.py iwyu-tool
+            CHECK_ARGS -p
+                       ${CMAKE_BINARY_DIR}
+                       %FILE%
+                       --
+                       -Xiwyu
+                       --prefix_header_includes=remove
+                       -Xiwyu
+                       --transitive_includes_only
+                       -Xiwyu
+                       --no_fwd_decls
+                       -Xiwyu
+                       --quoted_includes_first
+                       -Xiwyu
+                       --cxx17ns
+            FIX_ARGS -p
+                     ${CMAKE_BINARY_DIR}
+                     %FILE%
+                     --
+                     -Xiwyu
+                     --prefix_header_includes=remove
+                     -Xiwyu
+                     --transitive_includes_only
+                     -Xiwyu
+                     --no_fwd_decls
+                     -Xiwyu
+                     --quoted_includes_first
+                     -Xiwyu
+                     --cxx17ns
+                     |
+                     ${FIX_INCLUDES_EXECUTABLE}
+                     ||
+                     ${CMAKE_COMMAND}
+                     -E
+                     true
+            GLOBS "include/*.cpp"
+                  "src/*.cpp"
+                  "src/*.cpp.in"
+                  "test/*.cpp"
+                  "vendor/*.cpp")
+    endif()
+endif()

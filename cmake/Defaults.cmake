@@ -2,9 +2,13 @@ set(default_compile_definitions
     $<$<CONFIG:Debug>:PH_BUILD_DEBUG>
     $<$<NOT:$<CONFIG:Debug>>:PH_BUILD_RELEASE>
     $<$<PLATFORM_ID:Windows>:PH_PLATFORM_WINDOWS>
-    $<$<PLATFORM_ID:Windows>:NOMINMAX>
     $<$<PLATFORM_ID:Linux>:PH_PLATFORM_LINUX>
-    $<$<PLATFORM_ID:Darwin>:PH_PLATFORM_MACOS>)
+    $<$<PLATFORM_ID:Darwin>:PH_PLATFORM_MACOS>
+    $<$<PLATFORM_ID:Windows>:NOMINMAX>
+    $<$<CONFIG:Debug>:_GLIBCXX_ASSERTIONS>
+    __STDC_CONSTANT_MACROS
+    __STDC_FORMAT_MACROS
+    __STDC_LIMIT_MACROS)
 
 set(default_compile_features cxx_std_20 c_std_99)
 
@@ -17,7 +21,6 @@ set(default_compile_options
     $<$<CONFIG:Debug>:-fno-inline>
     $<$<CONFIG:Debug>:-fasynchronous-unwind-tables>
     $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
-    $<$<CONFIG:Debug>:-D_GLIBCXX_ASSERTIONS>
     $<$<CONFIG:Debug>:/Od>
     $<$<CONFIG:Debug>:/Oy>
     $<$<CONFIG:Debug>:/Zi>
@@ -25,7 +28,7 @@ set(default_compile_options
     $<$<NOT:$<CONFIG:Debug>>:-D_FORTIFY_SOURCE=2>
     -Wall
     -Wextra
-    # -Werror
+    -Werror
     -Wpedantic
     -Wshadow
     -Wdouble-promotion
