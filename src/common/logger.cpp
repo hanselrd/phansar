@@ -88,7 +88,41 @@ auto logger::operator=(logger &&) noexcept -> logger & = default;
 
 logger::~logger() = default;
 
-auto logger::log() const -> std::shared_ptr<spdlog::logger> {
+auto logger::handle() const -> std::shared_ptr<spdlog::logger> {
     return m_impl->logger;
+}
+
+void logger::trace(std::string_view _msg) {
+    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+                        spdlog::level::trace,
+                        _msg);
+}
+
+void logger::debug(std::string_view _msg) {
+    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+                        spdlog::level::debug,
+                        _msg);
+}
+
+void logger::info(std::string_view _msg) {
+    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+                        spdlog::level::info,
+                        _msg);
+}
+
+void logger::warn(std::string_view _msg) {
+    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+                        spdlog::level::warn,
+                        _msg);
+}
+
+void logger::error(std::string_view _msg) {
+    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION}, spdlog::level::err, _msg);
+}
+
+void logger::critical(std::string_view _msg) {
+    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+                        spdlog::level::critical,
+                        _msg);
 }
 } // namespace phansar::common

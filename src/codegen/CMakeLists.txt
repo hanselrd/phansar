@@ -5,5 +5,9 @@ ph_add_executable(
     COMPILE_FEATURES PRIVATE ${default_compile_features}
     COMPILE_OPTIONS PRIVATE ${default_compile_options}
     SOURCES PRIVATE codegen.cpp
-    LINK_LIBRARIES PRIVATE ph_vendor_fmt ph_vendor_llvm
+    LINK_LIBRARIES
+        PRIVATE
+        ph_vendor_fmt
+        ph_vendor_json
+        ph_vendor_llvm
     SANITIZERS ${default_sanitizers})

@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME glm
     GITHUB_REPOSITORY g-truc/glm # master
-    GIT_TAG 761a842a595f58acfc01cc5c7760ff351feaaece
+    GIT_TAG 66062497b104ca7c297321bd0e970869b1e6ece5
     EXCLUDE_FROM_ALL YES)
 
 ph_add_library(

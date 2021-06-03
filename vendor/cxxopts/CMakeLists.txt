@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME cxxopts
     GITHUB_REPOSITORY jarro2783/cxxopts # master
-    GIT_TAG 174510285a451d5e2ab2c4054bc88ce8b4ba933d
+    GIT_TAG df229cff0d5b96e146f3f11441f714e8e240cad0
     EXCLUDE_FROM_ALL YES)
 
 ph_add_library(

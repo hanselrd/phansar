@@ -4,7 +4,7 @@ ph_add_library(
     COMPILE_DEFINITIONS PRIVATE ${default_compile_definitions}
     COMPILE_FEATURES PRIVATE ${default_compile_features}
     COMPILE_OPTIONS PRIVATE ${default_compile_options}
-    SOURCES PRIVATE test.cpp
+    SOURCES PRIVATE test.cpp # TODO: remove
     LINK_LIBRARIES
         PUBLIC
         ph_common

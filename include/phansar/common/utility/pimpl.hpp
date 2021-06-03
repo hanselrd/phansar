@@ -16,10 +16,10 @@ public:
     template <class... Args>
     explicit pimpl(Args &&... _args);
     pimpl(const pimpl & _other);
-    auto operator            =(const pimpl & _other) -> pimpl &;
-    pimpl(pimpl &&) noexcept = default;
-    auto operator=(pimpl &&) noexcept -> pimpl & = default;
-    ~pimpl()                                     = default;
+    auto operator=(const pimpl & _other) -> pimpl &;
+    pimpl(pimpl && /*unused*/) noexcept;
+    auto operator=(pimpl && /*unused*/) noexcept -> pimpl &;
+    ~pimpl();
 
     auto operator*() const -> const T &;
     auto operator*() -> T &;
