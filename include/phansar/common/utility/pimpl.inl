@@ -24,6 +24,15 @@ auto pimpl<T>::operator=(const pimpl & _other) -> pimpl & {
 }
 
 template <class T>
+pimpl<T>::pimpl(pimpl &&) noexcept = default;
+
+template <class T>
+auto pimpl<T>::operator=(pimpl &&) noexcept -> pimpl & = default;
+
+template <class T>
+pimpl<T>::~pimpl() = default;
+
+template <class T>
 auto pimpl<T>::operator*() const -> const T & {
     return *m_instance.get();
 }
