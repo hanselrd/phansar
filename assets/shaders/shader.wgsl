@@ -26,6 +26,9 @@ struct InstanceInput {
     [[location(7)]] model_1: vec4<f32>;
     [[location(8)]] model_2: vec4<f32>;
     [[location(9)]] model_3: vec4<f32>;
+    [[location(10)]] normal_0: vec3<f32>;
+    [[location(11)]] normal_1: vec3<f32>;
+    [[location(12)]] normal_2: vec3<f32>;
 };
 
 struct VertexOutput {
@@ -49,6 +52,11 @@ fn main(
         instance.model_1,
         instance.model_2,
         instance.model_3,
+    );
+    let normal = mat3x3<f32>(
+        instance.normal_0,
+        instance.normal_1,
+        instance.normal_2,
     );
     out.clip_position = uniform.view_proj * model * vec4<f32>(vertex.position, 1.0);
     out.position = vertex.position;
