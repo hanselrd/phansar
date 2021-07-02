@@ -15,6 +15,7 @@ pub struct RendererConfig {
 
 #[derive(Debug)]
 pub struct Renderer {
+    pub config: RendererConfig,
     pub instance: wgpu::Instance,
     pub surface: wgpu::Surface,
     pub adapter: wgpu::Adapter,
@@ -53,6 +54,7 @@ impl Renderer {
         let swap_chain = device.create_swap_chain(&surface, &swap_chain_descriptor);
 
         Self {
+            config,
             instance,
             surface,
             adapter,

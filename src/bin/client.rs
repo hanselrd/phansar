@@ -59,8 +59,7 @@ const INDICES: &[client::graphics::index::Index] = &[
 struct State {
     renderer: client::graphics::renderer::Renderer,
     render_pipeline: wgpu::RenderPipeline,
-    vertex_buffer: wgpu::Buffer,
-    index_buffer: wgpu::Buffer,
+    pentagon_plane_mesh: client::graphics::mesh::Mesh,
     depth_texture: client::graphics::texture::Texture,
     #[allow(dead_code)]
     diffuse_texture: client::graphics::texture::Texture,
@@ -111,12 +110,11 @@ impl State {
                         },
                     ],
                 });
-        let depth_texture =
-            client::graphics::texture::Texture::create_depth_texture(&renderer, "depth");
+        let depth_texture = client::graphics::texture::Texture::create_depth_texture(&renderer);
         let diffuse_bytes =
             include_bytes!(concat!(env!("OUT_DIR"), "/assets/textures/container.png"));
         let diffuse_texture =
-            client::graphics::texture::Texture::from_bytes(&renderer, diffuse_bytes, "container");
+            client::graphics::texture::Texture::from_bytes(&renderer, diffuse_bytes);
         let diffuse_bind_group = renderer
             .device
             .create_bind_group(&wgpu::BindGroupDescriptor {
@@ -279,26 +277,19 @@ impl State {
                         alpha_to_coverage_enabled: false,
                     },
                 });
-        let vertex_buffer = renderer
-            .device
-            .create_buffer_init(&wgpu::util::BufferInitDescriptor {
-                label: Some("Vertex Buffer"),
-                contents: bytemuck::cast_slice(&*VERTICES),
-                usage: wgpu::BufferUsage::VERTEX,
-            });
-        let index_buffer = renderer
-            .device
-            .create_buffer_init(&wgpu::util::BufferInitDescriptor {
-                label: Some("Index Buffer"),
-                contents: bytemuck::cast_slice(INDICES),
-                usage: wgpu::BufferUsage::INDEX,
-            });
+        let pentagon_plane_mesh = client::graphics::mesh::Mesh::new(
+            client::graphics::mesh::MeshConfigBuilder::default()
+                .vertex_buffer_contents(VERTICES.clone())
+                .index_buffer_contents(INDICES)
+                .build()
+                .unwrap(),
+            &renderer,
+        );
 
         Self {
             renderer,
             render_pipeline,
-            vertex_buffer,
-            index_buffer,
+            pentagon_plane_mesh,
             depth_texture,
             diffuse_texture,
             diffuse_bind_group,
@@ -319,7 +310,7 @@ impl State {
             .device
             .create_swap_chain(&self.renderer.surface, &self.renderer.swap_chain_descriptor);
         self.depth_texture =
-            client::graphics::texture::Texture::create_depth_texture(&self.renderer, "depth");
+            client::graphics::texture::Texture::create_depth_texture(&self.renderer);
     }
 
     #[allow(unused_variables)]
@@ -384,13 +375,17 @@ impl State {
         render_pass.set_pipeline(&self.render_pipeline);
         render_pass.set_bind_group(0, &self.uniform_bind_group, &[]);
         render_pass.set_bind_group(1, &self.diffuse_bind_group, &[]);
-        render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
+        render_pass.set_vertex_buffer(0, self.pentagon_plane_mesh.vertex_buffer.slice(..));
         render_pass.set_vertex_buffer(1, self.instance_buffer.slice(..));
         render_pass.set_index_buffer(
-            self.index_buffer.slice(..),
+            self.pentagon_plane_mesh.index_buffer.slice(..),
             client::graphics::index::Index::format(),
         );
-        render_pass.draw_indexed(0..INDICES.len() as _, 0, 0..self.instances.len() as _);
+        render_pass.draw_indexed(
+            0..self.pentagon_plane_mesh.config.index_buffer_contents.len() as _,
+            0,
+            0..self.instances.len() as _,
+        );
         drop(render_pass);
 
         self.renderer

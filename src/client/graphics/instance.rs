@@ -18,6 +18,8 @@ use cgmath::SquareMatrix;
 pub struct Instance {
     #[builder(default = "cgmath::Matrix4::identity().into()")]
     pub model: [[f32; 4]; 4],
+    #[builder(default = "cgmath::Matrix3::identity().into()")]
+    pub normal: [[f32; 3]; 3],
 }
 
 impl<'a> Instance {
@@ -26,6 +28,9 @@ impl<'a> Instance {
         7 => Float32x4,
         8 => Float32x4,
         9 => Float32x4,
+        10 => Float32x3,
+        11 => Float32x3,
+        12 => Float32x3,
     ];
 
     pub fn layout() -> wgpu::VertexBufferLayout<'a> {
@@ -51,6 +56,7 @@ impl InstanceBuilder {
                 * cgmath::Matrix4::from_nonuniform_scale(scale.x, scale.y, scale.z))
             .into(),
         );
+        new.normal = Some(cgmath::Matrix3::from(rotation).into());
 
         new
     }

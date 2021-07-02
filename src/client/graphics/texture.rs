@@ -46,6 +46,7 @@ pub struct TextureConfig {
 
 #[derive(Debug)]
 pub struct Texture {
+    pub config: TextureConfig,
     pub texture: wgpu::Texture,
     pub view: wgpu::TextureView,
     pub sampler: wgpu::Sampler,
@@ -79,19 +80,16 @@ impl Texture {
         });
 
         Self {
+            config,
             texture,
             view,
             sampler,
         }
     }
 
-    pub fn create_depth_texture(
-        renderer: &client::graphics::renderer::Renderer,
-        label: &str,
-    ) -> Self {
+    pub fn create_depth_texture(renderer: &client::graphics::renderer::Renderer) -> Self {
         Self::new(
             TextureConfigBuilder::default()
-                .texture_label(label)
                 .texture_size(wgpu::Extent3d {
                     width: renderer.swap_chain_descriptor.width,
                     height: renderer.swap_chain_descriptor.height,
@@ -114,7 +112,6 @@ impl Texture {
     pub fn from_image(
         renderer: &client::graphics::renderer::Renderer,
         img: &image::DynamicImage,
-        label: &str,
     ) -> Self {
         let rgba = img.as_rgba8().unwrap();
         let dimensions = img.dimensions();
@@ -125,7 +122,6 @@ impl Texture {
         };
         let new = Self::new(
             TextureConfigBuilder::default()
-                .texture_label(label)
                 .texture_size(size)
                 .build()
                 .unwrap(),
@@ -150,13 +146,9 @@ impl Texture {
         new
     }
 
-    pub fn from_bytes(
-        renderer: &client::graphics::renderer::Renderer,
-        bytes: &[u8],
-        label: &str,
-    ) -> Self {
+    pub fn from_bytes(renderer: &client::graphics::renderer::Renderer, bytes: &[u8]) -> Self {
         let img = image::load_from_memory(bytes).unwrap();
 
-        Self::from_image(renderer, &img, label)
+        Self::from_image(renderer, &img)
     }
 }
