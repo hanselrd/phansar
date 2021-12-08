@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME rttr
     GITHUB_REPOSITORY rttrorg/rttr # master
-    GIT_TAG b16fccf0fbbbf94064bf2a6c7c47f2b910ab31f1
+    GIT_TAG 7edbd580cfad509a3253c733e70144e36f02ecd4
     OPTIONS "BUILD_RTTR_DYNAMIC OFF"
             "BUILD_UNIT_TESTS OFF"
             "BUILD_STATIC ON"

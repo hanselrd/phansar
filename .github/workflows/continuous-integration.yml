@@ -7,7 +7,7 @@ env:
     GCC_VERSION: 10
     LLVM_VERSION: 11
     POSTGRES_VERSION: 12
-    CCACHE_VERSION: 4.2.1
+    CCACHE_VERSION: 4.5
     CCACHE_BASEDIR: ${{ github.workspace }}
     CCACHE_DIR: ${{ github.workspace }}/.ccache
     CCACHE_COMPRESS: true

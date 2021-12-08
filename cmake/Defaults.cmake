@@ -30,7 +30,7 @@ set(default_compile_options
     -Wextra
     -Werror
     -Wpedantic
-    -Wshadow
+    # -Wshadow
     -Wdouble-promotion
     -Wformat=2
     -Werror=format-security

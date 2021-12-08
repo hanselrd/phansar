@@ -36,6 +36,7 @@
 *.log
 .cache
 .clangd
+.vscode
 __pycache__
 build
 compile_commands.json

@@ -26,14 +26,14 @@ auto g_decl_matcher = decl(anyOf(enumDecl(),
                            hasAttr(clang::attr::Kind::Annotate))
                           .bind("id");
 
-static nlohmann::json parse_annotations(const clang::Decl * decl) {
-    if (! decl->hasAttrs()) {
+static auto parse_annotations(const clang::Decl * _decl) -> nlohmann::json {
+    if (! _decl->hasAttrs()) {
         return {};
     }
 
     auto json = nlohmann::json{};
 
-    for (const auto & attr : decl->attrs()) {
+    for (const auto & attr : _decl->attrs()) {
         if (attr->getKind() != clang::attr::Kind::Annotate) {
             continue;
         }
@@ -98,7 +98,7 @@ static nlohmann::json parse_annotations(const clang::Decl * decl) {
                 history.push_back(fmt::format("{}", history_index.at(path)));
             } break;
             default: {
-                if (std::isspace(static_cast<unsigned char>(c)) && token.empty()) {
+                if ((std::isspace(static_cast<unsigned char>(c)) != 0) && token.empty()) {
                     continue;
                 }
 
@@ -149,7 +149,7 @@ public:
 
             switch (decl->getKind()) {
             case clang::Decl::Kind::Enum: {
-                auto enum_decl = llvm::cast<clang::EnumDecl>(decl);
+                const auto * enum_decl = llvm::cast<clang::EnumDecl>(decl);
 
                 llvm::outs() << fmt::format("{:{}}py::enum_<{}>(m, \"{}\")",
                                             "",
@@ -160,7 +160,8 @@ public:
                 for (const auto & noload_decl : enum_decl->noload_decls()) {
                     switch (noload_decl->getKind()) {
                     case clang::Decl::Kind::EnumConstant: {
-                        auto enum_constant_decl = llvm::cast<clang::EnumConstantDecl>(noload_decl);
+                        auto * enum_constant_decl =
+                            llvm::cast<clang::EnumConstantDecl>(noload_decl);
 
                         llvm::outs() << fmt::format("\n{:{}}.value(\"{}\", {})",
                                                     "",
@@ -176,7 +177,7 @@ public:
                 llvm::outs() << ";\n";
             } break;
             case clang::Decl::Kind::CXXRecord: {
-                auto cxx_record_decl = llvm::cast<clang::CXXRecordDecl>(decl);
+                const auto * cxx_record_decl = llvm::cast<clang::CXXRecordDecl>(decl);
                 /* cxx_record_decl->dump(); */
 
                 /* if (annotations.contains("__root__")) { */
@@ -319,6 +320,7 @@ auto main(int _argc, const char * _argv[]) -> int {
     tool.appendArgumentsAdjuster(clang::tooling::getInsertArgumentAdjuster("-nostdinc++"));
     tool.appendArgumentsAdjuster(clang::tooling::getInsertArgumentAdjuster("-I" STDINC0));
     tool.appendArgumentsAdjuster(clang::tooling::getInsertArgumentAdjuster("-I" STDINC1));
+    tool.appendArgumentsAdjuster(clang::tooling::getInsertArgumentAdjuster("-I" STDINC2));
     /* tool.appendArgumentsAdjuster(clang::tooling::getInsertArgumentAdjuster("-L" STDLIB0)); */
     /* tool.appendArgumentsAdjuster(clang::tooling::getInsertArgumentAdjuster("-Wl,-rpath,"
      * STDLIB0)); */

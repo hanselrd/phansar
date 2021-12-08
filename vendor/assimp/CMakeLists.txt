@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME assimp
     GITHUB_REPOSITORY assimp/assimp # master
-    GIT_TAG c04759ccc4b2e46b571f103b2e36e16da9051eae
+    GIT_TAG ea2e4420465ee4cc6b70460545c9036ed9125ceb
     OPTIONS "BUILD_SHARED_LIBS OFF"
             "ASSIMP_BUILD_ZLIB ON"
             "ASSIMP_BUILD_ASSIMP_TOOLS OFF"

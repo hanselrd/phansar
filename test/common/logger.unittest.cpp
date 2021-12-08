@@ -5,7 +5,10 @@
 #include <thread>
 
 SCENARIO("common::logger", "[common][logger]") {
-    auto logger = phansar::common::logger{"unittest", "logs/unittest.log", 1024 * 1024 * 5, 3};
+    auto logger = phansar::common::logger{"unittest",
+                                          "logs/unittest.log",
+                                          static_cast<std::size_t>(1024 * 1024 * 5),
+                                          3};
 
     SPDLOG_LOGGER_TRACE(logger.handle(), "trace");
     SPDLOG_LOGGER_DEBUG(logger.handle(), "debug");

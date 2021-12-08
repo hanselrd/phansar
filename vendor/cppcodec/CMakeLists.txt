@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME cppcodec
     GITHUB_REPOSITORY tplgy/cppcodec # master
-    GIT_TAG bd6ddf95129e769b50ef63e0f558fa21364f3f65
+    GIT_TAG 9838f9eaf077e42121cb42361e9a1613901fc5e8
     DOWNLOAD_ONLY YES)
 
 ph_add_library(
