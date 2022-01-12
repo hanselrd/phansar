@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME spdlog
     GITHUB_REPOSITORY gabime/spdlog # v1.x
-    GIT_TAG d357a9e0e39263fa4acf634e74428e900ef4e9ae
+    GIT_TAG 4cfdc8c5c84f696774cb9acde2f95c9e87c11a5e
     OPTIONS "SPDLOG_FMT_EXTERNAL ON"
     EXCLUDE_FROM_ALL YES)
 

@@ -28,4 +28,5 @@ ph_add_library(
         ph_vendor_taskflow
         ph_vendor_xsimd
         Threads::Threads
-    SANITIZERS ${default_sanitizers})
+    SANITIZERS ${default_sanitizers}
+    DEPENDENCIES codegen)

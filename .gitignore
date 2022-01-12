@@ -37,6 +37,7 @@
 .cache
 .clangd
 .vscode
+Testing
 __pycache__
 build
 compile_commands.json

@@ -126,7 +126,7 @@ if(ENABLE_BLACK)
         PROGRAMS black
         CHECK_ARGS --check %FILE%
         FIX_ARGS %FILE%
-        GLOBS "tools/*.py"
+        GLOBS "codegen/*.py" "tools/*.py"
         FILES "${CMAKE_SOURCE_DIR}/.cmake-format.py")
 endif()
 

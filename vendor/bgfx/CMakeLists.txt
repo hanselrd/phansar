@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME bgfx
     GITHUB_REPOSITORY bkaradzic/bgfx.cmake # master
-    GIT_TAG a01e8e043fe213a55b0bea9623f45fad80d067bc
+    GIT_TAG 7e7a6795a1ce50f41249efd136385a8266831360
     EXCLUDE_FROM_ALL YES)
 
 ph_add_library(

@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME entt
     GITHUB_REPOSITORY skypjack/entt # master
-    GIT_TAG 0ec763131043647d4c64fb1f6274da12c898b0ca
+    GIT_TAG 8e0747fd505beb6861939a141ec0962c376d36f2
     DOWNLOAD_ONLY YES)
 
 ph_add_library(

@@ -1,16 +1,17 @@
-#include <clang/ASTMatchers/ASTMatchFinder.h>
-#include <clang/ASTMatchers/ASTMatchers.h>
-#include <clang/Frontend/ASTUnit.h>
-#include <clang/Frontend/FrontendActions.h>
-#include <clang/Tooling/CommonOptionsParser.h>
-#include <clang/Tooling/Tooling.h>
-#include <fmt/format.h>
-#include <llvm/Support/CommandLine.h>
-#include <nlohmann/json.hpp>
+#if 0
+    #include <clang/ASTMatchers/ASTMatchFinder.h>
+    #include <clang/ASTMatchers/ASTMatchers.h>
+    #include <clang/Frontend/ASTUnit.h>
+    #include <clang/Frontend/FrontendActions.h>
+    #include <clang/Tooling/CommonOptionsParser.h>
+    #include <clang/Tooling/Tooling.h>
+    #include <fmt/format.h>
+    #include <llvm/Support/CommandLine.h>
+    #include <nlohmann/json.hpp>
 
-#include <cctype>
-#include <unordered_map>
-#include <vector>
+    #include <cctype>
+    #include <unordered_map>
+    #include <vector>
 
 /* using namespace llvm; */
 /* using namespace clang; */
@@ -335,3 +336,4 @@ auto main(int _argc, const char * _argv[]) -> int {
 
     return tool.run(clang::tooling::newFrontendActionFactory(&finder).get());
 }
+#endif
