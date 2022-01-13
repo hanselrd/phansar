@@ -1,5 +1,5 @@
-#ifndef PHANSAR_CODEGEN_PYBIND_HPP
-#define PHANSAR_CODEGEN_PYBIND_HPP
+#ifndef PHANSAR_COMMON_PYBIND_HPP
+#define PHANSAR_COMMON_PYBIND_HPP
 
 #include <phansar/common/logger.hpp>
 
@@ -12,7 +12,7 @@
 
 namespace py = pybind11;
 
-namespace phansar::codegen {
+namespace phansar::common {
 /* [[[cog
 import codegen
 codegen.class_(
@@ -52,6 +52,6 @@ inline void pybind_logger(pybind11::module & _m) {
 }
 } // namespace pybind
 /* [[[end]]] */
-} // namespace phansar::codegen
+} // namespace phansar::common
 
 #endif

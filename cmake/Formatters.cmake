@@ -171,7 +171,7 @@ if(ENABLE_CLANG_TIDY)
                      clang-tidy-10
                      clang-tidy-11
                      clang-tidy-12
-            CHECK_ARGS -extra-arg=-Wno-unknown-warning-option %FILE%
+            CHECK_ARGS -extra-arg=-Wno-unknown-warning-option -warnings-as-errors="*" %FILE%
             FIX_ARGS -extra-arg=-Wno-unknown-warning-option -export-fixes=%TMPDIR%/%ID%.yaml %FILE%
             POSTFIX_COMMAND
                 ${CLANG_APPLY_REPLACEMENTS_EXECUTABLE}

@@ -1,5 +1,4 @@
-#include <phansar/codegen/pybind.hpp>
-#include <phansar/common/logger.hpp>
+#include <phansar/common/pybind.hpp>
 
 #include <array>
 #include <cstdint>

@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 cogapp = "*"
-docopt = "*"
+mako = "*"
 
 [dev-packages]
 

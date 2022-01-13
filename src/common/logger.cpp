@@ -1,5 +1,8 @@
 #include <phansar/common/logger.hpp>
+#include <phansar/common/rttr/debug_visitor.hpp>
+#include <phansar/common/rttr/pybind_visitor.hpp>
 
+#include <rttr/registration>
 #include <spdlog/pattern_formatter.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -125,4 +128,66 @@ void logger::critical(std::string_view _msg) {
                         spdlog::level::critical,
                         _msg);
 }
+
+/* [[[cog
+import rttr
+rttr.Rttr.builder() \
+    .classes([ \
+        rttr.RttrClass.builder() \
+            .name("logger") \
+            .type("logger") \
+            .constructors([ \
+                rttr.RttrClass.Constructor.builder() \
+                    .args([ \
+                        "std::string_view",
+                        "std::string_view",
+                        "std::size_t",
+                        "std::size_t",
+                    ]) \
+                    .build(), \
+            ]) \
+            .methods([ \
+                rttr.RttrMethod.builder() \
+                    .name("handle") \
+                    .build(), \
+                rttr.RttrMethod.builder() \
+                    .name("trace") \
+                    .build(), \
+                rttr.RttrMethod.builder() \
+                    .name("debug") \
+                    .build(), \
+                rttr.RttrMethod.builder() \
+                    .name("info") \
+                    .build(), \
+                rttr.RttrMethod.builder() \
+                    .name("warn") \
+                    .build(), \
+                rttr.RttrMethod.builder() \
+                    .name("error") \
+                    .build(), \
+                rttr.RttrMethod.builder() \
+                    .name("critical") \
+                    .build(), \
+            ]) \
+            .build() \
+    ]) \
+    .build() \
+    .dump()
+]]] */
+// NOLINTBEGIN
+// clang-format off
+RTTR_REGISTRATION {
+    ::rttr::registration::class_<logger>("logger")
+        .constructor<std::string_view, std::string_view, std::size_t, std::size_t>()
+        .method("handle", &logger::handle)
+        .method("trace", &logger::trace)
+        .method("debug", &logger::debug)
+        .method("info", &logger::info)
+        .method("warn", &logger::warn)
+        .method("error", &logger::error)
+        .method("critical", &logger::critical);
+}
+// clang-format on
+// NOLINTEND
+/* [[[end]]] */
 } // namespace phansar::common

@@ -11,7 +11,13 @@ ph_add_library(
     COMPILE_DEFINITIONS PRIVATE ${default_compile_definitions}
     COMPILE_FEATURES PRIVATE ${default_compile_features}
     COMPILE_OPTIONS PRIVATE ${default_compile_options}
-    SOURCES PRIVATE ${CMAKE_BINARY_DIR}/version.cpp logger.cpp
+    SOURCES PRIVATE
+            ${CMAKE_BINARY_DIR}/version.cpp
+            errc.cpp
+            error.cpp
+            logger.cpp
+            rttr/debug_visitor.cpp
+            rttr/pybind_visitor.cpp
     LINK_LIBRARIES
         PUBLIC
         ph_vendor_capnproto

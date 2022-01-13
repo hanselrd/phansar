@@ -1,13 +1,13 @@
 #ifndef PHANSAR_COMMON_LOGGER_HPP
 #define PHANSAR_COMMON_LOGGER_HPP
 
-#include <phansar/codegen/macros.hpp>
 #include <phansar/common/utility/pimpl.hpp>
 
+#include <rttr/type>
 #include <spdlog/spdlog.h>
 
 namespace phansar::common {
-class PH_ANNOTATE() logger {
+class logger {
 public:
     logger(std::string_view _name, std::string_view _path, std::size_t _size, std::size_t _count);
     logger(const logger & /*unused*/);
@@ -27,6 +27,9 @@ public:
 private:
     struct impl;
     utility::pimpl<impl> m_impl;
+
+    // NOLINTNEXTLINE(modernize-use-trailing-return-type)
+    RTTR_ENABLE()
 };
 } // namespace phansar::common
 

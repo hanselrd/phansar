@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME llvm-project
     GITHUB_REPOSITORY llvm/llvm-project # main
-    GIT_TAG 630084549b33f297fdc4cab78190c783688603ea
+    GIT_TAG 173fce42052d8233ec0c83b87f2143d048f521ea
     DOWNLOAD_ONLY YES)
 set(LLVM_ENABLE_PROJECTS
     "clang"
