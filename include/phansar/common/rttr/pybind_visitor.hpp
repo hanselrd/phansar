@@ -2,6 +2,7 @@
 #define PHANSAR_COMMON_RTTR_PYBIND_VISITOR_HPP
 
 #include <phansar/common/utility/pimpl.hpp>
+#include <phansar/common/utility/rule_of_n.hpp>
 
 #include <pybind11/embed.h>
 #include <rttr/type>
@@ -13,7 +14,7 @@ namespace phansar::common::rttr {
 class pybind_visitor : public ::rttr::visitor {
 public:
     explicit pybind_visitor(py::module & _module);
-    ~pybind_visitor() override;
+    PH_RULE_OF_5(pybind_visitor);
 
     template <class T, class... BaseClasses>
     void visit_type_begin(const ::rttr::visitor::type_info<T> & _info);

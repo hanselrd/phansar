@@ -5,6 +5,7 @@ Checks:          >
                  -bugprone-branch-clone,
                  -bugprone-easily-swappable-parameters,
                  -bugprone-exception-escape,
+                 -bugprone-macro-parentheses,
                  -bugprone-sizeof-expression,
                  cert-*,
                  -cert-dcl50-cpp,

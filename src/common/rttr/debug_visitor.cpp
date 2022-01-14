@@ -3,7 +3,5 @@
 namespace phansar::common::rttr {
 struct debug_visitor::impl {};
 
-debug_visitor::debug_visitor() = default;
-
-debug_visitor::~debug_visitor() = default;
+PH_RULE_OF_6_DEFAULT(debug_visitor);
 } // namespace phansar::common::rttr

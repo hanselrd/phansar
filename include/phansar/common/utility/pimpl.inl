@@ -6,11 +6,11 @@ template <class... Args>
 pimpl<T>::pimpl(Args &&... _args) : m_instance{new T{std::forward<Args>(_args)...}} {}
 
 template <class T>
-pimpl<T>::pimpl(const pimpl & _other)
+PH_COPY_CONSTRUCTOR_IMPLEMENTATION(pimpl, T)
     : m_instance{_other.m_instance ? new T{*_other.m_instance} : nullptr} {}
 
 template <class T>
-auto pimpl<T>::operator=(const pimpl & _other) -> pimpl & {
+PH_COPY_ASSIGNMENT_IMPLEMENTATION(pimpl, T) {
     if (this != &_other) {
 #ifdef __has_include
     #if __has_include(<experimental/propagate_const>)
@@ -24,13 +24,13 @@ auto pimpl<T>::operator=(const pimpl & _other) -> pimpl & {
 }
 
 template <class T>
-pimpl<T>::pimpl(pimpl &&) noexcept = default;
+PH_MOVE_CONSTRUCTOR_DEFAULT(pimpl, T);
 
 template <class T>
-auto pimpl<T>::operator=(pimpl &&) noexcept -> pimpl & = default;
+PH_MOVE_ASSIGNMENT_DEFAULT(pimpl, T);
 
 template <class T>
-pimpl<T>::~pimpl() = default;
+PH_DESTRUCTOR_DEFAULT(pimpl, T);
 
 template <class T>
 auto pimpl<T>::operator*() const -> const T & {

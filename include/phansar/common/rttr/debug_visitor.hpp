@@ -2,6 +2,7 @@
 #define PHANSAR_COMMON_RTTR_DEBUG_VISITOR_HPP
 
 #include <phansar/common/utility/pimpl.hpp>
+#include <phansar/common/utility/rule_of_n.hpp>
 
 #include <rttr/type>
 #include <rttr/visitor.h>
@@ -9,8 +10,7 @@
 namespace phansar::common::rttr {
 class debug_visitor : public ::rttr::visitor {
 public:
-    debug_visitor();
-    ~debug_visitor() override;
+    PH_RULE_OF_6(debug_visitor);
 
     template <class T, class... BaseClasses>
     void visit_type_begin(const ::rttr::visitor::type_info<T> & _info);

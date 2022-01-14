@@ -2,6 +2,7 @@
 #define PHANSAR_COMMON_LOGGER_HPP
 
 #include <phansar/common/utility/pimpl.hpp>
+#include <phansar/common/utility/rule_of_n.hpp>
 
 #include <rttr/type>
 #include <spdlog/spdlog.h>
@@ -10,11 +11,7 @@ namespace phansar::common {
 class logger {
 public:
     logger(std::string_view _name, std::string_view _path, std::size_t _size, std::size_t _count);
-    logger(const logger & /*unused*/);
-    auto operator=(const logger & /*unused*/) -> logger &;
-    logger(logger && /*unused*/) noexcept;
-    auto operator=(logger && /*unused*/) noexcept -> logger &;
-    ~logger();
+    PH_RULE_OF_5(logger);
 
     [[nodiscard]] auto handle() const -> std::shared_ptr<spdlog::logger>;
     void               trace(std::string_view _msg);

@@ -2,6 +2,7 @@
 #define PHANSAR_COMMON_UTILITY_PIMPL_HPP
 
 #include <memory>
+#include <phansar/common/utility/rule_of_n.hpp>
 
 #ifdef __has_include
     #if __has_include(<experimental/propagate_const>)
@@ -15,11 +16,7 @@ class pimpl {
 public:
     template <class... Args>
     explicit pimpl(Args &&... _args);
-    pimpl(const pimpl & _other);
-    auto operator=(const pimpl & _other) -> pimpl &;
-    pimpl(pimpl && /*unused*/) noexcept;
-    auto operator=(pimpl && /*unused*/) noexcept -> pimpl &;
-    ~pimpl();
+    PH_RULE_OF_5(pimpl);
 
     auto operator*() const -> const T &;
     auto operator*() -> T &;
