@@ -5,7 +5,7 @@ function(ph_add_formatter)
     cmake_parse_arguments(
         ARG
         ""
-        "NAME"
+        "NAME;EXECUTABLE"
         "PROGRAMS;CHECK_ARGS;FIX_ARGS;POSTFIX_COMMAND;GLOBS;FILES"
         ${ARGN})
 
@@ -13,7 +13,11 @@ function(ph_add_formatter)
         message(FATAL_ERROR "called with unrecognized parameters: ${ARG_UNPARSED_ARGUMENTS}")
     endif()
 
-    find_program(${ARG_NAME}_EXECUTABLE NAMES ${ARG_PROGRAMS})
+    if(ARG_EXECUTABLE)
+        set(${ARG_NAME}_EXECUTABLE ${ARG_EXECUTABLE})
+    else()
+        find_program(${ARG_NAME}_EXECUTABLE NAMES ${ARG_PROGRAMS})
+    endif()
     if(${ARG_NAME}_EXECUTABLE)
         file(
             GLOB_RECURSE

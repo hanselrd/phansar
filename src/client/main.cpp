@@ -2,6 +2,8 @@
 #include <phansar/common/errc.hpp>
 #include <phansar/common/error.hpp>
 #include <phansar/common/logger.hpp>
+#include <phansar/common/meta/is_complete.hpp>
+#include <phansar/common/meta/y_combinator.hpp>
 #include <phansar/common/rttr/debug_visitor.hpp>
 #include <phansar/common/rttr/pybind_visitor.hpp>
 

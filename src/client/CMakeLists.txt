@@ -23,4 +23,5 @@ ph_add_executable(
     SOURCES PRIVATE main.cpp
     LINK_LIBRARIES PRIVATE ph_client_lib
     SANITIZERS ${default_sanitizers}
+    DEPENDENCIES assets
     INSTALL RUNTIME DESTINATION bin)

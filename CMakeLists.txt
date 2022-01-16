@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16...3.17 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
 
 project(
     phansar
@@ -32,10 +32,8 @@ endif()
 include(CMakePrintHelpers)
 include(CheckCXXCompilerFlag)
 include(CheckCCompilerFlag)
-include(cmake/Codegen.cmake)
 include(cmake/Defaults.cmake)
 include(cmake/Functions.cmake)
-include(cmake/Formatters.cmake)
 include(cmake/CPM.cmake)
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -52,15 +50,16 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/_vendor)
 
 enable_testing()
 include(CTest)
 
 add_subdirectory(vendor)
+include(cmake/FilePass.cmake)
 include(cmake/Version.cmake)
 add_subdirectory(src)
 add_subdirectory(test)
-# add_subdirectory(assets)
 
 unset(CMAKE_CXX_STANDARD CACHE)
 unset(CMAKE_C_STANDARD CACHE)

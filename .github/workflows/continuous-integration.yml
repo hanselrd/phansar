@@ -83,6 +83,7 @@ jobs:
           run: |
               python -m pip install --upgrade pip
               pip install pipenv cmake cmakelang black
+              pipenv install
 
         - name: Install (Windows)
           if: runner.os == 'Windows'

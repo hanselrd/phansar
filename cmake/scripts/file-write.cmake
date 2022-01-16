@@ -1,0 +1,1 @@
+file(WRITE ${OUTPUT_FILE} ${INPUT})
