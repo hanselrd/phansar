@@ -1,9 +1,9 @@
 #ifndef PHANSAR_COMMON_LOGGER_HPP
 #define PHANSAR_COMMON_LOGGER_HPP
 
+#include <phansar/common/policy/static_storage_policy.hpp>
 #include <phansar/common/utility/pimpl.hpp>
 #include <phansar/common/utility/rule_of_n.hpp>
-
 #include <rttr/type>
 #include <spdlog/spdlog.h>
 
@@ -23,7 +23,7 @@ public:
 
 private:
     struct impl;
-    utility::pimpl<impl> m_impl;
+    utility::pimpl<impl, policy::static_storage_policy<impl, 48, 8>> m_impl;
 
     // NOLINTNEXTLINE(modernize-use-trailing-return-type)
     RTTR_ENABLE()

@@ -1,6 +1,5 @@
 #include <phansar/common/errc.hpp>
 #include <phansar/common/error.hpp>
-
 #include <rttr/registration>
 
 namespace {

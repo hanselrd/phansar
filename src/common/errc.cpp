@@ -1,5 +1,4 @@
 #include <phansar/common/errc.hpp>
-
 #include <rttr/registration>
 
 namespace {

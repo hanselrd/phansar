@@ -1,13 +1,11 @@
 #include <phansar/common/logger.hpp>
 #include <phansar/common/rttr/debug_visitor.hpp>
 #include <phansar/common/rttr/pybind_visitor.hpp>
-
 #include <rttr/registration>
 #include <spdlog/pattern_formatter.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
-
 #include <shared_mutex>
 #include <thread>
 #include <unordered_map>

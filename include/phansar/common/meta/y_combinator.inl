@@ -1,3 +1,5 @@
+#include <phansar/common/meta/y_combinator.hpp>
+
 namespace phansar::common::meta {
 namespace detail {
 template <class F>

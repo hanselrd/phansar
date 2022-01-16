@@ -1,5 +1,4 @@
 #include <phansar/common/rttr/debug_visitor.hpp>
-
 #include <fmt/format.h>
 
 namespace phansar::common::rttr {

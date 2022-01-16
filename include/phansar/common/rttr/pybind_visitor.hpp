@@ -3,7 +3,6 @@
 
 #include <phansar/common/utility/pimpl.hpp>
 #include <phansar/common/utility/rule_of_n.hpp>
-
 #include <pybind11/embed.h>
 #include <rttr/type>
 #include <rttr/visitor.h>

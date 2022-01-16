@@ -1,17 +1,11 @@
 #ifndef PHANSAR_COMMON_UTILITY_PIMPL_HPP
 #define PHANSAR_COMMON_UTILITY_PIMPL_HPP
 
-#include <memory>
+#include <phansar/common/policy/dynamic_storage_policy.hpp>
 #include <phansar/common/utility/rule_of_n.hpp>
 
-#ifdef __has_include
-    #if __has_include(<experimental/propagate_const>)
-        #include <experimental/propagate_const>
-    #endif
-#endif
-
 namespace phansar::common::utility {
-template <class T>
+template <class T, class StoragePolicy = policy::dynamic_storage_policy<T>>
 class pimpl {
 public:
     template <class... Args>
@@ -24,15 +18,9 @@ public:
     auto operator->() -> T *;
 
 private:
-#ifdef __has_include
-    #if __has_include(<experimental/propagate_const>)
-    std::experimental::propagate_const<std::unique_ptr<T>>
-    #else
-    std::unique_ptr<T>
-    #endif
-#endif
-        m_instance;
+    StoragePolicy m_storage_policy;
 };
+
 } // namespace phansar::common::utility
 
 #include <phansar/common/utility/pimpl.inl>

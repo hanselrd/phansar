@@ -42,7 +42,7 @@
 #define PH_MOVE_ASSIGNMENT_DELETE(_classname, ...)                                                 \
     PH_MOVE_ASSIGNMENT_IMPLEMENTATION(_classname, __VA_ARGS__) = delete
 
-#define PH_DESTRUCTOR(_classname) ~_classname()
+#define PH_DESTRUCTOR(_classname) virtual ~_classname()
 #define PH_DESTRUCTOR_IMPLEMENTATION(_classname, ...)                                              \
     _classname __VA_OPT__(<__VA_ARGS__>)::~_classname()
 #define PH_DESTRUCTOR_DEFAULT(_classname, ...)                                                     \

@@ -1,5 +1,4 @@
 #include <phansar/common/version.hpp>
-
 #include <catch2/catch.hpp>
 
 SCENARIO("common::version", "[common][version]") {

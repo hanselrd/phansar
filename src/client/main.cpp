@@ -1,16 +1,14 @@
-#include <cstddef>
 #include <phansar/common/errc.hpp>
 #include <phansar/common/error.hpp>
 #include <phansar/common/logger.hpp>
-#include <phansar/common/meta/is_complete.hpp>
-#include <phansar/common/meta/y_combinator.hpp>
+#include <phansar/common/policy/static_storage_policy.hpp>
 #include <phansar/common/rttr/debug_visitor.hpp>
 #include <phansar/common/rttr/pybind_visitor.hpp>
-
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <rttr/type>
 #include <rttr/visitor.h>
+#include <cstddef>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
 PYBIND11_EMBEDDED_MODULE(phansar, m) {
@@ -35,6 +33,11 @@ auto main(int _argc, char * _argv[]) -> int {
     logger.debug(fmt::format("200 {} {}", ec, ec == phansar::common::error::error200));
     logger.debug(fmt::format("300 {} {}", ec, ec == phansar::common::error::error300));
     logger.debug(fmt::format("400 {} {}", ec, ec == phansar::common::error::error400));
+
+    auto policy =
+        phansar::common::policy::static_storage_policy<int, sizeof(int), alignof(int)>{1337};
+    logger.debug(fmt::format("sizeof: {}, value: {}", sizeof(policy), *policy));
+    logger.debug(fmt::format("sizeof: {}", sizeof(int)));
 
     auto t = rttr::type::get<phansar::common::errc>();
     logger.debug(fmt::format("{} {}", t.get_name(), t.get_sizeof()));

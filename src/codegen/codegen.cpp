@@ -8,7 +8,6 @@
     #include <fmt/format.h>
     #include <llvm/Support/CommandLine.h>
     #include <nlohmann/json.hpp>
-
     #include <cctype>
     #include <unordered_map>
     #include <vector>

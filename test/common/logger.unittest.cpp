@@ -1,7 +1,5 @@
 #include <phansar/common/logger.hpp>
-
 #include <catch2/catch.hpp>
-
 #include <thread>
 
 SCENARIO("common::logger", "[common][logger]") {
