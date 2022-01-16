@@ -1,6 +1,8 @@
+#include <phansar/common/macro.hpp>
+
 auto main(int _argc, char * _argv[]) -> int {
-    (void)_argc;
-    (void)_argv;
+    PH_UNUSED(_argc);
+    PH_UNUSED(_argv);
 
     return 0;
 }

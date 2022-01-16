@@ -16,8 +16,9 @@ ph_add_library(
             errc.cpp
             error.cpp
             logger.cpp
-            rttr/debug_visitor.cpp
-            rttr/pybind_visitor.cpp
+            reflect/debug_visitor.cpp
+            reflect/pybind_visitor.cpp
+            service_container.cpp
     LINK_LIBRARIES
         PUBLIC
         ph_vendor_capnproto
@@ -27,6 +28,7 @@ ph_add_library(
         ph_vendor_fmt
         ph_vendor_hedley
         ph_vendor_json
+        ph_vendor_kangaru
         ph_vendor_pybind11
         ph_vendor_rangev3
         ph_vendor_rttr

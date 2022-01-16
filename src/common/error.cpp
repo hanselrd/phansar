@@ -85,12 +85,12 @@ rttr.Rttr.builder() \
 // NOLINTBEGIN
 // clang-format off
 RTTR_REGISTRATION {
-    ::rttr::registration::enumeration<error>("error")(
-        ::rttr::value("error100", error::error100),
-        ::rttr::value("error200", error::error200),
-        ::rttr::value("error300", error::error300),
-        ::rttr::value("error400", error::error400),
-        ::rttr::value("error500", error::error500)
+    rttr::registration::enumeration<error>("error")(
+        rttr::value("error100", error::error100),
+        rttr::value("error200", error::error200),
+        rttr::value("error300", error::error300),
+        rttr::value("error400", error::error400),
+        rttr::value("error500", error::error500)
     );
 }
 // clang-format on

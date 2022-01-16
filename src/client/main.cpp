@@ -1,49 +1,58 @@
 #include <phansar/common/errc.hpp>
 #include <phansar/common/error.hpp>
 #include <phansar/common/logger.hpp>
-#include <phansar/common/policy/static_storage_policy.hpp>
-#include <phansar/common/rttr/debug_visitor.hpp>
-#include <phansar/common/rttr/pybind_visitor.hpp>
+#include <phansar/common/macro.hpp>
+#include <phansar/common/policy.hpp>
+#include <phansar/common/reflect/debug_visitor.hpp>
+#include <phansar/common/reflect/pybind_visitor.hpp>
+#include <phansar/common/service_container.hpp>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
+#include <kangaru/kangaru.hpp>
+#include <pybind11/chrono.h>
+#include <pybind11/complex.h>
+#include <pybind11/embed.h>
+#include <pybind11/functional.h>
+#include <pybind11/stl.h>
 #include <rttr/type>
 #include <rttr/visitor.h>
 #include <cstddef>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
 PYBIND11_EMBEDDED_MODULE(phansar, m) {
-    // phansar::common::pybind::pybind_logger(m);
-    auto visitor = phansar::common::rttr::pybind_visitor{m};
+    auto visitor = phansar::common::reflect::pybind_visitor{m};
     visitor.visit(rttr::type::get<phansar::common::logger>());
 }
 
 auto main(int _argc, char * _argv[]) -> int {
-    (void)_argc;
-    (void)_argv;
+    PH_UNUSED(_argc);
+    PH_UNUSED(_argv);
 
-    auto logger  = phansar::common::logger{"client",
-                                          "log/client.log",
-                                          static_cast<std::size_t>(1024 * 1024 * 5),
-                                          3};
-    auto visitor = phansar::common::rttr::debug_visitor{};
+    phansar::common::g_service_container.emplace<phansar::common::logger_service>(
+        "client",
+        "logs/client.log",
+        static_cast<std::size_t>(1024 * 1024 * 5),
+        3);
+    auto visitor = phansar::common::reflect::debug_visitor{};
     visitor.visit(rttr::type::get<phansar::common::logger>());
-    logger.debug("testing from C++");
+    PH_LOG_DEBUG("testing from C++");
     auto ec = std::error_code{phansar::common::errc::error102};
-    logger.debug(fmt::format("100 {} {}", ec.message(), ec == phansar::common::error::error100));
-    logger.debug(fmt::format("200 {} {}", ec, ec == phansar::common::error::error200));
-    logger.debug(fmt::format("300 {} {}", ec, ec == phansar::common::error::error300));
-    logger.debug(fmt::format("400 {} {}", ec, ec == phansar::common::error::error400));
+    PH_LOG_DEBUG("100 {} {}", ec.message(), ec == phansar::common::error::error100);
+    PH_LOG_DEBUG("200 {} {}", ec, ec == phansar::common::error::error200);
+    PH_LOG_DEBUG("300 {} {}", ec, ec == phansar::common::error::error300);
+    PH_LOG_DEBUG("400 {} {}", ec, ec == phansar::common::error::error400);
 
     auto policy =
         phansar::common::policy::static_storage_policy<int, sizeof(int), alignof(int)>{1337};
-    logger.debug(fmt::format("sizeof: {}, value: {}", sizeof(policy), *policy));
-    logger.debug(fmt::format("sizeof: {}", sizeof(int)));
+    PH_LOG_DEBUG("sizeof: {}, value: {}", sizeof(policy), *policy);
+    PH_LOG_WARNING("sizeof: {}", sizeof(int));
 
     auto t = rttr::type::get<phansar::common::errc>();
-    logger.debug(fmt::format("{} {}", t.get_name(), t.get_sizeof()));
+    PH_LOG_DEBUG("{} {}", t.get_name(), t.get_sizeof());
     t = rttr::type::get<phansar::common::logger>();
-    logger.debug(fmt::format("{} {}", t.get_name(), t.get_sizeof()));
+    PH_LOG_DEBUG("{} {}", t.get_name(), t.get_sizeof());
 
+#if 0
     auto guard = py::scoped_interpreter{};
     py::exec(R"python(
         from phansar import logger#, material, colors, permissions
@@ -84,6 +93,7 @@ auto main(int _argc, char * _argv[]) -> int {
         #l.debug(f"{permissions.write_execute}")
         #l.debug(f"{permissions.read_write_execute}")
     )python");
+#endif
 
     return 0;
 }

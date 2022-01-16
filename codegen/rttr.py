@@ -76,17 +76,17 @@ class RttrMethod:
                         % if len(data.overloads) != 0:
                             % for index, overload in enumerate(data.overloads):
                                 <%
-                                    select_overload = f"::rttr::select_overload<{overload.return_type}({', '.join(overload.args)})>(&{qualified_name})"
+                                    select_overload = f"rttr::select_overload<{overload.return_type}({', '.join(overload.args)})>(&{qualified_name})"
                                 %>
                                 % if not data.child and index == 0:
-                            ::rttr::registration::method("${data.name}", ${select_overload})
+                            rttr::registration::method("${data.name}", ${select_overload})
                                 % else:
                                 .method("${data.name}", ${select_overload})
                                 % endif
                             % endfor
                         % else:
                             %if not data.child:
-                            ::rttr::registration::method("${data.name}", &${qualified_name})
+                            rttr::registration::method("${data.name}", &${qualified_name})
                             % else:
                                 .method("${data.name}", &${qualified_name})
                             % endif
@@ -139,19 +139,19 @@ class RttrProperty:
                                 property_type = f"property{'_readonly' if data.readonly else ''}"
                             %>
                             % if not data.child:
-                            ::rttr::registration::${property_type}("${data.name}", &${qualified_name})
+                            rttr::registration::${property_type}("${data.name}", &${qualified_name})
                             % else:
                                 .${property_type}("${data.name}", &${qualified_name})
                             % endif
                         % elif data.getter is not None and data.setter is None:
                             % if not data.child:
-                            ::rttr::registration::property_readonly("${data.name}", &${qualified_getter})
+                            rttr::registration::property_readonly("${data.name}", &${qualified_getter})
                             % else:
                                 .property_readonly("${data.name}", &${qualified_getter})
                             % endif
                         % else:
                             % if not data.child:
-                            ::rttr::registration::property("${data.name}", &${qualified_getter}, &${qualified_setter})
+                            rttr::registration::property("${data.name}", &${qualified_getter}, &${qualified_setter})
                             % else:
                                 .property("${data.name}", &${qualified_getter}, &${qualified_setter})
                             % endif
@@ -191,22 +191,22 @@ class RttrEnum:
                             qualified_type = f"{qualified}{data.type}"
                         %>
                         % if not data.child:
-                            ::rttr::registration::enumeration<${qualified_type}>("${data.name}")(
+                            rttr::registration::enumeration<${qualified_type}>("${data.name}")(
                         % else:
                                 .enumeration<${qualified_type}>("${data.name}")(
                         % endif
                         % for index, value in enumerate(data.values):
                             % if index + 1 < len(data.values):
                                 % if not data.child:
-                                ::rttr::value("${value}", ${qualified_type}::${value}),
+                                rttr::value("${value}", ${qualified_type}::${value}),
                                 % else:
-                                    ::rttr::value("${value}", ${qualified_type}::${value}),
+                                    rttr::value("${value}", ${qualified_type}::${value}),
                                 % endif
                             % else:
                                 % if not data.child:
-                                ::rttr::value("${value}", ${qualified_type}::${value})
+                                rttr::value("${value}", ${qualified_type}::${value})
                                 % else:
-                                    ::rttr::value("${value}", ${qualified_type}::${value})
+                                    rttr::value("${value}", ${qualified_type}::${value})
                                 % endif
                             % endif
                         % endfor
@@ -260,7 +260,7 @@ class RttrClass:
                             qualified_name = f"{qualified}{data.name}"
                             qualified_type = f"{qualified}{data.type}"
                         %>
-                            ::rttr::registration::class_<${qualified_type}>("${data.name}")
+                            rttr::registration::class_<${qualified_type}>("${data.name}")
                         % for constructor in data.constructors:
                                 .constructor<${", ".join(constructor.args)}>()
                         % endfor

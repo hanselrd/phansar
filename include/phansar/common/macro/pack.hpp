@@ -1,0 +1,6 @@
+#ifndef PHANSAR_COMMON_MACRO_PACK_HPP
+#define PHANSAR_COMMON_MACRO_PACK_HPP
+
+#define PH_PACK(...) __VA_ARGS__
+
+#endif

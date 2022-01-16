@@ -1,6 +1,7 @@
 #include <phansar/common/logger.hpp>
-#include <phansar/common/rttr/debug_visitor.hpp>
-#include <phansar/common/rttr/pybind_visitor.hpp>
+#include <phansar/common/macro.hpp>
+#include <phansar/common/reflect/debug_visitor.hpp>
+#include <phansar/common/reflect/pybind_visitor.hpp>
 #include <rttr/registration>
 #include <spdlog/pattern_formatter.h>
 #include <spdlog/sinks/rotating_file_sink.h>
@@ -16,8 +17,8 @@ public:
     void format(const spdlog::details::log_msg & _msg,
                 const std::tm &                  _tm_time,
                 spdlog::memory_buf_t &           _dest) override {
-        (void)_msg;
-        (void)_tm_time;
+        PH_UNUSED_FREESTANDING(_msg);
+        PH_UNUSED_FREESTANDING(_tm_time);
 
         auto read_lock = std::shared_lock{s_thread_name_map_mutex};
 
@@ -85,39 +86,84 @@ auto logger::handle() const -> std::shared_ptr<spdlog::logger> {
     return m_impl->logger;
 }
 
-void logger::trace(std::string_view _msg) {
-    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+#ifdef __has_include
+    #if __has_include(<source_location>) && defined(__cpp_lib_source_location)
+void logger::trace(std::string_view _message, const std::source_location _location) {
+    m_impl->logger->log(spdlog::source_loc{_location.file_name(),
+                                           static_cast<int>(_location.line()),
+                                           _location.function_name()},
                         spdlog::level::trace,
-                        _msg);
+                        _message);
 }
 
-void logger::debug(std::string_view _msg) {
-    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+void logger::debug(std::string_view _message, const std::source_location _location) {
+    m_impl->logger->log(spdlog::source_loc{_location.file_name(),
+                                           static_cast<int>(_location.line()),
+                                           _location.function_name()},
                         spdlog::level::debug,
-                        _msg);
+                        _message);
 }
 
-void logger::info(std::string_view _msg) {
-    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+void logger::info(std::string_view _message, const std::source_location _location) {
+    m_impl->logger->log(spdlog::source_loc{_location.file_name(),
+                                           static_cast<int>(_location.line()),
+                                           _location.function_name()},
                         spdlog::level::info,
-                        _msg);
+                        _message);
 }
 
-void logger::warn(std::string_view _msg) {
-    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+void logger::warning(std::string_view _message, const std::source_location _location) {
+    m_impl->logger->log(spdlog::source_loc{_location.file_name(),
+                                           static_cast<int>(_location.line()),
+                                           _location.function_name()},
                         spdlog::level::warn,
-                        _msg);
+                        _message);
 }
 
-void logger::error(std::string_view _msg) {
-    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION}, spdlog::level::err, _msg);
+void logger::error(std::string_view _message, const std::source_location _location) {
+    m_impl->logger->log(spdlog::source_loc{_location.file_name(),
+                                           static_cast<int>(_location.line()),
+                                           _location.function_name()},
+                        spdlog::level::err,
+                        _message);
 }
 
-void logger::critical(std::string_view _msg) {
-    m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+void logger::critical(std::string_view _message, const std::source_location _location) {
+    m_impl->logger->log(spdlog::source_loc{_location.file_name(),
+                                           static_cast<int>(_location.line()),
+                                           _location.function_name()},
                         spdlog::level::critical,
-                        _msg);
+                        _message);
 }
+    #else
+void logger::trace(std::string_view _message, const spdlog::source_loc _location) {
+    // m_impl->logger->log(spdlog::source_loc{"<none>", 1, SPDLOG_FUNCTION},
+    //                     spdlog::level::trace,
+    //                     _message);
+    m_impl->logger->log(_location, spdlog::level::trace, _message);
+}
+
+void logger::debug(std::string_view _message, const spdlog::source_loc _location) {
+    m_impl->logger->log(_location, spdlog::level::debug, _message);
+}
+
+void logger::info(std::string_view _message, const spdlog::source_loc _location) {
+    m_impl->logger->log(_location, spdlog::level::info, _message);
+}
+
+void logger::warning(std::string_view _message, const spdlog::source_loc _location) {
+    m_impl->logger->log(_location, spdlog::level::warn, _message);
+}
+
+void logger::error(std::string_view _message, const spdlog::source_loc _location) {
+    m_impl->logger->log(_location, spdlog::level::err, _message);
+}
+
+void logger::critical(std::string_view _message, const spdlog::source_loc _location) {
+    m_impl->logger->log(_location, spdlog::level::critical, _message);
+}
+    #endif
+#endif
 
 /* [[[cog
 import rttr
@@ -150,7 +196,7 @@ rttr.Rttr.builder() \
                     .name("info") \
                     .build(), \
                 rttr.RttrMethod.builder() \
-                    .name("warn") \
+                    .name("warning") \
                     .build(), \
                 rttr.RttrMethod.builder() \
                     .name("error") \
@@ -167,13 +213,13 @@ rttr.Rttr.builder() \
 // NOLINTBEGIN
 // clang-format off
 RTTR_REGISTRATION {
-    ::rttr::registration::class_<logger>("logger")
+    rttr::registration::class_<logger>("logger")
         .constructor<std::string_view, std::string_view, std::size_t, std::size_t>()
         .method("handle", &logger::handle)
         .method("trace", &logger::trace)
         .method("debug", &logger::debug)
         .method("info", &logger::info)
-        .method("warn", &logger::warn)
+        .method("warning", &logger::warning)
         .method("error", &logger::error)
         .method("critical", &logger::critical);
 }

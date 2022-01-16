@@ -5,20 +5,10 @@ template <class T, class StoragePolicy>
 template <class... Args>
 pimpl<T, StoragePolicy>::pimpl(Args &&... _args) : m_storage_policy{std::forward<Args>(_args)...} {}
 
-template <class T, class StoragePolicy>
-PH_COPY_CONSTRUCTOR_DEFAULT(pimpl, T, StoragePolicy);
-
-template <class T, class StoragePolicy>
-PH_COPY_ASSIGNMENT_DEFAULT(pimpl, T, StoragePolicy);
-
-template <class T, class StoragePolicy>
-PH_MOVE_CONSTRUCTOR_DEFAULT(pimpl, T, StoragePolicy);
-
-template <class T, class StoragePolicy>
-PH_MOVE_ASSIGNMENT_DEFAULT(pimpl, T, StoragePolicy);
-
-template <class T, class StoragePolicy>
-PH_DESTRUCTOR_DEFAULT(pimpl, T, StoragePolicy);
+PH_RULE_OF_5_TEMPLATE_DEFAULT(pimpl,
+                              PH_PACK(template <class T, class StoragePolicy>),
+                              T,
+                              StoragePolicy);
 
 template <class T, class StoragePolicy>
 auto pimpl<T, StoragePolicy>::operator*() const -> const T & {
