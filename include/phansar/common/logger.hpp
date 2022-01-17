@@ -3,7 +3,6 @@
 
 #include <phansar/common/policy/static_storage_policy.hpp>
 #include <phansar/common/utility/pimpl.hpp>
-#include <phansar/common/utility/rule_of_n.hpp>
 #include <kangaru/kangaru.hpp>
 #include <rttr/type>
 #include <spdlog/spdlog.h>
@@ -23,7 +22,11 @@ namespace phansar::common {
 class logger {
 public:
     logger(std::string_view _name, std::string_view _path, std::size_t _size, std::size_t _count);
-    PH_RULE_OF_5(logger);
+    logger(const logger & _other);
+    auto operator=(const logger & _other) -> logger &;
+    logger(logger && _other) noexcept;
+    auto operator=(logger && _other) noexcept -> logger &;
+    virtual ~logger();
 
     [[nodiscard]] auto handle() const -> std::shared_ptr<spdlog::logger>;
 #ifdef __has_include

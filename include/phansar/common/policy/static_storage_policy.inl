@@ -15,7 +15,7 @@ static_storage_policy<T, Size, Align>::static_storage_policy(Args &&... _args) {
 }
 
 template <class T, std::size_t Size, std::size_t Align>
-PH_COPY_CONSTRUCTOR_IMPLEMENTATION(static_storage_policy, T, Size, Align)
+static_storage_policy<T, Size, Align>::static_storage_policy(const static_storage_policy & _other)
     : m_valid{_other.m_valid} {
     if (m_valid) {
         new (&m_storage) T{*std::launder(reinterpret_cast<const T *>(&_other.m_storage))};
@@ -23,7 +23,8 @@ PH_COPY_CONSTRUCTOR_IMPLEMENTATION(static_storage_policy, T, Size, Align)
 }
 
 template <class T, std::size_t Size, std::size_t Align>
-PH_COPY_ASSIGNMENT_IMPLEMENTATION(static_storage_policy, T, Size, Align) {
+auto static_storage_policy<T, Size, Align>::operator=(const static_storage_policy & _other)
+    -> static_storage_policy<T, Size, Align> & {
     if (this != &_other) {
         if (m_valid) {
             std::destroy_at(std::launder(reinterpret_cast<T *>(&m_storage)));
@@ -39,7 +40,8 @@ PH_COPY_ASSIGNMENT_IMPLEMENTATION(static_storage_policy, T, Size, Align) {
 }
 
 template <class T, std::size_t Size, std::size_t Align>
-PH_MOVE_CONSTRUCTOR_IMPLEMENTATION(static_storage_policy, T, Size, Align)
+static_storage_policy<T, Size, Align>::static_storage_policy(
+    static_storage_policy && _other) noexcept
     : m_valid{std::exchange(_other.m_valid, false)} {
     if (m_valid) {
         new (&m_storage) T{std::move(*std::launder(reinterpret_cast<T *>(&_other.m_storage)))};
@@ -47,7 +49,8 @@ PH_MOVE_CONSTRUCTOR_IMPLEMENTATION(static_storage_policy, T, Size, Align)
 }
 
 template <class T, std::size_t Size, std::size_t Align>
-PH_MOVE_ASSIGNMENT_IMPLEMENTATION(static_storage_policy, T, Size, Align) {
+auto static_storage_policy<T, Size, Align>::operator=(static_storage_policy && _other) noexcept
+    -> static_storage_policy<T, Size, Align> & {
     if (this != &_other) {
         if (m_valid) {
             std::destroy_at(std::launder(reinterpret_cast<T *>(&m_storage)));
@@ -63,7 +66,7 @@ PH_MOVE_ASSIGNMENT_IMPLEMENTATION(static_storage_policy, T, Size, Align) {
 }
 
 template <class T, std::size_t Size, std::size_t Align>
-PH_DESTRUCTOR_IMPLEMENTATION(static_storage_policy, T, Size, Align) {
+static_storage_policy<T, Size, Align>::~static_storage_policy() {
     if (m_valid) {
         std::destroy_at(std::launder(reinterpret_cast<T *>(&m_storage)));
     }

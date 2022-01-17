@@ -7,11 +7,12 @@ dynamic_storage_policy<T>::dynamic_storage_policy(Args &&... _args)
     : m_storage{new T{std::forward<Args>(_args)...}} {}
 
 template <class T>
-PH_COPY_CONSTRUCTOR_IMPLEMENTATION(dynamic_storage_policy, T)
+dynamic_storage_policy<T>::dynamic_storage_policy(const dynamic_storage_policy & _other)
     : m_storage{_other.m_storage ? new T{*_other.m_storage} : nullptr} {}
 
 template <class T>
-PH_COPY_ASSIGNMENT_IMPLEMENTATION(dynamic_storage_policy, T) {
+auto dynamic_storage_policy<T>::operator=(const dynamic_storage_policy & _other)
+    -> dynamic_storage_policy<T> & {
     if (this != &_other) {
         m_storage.reset(new T{*_other.m_storage});
     }
@@ -20,13 +21,15 @@ PH_COPY_ASSIGNMENT_IMPLEMENTATION(dynamic_storage_policy, T) {
 }
 
 template <class T>
-PH_MOVE_CONSTRUCTOR_DEFAULT(dynamic_storage_policy, T);
+dynamic_storage_policy<T>::dynamic_storage_policy(dynamic_storage_policy && _other) noexcept =
+    default;
 
 template <class T>
-PH_MOVE_ASSIGNMENT_DEFAULT(dynamic_storage_policy, T);
+auto dynamic_storage_policy<T>::operator=(dynamic_storage_policy && _other) noexcept
+    -> dynamic_storage_policy<T> &      = default;
 
 template <class T>
-PH_DESTRUCTOR_DEFAULT(dynamic_storage_policy, T);
+dynamic_storage_policy<T>::~dynamic_storage_policy() = default;
 
 template <class T>
 auto dynamic_storage_policy<T>::operator*() const -> const T & {

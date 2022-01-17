@@ -1,7 +1,6 @@
 #ifndef PHANSAR_COMMON_POLICY_STATIC_STORAGE_POLICY_HPP
 #define PHANSAR_COMMON_POLICY_STATIC_STORAGE_POLICY_HPP
 
-#include <phansar/common/utility/rule_of_n.hpp>
 #include <cstddef>
 #include <type_traits>
 
@@ -11,7 +10,11 @@ class static_storage_policy {
 public:
     template <class... Args>
     explicit static_storage_policy(Args &&... _args);
-    PH_RULE_OF_5(static_storage_policy);
+    static_storage_policy(const static_storage_policy & _other);
+    auto operator=(const static_storage_policy & _other) -> static_storage_policy &;
+    static_storage_policy(static_storage_policy && _other) noexcept;
+    auto operator=(static_storage_policy && _other) noexcept -> static_storage_policy &;
+    virtual ~static_storage_policy();
 
     auto operator*() const -> const T &;
     auto operator*() -> T &;

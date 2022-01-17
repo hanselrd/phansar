@@ -50,4 +50,34 @@
 #define PH_LOG_ERROR_IF(_condition, ...)    PH_LOG_IF(error, _condition, __VA_ARGS__)
 #define PH_LOG_CRITICAL_IF(_condition, ...) PH_LOG_IF(critical, _condition, __VA_ARGS__)
 
+#define PH_LOG_INDENTED(_level, _indent, ...)                                                      \
+    PH_LOG(_level, "{:{}}" __VA_OPT__("{}"), "", _indent __VA_OPT__(, fmt::format(__VA_ARGS__)))
+
+#define PH_LOG_INDENTED_TRACE(_indent, ...)    PH_LOG_INDENTED(trace, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_DEBUG(_indent, ...)    PH_LOG_INDENTED(debug, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_INFO(_indent, ...)     PH_LOG_INDENTED(info, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_WARNING(_indent, ...)  PH_LOG_INDENTED(warning, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_ERROR(_indent, ...)    PH_LOG_INDENTED(error, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_CRITICAL(_indent, ...) PH_LOG_INDENTED(critical, _indent, __VA_ARGS__)
+
+#define PH_LOG_INDENTED_IF(_level, _condition, _indent, ...)                                       \
+    PH_LOG_IF(_level,                                                                              \
+              _condition,                                                                          \
+              "{:{}}" __VA_OPT__("{}"),                                                            \
+              "",                                                                                  \
+              _indent __VA_OPT__(, fmt::format(__VA_ARGS__)))
+
+#define PH_LOG_INDENTED_TRACE_IF(_condition, _indent, ...)                                         \
+    PH_LOG_INDENTED_IF(trace, _condition, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_DEBUG_IF(_condition, _indent, ...)                                         \
+    PH_LOG_INDENTED_IF(debug, _condition, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_INFO_IF(_condition, _indent, ...)                                          \
+    PH_LOG_INDENTED_IF(info, _condition, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_WARNING_IF(_condition, _indent, ...)                                       \
+    PH_LOG_INDENTED_IF(warning, _condition, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_ERROR_IF(_condition, _indent, ...)                                         \
+    PH_LOG_INDENTED_IF(error, _condition, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_CRITICAL_IF(_condition, _indent, ...)                                      \
+    PH_LOG_INDENTED_IF(critical, _condition, _indent, __VA_ARGS__)
+
 #endif

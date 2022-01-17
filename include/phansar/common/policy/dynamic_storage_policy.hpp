@@ -1,7 +1,6 @@
 #ifndef PHANSAR_COMMON_POLICY_DYNAMIC_STORAGE_POLICY_HPP
 #define PHANSAR_COMMON_POLICY_DYNAMIC_STORAGE_POLICY_HPP
 
-#include <phansar/common/utility/rule_of_n.hpp>
 #include <memory>
 
 namespace phansar::common::policy {
@@ -10,7 +9,11 @@ class dynamic_storage_policy {
 public:
     template <class... Args>
     explicit dynamic_storage_policy(Args &&... _args);
-    PH_RULE_OF_5(dynamic_storage_policy);
+    dynamic_storage_policy(const dynamic_storage_policy & _other);
+    auto operator=(const dynamic_storage_policy & _other) -> dynamic_storage_policy &;
+    dynamic_storage_policy(dynamic_storage_policy && _other) noexcept;
+    auto operator=(dynamic_storage_policy && _other) noexcept -> dynamic_storage_policy &;
+    virtual ~dynamic_storage_policy();
 
     auto operator*() const -> const T &;
     auto operator*() -> T &;

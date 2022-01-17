@@ -80,7 +80,15 @@ logger::logger(std::string_view _name,
     m_impl->logger->set_formatter(std::move(formatter));
 }
 
-PH_RULE_OF_5_DEFAULT(logger);
+logger::logger(const logger & _other) = default;
+
+auto logger::operator=(const logger & _other) -> logger & = default;
+
+logger::logger(logger && _other) noexcept = default;
+
+auto logger::operator=(logger && _other) noexcept -> logger & = default;
+
+logger::~logger() = default;
 
 auto logger::handle() const -> std::shared_ptr<spdlog::logger> {
     return m_impl->logger;

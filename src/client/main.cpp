@@ -6,6 +6,7 @@
 #include <phansar/common/reflect/debug_visitor.hpp>
 #include <phansar/common/reflect/pybind_visitor.hpp>
 #include <phansar/common/service_container.hpp>
+#include <phansar/common/synchronized.hpp>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <kangaru/kangaru.hpp>
@@ -41,6 +42,16 @@ auto main(int _argc, char * _argv[]) -> int {
     PH_LOG_DEBUG("200 {} {}", ec, ec == phansar::common::error::error200);
     PH_LOG_DEBUG("300 {} {}", ec, ec == phansar::common::error::error300);
     PH_LOG_DEBUG("400 {} {}", ec, ec == phansar::common::error::error400);
+
+    auto k = phansar::common::synchronized<int>{12};
+    PH_LOG_INFO("{:{}}{}", "", 4, *k.lock());
+    PH_LOG_INDENTED_INFO(4, "{}", *k.lock());
+    PH_LOG_INFO_IF(true, "{:{}}{}", "", 4, *k.lock());
+    PH_LOG_INDENTED_INFO_IF(true, 4, "{}", *k.lock());
+    PH_LOG_CRITICAL("{:{}}{}", "", 5, *k.lock());
+    PH_LOG_INDENTED_CRITICAL(5, "{}", *k.lock());
+    PH_LOG_CRITICAL_IF(true, "{:{}}{}", "", 5, *k.lock());
+    PH_LOG_INDENTED_CRITICAL_IF(true, 5, "{}", *k.lock());
 
     auto policy =
         phansar::common::policy::static_storage_policy<int, sizeof(int), alignof(int)>{1337};

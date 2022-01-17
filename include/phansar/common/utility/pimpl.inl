@@ -5,10 +5,22 @@ template <class T, class StoragePolicy>
 template <class... Args>
 pimpl<T, StoragePolicy>::pimpl(Args &&... _args) : m_storage_policy{std::forward<Args>(_args)...} {}
 
-PH_RULE_OF_5_TEMPLATE_DEFAULT(pimpl,
-                              PH_PACK(template <class T, class StoragePolicy>),
-                              T,
-                              StoragePolicy);
+template <class T, class StoragePolicy>
+pimpl<T, StoragePolicy>::pimpl(const pimpl & _other) = default;
+
+template <class T, class StoragePolicy>
+auto pimpl<T, StoragePolicy>::operator=(const pimpl & _other)
+    -> pimpl<T, StoragePolicy> &      = default;
+
+template <class T, class StoragePolicy>
+pimpl<T, StoragePolicy>::pimpl(pimpl && _other) noexcept = default;
+
+template <class T, class StoragePolicy>
+auto pimpl<T, StoragePolicy>::operator=(pimpl && _other) noexcept
+    -> pimpl<T, StoragePolicy> &      = default;
+
+template <class T, class StoragePolicy>
+pimpl<T, StoragePolicy>::~pimpl() = default;
 
 template <class T, class StoragePolicy>
 auto pimpl<T, StoragePolicy>::operator*() const -> const T & {

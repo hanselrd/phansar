@@ -2,14 +2,18 @@
 #define PHANSAR_COMMON_REFLECT_DEBUG_VISITOR_HPP
 
 #include <phansar/common/utility/pimpl.hpp>
-#include <phansar/common/utility/rule_of_n.hpp>
 #include <rttr/type>
 #include <rttr/visitor.h>
 
 namespace phansar::common::reflect {
 class debug_visitor : public rttr::visitor {
 public:
-    PH_RULE_OF_6(debug_visitor);
+    debug_visitor();
+    debug_visitor(const debug_visitor & _other);
+    auto operator=(const debug_visitor & _other) -> debug_visitor &;
+    debug_visitor(debug_visitor && _other) noexcept;
+    auto operator=(debug_visitor && _other) noexcept -> debug_visitor &;
+    ~debug_visitor() override;
 
     template <class T, class... BaseClasses>
     void visit_type_begin(const rttr::visitor::type_info<T> & _info);
