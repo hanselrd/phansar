@@ -1,17 +1,20 @@
 #include <phansar/common/logger.hpp>
 #include <phansar/common/macro.hpp>
+#include <phansar/common/policy/freestanding_implementation_policy.hpp>
 #include <phansar/common/reflect/debug_visitor.hpp>
 #include <phansar/common/reflect/pybind_visitor.hpp>
+#include <phansar/common/synchronized.hpp>
 #include <rttr/registration>
 #include <spdlog/pattern_formatter.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
-#include <shared_mutex>
 #include <thread>
 #include <unordered_map>
 
 namespace {
+using namespace phansar::common;
+
 class flag_formatter : public spdlog::custom_flag_formatter {
 public:
     void format(const spdlog::details::log_msg & _msg,
@@ -20,26 +23,20 @@ public:
         PH_UNUSED_FREESTANDING(_msg);
         PH_UNUSED_FREESTANDING(_tm_time);
 
-        auto read_lock = std::shared_lock{s_thread_name_map_mutex};
-
-        if (! s_thread_name_map.contains(std::this_thread::get_id())) {
-            read_lock.unlock();
-            {
-                auto write_lock = std::unique_lock{s_thread_name_map_mutex};
-                if (s_thread_name_map.empty()) {
-                    s_thread_name_map.insert_or_assign(
-                        std::this_thread::get_id(),
-                        fmt::format("{:{}}", "MAIN", padinfo_.width_));
-                } else {
-                    s_thread_name_map.insert_or_assign(
-                        std::this_thread::get_id(),
-                        fmt::format("WORKER{:0{}}", s_thread_name_map.size(), padinfo_.width_ - 6));
-                }
+        if (! s_thread_name_map.lock_shared()->contains(std::this_thread::get_id())) {
+            auto write_lock = s_thread_name_map.lock();
+            if (write_lock->empty()) {
+                write_lock->insert_or_assign(std::this_thread::get_id(),
+                                             fmt::format("{:{}}", "MAIN", padinfo_.width_));
+            } else {
+                write_lock->insert_or_assign(std::this_thread::get_id(),
+                                             fmt::format("WORKER{:0{}}",
+                                                         write_lock->size(),
+                                                         padinfo_.width_ - std::strlen("WORKER")));
             }
-            read_lock.lock();
         }
 
-        auto thread_name = s_thread_name_map.at(std::this_thread::get_id());
+        auto thread_name = s_thread_name_map.lock_shared()->at(std::this_thread::get_id());
         _dest.append(thread_name.data(), thread_name.data() + thread_name.size());
     }
 
@@ -48,12 +45,16 @@ public:
     }
 
 private:
-    static std::unordered_map<std::thread::id, std::string> s_thread_name_map;
-    static std::shared_mutex                                s_thread_name_map_mutex;
+    static synchronized<std::unordered_map<std::thread::id, std::string>,
+                        policy::freestanding_implementation_policy<
+                            std::unordered_map<std::thread::id, std::string>>>
+        s_thread_name_map;
 };
 
-std::unordered_map<std::thread::id, std::string> flag_formatter::s_thread_name_map{};
-std::shared_mutex                                flag_formatter::s_thread_name_map_mutex{};
+synchronized<
+    std::unordered_map<std::thread::id, std::string>,
+    policy::freestanding_implementation_policy<std::unordered_map<std::thread::id, std::string>>>
+    flag_formatter::s_thread_name_map{};
 } // namespace
 
 namespace phansar::common {

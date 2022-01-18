@@ -5,6 +5,8 @@
 #include <phansar/common/policy.hpp>
 #include <phansar/common/reflect/debug_visitor.hpp>
 #include <phansar/common/reflect/pybind_visitor.hpp>
+#include <phansar/common/service/executor_service.hpp>
+#include <phansar/common/service/logger_service.hpp>
 #include <phansar/common/service_container.hpp>
 #include <phansar/common/synchronized.hpp>
 #include <fmt/format.h>
@@ -29,11 +31,17 @@ auto main(int _argc, char * _argv[]) -> int {
     PH_UNUSED(_argc);
     PH_UNUSED(_argv);
 
-    phansar::common::g_service_container.emplace<phansar::common::logger_service>(
+    phansar::common::g_service_container.emplace<phansar::common::service::logger_service>(
         "client",
         "logs/client.log",
         static_cast<std::size_t>(1024 * 1024 * 5),
         3);
+
+    phansar::common::g_service_container.emplace<phansar::common::service::executor_service>();
+
+    auto & executor =
+        phansar::common::g_service_container.service<phansar::common::service::executor_service>();
+
     auto visitor = phansar::common::reflect::debug_visitor{};
     visitor.visit(rttr::type::get<phansar::common::logger>());
     PH_LOG_DEBUG("testing from C++");
@@ -43,15 +51,20 @@ auto main(int _argc, char * _argv[]) -> int {
     PH_LOG_DEBUG("300 {} {}", ec, ec == phansar::common::error::error300);
     PH_LOG_DEBUG("400 {} {}", ec, ec == phansar::common::error::error400);
 
+    executor.async([]() { PH_LOG_INFO("Logging from a different thread"); });
+    executor.async([]() { PH_LOG_INFO("Logging from a different thread"); });
+    executor.async([]() { PH_LOG_INFO("Logging from a different thread"); });
+    executor.wait_for_all();
+
     auto k = phansar::common::synchronized<int>{12};
-    PH_LOG_INFO("{:{}}{}", "", 4, *k.lock());
-    PH_LOG_INDENTED_INFO(4, "{}", *k.lock());
-    PH_LOG_INFO_IF(true, "{:{}}{}", "", 4, *k.lock());
-    PH_LOG_INDENTED_INFO_IF(true, 4, "{}", *k.lock());
-    PH_LOG_CRITICAL("{:{}}{}", "", 5, *k.lock());
-    PH_LOG_INDENTED_CRITICAL(5, "{}", *k.lock());
-    PH_LOG_CRITICAL_IF(true, "{:{}}{}", "", 5, *k.lock());
-    PH_LOG_INDENTED_CRITICAL_IF(true, 5, "{}", *k.lock());
+    PH_LOG_INFO("{:{}}{}", "", 4, *k.lock_shared());
+    PH_LOG_INDENTED_INFO(4, "{}", *k.lock_shared());
+    PH_LOG_INFO_IF(true, "{:{}}{}", "", 4, *k.lock_shared());
+    PH_LOG_INDENTED_INFO_IF(true, 4, "{}", *k.lock_shared());
+    PH_LOG_CRITICAL("{:{}}{}", "", 5, *k.lock_shared());
+    PH_LOG_INDENTED_CRITICAL(5, "{}", *k.lock_shared());
+    PH_LOG_CRITICAL_IF(true, "{:{}}{}", "", 5, *k.lock_shared());
+    PH_LOG_INDENTED_CRITICAL_IF(true, 5, "{}", *k.lock_shared());
 
     auto policy =
         phansar::common::policy::static_storage_policy<int, sizeof(int), alignof(int)>{1337};

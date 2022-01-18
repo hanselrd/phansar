@@ -1,7 +1,7 @@
 #ifndef PHANSAR_COMMON_MACRO_LOG_HPP
 #define PHANSAR_COMMON_MACRO_LOG_HPP
 
-#include <phansar/common/logger.hpp>
+#include <phansar/common/service/logger_service.hpp>
 #include <phansar/common/service_container.hpp>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
@@ -11,8 +11,8 @@
         #define PH_LOG(_level, ...)                                                                \
             do {                                                                                   \
                 using namespace ::phansar::common;                                                 \
-                if (g_service_container.contains<logger_service>()) {                              \
-                    g_service_container.service<logger_service>()._level(                          \
+                if (g_service_container.contains<service::logger_service>()) {                     \
+                    g_service_container.service<service::logger_service>()._level(                 \
                         fmt::format(__VA_ARGS__));                                                 \
                 }                                                                                  \
             } while (false)
@@ -20,8 +20,8 @@
         #define PH_LOG(_level, ...)                                                                \
             do {                                                                                   \
                 using namespace ::phansar::common;                                                 \
-                if (g_service_container.contains<logger_service>()) {                              \
-                    g_service_container.service<logger_service>()._level(                          \
+                if (g_service_container.contains<service::logger_service>()) {                     \
+                    g_service_container.service<service::logger_service>()._level(                 \
                         fmt::format(__VA_ARGS__),                                                  \
                         spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION});                  \
                 }                                                                                  \

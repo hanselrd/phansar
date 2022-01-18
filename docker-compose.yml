@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+    app: &default
+        build: .
+        image: phansar/app
+        volumes:
+            - .:/app
+            - ./.cache:/cache
+
+    check_format:
+        <<: *default
+        environment:
+            CMAKE_BUILD_TYPE: Debug
+        command: >
+            sh -c "pipenv install &&
+                   rm -rf build &&
+                   cmake -S /app -B build -DENABLE_CMAKE_FORMAT=ON -DENABLE_BLACK=ON -DENABLE_CLANG_FORMAT=ON -DENABLE_CLANG_TIDY=ON &&
+                   cmake --build build --target check-format-cmake-format &&
+                   cmake --build build --target check-format-black &&
+                   cmake --build build --target check-format-clang-format &&
+                   cmake --build build --target check-format-clang-tidy &&
+                   rm -rf build"
+
+    debug_test: &build_test
+        <<: *default
+        environment:
+            CMAKE_BUILD_TYPE: Debug
+        command: >
+            sh -c "pipenv install &&
+                   rm -rf build &&
+                   ccache -z &&
+                   cmake -S /app -B build &&
+                   cmake --build build &&
+                   ctest --ctest-dir build --output-on-failure --timeout 30 &&
+                   rm -rf build &&
+                   ccache -sx"
+
+    release_test:
+        <<: *build_test
+        environment:
+            CMAKE_BUILD_TYPE: Release
+
+    relwithdebinfo_test:
+        <<: *build_test
+        environment:
+            CMAKE_BUILD_TYPE: RelWithDebInfo
+
+    minsizerel_test:
+        <<: *build_test
+        environment:
+            CMAKE_BUILD_TYPE: MinSizeRel

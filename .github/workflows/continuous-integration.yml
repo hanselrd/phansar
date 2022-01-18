@@ -3,228 +3,49 @@ name: Continuous Integration
 on: [push, pull_request]
 
 env:
-    CMAKE_GENERATOR: Ninja
-    GCC_VERSION: 11
-    LLVM_VERSION: 13
-    POSTGRES_VERSION: 13
-    CCACHE_VERSION: 4.5
-    CCACHE_BASEDIR: ${{ github.workspace }}
-    CCACHE_DIR: ${{ github.workspace }}/.ccache
-    CCACHE_COMPRESS: true
-    CCACHE_COMPRESSLEVEL: 6
-    CCACHE_MAXSIZE: 5G
-    CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
 
 jobs:
     build:
-        name: ${{ matrix.name }}
-        runs-on: ${{ matrix.os }}
-
-        strategy:
-            fail-fast: false
-            matrix:
-                name: [
-                    windows-latest-cl,
-                    # windows-latest-clang-cl,
-                    # windows-latest-clang,
-                    # windows-latest-gcc,
-                    ubuntu-latest-gcc,
-                    ubuntu-latest-clang,
-                    macos-latest-clang,
-                    # macos-latest-gcc
-                ]
-
-                include:
-                    - name: windows-latest-cl
-                      os: windows-latest
-                      compiler: cl
-
-                    # - name: windows-latest-clang-cl
-                    #   os: windows-latest
-                    #   compiler: clang-cl
-
-                    # - name: windows-latest-clang
-                    #   os: windows-latest
-                    #   compiler: clang
-
-                    # - name: windows-latest-gcc
-                    #   os: windows-latest
-                    #   compiler: gcc
-
-                    - name: ubuntu-latest-gcc
-                      os: ubuntu-latest
-                      compiler: gcc
-
-                    - name: ubuntu-latest-clang
-                      os: ubuntu-latest
-                      compiler: clang
-
-                    - name: macos-latest-clang
-                      os: macos-latest
-                      compiler: clang
-
-                    # - name: macos-latest-gcc
-                    #   os: macos-latest
-                    #   compiler: gcc
+        name: Continuous Integration
+        runs-on: ubuntu-latest
 
         steps:
         - uses: actions/checkout@v2
 
-        - uses: actions/setup-python@v1
-          with:
-            python-version: '3.x'
-            architecture: 'x64'
-
-        - if: runner.os == 'Windows'
-          uses: ilammy/msvc-dev-cmd@v1
-
-        - name: Install
-          shell: bash
-          run: |
-              python -m pip install --upgrade pip
-              pip install pipenv cmake cmakelang black
-              pipenv install
-
-        - name: Install (Windows)
-          if: runner.os == 'Windows'
-          shell: powershell
-          run: |
-              Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-              scoop install wget ninja llvm postgresql --global
-
-              if ("${{ matrix.compiler }}" -eq "gcc") {
-                  scoop install gcc --global
-                  echo "CC=gcc" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-                  echo "CXX=g++" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-              } elseif ("${{ matrix.compiler }}" -eq "clang") {
-                  echo "CC=clang" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-                  echo "CXX=clang++" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-              } else {
-                  echo "CC=${{ matrix.compiler }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-                  echo "CXX=${{ matrix.compiler }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-              }
-
-              echo "PATH=$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-        - name: Install (Linux)
-          if: runner.os == 'Linux'
-          shell: bash
-          run: |
-              wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-              sudo add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-$LLVM_VERSION main"
-
-              sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-              wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-
-              sudo apt-get update -y
-
-              sudo apt-get install -y ninja-build clang-tools-$LLVM_VERSION clang-format-$LLVM_VERSION clang-tidy-$LLVM_VERSION libglfw3-dev libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev postgresql-$POSTGRES_VERSION libpq-dev postgresql-server-dev-$POSTGRES_VERSION
-
-              if [ "${{ matrix.compiler }}" == "gcc" ]; then
-                  sudo apt-get install -y g++-$GCC_VERSION
-                  echo "CC=gcc-$GCC_VERSION" >> $GITHUB_ENV
-                  echo "CXX=g++-$GCC_VERSION" >> $GITHUB_ENV
-              elif [ "${{ matrix.compiler }}" == "clang" ]; then
-                  sudo apt-get install -y clang-$LLVM_VERSION
-                  echo "CC=clang-$LLVM_VERSION" >> $GITHUB_ENV
-                  echo "CXX=clang++-$LLVM_VERSION" >> $GITHUB_ENV
-              fi
-
-        - name: Install (macOS)
-          if: runner.os == 'macOS'
-          shell: bash
-          run: |
-              brew install ninja llvm@$LLVM_VERSION postgresql
-
-              echo "/usr/local/opt/llvm@$LLVM_VERSION/bin" >> $GITHUB_PATH
-
-              if [ "${{ matrix.compiler }}" == "gcc" ]; then
-                  brew install gcc@$GCC_VERSION
-                  echo "CC=gcc-$GCC_VERSION" >> $GITHUB_ENV
-                  echo "CXX=g++-$GCC_VERSION" >> $GITHUB_ENV
-              elif [ "${{ matrix.compiler }}" == "clang" ]; then
-                  echo "CC=clang" >> $GITHUB_ENV
-                  echo "CXX=clang++" >> $GITHUB_ENV
-              fi
-
         - uses: actions/cache@v2
           with:
             path: |
-                ${{ env.CCACHE_DIR }}
-                # ${{ env.CPM_SOURCE_CACHE }}
-            key: ${{ matrix.os }}-${{ matrix.compiler }}-${{ github.sha }}
+                ${{ github.workspace }}/.cache
+            key: ${{ runner.os }}-${{ github.sha }}
             restore-keys: |
-                ${{ matrix.os }}-${{ matrix.compiler }}-
-                ${{ matrix.os }}-
+                ${{ runner.os }}-
 
-        - name: Configure
+        - name: Build container
           shell: bash
           run: |
-              wget -O ccache.tar.xz https://github.com/cristianadam/ccache/releases/download/v$CCACHE_VERSION/${{ runner.os }}.tar.xz
-              cmake -E make_directory bin
-              tar -xf ccache.tar.xz -C bin
-              ./bin/ccache -pzsx
-              echo "${{ github.workspace }}/bin" >> $GITHUB_PATH
-              echo "CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
-              echo "CMAKE_C_COMPILER_LAUNCHER=ccache" >> $GITHUB_ENV
+              docker-compose build
 
         - name: Check formatting
           shell: bash
           run: |
-              cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_CMAKE_FORMAT=ON -DENABLE_BLACK=ON -DENABLE_CLANG_FORMAT=ON -DENABLE_CLANG_TIDY=ON
-              cmake -E copy build/compile_commands.json .
-
-              if [ "${{ runner.os }}" != "Windows" ]; then
-                  cmake --build build --target check-format-cmake-format
-              fi
-
-              cmake --build build --target check-format-black
-
-              if [ "${{ runner.os }}" == "macOS" ]; then
-                  cmake --build build --target check-format-clang-format
-                  # cmake --build build --target check-format-clang-tidy
-              fi
-
-              cmake -E rm -rf build
+              docker-compose run check_format
 
         - name: Build and test Debug
-          if: runner.os != 'Windows'
           shell: bash
           run: |
-              cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
-              cmake --build build
-              cd build
-              ctest --output-on-failure --timeout 30 -E "pkg-config"
-              cmake -E rm -rf build
+              docker-compose run debug_test
 
         - name: Build and test Release
           shell: bash
           run: |
-              cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-              cmake --build build
-              cd build
-              ctest --output-on-failure --timeout 30 -E "pkg-config"
-              cmake -E rm -rf build
+              docker-compose run release_test
 
         - name: Build and test RelWithDebInfo
           shell: bash
           run: |
-              cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo
-              cmake --build build
-              cd build
-              ctest --output-on-failure --timeout 30 -E "pkg-config"
-              cmake -E rm -rf build
+              docker-compose run relwithdebinfo_test
 
         - name: Build and test MinSizeRel
           shell: bash
           run: |
-              cmake -S . -B build -DCMAKE_BUILD_TYPE=MinSizeRel
-              cmake --build build
-              cd build
-              ctest --output-on-failure --timeout 30 -E "pkg-config"
-              cmake -E rm -rf build
-
-        - name: Summary
-          shell: bash
-          run: |
-              ccache -sx
+              docker-compose run minsizerel_test

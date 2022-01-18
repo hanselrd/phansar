@@ -3,7 +3,6 @@
 
 #include <phansar/common/policy/static_storage_policy.hpp>
 #include <phansar/common/utility/pimpl.hpp>
-#include <kangaru/kangaru.hpp>
 #include <rttr/type>
 #include <spdlog/spdlog.h>
 #include <version>
@@ -60,8 +59,6 @@ private:
     // NOLINTNEXTLINE(modernize-use-trailing-return-type)
     RTTR_ENABLE()
 };
-
-struct logger_service : kgr::single_service<logger>, kgr::supplied {};
 } // namespace phansar::common
 
 #endif

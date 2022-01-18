@@ -19,8 +19,8 @@ synchronized<T, ImplementationPolicy>::proxy<Writable>::proxy(const proxy & _oth
 
 template <class T, class ImplementationPolicy>
 template <bool Writable>
-auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator=(const proxy & _other) ->
-    synchronized<T, ImplementationPolicy>::proxy<Writable> & = default;
+auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator=(const proxy & _other)
+    -> synchronized<T, ImplementationPolicy>::proxy<Writable> &      = default;
 
 template <class T, class ImplementationPolicy>
 template <bool Writable>
@@ -30,8 +30,8 @@ synchronized<T, ImplementationPolicy>::proxy<Writable>::proxy(proxy && _other) n
 
 template <class T, class ImplementationPolicy>
 template <bool Writable>
-auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator=(proxy && _other) noexcept ->
-     synchronized<T, ImplementationPolicy>::proxy<Writable> & {
+auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator=(proxy && _other) noexcept
+    -> synchronized<T, ImplementationPolicy>::proxy<Writable> & {
     if (this != &_other) {
         if (m_impl->mutex != nullptr) {
             if constexpr (Writable) {
@@ -84,21 +84,21 @@ auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator->() -> T *
 template <class T, class ImplementationPolicy>
 template <bool Writable>
 template <bool Writable2, class>
-auto synchronized<T, ImplementationPolicy>::proxy<Writable>::get() -> const T * {
+auto synchronized<T, ImplementationPolicy>::proxy<Writable>::get() const -> const T * {
     return m_impl->obj;
 }
 
 template <class T, class ImplementationPolicy>
 template <bool Writable>
 template <bool Writable2, class>
-auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator*() -> const T & {
+auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator*() const -> const T & {
     return *get();
 }
 
 template <class T, class ImplementationPolicy>
 template <bool Writable>
 template <bool Writable2, class>
-auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator->() -> const T * {
+auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator->() const -> const T * {
     return get();
 }
 

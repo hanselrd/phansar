@@ -26,11 +26,11 @@ public:
         template <bool Writable2 = Writable, class = std::enable_if_t<Writable2>>
         auto operator->() -> T *;
         template <bool Writable2 = Writable, class = std::enable_if_t<! Writable2>>
-        auto get() -> const T *;
+        [[nodiscard]] auto get() const -> const T *;
         template <bool Writable2 = Writable, class = std::enable_if_t<! Writable2>>
-        auto operator*() -> const T &;
+        auto operator*() const -> const T &;
         template <bool Writable2 = Writable, class = std::enable_if_t<! Writable2>>
-        auto operator->() -> const T *;
+        auto operator->() const -> const T *;
 
     private:
         proxy(T & _obj, std::shared_mutex & _mutex);

@@ -137,44 +137,46 @@ function(ph_add_file_pass)
     endif()
 endfunction()
 
-find_program(PIPENV_EXECUTABLE pipenv NO_CACHE)
-if(PIPENV_EXECUTABLE)
-    ph_add_file_pass(
-        NAME codegen
-        COMMANDS
-            "${PIPENV_EXECUTABLE} run cog --verbosity=0 -I ${CMAKE_SOURCE_DIR}/codegen -r @INPUT_FILE@"
-        GLOBS "include/*.hpp"
-              "include/*.inl"
-              "include/*.cpp"
-              "src/*.hpp"
-              "src/*.inl"
-              "src/*.cpp"
-              "src/*.cpp.in"
-              "test/*.hpp"
-              "test/*.inl"
-              "test/*.cpp"
-              "vendor/*.hpp"
-              "vendor/*.inl"
-              "vendor/*.cpp")
+find_program(
+    PIPENV_EXECUTABLE
+    pipenv
+    REQUIRED
+    NO_CACHE)
+ph_add_file_pass(
+    NAME codegen
+    COMMANDS
+        "${PIPENV_EXECUTABLE} run cog --verbosity=0 -I ${CMAKE_SOURCE_DIR}/codegen -r @INPUT_FILE@"
+    GLOBS "include/*.hpp"
+          "include/*.inl"
+          "include/*.cpp"
+          "src/*.hpp"
+          "src/*.inl"
+          "src/*.cpp"
+          "src/*.cpp.in"
+          "test/*.hpp"
+          "test/*.inl"
+          "test/*.cpp"
+          "vendor/*.hpp"
+          "vendor/*.inl"
+          "vendor/*.cpp")
 
-    ph_add_file_pass(
-        NAME clean-codegen
-        COMMANDS
-            "${PIPENV_EXECUTABLE} run cog --verbosity=0 -I ${CMAKE_SOURCE_DIR}/codegen -rx @INPUT_FILE@"
-        GLOBS "include/*.hpp"
-              "include/*.inl"
-              "include/*.cpp"
-              "src/*.hpp"
-              "src/*.inl"
-              "src/*.cpp"
-              "src/*.cpp.in"
-              "test/*.hpp"
-              "test/*.inl"
-              "test/*.cpp"
-              "vendor/*.hpp"
-              "vendor/*.inl"
-              "vendor/*.cpp")
-endif()
+ph_add_file_pass(
+    NAME clean-codegen
+    COMMANDS
+        "${PIPENV_EXECUTABLE} run cog --verbosity=0 -I ${CMAKE_SOURCE_DIR}/codegen -rx @INPUT_FILE@"
+    GLOBS "include/*.hpp"
+          "include/*.inl"
+          "include/*.cpp"
+          "src/*.hpp"
+          "src/*.inl"
+          "src/*.cpp"
+          "src/*.cpp.in"
+          "test/*.hpp"
+          "test/*.inl"
+          "test/*.cpp"
+          "vendor/*.hpp"
+          "vendor/*.inl"
+          "vendor/*.cpp")
 
 ph_add_file_pass(
     NAME assets-shaders-vertex
@@ -332,7 +334,7 @@ if(ENABLE_CLANG_TIDY)
         ph_add_file_pass(
             NAME check-format-clang-tidy
             COMMANDS
-                "${CLANG_TIDY_EXECUTABLE} -extra-arg=-Wno-unknown-warning-option -warnings-as-errors=\"*\" @INPUT_FILE@"
+                "${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} -extra-arg=-Wno-unknown-warning-option -warnings-as-errors=\"*\" @INPUT_FILE@"
             GLOBS "include/*.cpp"
                   "src/*.cpp"
                   "src/*.cpp.in"
@@ -341,7 +343,7 @@ if(ENABLE_CLANG_TIDY)
         ph_add_file_pass(
             NAME fix-format-clang-tidy
             COMMANDS
-                "${CLANG_TIDY_EXECUTABLE} -extra-arg=-Wno-unknown-warning-option -export-fixes=@TMP_DIR@/@HASH@.yaml @INPUT_FILE@"
+                "${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} -extra-arg=-Wno-unknown-warning-option -export-fixes=@TMP_DIR@/@HASH@.yaml @INPUT_FILE@"
             POST_COMMANDS "${CLANG_APPLY_REPLACEMENTS_EXECUTABLE} -format -style=file @TMP_DIR@"
             GLOBS "include/*.cpp"
                   "src/*.cpp"
