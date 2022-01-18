@@ -51,10 +51,7 @@ private:
         s_thread_name_map;
 };
 
-synchronized<
-    std::unordered_map<std::thread::id, std::string>,
-    policy::freestanding_implementation_policy<std::unordered_map<std::thread::id, std::string>>>
-    flag_formatter::s_thread_name_map{};
+decltype(flag_formatter::s_thread_name_map) flag_formatter::s_thread_name_map{};
 } // namespace
 
 namespace phansar::common {
