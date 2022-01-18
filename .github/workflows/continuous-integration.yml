@@ -4,9 +4,9 @@ on: [push, pull_request]
 
 env:
     CMAKE_GENERATOR: Ninja
-    GCC_VERSION: 10
-    LLVM_VERSION: 11
-    POSTGRES_VERSION: 12
+    GCC_VERSION: 11
+    LLVM_VERSION: 13
+    POSTGRES_VERSION: 13
     CCACHE_VERSION: 4.5
     CCACHE_BASEDIR: ${{ github.workspace }}
     CCACHE_DIR: ${{ github.workspace }}/.ccache
