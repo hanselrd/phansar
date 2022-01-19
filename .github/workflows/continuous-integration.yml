@@ -13,12 +13,15 @@ jobs:
 
                 include:
                     - name: gcc
-                      c_compiler: gcc
-                      cxx_compiler: g++
+                      cc: gcc
+                      cxx: g++
 
                     - name: clang
-                      c_compiler: clang
-                      cxx_compiler: clang++
+                      cc: clang
+                      cxx: clang++
+        env:
+            CC: ${{ matrix.cc }}
+            CXX: ${{ matrix.cxx }}
 
         steps:
         - uses: actions/checkout@v2
@@ -33,34 +36,25 @@ jobs:
                 ${{ runner.os }}-
 
         - name: Build container
-          shell: bash
           run: |
               docker-compose build
-          env:
-              CMAKE_C_COMPILER: ${{ matrix.c_compiler }}
-              CMAKE_CXX_COMPILER: ${{ matrix.cxx_compiler }}
 
         - name: Check formatting
-          shell: bash
           run: |
               docker-compose run check_format
 
         - name: Build and test Debug
-          shell: bash
           run: |
               docker-compose run debug_test
 
         - name: Build and test Release
-          shell: bash
           run: |
               docker-compose run release_test
 
         - name: Build and test RelWithDebInfo
-          shell: bash
           run: |
               docker-compose run relwithdebinfo_test
 
         - name: Build and test MinSizeRel
-          shell: bash
           run: |
               docker-compose run minsizerel_test

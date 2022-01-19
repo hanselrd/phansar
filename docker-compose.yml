@@ -5,8 +5,8 @@ services:
         build: .
         image: phansar/app
         environment: &default_environment
-            CMAKE_C_COMPILER: ${CMAKE_C_COMPILER:-gcc}
-            CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER:-g++}
+            CC: ${CC:-gcc}
+            CXX: ${CXX:-g++}
         volumes:
             - .:/app
             - ./.cache:/cache
