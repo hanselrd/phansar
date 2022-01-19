@@ -9,9 +9,11 @@ void debug_visitor::visit_type_begin(const rttr::visitor::type_info<T> & _info) 
 
     PH_LOG_DEBUG("T= {}", typeid(T).name());
 
-    auto log_BaseClass = [](auto BaseClass){ PH_LOG_DEBUG("BaseClass= {}", typeid(std::remove_pointer_t<decltype(BaseClass)>).name()); };
+    auto log_BaseClass = [](auto _BaseClass) {
+        PH_LOG_DEBUG("BaseClass= {}", typeid(std::remove_pointer_t<decltype(_BaseClass)>).name());
+    };
     PH_UNUSED(log_BaseClass);
-    (log_BaseClass(static_cast<BaseClasses*>(nullptr)),...);
+    (log_BaseClass(static_cast<BaseClasses *>(nullptr)), ...);
 
     using base_classes_t = typename rttr::visitor::type_info<T>::base_classes;
     PH_LOG_DEBUG("base_classes_t= {}", typeid(base_classes_t).name());
@@ -86,9 +88,11 @@ template <class T, class... CtorArgs>
 void debug_visitor::visit_constructor(const rttr::visitor::constructor_info<T> & _info) {
     PH_LOG_DEBUG("T= {}", typeid(T).name());
 
-    auto log_CtorArg = [](auto CtorArg){ PH_LOG_DEBUG("CtorArg= {}", typeid(std::remove_pointer_t<decltype(CtorArg)>).name()); };
+    auto log_CtorArg = [](auto _CtorArg) {
+        PH_LOG_DEBUG("CtorArg= {}", typeid(std::remove_pointer_t<decltype(_CtorArg)>).name());
+    };
     PH_UNUSED(log_CtorArg);
-    (log_CtorArg(static_cast<CtorArgs*>(nullptr)),...);
+    (log_CtorArg(static_cast<CtorArgs *>(nullptr)), ...);
 
     using declaring_type_t = typename rttr::visitor::constructor_info<T>::declaring_type;
     PH_LOG_DEBUG("declaring_type_t= {}", typeid(declaring_type_t).name());
@@ -128,8 +132,7 @@ void debug_visitor::visit_constructor_function(
     using policy_t = typename rttr::visitor::constructor_function_info<T>::policy;
     PH_LOG_DEBUG("policy_t= {}", typeid(policy_t).name());
 
-    PH_LOG_DEBUG("function_ptr= {}",
-                 typeid(decltype(_info.function_ptr)).name());
+    PH_LOG_DEBUG("function_ptr= {}", typeid(decltype(_info.function_ptr)).name());
 
     PH_LOG_DEBUG("access_level= {}",
                  static_cast<std::underlying_type_t<rttr::access_levels>>(
@@ -162,17 +165,16 @@ void debug_visitor::visit_method(const rttr::visitor::method_info<T> & _info) {
     using policy_t = typename rttr::visitor::method_info<T>::policy;
     PH_LOG_DEBUG("policy_t= {}", typeid(policy_t).name());
 
-    PH_LOG_DEBUG("function_ptr= {}",
-                 typeid(decltype(_info.function_ptr)).name());
+    PH_LOG_DEBUG("function_ptr= {}", typeid(decltype(_info.function_ptr)).name());
 
     PH_LOG_DEBUG("access_level= {}",
                  static_cast<std::underlying_type_t<rttr::access_levels>>(
                      _info.method_item.get_access_level()));
 
-    PH_LOG_DEBUG("declaring_type= {}", _info.method_item.get_declaring_type().get_name().to_string());
+    PH_LOG_DEBUG("declaring_type= {}",
+                 _info.method_item.get_declaring_type().get_name().to_string());
 
-    PH_LOG_DEBUG("name= {}",
-                 _info.method_item.get_name().to_string());
+    PH_LOG_DEBUG("name= {}", _info.method_item.get_name().to_string());
 
     PH_LOG_DEBUG("len(parameter_infos)= {}", _info.method_item.get_parameter_infos().size());
     for (const auto & parameter_info : _info.method_item.get_parameter_infos()) {
@@ -200,16 +202,16 @@ void debug_visitor::visit_global_method(const rttr::visitor::method_info<T> & _i
     using policy_t = typename rttr::visitor::method_info<T>::policy;
     PH_LOG_DEBUG("policy_t= {}", typeid(policy_t).name());
 
-    PH_LOG_DEBUG("function_ptr= {}",
-                 typeid(decltype(_info.function_ptr)).name());
+    PH_LOG_DEBUG("function_ptr= {}", typeid(decltype(_info.function_ptr)).name());
 
     PH_LOG_DEBUG("access_level= {}",
                  static_cast<std::underlying_type_t<rttr::access_levels>>(
                      _info.method_item.get_access_level()));
-    PH_LOG_DEBUG("declaring_type= {}", _info.method_item.get_declaring_type().get_name().to_string());
 
-    PH_LOG_DEBUG("name= {}",
-                 _info.method_item.get_name().to_string());
+    PH_LOG_DEBUG("declaring_type= {}",
+                 _info.method_item.get_declaring_type().get_name().to_string());
+
+    PH_LOG_DEBUG("name= {}", _info.method_item.get_name().to_string());
 
     PH_LOG_DEBUG("len(parameter_infos)= {}", _info.method_item.get_parameter_infos().size());
     for (const auto & parameter_info : _info.method_item.get_parameter_infos()) {
@@ -237,20 +239,18 @@ void debug_visitor::visit_property(const rttr::visitor::property_info<T> & _info
     using policy_t = typename rttr::visitor::property_info<T>::policy;
     PH_LOG_DEBUG("policy_t= {}", typeid(policy_t).name());
 
-    PH_LOG_DEBUG("property_accessor= {}",
-                 typeid(decltype(_info.property_accessor)).name());
+    PH_LOG_DEBUG("property_accessor= {}", typeid(decltype(_info.property_accessor)).name());
 
     PH_LOG_DEBUG("access_level= {}",
                  static_cast<std::underlying_type_t<rttr::access_levels>>(
                      _info.property_item.get_access_level()));
 
-    PH_LOG_DEBUG("declaring_type= {}", _info.property_item.get_declaring_type().get_name().to_string());
+    PH_LOG_DEBUG("declaring_type= {}",
+                 _info.property_item.get_declaring_type().get_name().to_string());
 
-    PH_LOG_DEBUG("name= {}",
-                 _info.property_item.get_name().to_string());
+    PH_LOG_DEBUG("name= {}", _info.property_item.get_name().to_string());
 
-    PH_LOG_DEBUG("type= {}",
-                 _info.property_item.get_type().get_name().to_string());
+    PH_LOG_DEBUG("type= {}", _info.property_item.get_type().get_name().to_string());
 
     PH_LOG_DEBUG("is_enumeration= {}", _info.property_item.is_enumeration());
 
@@ -272,23 +272,20 @@ void debug_visitor::visit_getter_setter_property(
     using policy_t = typename rttr::visitor::property_getter_setter_info<T>::policy;
     PH_LOG_DEBUG("policy_t= {}", typeid(policy_t).name());
 
-    PH_LOG_DEBUG("property_getter= {}",
-                 typeid(decltype(_info.property_getter)).name());
+    PH_LOG_DEBUG("property_getter= {}", typeid(decltype(_info.property_getter)).name());
 
-    PH_LOG_DEBUG("property_setter= {}",
-                 typeid(decltype(_info.property_setter)).name());
+    PH_LOG_DEBUG("property_setter= {}", typeid(decltype(_info.property_setter)).name());
 
     PH_LOG_DEBUG("access_level= {}",
                  static_cast<std::underlying_type_t<rttr::access_levels>>(
                      _info.property_item.get_access_level()));
 
-    PH_LOG_DEBUG("declaring_type= {}", _info.property_item.get_declaring_type().get_name().to_string());
+    PH_LOG_DEBUG("declaring_type= {}",
+                 _info.property_item.get_declaring_type().get_name().to_string());
 
-    PH_LOG_DEBUG("name= {}",
-                 _info.property_item.get_name().to_string());
+    PH_LOG_DEBUG("name= {}", _info.property_item.get_name().to_string());
 
-    PH_LOG_DEBUG("type= {}",
-                 _info.property_item.get_type().get_name().to_string());
+    PH_LOG_DEBUG("type= {}", _info.property_item.get_type().get_name().to_string());
 
     PH_LOG_DEBUG("is_enumeration= {}", _info.property_item.is_enumeration());
 
@@ -309,20 +306,18 @@ void debug_visitor::visit_global_property(const rttr::visitor::property_info<T> 
     using policy_t = typename rttr::visitor::property_info<T>::policy;
     PH_LOG_DEBUG("policy_t= {}", typeid(policy_t).name());
 
-    PH_LOG_DEBUG("property_accessor= {}",
-                 typeid(decltype(_info.property_accessor)).name());
+    PH_LOG_DEBUG("property_accessor= {}", typeid(decltype(_info.property_accessor)).name());
 
     PH_LOG_DEBUG("access_level= {}",
                  static_cast<std::underlying_type_t<rttr::access_levels>>(
                      _info.property_item.get_access_level()));
 
-    PH_LOG_DEBUG("declaring_type= {}", _info.property_item.get_declaring_type().get_name().to_string());
+    PH_LOG_DEBUG("declaring_type= {}",
+                 _info.property_item.get_declaring_type().get_name().to_string());
 
-    PH_LOG_DEBUG("name= {}",
-                 _info.property_item.get_name().to_string());
+    PH_LOG_DEBUG("name= {}", _info.property_item.get_name().to_string());
 
-    PH_LOG_DEBUG("type= {}",
-                 _info.property_item.get_type().get_name().to_string());
+    PH_LOG_DEBUG("type= {}", _info.property_item.get_type().get_name().to_string());
 
     PH_LOG_DEBUG("is_enumeration= {}", _info.property_item.is_enumeration());
 
@@ -344,23 +339,20 @@ void debug_visitor::visit_global_getter_setter_property(
     using policy_t = typename rttr::visitor::property_getter_setter_info<T>::policy;
     PH_LOG_DEBUG("policy_t= {}", typeid(policy_t).name());
 
-    PH_LOG_DEBUG("property_getter= {}",
-                 typeid(decltype(_info.property_getter)).name());
+    PH_LOG_DEBUG("property_getter= {}", typeid(decltype(_info.property_getter)).name());
 
-    PH_LOG_DEBUG("property_setter= {}",
-                 typeid(decltype(_info.property_setter)).name());
+    PH_LOG_DEBUG("property_setter= {}", typeid(decltype(_info.property_setter)).name());
 
     PH_LOG_DEBUG("access_level= {}",
                  static_cast<std::underlying_type_t<rttr::access_levels>>(
                      _info.property_item.get_access_level()));
 
-    PH_LOG_DEBUG("declaring_type= {}", _info.property_item.get_declaring_type().get_name().to_string());
+    PH_LOG_DEBUG("declaring_type= {}",
+                 _info.property_item.get_declaring_type().get_name().to_string());
 
-    PH_LOG_DEBUG("name= {}",
-                 _info.property_item.get_name().to_string());
+    PH_LOG_DEBUG("name= {}", _info.property_item.get_name().to_string());
 
-    PH_LOG_DEBUG("type= {}",
-                 _info.property_item.get_type().get_name().to_string());
+    PH_LOG_DEBUG("type= {}", _info.property_item.get_type().get_name().to_string());
 
     PH_LOG_DEBUG("is_enumeration= {}", _info.property_item.is_enumeration());
 
@@ -381,20 +373,18 @@ void debug_visitor::visit_readonly_property(const rttr::visitor::property_info<T
     using policy_t = typename rttr::visitor::property_info<T>::policy;
     PH_LOG_DEBUG("policy_t= {}", typeid(policy_t).name());
 
-    PH_LOG_DEBUG("property_accessor= {}",
-                 typeid(decltype(_info.property_accessor)).name());
+    PH_LOG_DEBUG("property_accessor= {}", typeid(decltype(_info.property_accessor)).name());
 
     PH_LOG_DEBUG("access_level= {}",
                  static_cast<std::underlying_type_t<rttr::access_levels>>(
                      _info.property_item.get_access_level()));
 
-    PH_LOG_DEBUG("declaring_type= {}", _info.property_item.get_declaring_type().get_name().to_string());
+    PH_LOG_DEBUG("declaring_type= {}",
+                 _info.property_item.get_declaring_type().get_name().to_string());
 
-    PH_LOG_DEBUG("name= {}",
-                 _info.property_item.get_name().to_string());
+    PH_LOG_DEBUG("name= {}", _info.property_item.get_name().to_string());
 
-    PH_LOG_DEBUG("type= {}",
-                 _info.property_item.get_type().get_name().to_string());
+    PH_LOG_DEBUG("type= {}", _info.property_item.get_type().get_name().to_string());
 
     PH_LOG_DEBUG("is_enumeration= {}", _info.property_item.is_enumeration());
 
@@ -415,20 +405,18 @@ void debug_visitor::visit_global_readonly_property(const rttr::visitor::property
     using policy_t = typename rttr::visitor::property_info<T>::policy;
     PH_LOG_DEBUG("policy_t= {}", typeid(policy_t).name());
 
-    PH_LOG_DEBUG("property_accessor= {}",
-                 typeid(decltype(_info.property_accessor)).name());
+    PH_LOG_DEBUG("property_accessor= {}", typeid(decltype(_info.property_accessor)).name());
 
     PH_LOG_DEBUG("access_level= {}",
                  static_cast<std::underlying_type_t<rttr::access_levels>>(
                      _info.property_item.get_access_level()));
 
-    PH_LOG_DEBUG("declaring_type= {}", _info.property_item.get_declaring_type().get_name().to_string());
+    PH_LOG_DEBUG("declaring_type= {}",
+                 _info.property_item.get_declaring_type().get_name().to_string());
 
-    PH_LOG_DEBUG("name= {}",
-                 _info.property_item.get_name().to_string());
+    PH_LOG_DEBUG("name= {}", _info.property_item.get_name().to_string());
 
-    PH_LOG_DEBUG("type= {}",
-                 _info.property_item.get_type().get_name().to_string());
+    PH_LOG_DEBUG("type= {}", _info.property_item.get_type().get_name().to_string());
 
     PH_LOG_DEBUG("is_enumeration= {}", _info.property_item.is_enumeration());
 

@@ -17,9 +17,9 @@
 #include <pybind11/embed.h>
 #include <pybind11/functional.h>
 #include <pybind11/stl.h>
+#include <rttr/registration>
 #include <rttr/type>
 #include <rttr/visitor.h>
-#include <rttr/registration>
 #include <cstddef>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
@@ -30,41 +30,55 @@ PYBIND11_EMBEDDED_MODULE(phansar, m) {
 
 class Shape {
 public:
-    Shape(int width, int height) : _width{width}, _height{height} {}
+    Shape(int _width, int _height) : m_width{_width}, m_height{_height} {}
 
-    static Shape* create() {return nullptr; }
-    int area() {return 0;}
-    int area(int) {return 2;}
-    int area(int) const {return 3;}
-    int width() const { return _width; }
-    int height() const { return _height; }
+    static auto create() -> Shape * {
+        return nullptr;
+    }
+    auto area() -> int {
+        return 0;
+    }
+    auto area(int /*unused*/) -> int {
+        return 2;
+    }
+    [[nodiscard]] auto area(int /*unused*/) const -> int {
+        return 3;
+    }
+    [[nodiscard]] auto width() const -> int {
+        return m_width;
+    }
+    [[nodiscard]] auto height() const -> int {
+        return m_height;
+    }
 
 private:
-int _width;
-int _height;
+    int m_width;
+    int m_height;
 
-RTTR_ENABLE()
+    // NOLINTNEXTLINE(modernize-use-trailing-return-type)
+    RTTR_ENABLE()
 };
 
-class Rectangle : public Shape{
-    public:
-    Rectangle() :Shape{1,2} {}
-    private:
+class Rectangle : public Shape {
+public:
+    Rectangle() : Shape{1, 2} {}
+
+private:
+    // NOLINTNEXTLINE(modernize-use-trailing-return-type)
     RTTR_ENABLE(Shape)
 };
 
 RTTR_REGISTRATION {
     rttr::registration::class_<Shape>("Shape")
-    .constructor<int,int>().
-constructor(&Shape::create)
-    .method("area", rttr::select_overload<int()>(&Shape::area))
-    .method("area", rttr::select_overload<int(int)>(&Shape::area))
-    .method("area", rttr::select_const(&Shape::area))
-    .property_readonly("width", &Shape::width)
-    .property_readonly("height", &Shape::height);
+        .constructor<int, int>()
+        .constructor(&Shape::create)
+        .method("area", rttr::select_overload<int()>(&Shape::area))
+        .method("area", rttr::select_overload<int(int)>(&Shape::area))
+        .method("area", rttr::select_const(&Shape::area))
+        .property_readonly("width", &Shape::width)
+        .property_readonly("height", &Shape::height);
 
-    rttr::registration::class_<Rectangle>("Rectangle")
-    .constructor();
+    rttr::registration::class_<Rectangle>("Rectangle").constructor();
 }
 
 auto main(int _argc, char * _argv[]) -> int {
