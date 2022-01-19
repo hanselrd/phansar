@@ -31,7 +31,11 @@ PYBIND11_EMBEDDED_MODULE(phansar, m) {
 class Shape {
 public:
     Shape(int _width, int _height) : m_width{_width}, m_height{_height} {}
-    virtual ~Shape() = default;
+    Shape(const Shape & /*unused*/) = default;
+    auto operator=(const Shape & /*unused*/) -> Shape & = default;
+    Shape(Shape && /*unused*/) noexcept                 = default;
+    auto operator=(Shape && /*unused*/) noexcept -> Shape & = default;
+    virtual ~Shape()                                        = default;
 
     static auto create() -> Shape * {
         return nullptr;
@@ -53,8 +57,8 @@ public:
     }
 
 private:
-    int m_width;
-    int m_height;
+    int m_width{};
+    int m_height{};
 
     // NOLINTNEXTLINE(modernize-use-trailing-return-type)
     RTTR_ENABLE()
@@ -63,7 +67,11 @@ private:
 class Rectangle : public Shape {
 public:
     Rectangle() : Shape{1, 2} {}
-    ~Rectangle() override = default;
+    Rectangle(const Rectangle & /*unused*/) : Shape{1, 2} {}
+    auto operator=(const Rectangle & /*unused*/) -> Rectangle & = default;
+    Rectangle(Rectangle && /*unused*/) noexcept : Shape{1, 2} {}
+    auto operator=(Rectangle && /*unused*/) noexcept -> Rectangle & = default;
+    ~Rectangle() override                                           = default;
 
 private:
     // NOLINTNEXTLINE(modernize-use-trailing-return-type)
