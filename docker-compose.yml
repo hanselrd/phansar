@@ -4,6 +4,9 @@ services:
     app: &default
         build: .
         image: phansar/app
+        environment: &default_environment
+            CMAKE_C_COMPILER: ${CMAKE_C_COMPILER:-gcc}
+            CMAKE_CXX_COMPILER: ${CMAKE_C_COMPILER:-g++}
         volumes:
             - .:/app
             - ./.cache:/cache
@@ -11,6 +14,7 @@ services:
     check_format:
         <<: *default
         environment:
+            <<: *default_environment
             CMAKE_BUILD_TYPE: Debug
         command: >
             sh -c "pipenv install &&
@@ -22,12 +26,11 @@ services:
                    cmake --build build --target check-format-clang-tidy &&
                    rm -rf build"
 
-    gcc_debug_test: &gcc_build_test
+    debug_test: &build_test
         <<: *default
         environment:
+            <<: *default_environment
             CMAKE_BUILD_TYPE: Debug
-            CMAKE_C_COMPILER: gcc
-            CMAKE_CXX_COMPILER: g++
         command: >
             sh -c "pipenv install &&
                    rm -rf build &&
@@ -38,39 +41,20 @@ services:
                    rm -rf build &&
                    ccache -sx"
 
-    gcc_release_test:
-        <<: *gcc_build_test
+    release_test:
+        <<: *build_test
         environment:
+            <<: *default_environment
             CMAKE_BUILD_TYPE: Release
 
-    gcc_relwithdebinfo_test:
-        <<: *gcc_build_test
+    relwithdebinfo_test:
+        <<: *build_test
         environment:
+            <<: *default_environment
             CMAKE_BUILD_TYPE: RelWithDebInfo
 
-    gcc_minsizerel_test:
-        <<: *gcc_build_test
+    minsizerel_test:
+        <<: *build_test
         environment:
-            CMAKE_BUILD_TYPE: MinSizeRel
-
-    clang_debug_test: &clang_build_test
-        <<: *gcc_build_test
-        environment:
-            CMAKE_BUILD_TYPE: Debug
-            CMAKE_C_COMPILER: clang
-            CMAKE_CXX_COMPILER: clang++
-
-    clang_release_test:
-        <<: *clang_build_test
-        environment:
-            CMAKE_BUILD_TYPE: Release
-
-    clang_relwithdebinfo_test:
-        <<: *clang_build_test
-        environment:
-            CMAKE_BUILD_TYPE: RelWithDebInfo
-
-    clang_minsizerel_test:
-        <<: *clang_build_test
-        environment:
+            <<: *default_environment
             CMAKE_BUILD_TYPE: MinSizeRel
