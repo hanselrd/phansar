@@ -31,6 +31,7 @@ PYBIND11_EMBEDDED_MODULE(phansar, m) {
 class Shape {
 public:
     Shape(int _width, int _height) : m_width{_width}, m_height{_height} {}
+    virtual ~Shape() = default;
 
     static auto create() -> Shape * {
         return nullptr;
@@ -62,6 +63,7 @@ private:
 class Rectangle : public Shape {
 public:
     Rectangle() : Shape{1, 2} {}
+    ~Rectangle() override = default;
 
 private:
     // NOLINTNEXTLINE(modernize-use-trailing-return-type)
