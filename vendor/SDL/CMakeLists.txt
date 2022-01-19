@@ -1,0 +1,10 @@
+CPMAddPackage(
+    NAME SDL
+    GITHUB_REPOSITORY libsdl-org/SDL # main
+    GIT_TAG a0e3c884d4519d4ae02f5c22c7557759eaea60ca
+    EXCLUDE_FROM_ALL YES)
+
+ph_add_library(
+    NAME ph_vendor_sdl2
+    TYPE INTERFACE
+    LINK_LIBRARIES SYSTEM INTERFACE SDL2)
