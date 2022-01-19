@@ -7,7 +7,9 @@ RUN pacman -S \
         clang \
         cmake \
         git \
-        glfw-x11 \
+        sdl \
+        sdl_mixer \
+        sdl_ttf \
         llvm \
         ninja \
         postgresql \
