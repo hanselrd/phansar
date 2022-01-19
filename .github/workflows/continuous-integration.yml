@@ -4,8 +4,12 @@ on: [push, pull_request]
 
 jobs:
     build:
-        name: Continuous Integration
+        name: ${{ matrix.compiler }}
         runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                compiler: [gcc, clang]
 
         steps:
         - uses: actions/checkout@v2
@@ -14,8 +18,9 @@ jobs:
           with:
             path: |
                 ${{ github.workspace }}/.cache
-            key: ${{ runner.os }}-${{ github.sha }}
+            key: ${{ runner.os }}-${{ matrix.compiler }}-${{ github.sha }}
             restore-keys: |
+                ${{ runner.os }}-${{ matrix-compiler }}-
                 ${{ runner.os }}-
 
         - name: Build container
@@ -31,19 +36,19 @@ jobs:
         - name: Build and test Debug
           shell: bash
           run: |
-              docker-compose run debug_test
+              docker-compose run ${{ matrix.compiler }}_debug_test
 
         - name: Build and test Release
           shell: bash
           run: |
-              docker-compose run release_test
+              docker-compose run ${{ matrix.compiler }}_release_test
 
         - name: Build and test RelWithDebInfo
           shell: bash
           run: |
-              docker-compose run relwithdebinfo_test
+              docker-compose run ${{ matrix.compiler }}_relwithdebinfo_test
 
         - name: Build and test MinSizeRel
           shell: bash
           run: |
-              docker-compose run minsizerel_test
+              docker-compose run ${{ matrix.compiler }}_minsizerel_test

@@ -7,14 +7,15 @@ RUN pacman -S \
         clang \
         cmake \
         git \
-        sdl \
-        sdl_mixer \
-        sdl_ttf \
         llvm \
+        mesa \
         ninja \
         postgresql \
         python \
         python-pip \
+        sdl \
+        sdl_mixer \
+        sdl_ttf \
         --noconfirm
 
 RUN python -m pip install --upgrade pip
