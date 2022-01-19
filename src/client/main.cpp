@@ -2,6 +2,7 @@
 #include <phansar/common/error.hpp>
 #include <phansar/common/logger.hpp>
 #include <phansar/common/macro.hpp>
+#include <phansar/common/meta.hpp>
 #include <phansar/common/policy.hpp>
 #include <phansar/common/reflect/debug_visitor.hpp>
 #include <phansar/common/reflect/pybind_visitor.hpp>
@@ -11,7 +12,6 @@
 #include <phansar/common/synchronized.hpp>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
-#include <kangaru/kangaru.hpp>
 #include <pybind11/chrono.h>
 #include <pybind11/complex.h>
 #include <pybind11/embed.h>
@@ -44,6 +44,12 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto visitor = phansar::common::reflect::debug_visitor{};
     visitor.visit(rttr::type::get<phansar::common::logger>());
+    PH_LOG_DEBUG(
+        "is_const_method: {}",
+        phansar::common::meta::is_const_method_v<decltype(&phansar::common::logger::handle)>);
+    PH_LOG_DEBUG(
+        "is_const_method: {}",
+        phansar::common::meta::is_const_method_v<decltype(&phansar::common::logger::debug)>);
     PH_LOG_DEBUG("testing from C++");
     auto ec = std::error_code{phansar::common::errc::error102};
     PH_LOG_DEBUG("100 {} {}", ec.message(), ec == phansar::common::error::error100);

@@ -7,9 +7,9 @@
 namespace phansar::common::meta {
 namespace detail {
 template <class F>
-class y_combinator_result {
+class y_combinator {
 public:
-    explicit y_combinator_result(F && _f);
+    explicit y_combinator(F && _f);
 
     template <class... Args>
     constexpr auto operator()(Args &&... _args) const -> decltype(auto);
@@ -20,7 +20,7 @@ private:
 } // namespace detail
 
 template <class F>
-constexpr auto make_y_combinator(F && _f) -> detail::y_combinator_result<std::decay_t<F>>;
+constexpr auto make_y_combinator(F && _f) -> detail::y_combinator<std::decay_t<F>>;
 } // namespace phansar::common::meta
 
 #include <phansar/common/meta/y_combinator.inl>
