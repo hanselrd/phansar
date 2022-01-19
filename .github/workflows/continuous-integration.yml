@@ -39,7 +39,6 @@ jobs:
         - name: Build container
           shell: bash
           run: |
-              docker-compose config
               docker-compose build
 
         - name: Check formatting
