@@ -19,12 +19,52 @@
 #include <pybind11/stl.h>
 #include <rttr/type>
 #include <rttr/visitor.h>
+#include <rttr/registration>
 #include <cstddef>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
 PYBIND11_EMBEDDED_MODULE(phansar, m) {
     auto visitor = phansar::common::reflect::pybind_visitor{m};
     visitor.visit(rttr::type::get<phansar::common::logger>());
+}
+
+class Shape {
+public:
+    Shape(int width, int height) : _width{width}, _height{height} {}
+
+    static Shape* create() {return nullptr; }
+    int area() {return 0;}
+    int area(int) {return 2;}
+    int area(int) const {return 3;}
+    int width() const { return _width; }
+    int height() const { return _height; }
+
+private:
+int _width;
+int _height;
+
+RTTR_ENABLE()
+};
+
+class Rectangle : public Shape{
+    public:
+    Rectangle() :Shape{1,2} {}
+    private:
+    RTTR_ENABLE(Shape)
+};
+
+RTTR_REGISTRATION {
+    rttr::registration::class_<Shape>("Shape")
+    .constructor<int,int>().
+constructor(&Shape::create)
+    .method("area", rttr::select_overload<int()>(&Shape::area))
+    .method("area", rttr::select_overload<int(int)>(&Shape::area))
+    .method("area", rttr::select_const(&Shape::area))
+    .property_readonly("width", &Shape::width)
+    .property_readonly("height", &Shape::height);
+
+    rttr::registration::class_<Rectangle>("Rectangle")
+    .constructor();
 }
 
 auto main(int _argc, char * _argv[]) -> int {
@@ -43,6 +83,12 @@ auto main(int _argc, char * _argv[]) -> int {
         phansar::common::g_service_container.service<phansar::common::service::executor_service>();
 
     auto visitor = phansar::common::reflect::debug_visitor{};
+
+    {
+        visitor.visit(rttr::type::get<Rectangle>());
+        return 0;
+    }
+
     visitor.visit(rttr::type::get<phansar::common::logger>());
     PH_LOG_DEBUG(
         "is_const_method: {}",

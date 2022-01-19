@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME libpqxx
     GITHUB_REPOSITORY jtv/libpqxx # master
-    GIT_TAG 55f40b426d66f90faaf7251f7bc66a7aa28612ca
+    GIT_TAG c61cfe8cdc52970acef6abd138c9c201060bc230
     OPTIONS "SKIP_BUILD_TEST ON"
     EXCLUDE_FROM_ALL YES)
 

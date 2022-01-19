@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME SDL_ttf
     GITHUB_REPOSITORY libsdl-org/SDL_ttf # main
-    GIT_TAG 3a0dd6d0880254956275569b1144bdde16a98e47
+    GIT_TAG 164dd650976a75cc39ef0f5cbe89b826594ca0f9
     EXCLUDE_FROM_ALL YES)
 
 ph_add_library(

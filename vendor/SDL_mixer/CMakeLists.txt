@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME SDL_mixer
-    GITHUB_REPOSITORY libsdl-org/SDL_mixer # main
-    GIT_TAG ffd05891bcaca5c42cfd70ce940af3cd8f44dfbf
+    GITHUB_REPOSITORY libsdl-org/SDL_mixer # master
+    GIT_TAG 9e4993474f8b435f50714dac7c5827b5962277df
     EXCLUDE_FROM_ALL YES)
 
 ph_add_library(
