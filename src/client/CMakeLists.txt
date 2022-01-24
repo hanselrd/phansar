@@ -1,5 +1,6 @@
 ph_add_library(
     NAME ph_client_lib
+    TYPE STATIC
     INCLUDE_DIRECTORIES PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}
     COMPILE_DEFINITIONS PRIVATE ${default_compile_definitions}
     COMPILE_FEATURES PRIVATE ${default_compile_features}
@@ -10,10 +11,13 @@ ph_add_library(
         ph_common
         ph_vendor_assimp
         ph_vendor_bgfx
+        ph_vendor_glfw
         ph_vendor_glm
-        ph_vendor_sdl2
-        ph_vendor_sdl2_mixer
-        ph_vendor_sdl2_ttf
+        # cmake-format: off
+        # ph_vendor_sdl2
+        # ph_vendor_sdl2_mixer
+        # ph_vendor_sdl2_ttf
+        # cmake-format: on
     SANITIZERS ${default_sanitizers})
 
 ph_add_executable(

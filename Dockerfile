@@ -7,6 +7,7 @@ RUN pacman -S \
         clang \
         cmake \
         git \
+        glfw-x11 \
         llvm \
         mesa \
         ninja \

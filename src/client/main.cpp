@@ -20,6 +20,7 @@
 #include <rttr/registration>
 #include <rttr/type>
 #include <rttr/visitor.h>
+#include <sigslot/signal.hpp>
 #include <cstddef>
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
@@ -110,7 +111,7 @@ auto main(int _argc, char * _argv[]) -> int {
 
     {
         visitor.visit(rttr::type::get<Rectangle>());
-        return 0;
+        // return 0;
     }
 
     visitor.visit(rttr::type::get<phansar::common::logger>());
@@ -151,6 +152,13 @@ auto main(int _argc, char * _argv[]) -> int {
     PH_LOG_DEBUG("{} {}", t.get_name(), t.get_sizeof());
     t = rttr::type::get<phansar::common::logger>();
     PH_LOG_DEBUG("{} {}", t.get_name(), t.get_sizeof());
+
+    auto sig = sigslot::signal<double>{};
+    sig.connect([](double _dt) { PH_LOG_DEBUG("dt: {}", _dt); });
+
+    PH_LOG_DEBUG("slot_count: {}", sig.slot_count());
+    sig(12.0);
+    sig(15.0);
 
 #if 0
     auto guard = py::scoped_interpreter{};

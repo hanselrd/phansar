@@ -1,7 +1,8 @@
 CPMAddPackage(
     NAME SDL
     GITHUB_REPOSITORY libsdl-org/SDL # main
-    GIT_TAG 381520ad921944284226b4ebf96299cb7fd0a69c
+    GIT_TAG 57bc90403ed2bb8a26fe28e4ad3d3ae4f9bc470f
+    OPTIONS "BUILD_SHARED_LIBS ON"
     EXCLUDE_FROM_ALL YES)
 
 ph_add_library(

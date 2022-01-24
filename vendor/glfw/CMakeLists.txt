@@ -1,0 +1,11 @@
+CPMAddPackage(
+    NAME glfw
+    GITHUB_REPOSITORY glfw/glfw # master
+    GIT_TAG df8d7bc892937a8b0f7c604c92a9f64f383cf48c
+    OPTIONS "GLFW_BUILD_DOCS OFF" "GLFW_INSTALL OFF"
+    EXCLUDE_FROM_ALL YES)
+
+ph_add_library(
+    NAME ph_vendor_glfw
+    TYPE INTERFACE
+    LINK_LIBRARIES SYSTEM INTERFACE glfw)
