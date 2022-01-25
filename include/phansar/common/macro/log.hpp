@@ -12,7 +12,8 @@
             do {                                                                                   \
                 using namespace ::phansar::common;                                                 \
                 if (g_service_container.contains<service::logger_service>()) {                     \
-                    g_service_container.service<service::logger_service>()._level(                 \
+                    g_service_container.service<service::logger_service>().smart_log(              \
+                        spdlog::level::_level,                                                     \
                         fmt::format(__VA_ARGS__));                                                 \
                 }                                                                                  \
             } while (false)
@@ -21,7 +22,8 @@
             do {                                                                                   \
                 using namespace ::phansar::common;                                                 \
                 if (g_service_container.contains<service::logger_service>()) {                     \
-                    g_service_container.service<service::logger_service>()._level(                 \
+                    g_service_container.service<service::logger_service>().log(                    \
+                        spdlog::level::_level,                                                     \
                         fmt::format(__VA_ARGS__),                                                  \
                         spdlog::source_loc{__FILE__, __LINE__, SPDLOG_FUNCTION});                  \
                 }                                                                                  \
@@ -32,8 +34,8 @@
 #define PH_LOG_TRACE(...)    PH_LOG(trace, __VA_ARGS__)
 #define PH_LOG_DEBUG(...)    PH_LOG(debug, __VA_ARGS__)
 #define PH_LOG_INFO(...)     PH_LOG(info, __VA_ARGS__)
-#define PH_LOG_WARNING(...)  PH_LOG(warning, __VA_ARGS__)
-#define PH_LOG_ERROR(...)    PH_LOG(error, __VA_ARGS__)
+#define PH_LOG_WARNING(...)  PH_LOG(warn, __VA_ARGS__)
+#define PH_LOG_ERROR(...)    PH_LOG(err, __VA_ARGS__)
 #define PH_LOG_CRITICAL(...) PH_LOG(critical, __VA_ARGS__)
 
 #define PH_LOG_IF(_level, _condition, ...)                                                         \
@@ -46,8 +48,8 @@
 #define PH_LOG_TRACE_IF(_condition, ...)    PH_LOG_IF(trace, _condition, __VA_ARGS__)
 #define PH_LOG_DEBUG_IF(_condition, ...)    PH_LOG_IF(debug, _condition, __VA_ARGS__)
 #define PH_LOG_INFO_IF(_condition, ...)     PH_LOG_IF(info, _condition, __VA_ARGS__)
-#define PH_LOG_WARNING_IF(_condition, ...)  PH_LOG_IF(warning, _condition, __VA_ARGS__)
-#define PH_LOG_ERROR_IF(_condition, ...)    PH_LOG_IF(error, _condition, __VA_ARGS__)
+#define PH_LOG_WARNING_IF(_condition, ...)  PH_LOG_IF(warn, _condition, __VA_ARGS__)
+#define PH_LOG_ERROR_IF(_condition, ...)    PH_LOG_IF(err, _condition, __VA_ARGS__)
 #define PH_LOG_CRITICAL_IF(_condition, ...) PH_LOG_IF(critical, _condition, __VA_ARGS__)
 
 #define PH_LOG_INDENTED(_level, _indent, ...)                                                      \
@@ -56,8 +58,8 @@
 #define PH_LOG_INDENTED_TRACE(_indent, ...)    PH_LOG_INDENTED(trace, _indent, __VA_ARGS__)
 #define PH_LOG_INDENTED_DEBUG(_indent, ...)    PH_LOG_INDENTED(debug, _indent, __VA_ARGS__)
 #define PH_LOG_INDENTED_INFO(_indent, ...)     PH_LOG_INDENTED(info, _indent, __VA_ARGS__)
-#define PH_LOG_INDENTED_WARNING(_indent, ...)  PH_LOG_INDENTED(warning, _indent, __VA_ARGS__)
-#define PH_LOG_INDENTED_ERROR(_indent, ...)    PH_LOG_INDENTED(error, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_WARNING(_indent, ...)  PH_LOG_INDENTED(warn, _indent, __VA_ARGS__)
+#define PH_LOG_INDENTED_ERROR(_indent, ...)    PH_LOG_INDENTED(err, _indent, __VA_ARGS__)
 #define PH_LOG_INDENTED_CRITICAL(_indent, ...) PH_LOG_INDENTED(critical, _indent, __VA_ARGS__)
 
 #define PH_LOG_INDENTED_IF(_level, _condition, _indent, ...)                                       \
@@ -74,9 +76,9 @@
 #define PH_LOG_INDENTED_INFO_IF(_condition, _indent, ...)                                          \
     PH_LOG_INDENTED_IF(info, _condition, _indent, __VA_ARGS__)
 #define PH_LOG_INDENTED_WARNING_IF(_condition, _indent, ...)                                       \
-    PH_LOG_INDENTED_IF(warning, _condition, _indent, __VA_ARGS__)
+    PH_LOG_INDENTED_IF(warn, _condition, _indent, __VA_ARGS__)
 #define PH_LOG_INDENTED_ERROR_IF(_condition, _indent, ...)                                         \
-    PH_LOG_INDENTED_IF(error, _condition, _indent, __VA_ARGS__)
+    PH_LOG_INDENTED_IF(err, _condition, _indent, __VA_ARGS__)
 #define PH_LOG_INDENTED_CRITICAL_IF(_condition, _indent, ...)                                      \
     PH_LOG_INDENTED_IF(critical, _condition, _indent, __VA_ARGS__)
 

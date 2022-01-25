@@ -27,30 +27,15 @@ public:
     auto operator=(logger && _other) noexcept -> logger &;
     virtual ~logger();
 
-    [[nodiscard]] auto handle() const -> std::shared_ptr<spdlog::logger>;
 #ifdef __has_include
     #if __has_include(<source_location>) && defined(__cpp_lib_source_location)
-    void trace(std::string_view     _message,
-               std::source_location _location = std::source_location::current());
-    void debug(std::string_view     _message,
-               std::source_location _location = std::source_location::current());
-    void info(std::string_view     _message,
-              std::source_location _location = std::source_location::current());
-    void warning(std::string_view     _message,
-                 std::source_location _location = std::source_location::current());
-    void error(std::string_view     _message,
-               std::source_location _location = std::source_location::current());
-    void critical(std::string_view     _message,
-                  std::source_location _location = std::source_location::current());
-    #else
-    void trace(std::string_view _message, spdlog::source_loc _location);
-    void debug(std::string_view _message, spdlog::source_loc _location);
-    void info(std::string_view _message, spdlog::source_loc _location);
-    void warning(std::string_view _message, spdlog::source_loc _location);
-    void error(std::string_view _message, spdlog::source_loc _location);
-    void critical(std::string_view _message, spdlog::source_loc _location);
+    void smart_log(spdlog::level::level_enum _level,
+                   std::string_view          _message,
+                   std::source_location      _location = std::source_location::current());
     #endif
 #endif
+    void
+    log(spdlog::level::level_enum _level, std::string_view _message, spdlog::source_loc _location);
 
 private:
     struct impl;

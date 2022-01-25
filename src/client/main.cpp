@@ -23,12 +23,6 @@
 #include <sigslot/signal.hpp>
 #include <cstddef>
 
-// NOLINTNEXTLINE(modernize-use-trailing-return-type)
-PYBIND11_EMBEDDED_MODULE(phansar, m) {
-    auto visitor = phansar::common::reflect::pybind_visitor{m};
-    visitor.visit(rttr::type::get<phansar::common::logger>());
-}
-
 class Shape {
 public:
     Shape(int _width, int _height) : m_width{_width}, m_height{_height} {}
@@ -56,6 +50,8 @@ public:
     [[nodiscard]] auto height() const -> int {
         return m_height;
     }
+    static void test() {}
+    static int  s_scale;
 
 private:
     int m_width{};
@@ -64,6 +60,8 @@ private:
     // NOLINTNEXTLINE(modernize-use-trailing-return-type)
     RTTR_ENABLE()
 };
+
+decltype(Shape::s_scale) Shape::s_scale = 2;
 
 class Rectangle : public Shape {
 public:
@@ -87,9 +85,21 @@ RTTR_REGISTRATION {
         .method("area", rttr::select_overload<int(int)>(&Shape::area))
         .method("area", rttr::select_const(&Shape::area))
         .property_readonly("width", &Shape::width)
-        .property_readonly("height", &Shape::height);
+        .property_readonly("height", &Shape::height)
+        .method("test", &Shape::test)
+        .method("testt", []() {})
+        .property("scale", &Shape::s_scale)
+        .property_readonly("omg", []() { return 12; });
 
     rttr::registration::class_<Rectangle>("Rectangle").constructor();
+}
+
+// NOLINTNEXTLINE(modernize-use-trailing-return-type)
+PYBIND11_EMBEDDED_MODULE(phansar, m) {
+    auto visitor = phansar::common::reflect::pybind_visitor{m};
+    visitor.visit(rttr::type::get<phansar::common::logger>());
+    // visitor.visit(rttr::type::get<Shape>());
+    visitor.visit(rttr::type::get<Rectangle>());
 }
 
 auto main(int _argc, char * _argv[]) -> int {
@@ -107,20 +117,16 @@ auto main(int _argc, char * _argv[]) -> int {
     auto & executor =
         phansar::common::g_service_container.service<phansar::common::service::executor_service>();
 
-    auto visitor = phansar::common::reflect::debug_visitor{};
+    // auto visitor = phansar::common::reflect::debug_visitor{};
 
-    {
-        visitor.visit(rttr::type::get<Rectangle>());
-        // return 0;
-    }
+    // {
+    //     visitor.visit(rttr::type::get<Rectangle>());
+    //     // return 0;
+    // }
 
-    visitor.visit(rttr::type::get<phansar::common::logger>());
-    PH_LOG_DEBUG(
-        "is_const_method: {}",
-        phansar::common::meta::is_const_method_v<decltype(&phansar::common::logger::handle)>);
-    PH_LOG_DEBUG(
-        "is_const_method: {}",
-        phansar::common::meta::is_const_method_v<decltype(&phansar::common::logger::debug)>);
+    // visitor.visit(rttr::type::get<phansar::common::logger>());
+    PH_LOG_DEBUG("is_const_method: {}",
+                 phansar::common::meta::is_const_method_v<decltype(&phansar::common::logger::log)>);
     PH_LOG_DEBUG("testing from C++");
     auto ec = std::error_code{phansar::common::errc::error102};
     PH_LOG_DEBUG("100 {} {}", ec.message(), ec == phansar::common::error::error100);
@@ -143,6 +149,13 @@ auto main(int _argc, char * _argv[]) -> int {
     PH_LOG_CRITICAL_IF(true, "{:{}}{}", "", 5, *k.lock_shared());
     PH_LOG_INDENTED_CRITICAL_IF(true, 5, "{}", *k.lock_shared());
 
+    PH_LOG_TRACE("trace");
+    PH_LOG_DEBUG("debug");
+    PH_LOG_INFO("info");
+    PH_LOG_WARNING("warning");
+    PH_LOG_ERROR("error");
+    PH_LOG_CRITICAL("critical");
+
     auto policy =
         phansar::common::policy::static_storage_policy<int, sizeof(int), alignof(int)>{1337};
     PH_LOG_DEBUG("sizeof: {}, value: {}", sizeof(policy), *policy);
@@ -160,7 +173,6 @@ auto main(int _argc, char * _argv[]) -> int {
     sig(12.0);
     sig(15.0);
 
-#if 0
     auto guard = py::scoped_interpreter{};
     py::exec(R"python(
         from phansar import logger#, material, colors, permissions
@@ -169,7 +181,7 @@ auto main(int _argc, char * _argv[]) -> int {
         l.trace("trace")
         l.debug("debug")
         l.info("info")
-        l.warn("warn")
+        l.warning("warning")
         l.error("error")
         l.critical("critical")
         l.debug(f"{l}")
@@ -201,7 +213,6 @@ auto main(int _argc, char * _argv[]) -> int {
         #l.debug(f"{permissions.write_execute}")
         #l.debug(f"{permissions.read_write_execute}")
     )python");
-#endif
 
     return 0;
 }
