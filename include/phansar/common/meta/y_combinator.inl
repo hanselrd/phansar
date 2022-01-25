@@ -14,6 +14,6 @@ constexpr auto y_combinator<T>::operator()(Args &&... _args) const -> decltype(a
 
 template <class T>
 constexpr auto make_y_combinator(T && _f) -> detail::y_combinator<std::decay_t<T>> {
-    return {std::forward<T>(_f)};
+    return detail::y_combinator{std::forward<T>(_f)};
 }
 } // namespace phansar::common::meta

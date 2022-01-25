@@ -43,6 +43,8 @@ public:
     void visit_readonly_property(const rttr::visitor::property_info<T> & _info);
     template <class T>
     void visit_global_readonly_property(const rttr::visitor::property_info<T> & _info);
+    template <class T>
+    void visit_enumeration(const rttr::type & _type = rttr::type::get<T>());
 
 private:
     [[nodiscard]] auto _module_internal() const -> py::module &;

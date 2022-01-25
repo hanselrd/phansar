@@ -152,6 +152,23 @@ void pybind_visitor::visit_global_readonly_property(const rttr::visitor::propert
     _module_internal().attr(_info.property_item.get_name().to_string().c_str()) =
         _info.property_accessor;
 }
+
+template <class T>
+void pybind_visitor::visit_enumeration(const rttr::type & _type) {
+    static_assert(std::is_enum_v<T>, "T must be an enumeration type");
+    PH_ASSERT(_type.is_enumeration());
+
+    auto py_enum =
+        py::enum_<T>(_module_internal(), rttr::type::get<T>().get_name().to_string().c_str());
+
+    auto enumeration = _type.get_enumeration();
+    for (const auto & name : enumeration.get_names()) {
+        bool ok = false;
+        py_enum.value(name.to_string().c_str(),
+                      static_cast<T>(enumeration.name_to_value(name).to_int64(&ok)));
+        PH_ASSERT(ok);
+    }
+}
 } // namespace phansar::common::reflect
 
 RTTR_REGISTER_VISITOR(phansar::common::reflect::pybind_visitor);

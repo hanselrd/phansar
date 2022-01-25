@@ -23,83 +23,60 @@
 #include <sigslot/signal.hpp>
 #include <cstddef>
 
-class Shape {
-public:
-    Shape(int _width, int _height) : m_width{_width}, m_height{_height} {}
-    Shape(const Shape & /*unused*/) = default;
-    auto operator=(const Shape & /*unused*/) -> Shape & = default;
-    Shape(Shape && /*unused*/) noexcept                 = default;
-    auto operator=(Shape && /*unused*/) noexcept -> Shape & = default;
-    virtual ~Shape()                                        = default;
-
-    static auto create() -> Shape * {
-        return nullptr;
-    }
-    auto area() -> int {
-        return 0;
-    }
-    auto area(int /*unused*/) -> int {
-        return 2;
-    }
-    [[nodiscard]] auto area(int /*unused*/) const -> int {
-        return 3;
-    }
-    [[nodiscard]] auto width() const -> int {
-        return m_width;
-    }
-    [[nodiscard]] auto height() const -> int {
-        return m_height;
-    }
-    static void test() {}
-    static int  s_scale;
-
-private:
-    int m_width{};
-    int m_height{};
-
-    // NOLINTNEXTLINE(modernize-use-trailing-return-type)
-    RTTR_ENABLE()
+struct material {
+    std::array<float, 3> ambient, diffuse, specular;
+    float                shininess;
 };
 
-decltype(Shape::s_scale) Shape::s_scale = 2;
+enum class color { white, black, red, blue, green, yellow, cyan, magenta, pink };
 
-class Rectangle : public Shape {
-public:
-    Rectangle() : Shape{1, 2} {}
-    Rectangle(const Rectangle & /*unused*/) : Shape{1, 2} {}
-    auto operator=(const Rectangle & /*unused*/) -> Rectangle & = default;
-    Rectangle(Rectangle && /*unused*/) noexcept : Shape{1, 2} {}
-    auto operator=(Rectangle && /*unused*/) noexcept -> Rectangle & = default;
-    ~Rectangle() override                                           = default;
-
-private:
-    // NOLINTNEXTLINE(modernize-use-trailing-return-type)
-    RTTR_ENABLE(Shape)
+enum permissions {
+    READ               = 1 << 0,
+    WRITE              = 1 << 1,
+    EXECUTE            = 1 << 2,
+    READ_WRITE         = READ | WRITE,
+    READ_EXECUTE       = READ | EXECUTE,
+    WRITE_EXECUTE      = WRITE | EXECUTE,
+    READ_WRITE_EXECUTE = READ | WRITE | EXECUTE
 };
 
 RTTR_REGISTRATION {
-    rttr::registration::class_<Shape>("Shape")
-        .constructor<int, int>()
-        .constructor(&Shape::create)
-        .method("area", rttr::select_overload<int()>(&Shape::area))
-        .method("area", rttr::select_overload<int(int)>(&Shape::area))
-        .method("area", rttr::select_const(&Shape::area))
-        .property_readonly("width", &Shape::width)
-        .property_readonly("height", &Shape::height)
-        .method("test", &Shape::test)
-        .method("testt", []() {})
-        .property("scale", &Shape::s_scale)
-        .property_readonly("omg", []() { return 12; });
+    rttr::registration::class_<material>("material")
+        .constructor()
+        .property("ambient", &material::ambient)
+        .property("diffuse", &material::diffuse)
+        .property("specular", &material::specular)
+        .property("shininess", &material::shininess);
 
-    rttr::registration::class_<Rectangle>("Rectangle").constructor();
+    rttr::registration::enumeration<color>("color")(rttr::value("white", color::white),
+                                                    rttr::value("black", color::black),
+                                                    rttr::value("red", color::red),
+                                                    rttr::value("blue", color::blue),
+                                                    rttr::value("green", color::green),
+                                                    rttr::value("yellow", color::yellow),
+                                                    rttr::value("cyan", color::cyan),
+                                                    rttr::value("magenta", color::magenta),
+                                                    rttr::value("pink", color::pink)
+
+    );
+
+    rttr::registration::enumeration<permissions>("permissions")(
+        rttr::value("read", permissions::READ),
+        rttr::value("write", permissions::WRITE),
+        rttr::value("execute", permissions::EXECUTE),
+        rttr::value("read_write", permissions::READ_WRITE),
+        rttr::value("read_execute", permissions::READ_EXECUTE),
+        rttr::value("write_execute", permissions::WRITE_EXECUTE),
+        rttr::value("read_write_execute", permissions::READ_WRITE_EXECUTE));
 }
 
 // NOLINTNEXTLINE(modernize-use-trailing-return-type)
 PYBIND11_EMBEDDED_MODULE(phansar, m) {
     auto visitor = phansar::common::reflect::pybind_visitor{m};
     visitor.visit(rttr::type::get<phansar::common::logger>());
-    // visitor.visit(rttr::type::get<Shape>());
-    visitor.visit(rttr::type::get<Rectangle>());
+    visitor.visit(rttr::type::get<material>());
+    visitor.visit_enumeration<color>();
+    visitor.visit_enumeration<permissions>();
 }
 
 auto main(int _argc, char * _argv[]) -> int {
@@ -175,7 +152,7 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto guard = py::scoped_interpreter{};
     py::exec(R"python(
-        from phansar import logger#, material, colors, permissions
+        from phansar import logger, material, color, permissions
 
         l = logger("client", "logs/client.log", 1024 * 1024 * 5, 3)
         l.trace("trace")
@@ -186,32 +163,32 @@ auto main(int _argc, char * _argv[]) -> int {
         l.critical("critical")
         l.debug(f"{l}")
 
-        #m = material()
-        #l.debug(f"{m}")
-        #m.ambient = [1, 2, 3]
-        #l.info(f"ambient={m.ambient} diffuse={m.diffuse} specular={m.specular} shininess={m.shininess}")
-        #m.diffuse = [4, 5, 6]
-        #l.info(f"ambient={m.ambient} diffuse={m.diffuse} specular={m.specular} shininess={m.shininess}")
-        #m.specular = [7, 8, 9]
-        #l.info(f"ambient={m.ambient} diffuse={m.diffuse} specular={m.specular} shininess={m.shininess}")
+        m = material()
+        m.ambient = [1, 2, 3]
+        l.info(f"ambient={m.ambient} diffuse={m.diffuse} specular={m.specular} shininess={m.shininess}")
+        m.diffuse = [4, 5, 6]
+        l.info(f"ambient={m.ambient} diffuse={m.diffuse} specular={m.specular} shininess={m.shininess}")
+        m.specular = [7, 8, 9]
+        l.info(f"ambient={m.ambient} diffuse={m.diffuse} specular={m.specular} shininess={m.shininess}")
+        l.debug(f"{m}")
 
-        #l.debug(f"{colors.white}")
-        #l.debug(f"{colors.black}")
-        #l.debug(f"{colors.red}")
-        #l.debug(f"{colors.blue}")
-        #l.debug(f"{colors.green}")
-        #l.debug(f"{colors.yellow}")
-        #l.debug(f"{int(colors.cyan)}")
-        #l.debug(f"{colors.magenta}")
-        #l.debug(f"{colors.pink}")
+        l.debug(f"{color.white}")
+        l.debug(f"{color.black}")
+        l.debug(f"{color.red}")
+        l.debug(f"{color.blue}")
+        l.debug(f"{color.green}")
+        l.debug(f"{color.yellow}")
+        l.debug(f"{int(color.cyan)}")
+        l.debug(f"{color.magenta}")
+        l.debug(f"{color.pink}")
 
-        #l.debug(f"{permissions.read}")
-        #l.debug(f"{permissions.write}")
-        #l.debug(f"{permissions.execute}")
-        #l.debug(f"{permissions.read_write}")
-        #l.debug(f"{permissions.read_execute}")
-        #l.debug(f"{permissions.write_execute}")
-        #l.debug(f"{permissions.read_write_execute}")
+        l.debug(f"{permissions.read}")
+        l.debug(f"{permissions.write}")
+        l.debug(f"{permissions.execute}")
+        l.debug(f"{permissions.read_write}")
+        l.debug(f"{permissions.read_execute}")
+        l.debug(f"{permissions.write_execute}")
+        l.debug(f"{permissions.read_write_execute}")
     )python");
 
     return 0;

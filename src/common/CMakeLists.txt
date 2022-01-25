@@ -17,6 +17,7 @@ ph_add_library(
             error.cpp
             logger.cpp
             reflect/debug_visitor.cpp
+            reflect/json_serializer.cpp
             reflect/pybind_visitor.cpp
             service_container.cpp
     LINK_LIBRARIES
