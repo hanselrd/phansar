@@ -8,6 +8,7 @@ capnp_generate_cpp(
     capnp_headers
     schema/asset.capnp
     schema/datetime.capnp
+    schema/id.capnp
     schema/packet.capnp
     schema/result.capnp
     schema/user.capnp

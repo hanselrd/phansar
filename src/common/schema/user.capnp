@@ -4,8 +4,8 @@ using Cxx = import "/capnp/c++.capnp";
 
 $Cxx.namespace("phansar::common::schema");
 
-using Id = UInt32;
 using DT = import "datetime.capnp";
+using Id = import "id.capnp".Id;
 
 struct User {
     id @0 :Id;

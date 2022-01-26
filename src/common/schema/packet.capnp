@@ -4,7 +4,7 @@ using Cxx = import "/capnp/c++.capnp";
 
 $Cxx.namespace("phansar::common::schema");
 
-using Id = UInt32;
+using Id = import "id.capnp".Id;
 using Vector3 = import "vector.capnp".Vector3;
 
 struct Packet {
