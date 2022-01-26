@@ -7,8 +7,10 @@ capnp_generate_cpp(
     capnp_sources
     capnp_headers
     schema/asset.capnp
+    schema/datetime.capnp
     schema/packet.capnp
     schema/result.capnp
+    schema/user.capnp
     schema/vector.capnp)
 
 ph_add_library(
