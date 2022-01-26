@@ -1,5 +1,7 @@
 #include <phansar/common/macro.hpp>
 #include <phansar/common/network/socket.hpp>
+#include <phansar/common/schema/asset.capnp.h>
+#include <phansar/common/schema/packet.capnp.h>
 #include <phansar/common/service/executor_service.hpp>
 #include <phansar/common/service/logger_service.hpp>
 #include <phansar/common/service_container.hpp>
@@ -7,7 +9,6 @@
 #include <capnp/serialize-packed.h>
 #include <enet/enet.h>
 #include <iostream>
-#include <phansar.capnp.h>
 
 auto main(int _argc, char * _argv[]) -> int {
     PH_UNUSED(_argc);

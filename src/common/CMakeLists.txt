@@ -2,12 +2,19 @@ set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
 
-capnp_generate_cpp(capnp_sources capnp_headers phansar.capnp)
+set(CAPNPC_OUTPUT_DIR ${CMAKE_BINARY_DIR}/capnpc/phansar/common)
+capnp_generate_cpp(
+    capnp_sources
+    capnp_headers
+    schema/asset.capnp
+    schema/packet.capnp
+    schema/result.capnp
+    schema/vector.capnp)
 
 ph_add_library(
     NAME ph_common
     TYPE STATIC
-    INCLUDE_DIRECTORIES PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}
+    INCLUDE_DIRECTORIES PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_BINARY_DIR}/capnpc
     COMPILE_DEFINITIONS PRIVATE ${default_compile_definitions}
     COMPILE_FEATURES PRIVATE ${default_compile_features}
     COMPILE_OPTIONS PRIVATE ${default_compile_options}

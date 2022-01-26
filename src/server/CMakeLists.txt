@@ -1,7 +1,7 @@
 ph_add_library(
     NAME ph_server_lib
     TYPE STATIC
-    INCLUDE_DIRECTORIES PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}
+    INCLUDE_DIRECTORIES PUBLIC ${CMAKE_SOURCE_DIR}/include
     COMPILE_DEFINITIONS PRIVATE ${default_compile_definitions}
     COMPILE_FEATURES PRIVATE ${default_compile_features}
     COMPILE_OPTIONS PRIVATE ${default_compile_options}
@@ -11,7 +11,7 @@ ph_add_library(
 
 ph_add_executable(
     NAME ph_server
-    INCLUDE_DIRECTORIES PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_CURRENT_BINARY_DIR}
+    INCLUDE_DIRECTORIES PRIVATE ${CMAKE_SOURCE_DIR}/include
     COMPILE_DEFINITIONS PRIVATE ${default_compile_definitions}
     COMPILE_FEATURES PRIVATE ${default_compile_features}
     COMPILE_OPTIONS PRIVATE ${default_compile_options}
