@@ -21,7 +21,7 @@ public:
     auto operator->() -> T *;
 
 private:
-    std::unique_ptr<T> m_storage;
+    std::unique_ptr<T> m_storage{};
 };
 } // namespace phansar::common::policy
 

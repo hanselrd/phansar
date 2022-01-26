@@ -4,8 +4,8 @@ namespace phansar::common {
 template <class T, class ImplementationPolicy>
 template <bool Writable>
 struct synchronized<T, ImplementationPolicy>::proxy<Writable>::impl {
-    T *                 obj;
-    std::shared_mutex * mutex;
+    T *                 obj{};
+    std::shared_mutex * mutex{};
 };
 
 template <class T, class ImplementationPolicy>
@@ -105,7 +105,7 @@ auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator->() const 
 template <class T, class ImplementationPolicy>
 struct synchronized<T, ImplementationPolicy>::impl {
     T                                  obj;
-    std::unique_ptr<std::shared_mutex> mutex;
+    std::unique_ptr<std::shared_mutex> mutex{};
 };
 
 template <class T, class ImplementationPolicy>

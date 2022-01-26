@@ -2,7 +2,7 @@ set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
 
-# capnp_generate_cpp(capnp_sources capnp_headers phansar.capnp)
+capnp_generate_cpp(capnp_sources capnp_headers phansar.capnp)
 
 ph_add_library(
     NAME ph_common
@@ -13,9 +13,11 @@ ph_add_library(
     COMPILE_OPTIONS PRIVATE ${default_compile_options}
     SOURCES PRIVATE
             ${CMAKE_BINARY_DIR}/version.cpp
+            ${capnp_sources}
             errc.cpp
             error.cpp
             logger.cpp
+            network/socket.cpp
             reflect/debug_visitor.cpp
             reflect/json_serializer.cpp
             reflect/pybind_visitor.cpp
@@ -25,6 +27,7 @@ ph_add_library(
         ph_vendor_capnproto
         ph_vendor_cppcodec
         ph_vendor_cxxopts
+        ph_vendor_enet
         ph_vendor_entt
         ph_vendor_fmt
         ph_vendor_hedley

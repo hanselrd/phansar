@@ -15,7 +15,7 @@ public:
     constexpr auto operator()(Args &&... _args) const -> decltype(auto);
 
 private:
-    T m_f;
+    T m_f{};
 };
 } // namespace detail
 

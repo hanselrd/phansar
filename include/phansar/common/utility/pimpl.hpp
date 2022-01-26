@@ -21,7 +21,7 @@ public:
     auto operator->() -> T *;
 
 private:
-    StoragePolicy m_storage_policy;
+    StoragePolicy m_storage_policy{};
 };
 
 } // namespace phansar::common::utility

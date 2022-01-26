@@ -22,8 +22,8 @@ public:
     auto operator->() -> T *;
 
 private:
-    std::aligned_storage_t<Size, Align> m_storage;
-    bool                                m_valid = true;
+    std::aligned_storage_t<Size, Align> m_storage{};
+    bool                                m_valid{true};
 };
 } // namespace phansar::common::policy
 
