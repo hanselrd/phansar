@@ -1,6 +1,7 @@
 set(default_compile_definitions
     $<$<CONFIG:Debug>:PH_BUILD_DEBUG>
     $<$<NOT:$<CONFIG:Debug>>:PH_BUILD_RELEASE>
+    $<$<PLATFORM_ID:Emscripten>:PH_PLATFORM_EMSCRIPTEN>
     $<$<PLATFORM_ID:Windows>:PH_PLATFORM_WINDOWS>
     $<$<PLATFORM_ID:Linux>:PH_PLATFORM_LINUX>
     $<$<PLATFORM_ID:Darwin>:PH_PLATFORM_MACOS>

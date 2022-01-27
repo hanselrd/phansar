@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME pybind11
     GITHUB_REPOSITORY pybind/pybind11 # master
-    GIT_TAG dedda228f44a64d73afff120fd6e47b2a27170c2
+    GIT_TAG ec81e8e778accff323d76cd0ab0f3f280dc05f26
     EXCLUDE_FROM_ALL YES)
 
 ph_add_library(

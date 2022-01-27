@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from helpers.shell import shell
+from utility.shell import shell
 import argparse
 import glob
 import logging

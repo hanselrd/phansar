@@ -137,11 +137,8 @@ function(ph_add_file_pass)
     endif()
 endfunction()
 
-find_program(
-    PIPENV_EXECUTABLE
-    pipenv
-    REQUIRED
-    NO_CACHE)
+find_program(PIPENV_EXECUTABLE pipenv REQUIRED)
+
 ph_add_file_pass(
     NAME codegen
     COMMANDS
@@ -181,45 +178,54 @@ ph_add_file_pass(
 ph_add_file_pass(
     NAME assets-shaders-vertex
     GROUPS assets assets-shaders
-    PRE_COMMANDS "${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets/shaders"
+    PRE_COMMANDS
+        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\-B ${CMAKE_BINARY_DIR}/host \\-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}\"">
+        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\--build ${CMAKE_BINARY_DIR}/host \\--target shaderc\"">
+        "${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets/shaders"
     COMMANDS
-        $<$<PLATFORM_ID:Windows>:"$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx9.bin --platform windows -p vs_3_0 -O 3">
-        $<$<PLATFORM_ID:Windows>:"$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx11.bin --platform windows -p vs_5_0 -O 3">
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-metal.bin --platform osx -p metal"
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-glsl.bin --platform linux"
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-spirv.bin --platform linux -p spirv"
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-essl.bin --platform android"
+        $<$<PLATFORM_ID:Windows>:"\"$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx9.bin --platform windows -p vs_3_0 -O 3\"">
+        $<$<PLATFORM_ID:Windows>:"\"$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx11.bin --platform windows -p vs_5_0 -O 3\"">
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-metal.bin --platform osx -p metal"
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-glsl.bin --platform linux"
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-spirv.bin --platform linux -p spirv"
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-essl.bin --platform android"
     GLOBS "assets/shaders/vs_*.sc"
-    DEPENDENCIES shaderc
+    PRE_SEQUENTIAL
     SEQUENTIAL)
 
 ph_add_file_pass(
     NAME assets-shaders-fragment
     GROUPS assets assets-shaders
-    PRE_COMMANDS "${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets/shaders"
+    PRE_COMMANDS
+        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\-B ${CMAKE_BINARY_DIR}/host \\-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}\"">
+        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\--build ${CMAKE_BINARY_DIR}/host \\--target shaderc\"">
+        "${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets/shaders"
     COMMANDS
-        $<$<PLATFORM_ID:Windows>:"$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx9.bin --platform windows -p ps_3_0 -O 3">
-        $<$<PLATFORM_ID:Windows>:"$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx11.bin --platform windows -p ps_5_0 -O 3">
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-metal.bin --platform osx -p metal"
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-glsl.bin --platform linux"
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-spirv.bin --platform linux -p spirv"
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-essl.bin --platform android"
+        $<$<PLATFORM_ID:Windows>:"\"$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx9.bin --platform windows -p ps_3_0 -O 3\"">
+        $<$<PLATFORM_ID:Windows>:"\"$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx11.bin --platform windows -p ps_5_0 -O 3\"">
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-metal.bin --platform osx -p metal"
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-glsl.bin --platform linux"
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-spirv.bin --platform linux -p spirv"
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-essl.bin --platform android"
     GLOBS "assets/shaders/fs_*.sc"
-    DEPENDENCIES shaderc
+    PRE_SEQUENTIAL
     SEQUENTIAL)
 
 ph_add_file_pass(
     NAME assets-shaders-compute
     GROUPS assets assets-shaders
-    PRE_COMMANDS "${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets/shaders"
+    PRE_COMMANDS
+        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\-B ${CMAKE_BINARY_DIR}/host \\-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}\"">
+        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\--build ${CMAKE_BINARY_DIR}/host \\--target shaderc\"">
+        "${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets/shaders"
     COMMANDS
-        $<$<PLATFORM_ID:Windows>:"$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx11.bin --platform windows -p cs_5_0 -O 1">
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-metal.bin --platform osx -p metal"
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-glsl.bin --platform linux -p 430"
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-spirv.bin --platform linux -p spirv"
-        "$<TARGET_FILE:shaderc> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-essl.bin --platform android"
+        $<$<PLATFORM_ID:Windows>:"\"$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx11.bin --platform windows -p cs_5_0 -O 1\"">
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-metal.bin --platform osx -p metal"
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-glsl.bin --platform linux -p 430"
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-spirv.bin --platform linux -p spirv"
+        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-essl.bin --platform android"
     GLOBS "assets/shaders/cs_*.sc"
-    DEPENDENCIES shaderc
+    PRE_SEQUENTIAL
     SEQUENTIAL)
 
 foreach(
@@ -239,7 +245,7 @@ foreach(
 endforeach()
 
 if(ENABLE_CMAKE_FORMAT)
-    find_program(CMAKE_FORMAT_EXECUTABLE cmake-format NO_CACHE)
+    find_program(CMAKE_FORMAT_EXECUTABLE cmake-format)
     if(CMAKE_FORMAT_EXECUTABLE)
         ph_add_file_pass(
             NAME check-format-cmake-format
@@ -268,7 +274,7 @@ if(ENABLE_CMAKE_FORMAT)
 endif()
 
 if(ENABLE_BLACK)
-    find_program(BLACK_EXECUTABLE black NO_CACHE)
+    find_program(BLACK_EXECUTABLE black)
     if(BLACK_EXECUTABLE)
         ph_add_file_pass(
             NAME check-format-black
@@ -287,7 +293,7 @@ if(ENABLE_BLACK)
 endif()
 
 if(ENABLE_CLANG_FORMAT)
-    find_program(CLANG_FORMAT_EXECUTABLE clang-format NO_CACHE)
+    find_program(CLANG_FORMAT_EXECUTABLE clang-format)
     if(CLANG_FORMAT_EXECUTABLE)
         ph_add_file_pass(
             NAME check-format-clang-format
@@ -328,8 +334,8 @@ if(ENABLE_CLANG_FORMAT)
 endif()
 
 if(ENABLE_CLANG_TIDY)
-    find_program(CLANG_TIDY_EXECUTABLE clang-tidy NO_CACHE)
-    find_program(CLANG_APPLY_REPLACEMENTS_EXECUTABLE clang-apply-replacements NO_CACHE)
+    find_program(CLANG_TIDY_EXECUTABLE clang-tidy)
+    find_program(CLANG_APPLY_REPLACEMENTS_EXECUTABLE clang-apply-replacements)
     if(CLANG_TIDY_EXECUTABLE AND CLANG_APPLY_REPLACEMENTS_EXECUTABLE)
         ph_add_file_pass(
             NAME check-format-clang-tidy

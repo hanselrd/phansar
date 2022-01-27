@@ -8,13 +8,23 @@ add_subdirectory(cxxopts EXCLUDE_FROM_ALL)
 add_subdirectory(enet EXCLUDE_FROM_ALL)
 add_subdirectory(entt EXCLUDE_FROM_ALL)
 add_subdirectory(fmt EXCLUDE_FROM_ALL)
-add_subdirectory(glfw EXCLUDE_FROM_ALL)
+if(NOT
+   CMAKE_SYSTEM_NAME
+   STREQUAL
+   "Emscripten")
+    add_subdirectory(glfw EXCLUDE_FROM_ALL)
+endif()
 add_subdirectory(glm EXCLUDE_FROM_ALL)
 add_subdirectory(hedley EXCLUDE_FROM_ALL)
 add_subdirectory(json EXCLUDE_FROM_ALL)
 add_subdirectory(kangaru EXCLUDE_FROM_ALL)
-add_subdirectory(libpqxx EXCLUDE_FROM_ALL)
-add_subdirectory(pybind11 EXCLUDE_FROM_ALL)
+if(NOT
+   CMAKE_SYSTEM_NAME
+   STREQUAL
+   "Emscripten")
+    add_subdirectory(libpqxx EXCLUDE_FROM_ALL)
+    add_subdirectory(pybind11 EXCLUDE_FROM_ALL)
+endif()
 add_subdirectory(range-v3 EXCLUDE_FROM_ALL)
 add_subdirectory(rttr EXCLUDE_FROM_ALL)
 add_subdirectory(sigslot EXCLUDE_FROM_ALL)

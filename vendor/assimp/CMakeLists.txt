@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME assimp
     GITHUB_REPOSITORY assimp/assimp # master
-    GIT_TAG 5698d41bf952b156b2855c143021ace8fa06dfea
+    GIT_TAG a214b0833f368d665f25d296385966bbc13a796b
     OPTIONS "BUILD_SHARED_LIBS OFF"
             "ASSIMP_BUILD_ZLIB ON"
             "ASSIMP_BUILD_ASSIMP_TOOLS OFF"
@@ -18,7 +18,7 @@ CPMAddPackage(
     EXCLUDE_FROM_ALL YES)
 
 if(assimp_ADDED)
-    set_target_properties(assimp PROPERTIES COMPILE_OPTIONS "")
+    target_compile_definitions(assimp PRIVATE _POSIX_C_SOURCE=2008009L)
 endif()
 
 ph_add_library(

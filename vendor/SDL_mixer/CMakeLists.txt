@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME SDL_mixer
     GITHUB_REPOSITORY libsdl-org/SDL_mixer # master
-    GIT_TAG 8df5ea8f1a1ee39d395f37d0e7b48487f3420458
+    GIT_TAG 6845d9f3cb3f35542f1ec7e74dba6b30bf968959
     OPTIONS "BUILD_SHARED_LIBS ON"
     EXCLUDE_FROM_ALL YES)
 
