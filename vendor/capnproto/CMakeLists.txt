@@ -8,4 +8,8 @@ CPMAddPackage(
 ph_add_library(
     NAME ph_vendor_capnproto
     TYPE INTERFACE
-    LINK_LIBRARIES SYSTEM INTERFACE capnp-rpc)
+    LINK_LIBRARIES
+        SYSTEM
+        INTERFACE
+        capnp
+        capnp-json)

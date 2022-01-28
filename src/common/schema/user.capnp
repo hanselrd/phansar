@@ -4,8 +4,8 @@ using Cxx = import "/capnp/c++.capnp";
 
 $Cxx.namespace("phansar::common::schema");
 
-using DT = import "datetime.capnp";
 using Id = import "id.capnp".Id;
+using Timestamp = import "datetime.capnp".Timestamp;
 
 struct User {
     id @0 :Id;
@@ -21,13 +21,19 @@ struct User {
         root @4;
     }
 
-    banned @3 :Bool;
-    hidden @4 :Bool;
+    flags @3 :List(Flag);
 
-    metadata @5 :Metadata;
+    enum Flag {
+        banned @0;
+        hidden @1;
+        blocked @2;
+    }
+
+    metadata @4 :Metadata;
 
     struct Metadata {
-        creationDateTime @0 :DT.DateTime;
-        lastLoginDateTime @1 :DT.DateTime;
+        creationTimestamp @0 :Timestamp;
+        lastLoginTimestamp @1 :Timestamp;
+        publicKey @2 :Text;
     }
 }
