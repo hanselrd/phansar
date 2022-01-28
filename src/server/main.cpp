@@ -43,10 +43,10 @@ auto main(int _argc, char * _argv[]) -> int {
     header.setSendTimestamp(std::chrono::duration_cast<std::chrono::nanoseconds>(
                                 std::chrono::system_clock::now().time_since_epoch())
                                 .count());
-    auto auth    = packet.initAuth();
-    auto logIn   = auth.initLogIn();
+    auto auth         = packet.initAuth();
+    auto logIn        = auth.initLogIn();
     auto transaction0 = logIn.initTransaction0();
-    auto request = transaction0.initRequest();
+    auto request      = transaction0.initRequest();
     request.setUserName("bob");
     request.setPassword("password");
     // auto position = packet.initPosition();

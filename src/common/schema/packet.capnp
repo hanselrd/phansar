@@ -6,8 +6,8 @@ $Cxx.namespace("phansar::common::schema");
 
 using Channel = import "channel.capnp".Channel;
 using Id = import "id.capnp".Id;
+using Ptr = import "pointer.capnp";
 using Publish = import "publish.capnp".Publish;
-using Ref = List;
 using TC = import "transaction_chain.capnp";
 using Timestamp = import "datetime.capnp".Timestamp;
 using TimestampDiff = import "datetime.capnp".TimestampDiff;
@@ -35,11 +35,11 @@ struct Packet {
 
         auth :union {
             logIn @3 :TC.TransactionChain3(
-                Transaction(Detail.Auth.LogIn.Request0, Detail.Auth.LogIn.Response0),
-                Transaction(Detail.Auth.LogIn.Request1, Detail.Auth.LogIn.Response1),
-                Transaction(Detail.Auth.LogIn.Request2, Detail.Auth.LogIn.Response2));
+                Transaction(Detail.Auth.LogIn.Transaction0.Request, Detail.Auth.LogIn.Transaction0.Response),
+                Transaction(Detail.Auth.LogIn.Transaction1.Request, Detail.Auth.LogIn.Transaction1.Response),
+                Transaction(Detail.Auth.LogIn.Transaction2.Request, Detail.Auth.LogIn.Transaction2.Response));
 
-            logOut @4 :Transaction(Ref(Void), Ref(Void));
+            logOut @4 :Transaction(Ptr.PVoid, Ptr.PVoid);
         }
 
         user :union {
@@ -47,36 +47,48 @@ struct Packet {
 
             updatePosition @6 :Publish(Vector3);
         }
+
+        refresh :union {
+            world @7 :Transaction(Ptr.PVoid, World);
+            channel @8 :Transaction(Ptr.PVoid, Channel);
+            user @9 :Transaction(Ptr.PVoid, User);
+        }
     }
 
     struct Detail {
         struct Auth {
             struct LogIn {
-                struct Request0 {
-                    userName @0 :Text;
-                    password @1 :Text;
+                struct Transaction0 {
+                    struct Request {
+                        userName @0 :Text;
+                        password @1 :Text;
+                    }
+
+                    struct Response {
+                        worlds @0 :List(World);
+                    }
                 }
 
-                struct Response0 {
-                    worlds @0 :List(World);
+                struct Transaction1 {
+                    struct Request {
+                        worldId @0 :Id;
+                    }
+
+                    struct Response {
+                        channels @0 :List(Channel);
+                    }
                 }
 
-                struct Request1 {
-                    worldId @0 :Id;
-                }
+                struct Transaction2 {
+                    struct Request {
+                        channelId @0 :Id;
+                    }
 
-                struct Response1 {
-                    channels @0 :List(Channel);
-                }
-
-                struct Request2 {
-                    channelId @0 :Id;
-                }
-
-                struct Response2 {
-                    world @0 :World;
-                    channel @1 :Channel;
-                    user @2 :User;
+                    struct Response {
+                        world @0 :World;
+                        channel @1 :Channel;
+                        user @2 :User;
+                    }
                 }
             }
         }

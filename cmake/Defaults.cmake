@@ -11,7 +11,7 @@ set(default_compile_definitions
     __STDC_FORMAT_MACROS
     __STDC_LIMIT_MACROS)
 
-set(default_compile_features cxx_std_23 c_std_99)
+set(default_compile_features cxx_std_20 c_std_99)
 
 set(default_compile_options
     $<$<CONFIG:Debug>:-Og>

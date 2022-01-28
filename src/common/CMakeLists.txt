@@ -11,6 +11,7 @@ capnp_generate_cpp(
     schema/datetime.capnp
     schema/id.capnp
     schema/packet.capnp
+    schema/pointer.capnp
     schema/publish.capnp
     schema/result.capnp
     schema/transaction_chain.capnp
