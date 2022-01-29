@@ -1,7 +1,7 @@
 #include <phansar/common/version.hpp>
 #include <catch2/catch.hpp>
 
-SCENARIO("common::version", "[common][version]") {
+TEST_CASE("common::version", "[common][version]") {
     REQUIRE(! phansar::common::version::k_version.empty());
     REQUIRE(! phansar::common::version::k_major.empty());
     REQUIRE(! phansar::common::version::k_minor.empty());

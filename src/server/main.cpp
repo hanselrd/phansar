@@ -1,6 +1,7 @@
 #include <phansar/common/macro.hpp>
 #include <phansar/common/network/socket.hpp>
 #include <phansar/common/schema/asset.capnp.h>
+#include <phansar/common/schema/object.hpp>
 #include <phansar/common/schema/packet.capnp.h>
 #include <phansar/common/service/executor_service.hpp>
 #include <phansar/common/service/logger_service.hpp>
@@ -29,7 +30,7 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto message = capnp::MallocMessageBuilder{};
 
-    auto packet = message.initRoot<phansar::common::schema::Packet>();
+    auto packet = message.getRoot<phansar::common::schema::Packet>();
     auto header = packet.initHeader();
     header.setId(0xFF);
     // auto user = header.initUser();
@@ -43,64 +44,51 @@ auto main(int _argc, char * _argv[]) -> int {
     header.setSendTimestamp(std::chrono::duration_cast<std::chrono::nanoseconds>(
                                 std::chrono::system_clock::now().time_since_epoch())
                                 .count());
-    auto auth         = packet.initAuth();
-    auto logIn        = auth.initLogIn();
-    auto transaction0 = logIn.initTransaction0();
-    auto request      = transaction0.initRequest();
-    request.setUserName("bob");
-    request.setPassword("password");
-    // auto position = packet.initPosition();
-    // auto dt       = position.initDt();
-    // dt.setX(12.0F);
-    // dt.setY(23.0F);
-    // dt.setZ(34.0F);
-    // auto data = packet.initData();
-    // data.setName("public_key");
-    // auto value = data.initValue(50);
-    // std::memset(value.begin(), 0x05, static_cast<int>(value.size()));
-
     {
-        auto stream = kj::VectorOutputStream{};
-        capnp::writeMessage(stream, message);
-        const auto u = stream.getArray();
-        PH_LOG_DEBUG("u.encoded[{}]= {:#04x}", u.size(), fmt::join(u, ", "));
-
-        auto array   = kj::ArrayInputStream{kj::arrayPtr(u.begin(), u.size())};
-        auto reader  = capnp::InputStreamMessageReader{array};
-        auto builder = capnp::MallocMessageBuilder{};
-        builder.setRoot(reader.getRoot<phansar::common::schema::Packet>());
-        auto decoded = builder.getRoot<phansar::common::schema::Packet>();
-        auto header  = decoded.getHeader();
-        header.setReceiveTimestamp(std::chrono::duration_cast<std::chrono::nanoseconds>(
-                                       std::chrono::system_clock::now().time_since_epoch())
-                                       .count());
-        header.setLatency(header.getReceiveTimestamp() - header.getSendTimestamp());
-        PH_LOG_DEBUG("packet= {}", decoded.toString().flatten().cStr());
-        auto json        = capnp::JsonCodec{};
-        auto packet_json = json.encode(decoded);
-        PH_LOG_DEBUG("packet[json]= {}", packet_json.cStr());
+        auto auth         = packet.initAuth();
+        auto logIn        = auth.initLogIn();
+        auto transaction0 = logIn.initTransaction0();
+        auto request      = transaction0.initRequest();
+        request.setUserName("bob");
+        request.setPassword("password");
+    }
+    {
+        auto user         = phansar::common::schema::object<phansar::common::schema::User>{};
+        auto user_builder = user.get_builder();
+        user_builder.setId(9001);
+        user_builder.setName("Bob");
+        auto roles_builder = user_builder.initRoles(1);
+        roles_builder.set(0, phansar::common::schema::User::Role::ADMINISTRATOR);
+        PH_LOG_DEBUG("user[{},{}]= {}",
+                     user.get_bytes().size(),
+                     user.is_self_contained(),
+                     user.get_reader().toString().flatten().cStr());
     }
 
-    {
-        auto stream = kj::VectorOutputStream{};
-        capnp::writePackedMessage(stream, message);
-        const auto p = stream.getArray();
-        PH_LOG_DEBUG("p.encoded[{}]= {:#04x}", p.size(), fmt::join(p, ", "));
-
-        auto array   = kj::ArrayInputStream{kj::arrayPtr(p.begin(), p.size())};
-        auto reader  = capnp::PackedMessageReader{array};
-        auto builder = capnp::MallocMessageBuilder{};
-        builder.setRoot(reader.getRoot<phansar::common::schema::Packet>());
-        auto decoded = builder.getRoot<phansar::common::schema::Packet>();
+    for (auto i = std::size_t{0}; i < 3; ++i) {
+        auto object =
+            phansar::common::schema::object<phansar::common::schema::Packet>{packet.asReader()};
+        auto encoded = object.get_bytes();
+        PH_LOG_DEBUG("[{}] encoded[{},{}]= {:#04x}",
+                     i,
+                     encoded.size(),
+                     object.is_self_contained(),
+                     fmt::join(encoded, ", "));
+        auto object2 = phansar::common::schema::object<phansar::common::schema::Packet>{encoded};
+        auto decoded = object.get_builder();
         auto header  = decoded.getHeader();
         header.setReceiveTimestamp(std::chrono::duration_cast<std::chrono::nanoseconds>(
                                        std::chrono::system_clock::now().time_since_epoch())
                                        .count());
         header.setLatency(header.getReceiveTimestamp() - header.getSendTimestamp());
-        PH_LOG_DEBUG("packet= {}", decoded.toString().flatten().cStr());
-        auto json        = capnp::JsonCodec{};
-        auto packet_json = json.encode(decoded);
-        PH_LOG_DEBUG("packet[json]= {}", packet_json.cStr());
+        PH_LOG_DEBUG("[{}] decoded[{},{}]= {}",
+                     i,
+                     object2.get_bytes().size(),
+                     object2.is_self_contained(),
+                     decoded.toString().flatten().cStr());
+        auto json         = capnp::JsonCodec{};
+        auto decoded_json = json.encode(decoded);
+        PH_LOG_DEBUG("[{}] decoded[json]= {}", i, decoded_json.cStr());
     }
 
     return 0;

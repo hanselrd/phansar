@@ -6,9 +6,9 @@ $Cxx.namespace("phansar::common::schema");
 
 using Channel = import "channel.capnp".Channel;
 using Id = import "id.capnp".Id;
-using Ptr = import "pointer.capnp";
+using Ptr = import "pointer.cog.capnp";
 using Publish = import "publish.capnp".Publish;
-using TC = import "transaction_chain.capnp";
+using TC = import "transaction_chain.cog.capnp";
 using Timestamp = import "datetime.capnp".Timestamp;
 using TimestampDiff = import "datetime.capnp".TimestampDiff;
 using Transaction = import "transaction.capnp".Transaction;
@@ -39,7 +39,7 @@ struct Packet {
                 Transaction(Detail.Auth.LogIn.Transaction1.Request, Detail.Auth.LogIn.Transaction1.Response),
                 Transaction(Detail.Auth.LogIn.Transaction2.Request, Detail.Auth.LogIn.Transaction2.Response));
 
-            logOut @4 :Transaction(Ptr.PVoid, Ptr.PVoid);
+            logOut @4 :Transaction(Ptr.VoidT, Ptr.VoidT);
         }
 
         user :union {
@@ -49,9 +49,9 @@ struct Packet {
         }
 
         refresh :union {
-            world @7 :Transaction(Ptr.PVoid, World);
-            channel @8 :Transaction(Ptr.PVoid, Channel);
-            user @9 :Transaction(Ptr.PVoid, User);
+            world @7 :Transaction(Ptr.VoidT, World);
+            channel @8 :Transaction(Ptr.VoidT, Channel);
+            user @9 :Transaction(Ptr.VoidT, User);
         }
     }
 

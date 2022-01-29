@@ -8,13 +8,14 @@ capnp_generate_cpp(
     capnp_headers
     schema/asset.capnp
     schema/channel.capnp
+    schema/chat.capnp
     schema/datetime.capnp
     schema/id.capnp
     schema/packet.capnp
-    schema/pointer.capnp
+    schema/pointer.cog.capnp
     schema/publish.capnp
     schema/result.capnp
-    schema/transaction_chain.capnp
+    schema/transaction_chain.cog.capnp
     schema/transaction.capnp
     schema/user.capnp
     schema/vector.capnp
@@ -30,8 +31,8 @@ ph_add_library(
     SOURCES PRIVATE
             ${CMAKE_BINARY_DIR}/version.cpp
             ${capnp_sources}
-            errc.cpp
-            error.cpp
+            errc.cog.cpp
+            error.cog.cpp
             logger.cpp
             network/socket.cpp
             reflect/debug_visitor.cpp

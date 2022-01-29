@@ -20,10 +20,7 @@ services:
             sh -c "pipenv install &&
                    rm -rf build &&
                    cmake -S /app -B build -DENABLE_CMAKE_FORMAT=ON -DENABLE_BLACK=ON -DENABLE_CLANG_FORMAT=ON -DENABLE_CLANG_TIDY=ON &&
-                   cmake --build build --target check-format-cmake-format &&
-                   cmake --build build --target check-format-black &&
-                   cmake --build build --target check-format-clang-format &&
-                   cmake --build build --target check-format-clang-tidy &&
+                   cmake --build build --target check-format &&
                    rm -rf build"
 
     debug_test: &build_test

@@ -47,7 +47,7 @@ function(ph_add_file_pass)
     add_custom_target(intra-${ARG_NAME} DEPENDS pre-${ARG_NAME})
 
     if(ARG_DEPENDENCIES)
-        add_dependencies(intra-${ARG_NAME} ${ARG_DEPENDENCIES})
+        add_dependencies(pre-${ARG_NAME} ${ARG_DEPENDENCIES})
     endif()
 
     foreach(file IN LISTS files)
@@ -143,37 +143,39 @@ ph_add_file_pass(
     NAME codegen
     COMMANDS
         "${PIPENV_EXECUTABLE} run cog --verbosity=0 -I ${CMAKE_SOURCE_DIR}/codegen -r @INPUT_FILE@"
-    GLOBS "include/*.hpp"
-          "include/*.inl"
-          "include/*.cpp"
-          "src/*.hpp"
-          "src/*.inl"
-          "src/*.cpp"
-          "src/*.cpp.in"
-          "test/*.hpp"
-          "test/*.inl"
-          "test/*.cpp"
-          "vendor/*.hpp"
-          "vendor/*.inl"
-          "vendor/*.cpp")
+    GLOBS "include/*.cog.hpp"
+          "include/*.cog.inl"
+          "include/*.cog.cpp"
+          "src/*.cog.hpp"
+          "src/*.cog.inl"
+          "src/*.cog.cpp"
+          "src/*.cog.cpp.in"
+          "src/*.cog.capnp"
+          "test/*.cog.hpp"
+          "test/*.cog.inl"
+          "test/*.cog.cpp"
+          "vendor/*.cog.hpp"
+          "vendor/*.cog.inl"
+          "vendor/*.cog.cpp")
 
 ph_add_file_pass(
     NAME clean-codegen
     COMMANDS
         "${PIPENV_EXECUTABLE} run cog --verbosity=0 -I ${CMAKE_SOURCE_DIR}/codegen -rx @INPUT_FILE@"
-    GLOBS "include/*.hpp"
-          "include/*.inl"
-          "include/*.cpp"
-          "src/*.hpp"
-          "src/*.inl"
-          "src/*.cpp"
-          "src/*.cpp.in"
-          "test/*.hpp"
-          "test/*.inl"
-          "test/*.cpp"
-          "vendor/*.hpp"
-          "vendor/*.inl"
-          "vendor/*.cpp")
+    GLOBS "include/*.cog.hpp"
+          "include/*.cog.inl"
+          "include/*.cog.cpp"
+          "src/*.cog.hpp"
+          "src/*.cog.inl"
+          "src/*.cog.cpp"
+          "src/*.cog.cpp.in"
+          "src/*.cog.capnp"
+          "test/*.cog.hpp"
+          "test/*.cog.inl"
+          "test/*.cog.cpp"
+          "vendor/*.cog.hpp"
+          "vendor/*.cog.inl"
+          "vendor/*.cog.cpp")
 
 ph_add_file_pass(
     NAME assets-shaders-vertex
@@ -339,12 +341,14 @@ if(ENABLE_CLANG_TIDY)
     if(CLANG_TIDY_EXECUTABLE AND CLANG_APPLY_REPLACEMENTS_EXECUTABLE)
         ph_add_file_pass(
             NAME check-format-clang-tidy
+            GROUPS check-format
             COMMANDS
                 "${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} -extra-arg=-Wno-unknown-warning-option -warnings-as-errors=\"*\" @INPUT_FILE@"
             GLOBS "include/*.cpp"
                   "src/*.cpp"
                   "src/*.cpp.in"
-                  "test/*.cpp")
+                  "test/*.cpp"
+            DEPENDENCIES ph_common ph_client_lib ph_server_lib)
 
         ph_add_file_pass(
             NAME fix-format-clang-tidy
@@ -354,6 +358,7 @@ if(ENABLE_CLANG_TIDY)
             GLOBS "include/*.cpp"
                   "src/*.cpp"
                   "src/*.cpp.in"
-                  "test/*.cpp")
+                  "test/*.cpp"
+            DEPENDENCIES ph_common ph_client_lib ph_server_lib)
     endif()
 endif()

@@ -23,7 +23,6 @@ public:
 private:
     StoragePolicy m_storage_policy{};
 };
-
 } // namespace phansar::common::utility
 
 #include <phansar/common/utility/pimpl.inl>
