@@ -19,7 +19,7 @@ TEMPLATE_PRODUCT_TEST_CASE_METHOD(test::fixture::executor_fixture,
                                    (int, policy::freestanding_implementation_policy<int>))) {
     auto s = TestType{};
 
-    auto addend = GENERATE(range(1, 10));
+    auto addend = GENERATE(range<std::size_t>(1, 10));
 
     SECTION("locking allows thread safe modification") {
         for (auto i = std::size_t{0};

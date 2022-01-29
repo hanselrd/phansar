@@ -41,9 +41,10 @@ auto main(int _argc, char * _argv[]) -> int {
     // roles.set(1, phansar::common::schema::User::Role::INTERN);
     // auto flags = user.initFlags(1);
     // flags.set(0, phansar::common::schema::User::Flag::HIDDEN);
-    header.setSendTimestamp(std::chrono::duration_cast<std::chrono::nanoseconds>(
-                                std::chrono::system_clock::now().time_since_epoch())
-                                .count());
+    header.setSendTimestamp(
+        static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                                       std::chrono::system_clock::now().time_since_epoch())
+                                       .count()));
     {
         auto auth         = packet.initAuth();
         auto logIn        = auth.initLogIn();
@@ -77,9 +78,10 @@ auto main(int _argc, char * _argv[]) -> int {
         auto object2 = phansar::common::schema::object<phansar::common::schema::Packet>{encoded};
         auto decoded = object.get_builder();
         auto header  = decoded.getHeader();
-        header.setReceiveTimestamp(std::chrono::duration_cast<std::chrono::nanoseconds>(
-                                       std::chrono::system_clock::now().time_since_epoch())
-                                       .count());
+        header.setReceiveTimestamp(
+            static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                                           std::chrono::system_clock::now().time_since_epoch())
+                                           .count()));
         header.setLatency(header.getReceiveTimestamp() - header.getSendTimestamp());
         PH_LOG_DEBUG("[{}] decoded[{},{}]= {}",
                      i,
