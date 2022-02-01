@@ -7,7 +7,7 @@
 using namespace phansar;
 using namespace phansar::common;
 
-const auto k_iterations_per_worker = std::size_t{1'000};
+const auto k_iterations_per_worker = int{1'000};
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
 TEMPLATE_PRODUCT_TEST_CASE_METHOD(test::fixture::executor_fixture,
@@ -19,7 +19,7 @@ TEMPLATE_PRODUCT_TEST_CASE_METHOD(test::fixture::executor_fixture,
                                    (int, policy::freestanding_implementation_policy<int>))) {
     auto s = TestType{};
 
-    auto addend = GENERATE(range<std::size_t>(1, 10));
+    auto addend = GENERATE(range<int>(1, 10));
 
     SECTION("locking allows thread safe modification") {
         for (auto i = std::size_t{0};
@@ -32,8 +32,8 @@ TEMPLATE_PRODUCT_TEST_CASE_METHOD(test::fixture::executor_fixture,
 
         test::fixture::executor_fixture<TestType>::executor->wait_for_all();
 
-        REQUIRE(static_cast<std::size_t>(*s.lock_shared()) ==
-                (test::fixture::executor_fixture<TestType>::executor->num_workers() *
+        REQUIRE(*s.lock_shared() ==
+                (static_cast<int>(test::fixture::executor_fixture<TestType>::executor->num_workers()) *
                  k_iterations_per_worker * addend));
     }
 }
