@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME fmt
     GITHUB_REPOSITORY fmtlib/fmt # master
-    GIT_TAG a34a97cc1d7d50ed6b05bd315ecef7aeb97f1364
+    GIT_TAG 3e8372b96e147843e492067bdf4978c71d0129c4
     EXCLUDE_FROM_ALL YES)
 
 ph_add_library(

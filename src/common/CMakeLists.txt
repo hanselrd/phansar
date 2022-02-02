@@ -54,6 +54,7 @@ ph_add_library(
         ph_vendor_rangev3
         ph_vendor_rttr
         ph_vendor_sigslot
+        ph_vendor_sol2
         ph_vendor_spdlog
         ph_vendor_taskflow
         ph_vendor_xsimd

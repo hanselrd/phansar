@@ -1,0 +1,16 @@
+CPMAddPackage(
+    NAME sol2
+    GITHUB_REPOSITORY ThePhD/sol2 # develop
+    GIT_TAG 50b62c9346750b7c2c406c9e4c546f96b0bf021d
+    OPTIONS "SOL2_BUILD_LUA OFF" "SOL2_ENABLE_INSTALL OFF"
+    EXCLUDE_FROM_ALL YES)
+
+ph_add_library(
+    NAME ph_vendor_sol2
+    TYPE INTERFACE
+    COMPILE_DEFINITIONS INTERFACE SOL_ALL_SAFETIES_ON
+    LINK_LIBRARIES
+        SYSTEM
+        INTERFACE
+        ph_vendor_lua
+        sol2)

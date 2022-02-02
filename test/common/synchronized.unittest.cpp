@@ -32,8 +32,9 @@ TEMPLATE_PRODUCT_TEST_CASE_METHOD(test::fixture::executor_fixture,
 
         test::fixture::executor_fixture<TestType>::executor->wait_for_all();
 
-        REQUIRE(*s.lock_shared() ==
-                (static_cast<int>(test::fixture::executor_fixture<TestType>::executor->num_workers()) *
-                 k_iterations_per_worker * addend));
+        REQUIRE(
+            *s.lock_shared() ==
+            (static_cast<int>(test::fixture::executor_fixture<TestType>::executor->num_workers()) *
+             k_iterations_per_worker * addend));
     }
 }

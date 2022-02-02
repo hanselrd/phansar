@@ -27,6 +27,8 @@ set(default_compile_options
     $<$<CONFIG:Debug>:/Zi>
     $<$<CONFIG:Debug>:/FS>
     $<$<NOT:$<CONFIG:Debug>>:-D_FORTIFY_SOURCE=2>
+    $<$<BOOL:${ENABLE_CODE_COVERAGE}>:-fprofile-arcs>
+    $<$<BOOL:${ENABLE_CODE_COVERAGE}>:-ftest-coverage>
     -Wall
     -Wextra
     -Werror

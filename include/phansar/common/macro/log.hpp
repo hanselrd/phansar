@@ -5,13 +5,14 @@
 #include <phansar/common/service_container.hpp>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
+#include <hedley.h>
 
 #ifdef __has_include
     #if __has_include(<source_location>) && defined(__cpp_lib_source_location)
         #define PH_LOG(_level, ...)                                                                \
             do {                                                                                   \
                 using namespace ::phansar::common;                                                 \
-                if (g_service_container.contains<service::logger_service>()) {                     \
+                if (HEDLEY_LIKELY(g_service_container.contains<service::logger_service>())) {      \
                     g_service_container.service<service::logger_service>().smart_log(              \
                         spdlog::level::_level,                                                     \
                         fmt::format(__VA_ARGS__));                                                 \
@@ -21,7 +22,7 @@
         #define PH_LOG(_level, ...)                                                                \
             do {                                                                                   \
                 using namespace ::phansar::common;                                                 \
-                if (g_service_container.contains<service::logger_service>()) {                     \
+                if (HEDLEY_LIKELY(g_service_container.contains<service::logger_service>())) {      \
                     g_service_container.service<service::logger_service>().log(                    \
                         spdlog::level::_level,                                                     \
                         fmt::format(__VA_ARGS__),                                                  \
@@ -63,11 +64,11 @@
 #define PH_LOG_INDENTED_CRITICAL(_indent, ...) PH_LOG_INDENTED(critical, _indent, __VA_ARGS__)
 
 #define PH_LOG_INDENTED_IF(_level, _condition, _indent, ...)                                       \
-    PH_LOG_IF(_level,                                                                              \
-              _condition,                                                                          \
-              "{:{}}" __VA_OPT__("{}"),                                                            \
-              "",                                                                                  \
-              _indent __VA_OPT__(, fmt::format(__VA_ARGS__)))
+    do {                                                                                           \
+        if (_condition) {                                                                          \
+            PH_LOG_INDENTED(_level, _indent, __VA_ARGS__);                                         \
+        }                                                                                          \
+    } while (false)
 
 #define PH_LOG_INDENTED_TRACE_IF(_condition, _indent, ...)                                         \
     PH_LOG_INDENTED_IF(trace, _condition, _indent, __VA_ARGS__)

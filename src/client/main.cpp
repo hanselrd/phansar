@@ -21,7 +21,9 @@
 #include <rttr/type>
 #include <rttr/visitor.h>
 #include <sigslot/signal.hpp>
+#include <sol/sol.hpp>
 #include <cstddef>
+#include <hedley.h>
 
 struct material {
     std::array<float, 3> ambient, diffuse, specular;
@@ -93,6 +95,24 @@ auto main(int _argc, char * _argv[]) -> int {
 
     auto & executor =
         phansar::common::g_service_container.service<phansar::common::service::executor_service>();
+
+    auto lua = sol::state{};
+    lua.open_libraries(sol::lib::base, sol::lib::string, sol::lib::utf8);
+
+    HEDLEY_DIAGNOSTIC_PUSH
+#ifdef HEDLEY_GCC_VERSION
+    HEDLEY_PRAGMA(GCC diagnostic ignored "-Wnonnull")
+#endif
+    lua.set_function("beep1", []() { PH_LOG_TRACE("boop1"); });
+    lua.set("beep2", []() { PH_LOG_TRACE("boop2"); });
+    lua["beep3"] = []() { PH_LOG_TRACE("boop3"); };
+    HEDLEY_DIAGNOSTIC_POP
+
+    lua.script(R"lua(
+        beep1()
+        beep2()
+        beep3()
+    )lua");
 
     // auto visitor = phansar::common::reflect::debug_visitor{};
 
