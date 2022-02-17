@@ -3,7 +3,7 @@
 namespace phansar::common::meta {
 namespace detail {
 template <class T>
-y_combinator<T>::y_combinator(T && _f) : m_f{std::forward<T>(_f)} {}
+constexpr y_combinator<T>::y_combinator(T && _f) : m_f{std::forward<T>(_f)} {}
 
 template <class T>
 template <class... Args>

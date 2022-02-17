@@ -17,9 +17,10 @@ services:
             <<: *default_environment
             CMAKE_BUILD_TYPE: Debug
         command: >
-            sh -c "pipenv install &&
+            sh -c "pipenv install --dev &&
+                   npm install &&
                    rm -rf build &&
-                   cmake -S /app -B build -DENABLE_CMAKE_FORMAT=ON -DENABLE_BLACK=ON -DENABLE_CLANG_FORMAT=ON -DENABLE_CLANG_TIDY=ON &&
+                   cmake -S /app -B build -DENABLE_CMAKE_FORMAT=ON -DENABLE_BLACK=ON -DENABLE_PRETTIER=ON -DENABLE_CLANG_FORMAT=ON -DENABLE_CLANG_TIDY=ON &&
                    cmake --build build --target check-format &&
                    rm -rf build"
 
@@ -29,7 +30,8 @@ services:
             <<: *default_environment
             CMAKE_BUILD_TYPE: Debug
         command: >
-            sh -c "pipenv install &&
+            sh -c "pipenv install --dev &&
+                   npm install &&
                    rm -rf build &&
                    ccache -z &&
                    cmake -S /app -B build &&

@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME range-v3
     GITHUB_REPOSITORY ericniebler/range-v3 # master
-    GIT_TAG 9aa032ccd0eb4bd77f58e5b181168f1038c222c6
+    GIT_TAG b832d51e2f796a31011e11d4a072941e61d27772
     EXCLUDE_FROM_ALL YES)
 
 ph_add_library(

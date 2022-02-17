@@ -37,7 +37,7 @@ ph_add_library(
             network/socket.cpp
             reflect/debug_visitor.cpp
             reflect/json_serializer.cpp
-            reflect/pybind_visitor.cpp
+            reflect/sol_visitor.cpp
             service_container.cpp
     LINK_LIBRARIES
         PUBLIC
@@ -50,7 +50,6 @@ ph_add_library(
         ph_vendor_hedley
         ph_vendor_json
         ph_vendor_kangaru
-        ph_vendor_pybind11
         ph_vendor_rangev3
         ph_vendor_rttr
         ph_vendor_sigslot

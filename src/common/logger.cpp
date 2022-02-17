@@ -1,14 +1,14 @@
 #include <phansar/common/logger.hpp>
 #include <phansar/common/macro.hpp>
 #include <phansar/common/policy/freestanding_implementation_policy.hpp>
-#include <phansar/common/reflect/debug_visitor.hpp>
-#include <phansar/common/reflect/pybind_visitor.hpp>
+#include <phansar/common/reflect/sol_visitor.hpp>
 #include <phansar/common/synchronized.hpp>
 #include <rttr/registration>
 #include <spdlog/pattern_formatter.h>
 #include <spdlog/sinks/rotating_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
+#include <hedley.h>
 #include <thread>
 #include <unordered_map>
 
@@ -109,14 +109,18 @@ void logger::log(spdlog::level::level_enum _level,
 }
 
 RTTR_REGISTRATION {
+    HEDLEY_DIAGNOSTIC_PUSH
+#ifdef HEDLEY_GCC_VERSION
+    HEDLEY_PRAGMA(GCC diagnostic ignored "-Wnonnull")
+#endif
     rttr::registration::class_<logger>("logger")
         .constructor<std::string_view, std::string_view, std::size_t, std::size_t>()
-#ifdef __has_include
-    #if __has_include(<source_location>) && defined(__cpp_lib_source_location)
-        .method("smart_log", &logger::smart_log)
-    #endif
-#endif
-        .method("log", &logger::log)
+        // #ifdef __has_include
+        //     #if __has_include(<source_location>) && defined(__cpp_lib_source_location)
+        //         .method("smart_log", &logger::smart_log)
+        //     #endif
+        // #endif
+        //         .method("log", &logger::log)
         .method("trace",
                 [](logger & _obj, std::string_view _message) {
                     _obj.log(spdlog::level::trace, _message, spdlog::source_loc{"<none>", 1, ""});
@@ -140,5 +144,6 @@ RTTR_REGISTRATION {
         .method("critical", [](logger & _obj, std::string_view _message) {
             _obj.log(spdlog::level::critical, _message, spdlog::source_loc{"<none>", 1, ""});
         });
+    HEDLEY_DIAGNOSTIC_POP
 }
 } // namespace phansar::common

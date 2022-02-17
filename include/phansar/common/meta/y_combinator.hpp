@@ -9,7 +9,7 @@ namespace detail {
 template <class T>
 class y_combinator {
 public:
-    explicit y_combinator(T && _f);
+    explicit constexpr y_combinator(T && _f);
 
     template <class... Args>
     constexpr auto operator()(Args &&... _args) const -> decltype(auto);

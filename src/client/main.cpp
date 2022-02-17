@@ -4,19 +4,13 @@
 #include <phansar/common/macro.hpp>
 #include <phansar/common/meta.hpp>
 #include <phansar/common/policy.hpp>
-#include <phansar/common/reflect/debug_visitor.hpp>
-#include <phansar/common/reflect/pybind_visitor.hpp>
+#include <phansar/common/reflect/sol_visitor.hpp>
 #include <phansar/common/service/executor_service.hpp>
 #include <phansar/common/service/logger_service.hpp>
 #include <phansar/common/service_container.hpp>
 #include <phansar/common/synchronized.hpp>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
-#include <pybind11/chrono.h>
-#include <pybind11/complex.h>
-#include <pybind11/embed.h>
-#include <pybind11/functional.h>
-#include <pybind11/stl.h>
 #include <rttr/registration>
 #include <rttr/type>
 #include <rttr/visitor.h>
@@ -26,9 +20,29 @@
 #include <hedley.h>
 
 struct material {
-    std::array<float, 3> ambient, diffuse, specular;
-    float                shininess;
+    std::array<float, 3> ambient{}, diffuse{}, specular{};
+    float                shininess{};
+
+    static int s_number;
+
+    void        func() {}
+    static auto get_x() -> int {
+        return s_x;
+    }
+    [[nodiscard]] auto get_y() const -> int {
+        return m_y;
+    }
+    static void set_x(int _x) {
+        s_x = _x;
+    }
+
+private:
+    static int s_x;
+    int        m_y = 0xff;
 };
+
+int material::s_x      = 222;
+int material::s_number = 10;
 
 enum class color { white, black, red, blue, green, yellow, cyan, magenta, pink };
 
@@ -48,7 +62,11 @@ RTTR_REGISTRATION {
         .property("ambient", &material::ambient)
         .property("diffuse", &material::diffuse)
         .property("specular", &material::specular)
-        .property("shininess", &material::shininess);
+        .property("shininess", &material::shininess)
+        .property("x", &material::get_x, &material::set_x)
+        .property_readonly("y", &material::get_y)
+        .property("number", &material::s_number)
+        .method("func", &material::func);
 
     rttr::registration::enumeration<color>("color")(rttr::value("white", color::white),
                                                     rttr::value("black", color::black),
@@ -72,15 +90,6 @@ RTTR_REGISTRATION {
         rttr::value("read_write_execute", permissions::READ_WRITE_EXECUTE));
 }
 
-// NOLINTNEXTLINE(modernize-use-trailing-return-type)
-PYBIND11_EMBEDDED_MODULE(phansar, m) {
-    auto visitor = phansar::common::reflect::pybind_visitor{m};
-    visitor.visit(rttr::type::get<phansar::common::logger>());
-    visitor.visit(rttr::type::get<material>());
-    visitor.visit_enumeration<color>();
-    visitor.visit_enumeration<permissions>();
-}
-
 auto main(int _argc, char * _argv[]) -> int {
     PH_UNUSED(_argc);
     PH_UNUSED(_argv);
@@ -97,7 +106,16 @@ auto main(int _argc, char * _argv[]) -> int {
         phansar::common::g_service_container.service<phansar::common::service::executor_service>();
 
     auto lua = sol::state{};
-    lua.open_libraries(sol::lib::base, sol::lib::string, sol::lib::utf8);
+    lua.open_libraries(sol::lib::base, sol::lib::string, sol::lib::table);
+    // const auto package_path = lua["package"]["path"].get<std::string>();
+    // lua["package"]["path"] =
+    //     package_path + (! package_path.empty() ? ";" : "") + "./assets/scripts/?.lua";
+
+    auto visitor = phansar::common::reflect::sol_visitor{lua};
+    visitor.visit<phansar::common::logger>();
+    visitor.visit<material>();
+    visitor.visit<color>();
+    visitor.visit<permissions>();
 
     HEDLEY_DIAGNOSTIC_PUSH
 #ifdef HEDLEY_GCC_VERSION
@@ -105,25 +123,112 @@ auto main(int _argc, char * _argv[]) -> int {
 #endif
     lua.set_function("beep1", []() { PH_LOG_TRACE("boop1"); });
     lua.set("beep2", []() { PH_LOG_TRACE("boop2"); });
-    lua["beep3"] = []() { PH_LOG_TRACE("boop3"); };
+    lua["beep3"]          = []() { PH_LOG_TRACE("boop3"); };
+    lua["check_material"] = [](const material & _m) {
+        PH_LOG_DEBUG("material {} | {} | {} | {}",
+                     fmt::join(_m.ambient, ", "),
+                     fmt::join(_m.diffuse, ", "),
+                     fmt::join(_m.specular, ", "),
+                     _m.shininess);
+    };
     HEDLEY_DIAGNOSTIC_POP
 
-    lua.script(R"lua(
-        beep1()
-        beep2()
-        beep3()
-    )lua");
+    //     lua.new_usertype<material>("material", sol::no_constructor, sol::base_classes,
+    //     sol::bases<>());
+    // //    auto mat_type = lua["material"].get<sol::usertype<material>>();
+    //     lua["material"]["ambient"]   = &material::ambient;
+    //     lua["material"]["diffuse"]   = &material::diffuse;
+    //     lua["material"]["specular"]  = &material::specular;
+    //     lua["material"]["shininess"] = &material::shininess;
+    //     lua["material"]["func"]      = &material::func;
 
-    // auto visitor = phansar::common::reflect::debug_visitor{};
+    lua["l"] =
+        &phansar::common::g_service_container.service<phansar::common::service::logger_service>();
+    auto m2      = material{};
+    m2.shininess = 14;
+    lua["m2"]    = &m2;
+    // lua.safe_script(R"lua(
+    //     beep1()
+    //     beep2()
+    //     beep3()
+    // )lua");
+    // lua.safe_script_file("./assets/scripts/test.lua");
+    lua.script_file("./assets/scripts/index.lua");
+    // lua.script(R"lua(
+    //     print(m2.shininess)
+    //     assert(m2.shininess == 14)
+    //     m2.shininess = 15
+    //     print(m2.shininess)
+    //     assert(m2.shininess == 15)
+    //     check_material(m2)
+    //     m2.specular = {11, 22, 33}
+    //     print(m2.func)
 
-    // {
-    //     visitor.visit(rttr::type::get<Rectangle>());
-    //     // return 0;
-    // }
+    //     local m = material.new1()
+    //     m.shininess = 12
+    //     m.ambient = {1, 2, 3}
+    //     m.diffuse = {4, 5, 6}
+    //     m.specular = {7, 8, 9}
+    //     print(m.x)
+    //     m.x = 200
+    //     print(m.x)
+    //     print(m.number)
+    //     m.number = 101
+    //     print(m.number)
+    //     print(m.y)
+    //     check_material(m)
+    //     print(color.red)
+    // )lua");
 
-    // visitor.visit(rttr::type::get<phansar::common::logger>());
-    PH_LOG_DEBUG("is_const_method: {}",
-                 phansar::common::meta::is_const_method_v<decltype(&phansar::common::logger::log)>);
+    PH_LOG_DEBUG("c++ material {} | {} | {} | {}",
+                 fmt::join(m2.ambient, ", "),
+                 fmt::join(m2.diffuse, ", "),
+                 fmt::join(m2.specular, ", "),
+                 m2.shininess);
+    PH_LOG_DEBUG("number {}", m2.s_number);
+    // lua.script(R"lua(
+    //     beep1()
+    //     beep2()
+    //     beep3()
+
+    //     logger:debug("debug")
+    //     logger:debug("debug")
+    //     logger:info("info")
+    //     logger:warning("warning")
+    //     logger:error("error")
+    //     logger:critical("critical")
+    //     print(logger)
+
+    //     local l = logger.new1("client", "logs/lua-client.log", 1024 * 1024 * 5, 3)
+    //     l:trace("trace")
+    //     l:debug("debug")
+    //     l:info("info")
+    //     l:warning("warning")
+    //     l:error("error")
+    //     l:critical("critical")
+    //     print(l)
+
+    //     m = material.new1()
+    //     m.shininess = 12
+    //     --m.ambient = {1, 2, 3}
+    //     --m.diffuse = {4, 5, 6}
+    //     --m.specular = {7, 8, 9}
+    //     print(m.ambient)
+    //     print(m.diffuse)
+    //     print(m.specular)
+    //     print(m.shininess)
+    //     print(m)
+
+    //     check_material(m)
+    //     print(m2.shininess)
+    //     m2.shininess = 11
+    //     print(m2.shininess)
+    //     assert(m2.shininess == 11)
+    //     check_material(m2)
+    // )lua");
+
+    return 0;
+
     PH_LOG_DEBUG("testing from C++");
     auto ec = std::error_code{phansar::common::errc::error102};
     PH_LOG_DEBUG("100 {} {}", ec.message(), ec == phansar::common::error::error100);
@@ -169,47 +274,6 @@ auto main(int _argc, char * _argv[]) -> int {
     PH_LOG_DEBUG("slot_count: {}", sig.slot_count());
     sig(12.0);
     sig(15.0);
-
-    auto guard = py::scoped_interpreter{};
-    py::exec(R"python(
-        from phansar import logger, material, color, permissions
-
-        l = logger("client", "logs/client.log", 1024 * 1024 * 5, 3)
-        l.trace("trace")
-        l.debug("debug")
-        l.info("info")
-        l.warning("warning")
-        l.error("error")
-        l.critical("critical")
-        l.debug(f"{l}")
-
-        m = material()
-        m.ambient = [1, 2, 3]
-        l.info(f"ambient={m.ambient} diffuse={m.diffuse} specular={m.specular} shininess={m.shininess}")
-        m.diffuse = [4, 5, 6]
-        l.info(f"ambient={m.ambient} diffuse={m.diffuse} specular={m.specular} shininess={m.shininess}")
-        m.specular = [7, 8, 9]
-        l.info(f"ambient={m.ambient} diffuse={m.diffuse} specular={m.specular} shininess={m.shininess}")
-        l.debug(f"{m}")
-
-        l.debug(f"{color.white}")
-        l.debug(f"{color.black}")
-        l.debug(f"{color.red}")
-        l.debug(f"{color.blue}")
-        l.debug(f"{color.green}")
-        l.debug(f"{color.yellow}")
-        l.debug(f"{int(color.cyan)}")
-        l.debug(f"{color.magenta}")
-        l.debug(f"{color.pink}")
-
-        l.debug(f"{permissions.read}")
-        l.debug(f"{permissions.write}")
-        l.debug(f"{permissions.execute}")
-        l.debug(f"{permissions.read_write}")
-        l.debug(f"{permissions.read_execute}")
-        l.debug(f"{permissions.write_execute}")
-        l.debug(f"{permissions.read_write_execute}")
-    )python");
 
     return 0;
 }

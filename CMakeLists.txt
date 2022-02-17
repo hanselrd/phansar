@@ -11,6 +11,7 @@ endif()
 
 option(ENABLE_CMAKE_FORMAT "Enable cmake-format" OFF)
 option(ENABLE_BLACK "Enable black" OFF)
+option(ENABLE_PRETTIER "Enable prettier" OFF)
 option(ENABLE_CLANG_FORMAT "Enable clang-format" OFF)
 option(ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
 option(ENABLE_INCLUDE_WHAT_YOU_USE "Enable include-what-you-use" OFF)

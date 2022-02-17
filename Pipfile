@@ -9,6 +9,8 @@ filelock = "*"
 mako = "*"
 
 [dev-packages]
+black = "*"
+cmakelang = "*"
 
 [requires]
 python_version = "3.10"

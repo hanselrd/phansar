@@ -1,22 +1,20 @@
-#ifndef PHANSAR_COMMON_REFLECT_PYBIND_VISITOR_HPP
-#define PHANSAR_COMMON_REFLECT_PYBIND_VISITOR_HPP
+#ifndef PHANSAR_COMMON_REFLECT_SOL_VISITOR_HPP
+#define PHANSAR_COMMON_REFLECT_SOL_VISITOR_HPP
 
 #include <phansar/common/utility/pimpl.hpp>
-#include <pybind11/embed.h>
 #include <rttr/type>
 #include <rttr/visitor.h>
-
-namespace py = pybind11;
+#include <sol/sol.hpp>
 
 namespace phansar::common::reflect {
-class pybind_visitor : public rttr::visitor {
+class sol_visitor : public rttr::visitor {
 public:
-    explicit pybind_visitor(py::module & _module);
-    pybind_visitor(const pybind_visitor & _other);
-    auto operator=(const pybind_visitor & _other) -> pybind_visitor &;
-    pybind_visitor(pybind_visitor && _other) noexcept;
-    auto operator=(pybind_visitor && _other) noexcept -> pybind_visitor &;
-    ~pybind_visitor() override;
+    explicit sol_visitor(sol::state & _state);
+    sol_visitor(const sol_visitor & _other);
+    auto operator=(const sol_visitor & _other) -> sol_visitor &;
+    sol_visitor(sol_visitor && _other) noexcept;
+    auto operator=(sol_visitor && _other) noexcept -> sol_visitor &;
+    ~sol_visitor() override;
 
     template <class T, class... BaseClasses>
     void visit_type_begin(const rttr::visitor::type_info<T> & _info);
@@ -44,10 +42,12 @@ public:
     template <class T>
     void visit_global_readonly_property(const rttr::visitor::property_info<T> & _info);
     template <class T>
-    void visit_enumeration(const rttr::type & _type = rttr::type::get<T>());
+    void visit(const rttr::type & _type = rttr::type::get<T>());
 
 private:
-    [[nodiscard]] auto _module_internal() const -> py::module &;
+    [[nodiscard]] auto _state_internal() const -> sol::state &;
+    void               _constructor_counter_reset_internal();
+    auto               _constructor_counter_next_internal() -> std::size_t;
 
     struct impl;
     utility::pimpl<impl> m_impl;
@@ -57,6 +57,6 @@ private:
 };
 } // namespace phansar::common::reflect
 
-#include <phansar/common/reflect/pybind_visitor.inl>
+#include <phansar/common/reflect/sol_visitor.inl>
 
 #endif

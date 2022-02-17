@@ -41,4 +41,6 @@ Testing
 __pycache__
 build
 compile_commands.json
+node_modules
+package-lock.json
 tags

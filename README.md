@@ -1,6 +1,6 @@
 # Phansar
 
-> 2D Multiplayer RPG
+> Game written using a modern C++ stack
 
 [![Build Status](https://img.shields.io/github/workflow/status/hanselrd/phansar/Continuous%20Integration?style=for-the-badge&logo=github)](https://github.com/hanselrd/phansar/actions)
 [![code style: clang-format](https://img.shields.io/static/v1?label=code%20style&message=clang-format&style=for-the-badge&color=orange&logo=c%2B%2B&logoColor=orange)](https://clang.llvm.org/docs/ClangFormat.html)

@@ -10,11 +10,13 @@ function(ph_add_file_pass)
         message(FATAL_ERROR "called with unrecognized parameters: ${ARG_UNPARSED_ARGUMENTS}")
     endif()
 
-    file(
-        GLOB_RECURSE
-        files
-        CONFIGURE_DEPENDS
-        ${ARG_GLOBS})
+    if(ARG_GLOBS)
+        file(
+            GLOB_RECURSE
+            files
+            CONFIGURE_DEPENDS
+            ${ARG_GLOBS})
+    endif()
     list(APPEND files ${ARG_FILES})
 
     if(ARG_PRE_COMMANDS)
@@ -30,7 +32,7 @@ function(ph_add_file_pass)
                 # cmake-format: off
                 ${CMAKE_COMMAND}
                 -DCOMMANDS:STRING="${pre_commands}"
-                -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
+                 -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
                 -DREDIRECT_OUTPUT:BOOL=${ARG_PRE_REDIRECT_OUTPUT}
                 -DSEQUENTIAL:BOOL=${ARG_PRE_SEQUENTIAL}
                 -P ${CMAKE_SOURCE_DIR}/cmake/scripts/execute-process.cmake
@@ -89,7 +91,7 @@ function(ph_add_file_pass)
                 # cmake-format: off
                 ${CMAKE_COMMAND}
                 -DCOMMANDS:STRING="${commands}"
-                -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
+                 -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
                 -DREDIRECT_OUTPUT:BOOL=${ARG_REDIRECT_OUTPUT}
                 -DSEQUENTIAL:BOOL=${ARG_SEQUENTIAL}
                 -P ${CMAKE_SOURCE_DIR}/cmake/scripts/execute-process.cmake
@@ -114,7 +116,7 @@ function(ph_add_file_pass)
                 # cmake-format: off
                 ${CMAKE_COMMAND}
                 -DCOMMANDS:STRING="${post_commands}"
-                -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
+                 -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
                 -DREDIRECT_OUTPUT:BOOL=${ARG_POST_REDIRECT_OUTPUT}
                 -DSEQUENTIAL:BOOL=${ARG_POST_SEQUENTIAL}
                 -P ${CMAKE_SOURCE_DIR}/cmake/scripts/execute-process.cmake
@@ -138,6 +140,7 @@ function(ph_add_file_pass)
 endfunction()
 
 find_program(PIPENV_EXECUTABLE pipenv REQUIRED)
+find_program(NPX_EXECUTABLE npx REQUIRED)
 
 ph_add_file_pass(
     NAME codegen
@@ -176,75 +179,6 @@ ph_add_file_pass(
           "vendor/*.cog.hpp"
           "vendor/*.cog.inl"
           "vendor/*.cog.cpp")
-
-ph_add_file_pass(
-    NAME assets-shaders-vertex
-    GROUPS assets assets-shaders
-    PRE_COMMANDS
-        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\-B ${CMAKE_BINARY_DIR}/host \\-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}\"">
-        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\--build ${CMAKE_BINARY_DIR}/host \\--target shaderc\"">
-        "${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets/shaders"
-    COMMANDS
-        $<$<PLATFORM_ID:Windows>:"\"$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx9.bin --platform windows -p vs_3_0 -O 3\"">
-        $<$<PLATFORM_ID:Windows>:"\"$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx11.bin --platform windows -p vs_5_0 -O 3\"">
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-metal.bin --platform osx -p metal"
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-glsl.bin --platform linux"
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-spirv.bin --platform linux -p spirv"
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type vertex --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-essl.bin --platform android"
-    GLOBS "assets/shaders/vs_*.sc"
-    PRE_SEQUENTIAL
-    SEQUENTIAL)
-
-ph_add_file_pass(
-    NAME assets-shaders-fragment
-    GROUPS assets assets-shaders
-    PRE_COMMANDS
-        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\-B ${CMAKE_BINARY_DIR}/host \\-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}\"">
-        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\--build ${CMAKE_BINARY_DIR}/host \\--target shaderc\"">
-        "${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets/shaders"
-    COMMANDS
-        $<$<PLATFORM_ID:Windows>:"\"$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx9.bin --platform windows -p ps_3_0 -O 3\"">
-        $<$<PLATFORM_ID:Windows>:"\"$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx11.bin --platform windows -p ps_5_0 -O 3\"">
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-metal.bin --platform osx -p metal"
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-glsl.bin --platform linux"
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-spirv.bin --platform linux -p spirv"
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type fragment --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-essl.bin --platform android"
-    GLOBS "assets/shaders/fs_*.sc"
-    PRE_SEQUENTIAL
-    SEQUENTIAL)
-
-ph_add_file_pass(
-    NAME assets-shaders-compute
-    GROUPS assets assets-shaders
-    PRE_COMMANDS
-        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\-B ${CMAKE_BINARY_DIR}/host \\-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}\"">
-        $<$<BOOL:${CMAKE_CROSSCOMPILING}>:"\"${PIPENV_EXECUTABLE} run ${CMAKE_SOURCE_DIR}/tools/flock.py ${CMAKE_BINARY_DIR}/host --directory -c ${CMAKE_COMMAND} \\--build ${CMAKE_BINARY_DIR}/host \\--target shaderc\"">
-        "${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets/shaders"
-    COMMANDS
-        $<$<PLATFORM_ID:Windows>:"\"$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-dx11.bin --platform windows -p cs_5_0 -O 1\"">
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-metal.bin --platform osx -p metal"
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-glsl.bin --platform linux -p 430"
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-spirv.bin --platform linux -p spirv"
-        "$<IF:$<BOOL:${CMAKE_CROSSCOMPILING}>,${CMAKE_BINARY_DIR}/host/bin/shaderc,$<TARGET_FILE:shaderc>> -i ${bgfx_SOURCE_DIR}/bgfx/src --type compute --varyingdef ${CMAKE_SOURCE_DIR}/assets/shaders/varying.def.sc -f @INPUT_FILE@ -o ${CMAKE_BINARY_DIR}/assets/shaders/@INPUT_STEM@-essl.bin --platform android"
-    GLOBS "assets/shaders/cs_*.sc"
-    PRE_SEQUENTIAL
-    SEQUENTIAL)
-
-foreach(
-    asset_type
-    "fonts"
-    "maps"
-    "models"
-    "textures"
-    "tilesets")
-    ph_add_file_pass(
-        NAME assets-${asset_type}
-        GROUPS assets
-        PRE_COMMANDS "${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/assets/${asset_type}"
-        COMMANDS
-            "${CMAKE_COMMAND} -E copy_if_different @INPUT_FILE@ ${CMAKE_BINARY_DIR}/assets/${asset_type}/@INPUT_FILENAME@"
-        GLOBS "assets/${asset_type}/*")
-endforeach()
 
 if(ENABLE_CMAKE_FORMAT)
     find_program(CMAKE_FORMAT_EXECUTABLE cmake-format)
@@ -291,6 +225,37 @@ if(ENABLE_BLACK)
             COMMANDS "${BLACK_EXECUTABLE} @INPUT_FILE@"
             GLOBS "codegen/*.py" "tools/*.py"
             FILES "${CMAKE_SOURCE_DIR}/.cmake-format.py")
+    endif()
+endif()
+
+if(ENABLE_PRETTIER)
+    find_program(NPX_EXECUTABLE npx)
+    if(NPX_EXECUTABLE)
+        ph_add_file_pass(
+            NAME check-format-prettier-0
+            GROUPS check-format check-format-prettier
+            COMMANDS "${NPX_EXECUTABLE} prettier --check @INPUT_FILE@"
+            GLOBS "src/*.ts"
+            FILES "${CMAKE_SOURCE_DIR}/package.json" "${CMAKE_SOURCE_DIR}/tsconfig.json")
+
+        ph_add_file_pass(
+            NAME check-format-prettier-1
+            GROUPS check-format check-format-prettier
+            COMMANDS "${NPX_EXECUTABLE} prettier --parser json --check @INPUT_FILE@"
+            FILES "${CMAKE_SOURCE_DIR}/.prettierrc")
+
+        ph_add_file_pass(
+            NAME fix-format-prettier-0
+            GROUPS fix-format fix-format-prettier
+            COMMANDS "${NPX_EXECUTABLE} prettier --write @INPUT_FILE@"
+            GLOBS "src/*.ts"
+            FILES "${CMAKE_SOURCE_DIR}/package.json" "${CMAKE_SOURCE_DIR}/tsconfig.json")
+
+        ph_add_file_pass(
+            NAME fix-format-prettier-1
+            GROUPS fix-format fix-format-prettier
+            COMMANDS "${NPX_EXECUTABLE} prettier --parser json --write @INPUT_FILE@"
+            FILES "${CMAKE_SOURCE_DIR}/.prettierrc")
     endif()
 endif()
 

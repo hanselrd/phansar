@@ -11,6 +11,8 @@ RUN pacman -S \
         llvm \
         mesa \
         ninja \
+        nodejs \
+        npm \
         postgresql \
         python \
         python-pip \
