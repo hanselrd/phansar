@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from utility.shell import shell
 import argparse
@@ -69,7 +69,7 @@ if __name__ == "__main__":
                     data,
                 ).groups()
                 shell(
-                    f"git clone https://github.com/{groups[0]}.git -b {groups[1]} {tmpdir}"
+                    f"git clone --filter=blob:none https://github.com/{groups[0]}.git -b {groups[1]} {tmpdir}"
                 )
                 shell(f"cd {tmpdir} && git checkout {groups[2]}")
                 _, stdout, _ = shell(f"cd {tmpdir} && git rev-parse HEAD")

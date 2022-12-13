@@ -32,7 +32,7 @@ function(ph_add_file_pass)
                 # cmake-format: off
                 ${CMAKE_COMMAND}
                 -DCOMMANDS:STRING="${pre_commands}"
-                 -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
+                -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
                 -DREDIRECT_OUTPUT:BOOL=${ARG_PRE_REDIRECT_OUTPUT}
                 -DSEQUENTIAL:BOOL=${ARG_PRE_SEQUENTIAL}
                 -P ${CMAKE_SOURCE_DIR}/cmake/scripts/execute-process.cmake
@@ -91,7 +91,7 @@ function(ph_add_file_pass)
                 # cmake-format: off
                 ${CMAKE_COMMAND}
                 -DCOMMANDS:STRING="${commands}"
-                 -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
+                -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
                 -DREDIRECT_OUTPUT:BOOL=${ARG_REDIRECT_OUTPUT}
                 -DSEQUENTIAL:BOOL=${ARG_SEQUENTIAL}
                 -P ${CMAKE_SOURCE_DIR}/cmake/scripts/execute-process.cmake
@@ -116,7 +116,7 @@ function(ph_add_file_pass)
                 # cmake-format: off
                 ${CMAKE_COMMAND}
                 -DCOMMANDS:STRING="${post_commands}"
-                 -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
+                -DWORKING_DIRECTORY:STRING=${CMAKE_SOURCE_DIR}
                 -DREDIRECT_OUTPUT:BOOL=${ARG_POST_REDIRECT_OUTPUT}
                 -DSEQUENTIAL:BOOL=${ARG_POST_SEQUENTIAL}
                 -P ${CMAKE_SOURCE_DIR}/cmake/scripts/execute-process.cmake

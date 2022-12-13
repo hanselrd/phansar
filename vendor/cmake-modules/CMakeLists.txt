@@ -1,7 +1,7 @@
 CPMAddPackage(
     NAME cmake-modules
     GITHUB_REPOSITORY rpavlik/cmake-modules # main
-    GIT_TAG 77982ba193e2baeffae13876fd4b0b77cff5576c
+    GIT_TAG 14094b5ed352d96e0a919237f3018f385f980344
     DOWNLOAD_ONLY YES)
 
 if(cmake-modules_ADDED)

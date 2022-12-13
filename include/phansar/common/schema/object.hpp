@@ -15,7 +15,7 @@ public:
     explicit object(capnp::ReaderFor<T> _reader, capnp::MallocMessageBuilder * _message = nullptr);
     explicit object(capnp::BuilderFor<T>          _builder,
                     capnp::MallocMessageBuilder * _message = nullptr);
-    object(const object & _other) = delete;
+    object(const object & _other)                     = delete;
     auto operator=(const object & _other) -> object & = delete;
     object(object && _other) noexcept;
     auto operator=(object && _other) noexcept -> object &;

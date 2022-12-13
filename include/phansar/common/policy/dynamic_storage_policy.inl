@@ -26,7 +26,7 @@ dynamic_storage_policy<T>::dynamic_storage_policy(dynamic_storage_policy && _oth
 
 template <class T>
 auto dynamic_storage_policy<T>::operator=(dynamic_storage_policy && _other) noexcept
-    -> dynamic_storage_policy<T> &      = default;
+    -> dynamic_storage_policy<T> & = default;
 
 template <class T>
 dynamic_storage_policy<T>::~dynamic_storage_policy() = default;

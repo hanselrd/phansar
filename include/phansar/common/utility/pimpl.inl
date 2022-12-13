@@ -10,14 +10,14 @@ pimpl<T, StoragePolicy>::pimpl(const pimpl & _other) = default;
 
 template <class T, class StoragePolicy>
 auto pimpl<T, StoragePolicy>::operator=(const pimpl & _other)
-    -> pimpl<T, StoragePolicy> &      = default;
+    -> pimpl<T, StoragePolicy> & = default;
 
 template <class T, class StoragePolicy>
 pimpl<T, StoragePolicy>::pimpl(pimpl && _other) noexcept = default;
 
 template <class T, class StoragePolicy>
 auto pimpl<T, StoragePolicy>::operator=(pimpl && _other) noexcept
-    -> pimpl<T, StoragePolicy> &      = default;
+    -> pimpl<T, StoragePolicy> & = default;
 
 template <class T, class StoragePolicy>
 pimpl<T, StoragePolicy>::~pimpl() = default;
