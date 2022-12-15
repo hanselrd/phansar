@@ -36,7 +36,7 @@ services:
                    ccache -z &&
                    cmake -S /app -B build &&
                    cmake --build build &&
-                   ctest --ctest-dir build --output-on-failure --timeout 30 &&
+                   ctest --test-dir build --output-on-failure --timeout 30 &&
                    rm -rf build &&
                    ccache -sx"
 
