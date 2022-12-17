@@ -1,7 +1,8 @@
 #include <phansar/common/version.hpp>
 
 namespace phansar::common::version {
-const std::string k_version        = "@CMAKE_PROJECT_VERSION@.@GIT_SHORT_HASH@.@BUILD_TYPE@";
+const std::string k_version =
+    "@CMAKE_PROJECT_VERSION@.@GIT_SHORT_HASH@.@BUILD_TYPE@";
 const std::string k_major          = "@CMAKE_PROJECT_VERSION_MAJOR@";
 const std::string k_minor          = "@CMAKE_PROJECT_VERSION_MINOR@";
 const std::string k_patch          = "@CMAKE_PROJECT_VERSION_PATCH@";

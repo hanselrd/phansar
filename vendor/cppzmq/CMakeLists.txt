@@ -1,0 +1,11 @@
+CPMAddPackage(
+  NAME cppzmq
+  GITHUB_REPOSITORY zeromq/cppzmq # master
+  GIT_TAG c66fc6094b2a03439dea8469719e221e80e2e8e7
+  DOWNLOAD_ONLY YES)
+
+ph_add_library(
+  NAME ph_vendor_cppzmq
+  TYPE INTERFACE
+  INCLUDE_DIRECTORIES SYSTEM INTERFACE ${cppzmq_SOURCE_DIR}
+  LINK_LIBRARIES SYSTEM INTERFACE ph_vendor_libzmq)

@@ -3,35 +3,35 @@
 
 namespace {
 struct error_category : std::error_category {
-    [[nodiscard]] auto name() const noexcept -> const char * override;
-    [[nodiscard]] auto message(int _condition) const -> std::string override;
+  [[nodiscard]] auto name() const noexcept -> const char * override;
+  [[nodiscard]] auto message(int _condition) const -> std::string override;
 };
 
 auto error_category::name() const noexcept -> const char * {
-    return "raw generic error";
+  return "raw generic error";
 }
 
 auto error_category::message(int _condition) const -> std::string {
-    using namespace phansar::common;
+  using namespace phansar::common;
 
-    switch (static_cast<errc>(_condition)) {
-    case errc::error100:
-        return "error 100";
-    case errc::error101:
-        return "error 101";
-    case errc::error102:
-        return "error 102";
-    case errc::error200:
-        return "error 200";
-    case errc::error300:
-        return "error 300";
-    case errc::error400:
-        return "error 400";
-    case errc::error500:
-        return "error 500";
-    default:
-        return "(unknown)";
-    }
+  switch (static_cast<errc>(_condition)) {
+  case errc::error100:
+    return "error 100";
+  case errc::error101:
+    return "error 101";
+  case errc::error102:
+    return "error 102";
+  case errc::error200:
+    return "error 200";
+  case errc::error300:
+    return "error 300";
+  case errc::error400:
+    return "error 400";
+  case errc::error500:
+    return "error 500";
+  default:
+    return "(unknown)";
+  }
 }
 
 const auto k_error_category = error_category{};
@@ -39,7 +39,7 @@ const auto k_error_category = error_category{};
 
 namespace phansar::common {
 auto make_error_code(errc _e) -> std::error_code {
-    return {static_cast<int>(_e), k_error_category};
+  return {static_cast<int>(_e), k_error_category};
 }
 
 /* [[[cog

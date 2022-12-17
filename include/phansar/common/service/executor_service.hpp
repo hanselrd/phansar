@@ -5,7 +5,9 @@
 #include <taskflow/taskflow.hpp>
 
 namespace phansar::common::service {
-struct executor_service : kgr::single_service<tf::Executor>, kgr::supplied {};
+struct executor_service
+    : kgr::single_service<tf::Executor>
+    , kgr::supplied {};
 } // namespace phansar::common::service
 
 #endif

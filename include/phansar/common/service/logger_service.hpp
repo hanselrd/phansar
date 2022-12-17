@@ -5,7 +5,9 @@
 #include <kangaru/kangaru.hpp>
 
 namespace phansar::common::service {
-struct logger_service : kgr::single_service<logger>, kgr::supplied {};
+struct logger_service
+    : kgr::single_service<logger>
+    , kgr::supplied {};
 } // namespace phansar::common::service
 
 #endif

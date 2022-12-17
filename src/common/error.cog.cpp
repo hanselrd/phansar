@@ -4,55 +4,60 @@
 
 namespace {
 struct error_category : std::error_category {
-    [[nodiscard]] auto name() const noexcept -> const char * override;
-    [[nodiscard]] auto message(int _condition) const -> std::string override;
-    [[nodiscard]] auto equivalent(const std::error_code & _code, int _condition) const noexcept
-        -> bool override;
+  [[nodiscard]] auto name() const noexcept -> const char * override;
+  [[nodiscard]] auto message(int _condition) const -> std::string override;
+  [[nodiscard]] auto equivalent(const std::error_code & _code,
+                                int _condition) const noexcept -> bool override;
 };
 
 auto error_category::name() const noexcept -> const char * {
-    return "generic error";
+  return "generic error";
 }
 
 auto error_category::message(int _condition) const -> std::string {
-    using namespace phansar::common;
+  using namespace phansar::common;
 
-    switch (static_cast<error>(_condition)) {
-    case error::error100:
-        return "error 100";
-    case error::error200:
-        return "error 200";
-    case error::error300:
-        return "error 300";
-    case error::error400:
-        return "error 400";
-    case error::error500:
-        return "error 500";
-    default:
-        return "(unknown)";
-    }
+  switch (static_cast<error>(_condition)) {
+  case error::error100:
+    return "error 100";
+  case error::error200:
+    return "error 200";
+  case error::error300:
+    return "error 300";
+  case error::error400:
+    return "error 400";
+  case error::error500:
+    return "error 500";
+  default:
+    return "(unknown)";
+  }
 }
 
-auto error_category::equivalent(const std::error_code & _code, int _condition) const noexcept
-    -> bool {
-    using namespace phansar::common;
+auto error_category::equivalent(const std::error_code & _code,
+                                int _condition) const noexcept -> bool {
+  using namespace phansar::common;
 
-    const auto & error_category = std::error_code{errc{}}.category();
+  const auto & error_category = std::error_code{errc{}}.category();
 
-    switch (static_cast<error>(_condition)) {
-    case error::error100:
-        return _code.category() == error_category && _code.value() >= 100 && _code.value() < 200;
-    case error::error200:
-        return _code.category() == error_category && _code.value() >= 200 && _code.value() < 300;
-    case error::error300:
-        return _code.category() == error_category && _code.value() >= 300 && _code.value() < 400;
-    case error::error400:
-        return _code.category() == error_category && _code.value() >= 400 && _code.value() < 500;
-    case error::error500:
-        return _code.category() == error_category && _code.value() >= 500 && _code.value() < 600;
-    default:
-        return false;
-    }
+  switch (static_cast<error>(_condition)) {
+  case error::error100:
+    return _code.category() == error_category && _code.value() >= 100 &&
+           _code.value() < 200;
+  case error::error200:
+    return _code.category() == error_category && _code.value() >= 200 &&
+           _code.value() < 300;
+  case error::error300:
+    return _code.category() == error_category && _code.value() >= 300 &&
+           _code.value() < 400;
+  case error::error400:
+    return _code.category() == error_category && _code.value() >= 400 &&
+           _code.value() < 500;
+  case error::error500:
+    return _code.category() == error_category && _code.value() >= 500 &&
+           _code.value() < 600;
+  default:
+    return false;
+  }
 }
 
 const auto k_error_category = error_category{};
@@ -60,7 +65,7 @@ const auto k_error_category = error_category{};
 
 namespace phansar::common {
 auto make_error_condition(error _e) -> std::error_condition {
-    return {static_cast<int>(_e), k_error_category};
+  return {static_cast<int>(_e), k_error_category};
 }
 
 /* [[[cog

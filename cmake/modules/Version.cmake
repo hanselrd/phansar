@@ -4,15 +4,16 @@ git_local_changes(GIT_CHANGES)
 string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
 string(TIMESTAMP BUILD_TIMESTAMP UTC)
 string(
-    REPLACE "refs/heads/"
-            ""
-            GIT_BRANCH
-            ${GIT_REFSPEC})
+  REPLACE "refs/heads/"
+          ""
+          GIT_BRANCH
+          ${GIT_REFSPEC})
 string(
-    SUBSTRING ${GIT_HASH}
-              0
-              12
-              GIT_SHORT_HASH)
+  SUBSTRING ${GIT_HASH}
+            0
+            12
+            GIT_SHORT_HASH)
 string(TOLOWER ${GIT_CHANGES} GIT_CHANGES)
 
-configure_file(${CMAKE_SOURCE_DIR}/src/common/version.cpp.in ${CMAKE_BINARY_DIR}/version.cpp @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/src/common/version.cpp.in
+               ${CMAKE_BINARY_DIR}/version.cpp @ONLY)

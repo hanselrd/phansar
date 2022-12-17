@@ -1,30 +1,30 @@
 {
-    "name": "phansar",
-    "version": "1.0.0",
-    "description": "Game written using a modern C++ stack",
-    "main": "index.js",
-    "directories": {
-        "test": "test"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/hanselrd/phansar.git"
-    },
-    "author": "Hansel De La Cruz",
-    "license": "AGPL-3.0",
-    "bugs": {
-        "url": "https://github.com/hanselrd/phansar/issues"
-    },
-    "homepage": "https://github.com/hanselrd/phansar#readme",
-    "dependencies": {
-        "lua-types": "^2.11.0",
-        "typescript": "^4.5.5",
-        "typescript-to-lua": "^1.3.3"
-    },
-    "devDependencies": {
-        "prettier": "^2.5.1"
-    }
+  "name": "phansar",
+  "version": "1.0.0",
+  "description": "Game written using a modern C++ stack",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hanselrd/phansar.git"
+  },
+  "author": "Hansel De La Cruz",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/hanselrd/phansar/issues"
+  },
+  "homepage": "https://github.com/hanselrd/phansar#readme",
+  "dependencies": {
+    "lua-types": "^2.13.1",
+    "typescript": "^4.9.4",
+    "typescript-to-lua": "^1.11.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.1"
+  }
 }

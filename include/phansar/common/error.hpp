@@ -5,11 +5,11 @@
 
 namespace phansar::common {
 enum class error {
-    error100,
-    error200,
-    error300,
-    error400,
-    error500,
+  error100,
+  error200,
+  error300,
+  error400,
+  error500,
 };
 
 auto make_error_condition(error _e) -> std::error_condition;

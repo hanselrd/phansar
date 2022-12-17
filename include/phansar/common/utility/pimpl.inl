@@ -3,7 +3,8 @@
 namespace phansar::common::utility {
 template <class T, class StoragePolicy>
 template <class... Args>
-pimpl<T, StoragePolicy>::pimpl(Args &&... _args) : m_storage_policy{std::forward<Args>(_args)...} {}
+pimpl<T, StoragePolicy>::pimpl(Args &&... _args)
+    : m_storage_policy{std::forward<Args>(_args)...} {}
 
 template <class T, class StoragePolicy>
 pimpl<T, StoragePolicy>::pimpl(const pimpl & _other) = default;
@@ -24,21 +25,21 @@ pimpl<T, StoragePolicy>::~pimpl() = default;
 
 template <class T, class StoragePolicy>
 auto pimpl<T, StoragePolicy>::operator*() const -> const T & {
-    return m_storage_policy.operator*();
+  return m_storage_policy.operator*();
 }
 
 template <class T, class StoragePolicy>
 auto pimpl<T, StoragePolicy>::operator*() -> T & {
-    return const_cast<T &>(static_cast<const pimpl &>(*this).operator*());
+  return const_cast<T &>(static_cast<const pimpl &>(*this).operator*());
 }
 
 template <class T, class StoragePolicy>
 auto pimpl<T, StoragePolicy>::operator->() const -> const T * {
-    return m_storage_policy.operator->();
+  return m_storage_policy.operator->();
 }
 
 template <class T, class StoragePolicy>
 auto pimpl<T, StoragePolicy>::operator->() -> T * {
-    return const_cast<T *>(static_cast<const pimpl &>(*this).operator->());
+  return const_cast<T *>(static_cast<const pimpl &>(*this).operator->());
 }
 } // namespace phansar::common::utility

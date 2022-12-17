@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
 
 project(
-    phansar
-    VERSION 1.0.0
-    LANGUAGES CXX C)
+  phansar
+  VERSION 1.0.0
+  LANGUAGES CXX C)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-    message(FATAL_ERROR "In-source builds are not allowed")
+  message(FATAL_ERROR "In-source builds are not allowed")
 endif()
 
 option(ENABLE_CMAKE_FORMAT "Enable cmake-format" OFF)
@@ -23,12 +23,12 @@ option(ENABLE_TSAN "Enable thread sanitizer" OFF)
 option(ENABLE_UBSAN "Enable undefined behavior sanitizer" OFF)
 
 if(NOT WIN32)
-    find_program(CCACHE_EXECUTABLE ccache)
-    if(CCACHE_EXECUTABLE)
-        message(STATUS "Using ccache: ${CCACHE_EXECUTABLE}")
-        set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_EXECUTABLE})
-        set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_EXECUTABLE})
-    endif()
+  find_program(CCACHE_EXECUTABLE ccache)
+  if(CCACHE_EXECUTABLE)
+    message(STATUS "Using ccache: ${CCACHE_EXECUTABLE}")
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_EXECUTABLE})
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_EXECUTABLE})
+  endif()
 endif()
 
 include(CMakePrintHelpers)
@@ -39,7 +39,7 @@ include(cmake/modules/Functions.cmake)
 include(cmake/modules/CPM.cmake)
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    set(CMAKE_BUILD_TYPE Release)
+  set(CMAKE_BUILD_TYPE Release)
 endif()
 
 set(BUILD_SHARED_LIBS OFF)
