@@ -11,11 +11,8 @@ ph_add_library(
     ph_common
     ph_vendor_assimp
     ph_vendor_bgfx
-    ph_vendor_glfw
     ph_vendor_glm
-    # ph_vendor_sdl2
-    # ph_vendor_sdl2_mixer
-    # ph_vendor_sdl2_ttf
+    ph_vendor_sdl2
   SANITIZERS ${default_sanitizers})
 
 ph_add_executable(
