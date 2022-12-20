@@ -18,7 +18,7 @@ static_storage_policy<T, Size, Align>::static_storage_policy(Args &&... _args) {
 
 template <class T, std::size_t Size, std::size_t Align>
 static_storage_policy<T, Size, Align>::static_storage_policy(
-    const static_storage_policy & _other)
+    static_storage_policy const & _other)
     : m_valid{_other.m_valid} {
   if (m_valid) {
     new (&m_storage)
@@ -28,7 +28,7 @@ static_storage_policy<T, Size, Align>::static_storage_policy(
 
 template <class T, std::size_t Size, std::size_t Align>
 auto static_storage_policy<T, Size, Align>::operator=(
-    const static_storage_policy & _other)
+    static_storage_policy const & _other)
     -> static_storage_policy<T, Size, Align> & {
   if (this != &_other) {
     if (m_valid) {
@@ -89,7 +89,7 @@ auto static_storage_policy<T, Size, Align>::operator*() const -> const T & {
 template <class T, std::size_t Size, std::size_t Align>
 auto static_storage_policy<T, Size, Align>::operator*() -> T & {
   return const_cast<T &>(
-      static_cast<const static_storage_policy &>(*this).operator*());
+      static_cast<static_storage_policy const &>(*this).operator*());
 }
 
 template <class T, std::size_t Size, std::size_t Align>
@@ -100,6 +100,6 @@ auto static_storage_policy<T, Size, Align>::operator->() const -> const T * {
 template <class T, std::size_t Size, std::size_t Align>
 auto static_storage_policy<T, Size, Align>::operator->() -> T * {
   return const_cast<T *>(
-      static_cast<const static_storage_policy &>(*this).operator->());
+      static_cast<static_storage_policy const &>(*this).operator->());
 }
 } // namespace phansar::common::policy

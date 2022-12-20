@@ -8,9 +8,9 @@ struct sol_visitor::impl {
 
 sol_visitor::sol_visitor(sol::state & _state) : m_impl{&_state} {}
 
-sol_visitor::sol_visitor(const sol_visitor & _other) = default;
+sol_visitor::sol_visitor(sol_visitor const & _other) = default;
 
-auto sol_visitor::operator=(const sol_visitor & _other)
+auto sol_visitor::operator=(sol_visitor const & _other)
     -> sol_visitor &                                     = default;
 
 sol_visitor::sol_visitor(sol_visitor && _other) noexcept = default;

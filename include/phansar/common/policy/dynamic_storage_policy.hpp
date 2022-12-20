@@ -9,8 +9,8 @@ class dynamic_storage_policy {
 public:
   template <class... Args>
   explicit dynamic_storage_policy(Args &&... _args);
-  dynamic_storage_policy(const dynamic_storage_policy & _other);
-  auto operator=(const dynamic_storage_policy & _other)
+  dynamic_storage_policy(dynamic_storage_policy const & _other);
+  auto operator=(dynamic_storage_policy const & _other)
       -> dynamic_storage_policy &;
   dynamic_storage_policy(dynamic_storage_policy && _other) noexcept;
   auto operator=(dynamic_storage_policy && _other) noexcept

@@ -10,14 +10,14 @@ template <class T>
 class object {
 public:
   explicit object(capnp::MallocMessageBuilder * _message = nullptr);
-  explicit object(const std::vector<kj::byte> & _bytes,
+  explicit object(std::vector<kj::byte> const & _bytes,
                   capnp::MallocMessageBuilder * _message = nullptr);
   explicit object(capnp::ReaderFor<T>           _reader,
                   capnp::MallocMessageBuilder * _message = nullptr);
   explicit object(capnp::BuilderFor<T>          _builder,
                   capnp::MallocMessageBuilder * _message = nullptr);
-  object(const object & _other)                     = delete;
-  auto operator=(const object & _other) -> object & = delete;
+  object(object const & _other)                     = delete;
+  auto operator=(object const & _other) -> object & = delete;
   object(object && _other) noexcept;
   auto operator=(object && _other) noexcept -> object &;
   virtual ~object();

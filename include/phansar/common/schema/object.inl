@@ -31,7 +31,7 @@ object<T>::object(capnp::MallocMessageBuilder * _message) {
 }
 
 template <class T>
-object<T>::object(const std::vector<kj::byte> & _bytes,
+object<T>::object(std::vector<kj::byte> const & _bytes,
                   capnp::MallocMessageBuilder * _message)
     : object{_message} {
   auto stream =

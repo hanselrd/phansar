@@ -9,8 +9,8 @@ class pimpl {
 public:
   template <class... Args>
   explicit pimpl(Args &&... _args);
-  pimpl(const pimpl & _other);
-  auto operator=(const pimpl & _other) -> pimpl &;
+  pimpl(pimpl const & _other);
+  auto operator=(pimpl const & _other) -> pimpl &;
   pimpl(pimpl && _other) noexcept;
   auto operator=(pimpl && _other) noexcept -> pimpl &;
   virtual ~pimpl();

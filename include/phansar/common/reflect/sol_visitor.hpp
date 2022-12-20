@@ -10,42 +10,42 @@ namespace phansar::common::reflect {
 class sol_visitor : public rttr::visitor {
 public:
   explicit sol_visitor(sol::state & _state);
-  sol_visitor(const sol_visitor & _other);
-  auto operator=(const sol_visitor & _other) -> sol_visitor &;
+  sol_visitor(sol_visitor const & _other);
+  auto operator=(sol_visitor const & _other) -> sol_visitor &;
   sol_visitor(sol_visitor && _other) noexcept;
   auto operator=(sol_visitor && _other) noexcept -> sol_visitor &;
   ~sol_visitor() override;
 
   template <class T, class... BaseClasses>
-  void visit_type_begin(const rttr::visitor::type_info<T> & _info);
+  void visit_type_begin(rttr::visitor::type_info<T> const & _info);
   template <class T, class... BaseClasses>
-  void visit_type_end(const rttr::visitor::type_info<T> & _info);
+  void visit_type_end(rttr::visitor::type_info<T> const & _info);
   template <class T, class... CtorArgs>
-  void visit_constructor(const rttr::visitor::constructor_info<T> & _info);
+  void visit_constructor(rttr::visitor::constructor_info<T> const & _info);
   template <class T>
   void visit_constructor_function(
-      const rttr::visitor::constructor_function_info<T> & _info);
+      rttr::visitor::constructor_function_info<T> const & _info);
   template <class T>
-  void visit_method(const rttr::visitor::method_info<T> & _info);
+  void visit_method(rttr::visitor::method_info<T> const & _info);
   template <class T>
-  void visit_global_method(const rttr::visitor::method_info<T> & _info);
+  void visit_global_method(rttr::visitor::method_info<T> const & _info);
   template <class T>
-  void visit_property(const rttr::visitor::property_info<T> & _info);
+  void visit_property(rttr::visitor::property_info<T> const & _info);
   template <class T>
   void visit_getter_setter_property(
-      const rttr::visitor::property_getter_setter_info<T> & _info);
+      rttr::visitor::property_getter_setter_info<T> const & _info);
   template <class T>
-  void visit_global_property(const rttr::visitor::property_info<T> & _info);
+  void visit_global_property(rttr::visitor::property_info<T> const & _info);
   template <class T>
   void visit_global_getter_setter_property(
-      const rttr::visitor::property_getter_setter_info<T> & _info);
+      rttr::visitor::property_getter_setter_info<T> const & _info);
   template <class T>
-  void visit_readonly_property(const rttr::visitor::property_info<T> & _info);
+  void visit_readonly_property(rttr::visitor::property_info<T> const & _info);
   template <class T>
   void
-  visit_global_readonly_property(const rttr::visitor::property_info<T> & _info);
+  visit_global_readonly_property(rttr::visitor::property_info<T> const & _info);
   template <class T>
-  void visit(const rttr::type & _type = rttr::type::get<T>());
+  void visit(rttr::type const & _type = rttr::type::get<T>());
 
 private:
   [[nodiscard]] auto _state_internal() const -> sol::state &;

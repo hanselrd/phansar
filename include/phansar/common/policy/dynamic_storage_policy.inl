@@ -8,11 +8,11 @@ dynamic_storage_policy<T>::dynamic_storage_policy(Args &&... _args)
 
 template <class T>
 dynamic_storage_policy<T>::dynamic_storage_policy(
-    const dynamic_storage_policy & _other)
+    dynamic_storage_policy const & _other)
     : m_storage{_other.m_storage ? new T{*_other.m_storage} : nullptr} {}
 
 template <class T>
-auto dynamic_storage_policy<T>::operator=(const dynamic_storage_policy & _other)
+auto dynamic_storage_policy<T>::operator=(dynamic_storage_policy const & _other)
     -> dynamic_storage_policy<T> & {
   if (this != &_other) {
     m_storage.reset(new T{*_other.m_storage});
@@ -41,7 +41,7 @@ auto dynamic_storage_policy<T>::operator*() const -> const T & {
 template <class T>
 auto dynamic_storage_policy<T>::operator*() -> T & {
   return const_cast<T &>(
-      dynamic_cast<const dynamic_storage_policy &>(*this).operator*());
+      dynamic_cast<dynamic_storage_policy const &>(*this).operator*());
 }
 
 template <class T>
@@ -52,6 +52,6 @@ auto dynamic_storage_policy<T>::operator->() const -> const T * {
 template <class T>
 auto dynamic_storage_policy<T>::operator->() -> T * {
   return const_cast<T *>(
-      dynamic_cast<const dynamic_storage_policy &>(*this).operator->());
+      dynamic_cast<dynamic_storage_policy const &>(*this).operator->());
 }
 } // namespace phansar::common::policy

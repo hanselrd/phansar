@@ -14,8 +14,8 @@ public:
   template <bool Writable>
   class proxy {
   public:
-    proxy(const proxy & _other);
-    auto operator=(const proxy & _other) -> proxy &;
+    proxy(proxy const & _other);
+    auto operator=(proxy const & _other) -> proxy &;
     proxy(proxy && _other) noexcept;
     auto operator=(proxy && _other) noexcept -> proxy &;
     virtual ~proxy();
@@ -44,8 +44,8 @@ public:
 
   template <class... Args>
   explicit constexpr synchronized(Args &&... _args);
-  synchronized(const synchronized & _other);
-  auto operator=(const synchronized & _other) -> synchronized &;
+  synchronized(synchronized const & _other);
+  auto operator=(synchronized const & _other) -> synchronized &;
   synchronized(synchronized && _other) noexcept;
   auto operator=(synchronized && _other) noexcept -> synchronized &;
   virtual ~synchronized();

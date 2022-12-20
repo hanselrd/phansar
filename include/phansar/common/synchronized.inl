@@ -17,12 +17,12 @@ synchronized<T, ImplementationPolicy>::proxy<Writable>::proxy(
 template <class T, class ImplementationPolicy>
 template <bool Writable>
 synchronized<T, ImplementationPolicy>::proxy<Writable>::proxy(
-    const proxy & _other) = default;
+    proxy const & _other) = default;
 
 template <class T, class ImplementationPolicy>
 template <bool Writable>
 auto synchronized<T, ImplementationPolicy>::proxy<Writable>::operator=(
-    const proxy & _other)
+    proxy const & _other)
     -> synchronized<T, ImplementationPolicy>::proxy<Writable> & = default;
 
 template <class T, class ImplementationPolicy>
@@ -126,11 +126,11 @@ constexpr synchronized<T, ImplementationPolicy>::synchronized(Args &&... _args)
 
 template <class T, class ImplementationPolicy>
 synchronized<T, ImplementationPolicy>::synchronized(
-    const synchronized & _other) = default;
+    synchronized const & _other) = default;
 
 template <class T, class ImplementationPolicy>
 auto synchronized<T, ImplementationPolicy>::operator=(
-    const synchronized & _other)
+    synchronized const & _other)
     -> synchronized<T, ImplementationPolicy> & = default;
 
 template <class T, class ImplementationPolicy>

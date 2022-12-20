@@ -4,13 +4,13 @@
 
 namespace {
 struct error_category : std::error_category {
-  [[nodiscard]] auto name() const noexcept -> const char * override;
+  [[nodiscard]] auto name() const noexcept -> char const * override;
   [[nodiscard]] auto message(int _condition) const -> std::string override;
-  [[nodiscard]] auto equivalent(const std::error_code & _code,
+  [[nodiscard]] auto equivalent(std::error_code const & _code,
                                 int _condition) const noexcept -> bool override;
 };
 
-auto error_category::name() const noexcept -> const char * {
+auto error_category::name() const noexcept -> char const * {
   return "generic error";
 }
 
@@ -33,11 +33,11 @@ auto error_category::message(int _condition) const -> std::string {
   }
 }
 
-auto error_category::equivalent(const std::error_code & _code,
+auto error_category::equivalent(std::error_code const & _code,
                                 int _condition) const noexcept -> bool {
   using namespace phansar::common;
 
-  const auto & error_category = std::error_code{errc{}}.category();
+  auto const & error_category = std::error_code{errc{}}.category();
 
   switch (static_cast<error>(_condition)) {
   case error::error100:
@@ -60,7 +60,7 @@ auto error_category::equivalent(const std::error_code & _code,
   }
 }
 
-const auto k_error_category = error_category{};
+auto const k_error_category = error_category{};
 } // namespace
 
 namespace phansar::common {

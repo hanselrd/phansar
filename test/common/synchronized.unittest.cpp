@@ -7,7 +7,7 @@
 using namespace phansar;
 using namespace phansar::common;
 
-const auto k_iterations_per_worker = int{1'000};
+auto const k_iterations_per_worker = int{1'000};
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
 TEMPLATE_PRODUCT_TEST_CASE_METHOD(

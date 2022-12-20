@@ -23,8 +23,8 @@ public:
   };
 
   explicit socket(type _type);
-  socket(const socket & _other);
-  auto operator=(const socket & _other) -> socket &;
+  socket(socket const & _other);
+  auto operator=(socket const & _other) -> socket &;
   socket(socket && _other) noexcept;
   auto operator=(socket && _other) noexcept -> socket &;
   virtual ~socket();
@@ -36,10 +36,10 @@ public:
   void poll(std::uint32_t _timeout = 0);
   void send(std::uint16_t        _client_id,
             channel              _channel,
-            const std::uint8_t * _ptr,
+            std::uint8_t const * _ptr,
             std::size_t          _size);
   void
-  broadcast(channel _channel, const std::uint8_t * _ptr, std::size_t _size);
+  broadcast(channel _channel, std::uint8_t const * _ptr, std::size_t _size);
   auto receive(std::uint16_t _client_id, channel _channel)
       -> std::optional<std::vector<std::uint8_t>>;
   auto receive(channel _channel)

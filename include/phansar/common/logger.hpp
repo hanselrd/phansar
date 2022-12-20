@@ -24,8 +24,8 @@ public:
          std::string_view _path,
          std::size_t      _size,
          std::size_t      _count);
-  logger(const logger & _other);
-  auto operator=(const logger & _other) -> logger &;
+  logger(logger const & _other);
+  auto operator=(logger const & _other) -> logger &;
   logger(logger && _other) noexcept;
   auto operator=(logger && _other) noexcept -> logger &;
   virtual ~logger();

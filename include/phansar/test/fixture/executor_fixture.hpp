@@ -8,8 +8,8 @@ namespace phansar::test::fixture {
 template <class T = void>
 struct executor_fixture {
   executor_fixture();
-  executor_fixture(const executor_fixture & _other);
-  auto operator=(const executor_fixture & _other) -> executor_fixture &;
+  executor_fixture(executor_fixture const & _other);
+  auto operator=(executor_fixture const & _other) -> executor_fixture &;
   executor_fixture(executor_fixture && _other) noexcept;
   auto operator=(executor_fixture && _other) noexcept -> executor_fixture &;
   virtual ~executor_fixture();

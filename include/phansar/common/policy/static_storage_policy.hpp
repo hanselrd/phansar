@@ -10,8 +10,8 @@ class static_storage_policy {
 public:
   template <class... Args>
   explicit static_storage_policy(Args &&... _args);
-  static_storage_policy(const static_storage_policy & _other);
-  auto operator=(const static_storage_policy & _other)
+  static_storage_policy(static_storage_policy const & _other);
+  auto operator=(static_storage_policy const & _other)
       -> static_storage_policy &;
   static_storage_policy(static_storage_policy && _other) noexcept;
   auto operator=(static_storage_policy && _other) noexcept

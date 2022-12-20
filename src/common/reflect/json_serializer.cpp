@@ -4,13 +4,13 @@
 #include <variant>
 
 namespace rttr {
-void to_json(nlohmann::json & _json, const instance & _obj) {
+void to_json(nlohmann::json & _json, instance const & _obj) {
   using namespace phansar::common;
 
-  const auto write = meta::make_y_combinator(
+  auto const write = meta::make_y_combinator(
       [](auto &&                                             _write,
          nlohmann::json &                                    _json,
-         const std::variant<rttr::instance, rttr::variant> & _variant) -> void {
+         std::variant<rttr::instance, rttr::variant> const & _variant) -> void {
         PH_UNUSED(_write);
         PH_UNUSED(_json);
         PH_UNUSED(_variant);
@@ -19,7 +19,7 @@ void to_json(nlohmann::json & _json, const instance & _obj) {
   write(_json, _obj);
 }
 
-void from_json(const nlohmann::json & _json, instance & _obj) {
+void from_json(nlohmann::json const & _json, instance & _obj) {
   PH_UNUSED(_json);
   PH_UNUSED(_obj);
   PH_UNIMPLEMENTED();

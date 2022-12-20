@@ -5,7 +5,7 @@
 namespace phansar::common::reflect {
 template <class T, class... BaseClasses>
 void debug_visitor::visit_type_begin(
-    const rttr::visitor::type_info<T> & _info) {
+    rttr::visitor::type_info<T> const & _info) {
   PH_LOG_DEBUG("====================================================");
 
   PH_LOG_DEBUG("T= {}", typeid(T).name());
@@ -25,13 +25,13 @@ void debug_visitor::visit_type_begin(
 
   PH_LOG_DEBUG("len(base_classes)= {}",
                _info.type_item.get_base_classes().size());
-  for (const auto & base_class : _info.type_item.get_base_classes()) {
+  for (auto const & base_class : _info.type_item.get_base_classes()) {
     PH_LOG_DEBUG("base_class= {}", base_class.get_name().to_string());
   }
 
   PH_LOG_DEBUG("len(derived_classes)= {}",
                _info.type_item.get_derived_classes().size());
-  for (const auto & derived_class : _info.type_item.get_derived_classes()) {
+  for (auto const & derived_class : _info.type_item.get_derived_classes()) {
     PH_LOG_DEBUG("derived_class= {}", derived_class.get_name().to_string());
   }
 
@@ -53,7 +53,7 @@ void debug_visitor::visit_type_begin(
 
   PH_LOG_DEBUG("len(template_arguments)= {}",
                _info.type_item.get_template_arguments().size());
-  for (const auto & template_argument :
+  for (auto const & template_argument :
        _info.type_item.get_template_arguments()) {
     PH_LOG_DEBUG("template_argument= {}",
                  template_argument.get_name().to_string());
@@ -97,13 +97,13 @@ void debug_visitor::visit_type_begin(
 
 template <class T, class... BaseClasses>
 void debug_visitor::visit_type_end(
-    const rttr::visitor::type_info<T> & /*unused*/) {
+    rttr::visitor::type_info<T> const & /*unused*/) {
   PH_LOG_DEBUG("====================================================");
 }
 
 template <class T, class... CtorArgs>
 void debug_visitor::visit_constructor(
-    const rttr::visitor::constructor_info<T> & _info) {
+    rttr::visitor::constructor_info<T> const & _info) {
   PH_LOG_DEBUG("T= {}", typeid(T).name());
 
   auto log_ctor_arg = [](auto _ctor_arg) {
@@ -132,7 +132,7 @@ void debug_visitor::visit_constructor(
 
   PH_LOG_DEBUG("len(parameter_infos)= {}",
                _info.ctor_item.get_parameter_infos().size());
-  for (const auto & parameter_info : _info.ctor_item.get_parameter_infos()) {
+  for (auto const & parameter_info : _info.ctor_item.get_parameter_infos()) {
     PH_LOG_DEBUG("parameter_info= {} {}",
                  parameter_info.get_type().get_name().to_string(),
                  parameter_info.get_name().to_string());
@@ -145,7 +145,7 @@ void debug_visitor::visit_constructor(
 
 template <class T>
 void debug_visitor::visit_constructor_function(
-    const rttr::visitor::constructor_function_info<T> & _info) {
+    rttr::visitor::constructor_function_info<T> const & _info) {
   PH_LOG_DEBUG("T= {}", typeid(T).name());
 
   using declaring_type_t =
@@ -169,7 +169,7 @@ void debug_visitor::visit_constructor_function(
 
   PH_LOG_DEBUG("len(parameter_infos)= {}",
                _info.ctor_item.get_parameter_infos().size());
-  for (const auto & parameter_info : _info.ctor_item.get_parameter_infos()) {
+  for (auto const & parameter_info : _info.ctor_item.get_parameter_infos()) {
     PH_LOG_DEBUG("parameter_info= {} {}",
                  parameter_info.get_type().get_name().to_string(),
                  parameter_info.get_name().to_string());
@@ -181,7 +181,7 @@ void debug_visitor::visit_constructor_function(
 }
 
 template <class T>
-void debug_visitor::visit_method(const rttr::visitor::method_info<T> & _info) {
+void debug_visitor::visit_method(rttr::visitor::method_info<T> const & _info) {
   PH_LOG_DEBUG("T= {}", typeid(T).name());
 
   using declaring_type_t =
@@ -204,7 +204,7 @@ void debug_visitor::visit_method(const rttr::visitor::method_info<T> & _info) {
 
   PH_LOG_DEBUG("len(parameter_infos)= {}",
                _info.method_item.get_parameter_infos().size());
-  for (const auto & parameter_info : _info.method_item.get_parameter_infos()) {
+  for (auto const & parameter_info : _info.method_item.get_parameter_infos()) {
     PH_LOG_DEBUG("parameter_info= {} {}",
                  parameter_info.get_type().get_name().to_string(),
                  parameter_info.get_name().to_string());
@@ -222,7 +222,7 @@ void debug_visitor::visit_method(const rttr::visitor::method_info<T> & _info) {
 
 template <class T>
 void debug_visitor::visit_global_method(
-    const rttr::visitor::method_info<T> & _info) {
+    rttr::visitor::method_info<T> const & _info) {
   PH_LOG_DEBUG("T= {}", typeid(T).name());
 
   using declaring_type_t =
@@ -245,7 +245,7 @@ void debug_visitor::visit_global_method(
 
   PH_LOG_DEBUG("len(parameter_infos)= {}",
                _info.method_item.get_parameter_infos().size());
-  for (const auto & parameter_info : _info.method_item.get_parameter_infos()) {
+  for (auto const & parameter_info : _info.method_item.get_parameter_infos()) {
     PH_LOG_DEBUG("parameter_info= {} {}",
                  parameter_info.get_type().get_name().to_string(),
                  parameter_info.get_name().to_string());
@@ -263,7 +263,7 @@ void debug_visitor::visit_global_method(
 
 template <class T>
 void debug_visitor::visit_property(
-    const rttr::visitor::property_info<T> & _info) {
+    rttr::visitor::property_info<T> const & _info) {
   PH_LOG_DEBUG("T= {}", typeid(T).name());
 
   using declaring_type_t =
@@ -299,7 +299,7 @@ void debug_visitor::visit_property(
 
 template <class T>
 void debug_visitor::visit_getter_setter_property(
-    const rttr::visitor::property_getter_setter_info<T> & _info) {
+    rttr::visitor::property_getter_setter_info<T> const & _info) {
   PH_LOG_DEBUG("T= {}", typeid(T).name());
 
   using declaring_type_t =
@@ -339,7 +339,7 @@ void debug_visitor::visit_getter_setter_property(
 
 template <class T>
 void debug_visitor::visit_global_property(
-    const rttr::visitor::property_info<T> & _info) {
+    rttr::visitor::property_info<T> const & _info) {
   PH_LOG_DEBUG("T= {}", typeid(T).name());
 
   using declaring_type_t =
@@ -375,7 +375,7 @@ void debug_visitor::visit_global_property(
 
 template <class T>
 void debug_visitor::visit_global_getter_setter_property(
-    const rttr::visitor::property_getter_setter_info<T> & _info) {
+    rttr::visitor::property_getter_setter_info<T> const & _info) {
   PH_LOG_DEBUG("T= {}", typeid(T).name());
 
   using declaring_type_t =
@@ -415,7 +415,7 @@ void debug_visitor::visit_global_getter_setter_property(
 
 template <class T>
 void debug_visitor::visit_readonly_property(
-    const rttr::visitor::property_info<T> & _info) {
+    rttr::visitor::property_info<T> const & _info) {
   PH_LOG_DEBUG("T= {}", typeid(T).name());
 
   using declaring_type_t =
@@ -451,7 +451,7 @@ void debug_visitor::visit_readonly_property(
 
 template <class T>
 void debug_visitor::visit_global_readonly_property(
-    const rttr::visitor::property_info<T> & _info) {
+    rttr::visitor::property_info<T> const & _info) {
   PH_LOG_DEBUG("T= {}", typeid(T).name());
 
   using declaring_type_t =

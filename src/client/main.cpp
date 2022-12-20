@@ -145,7 +145,7 @@ auto main(int _argc, char * _argv[]) -> int {
   lua["beep3"] = []() {
     PH_LOG_TRACE("boop3");
   };
-  lua["check_material"] = [](const material & _m) {
+  lua["check_material"] = [](material const & _m) {
     PH_LOG_DEBUG("material {} | {} | {} | {}",
                  fmt::join(_m.ambient, ", "),
                  fmt::join(_m.diffuse, ", "),

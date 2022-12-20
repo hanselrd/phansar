@@ -5,7 +5,7 @@
 
 namespace phansar::common::reflect {
 template <class T, class... BaseClasses>
-void sol_visitor::visit_type_begin(const rttr::visitor::type_info<T> & _info) {
+void sol_visitor::visit_type_begin(rttr::visitor::type_info<T> const & _info) {
   using declaring_type_t =
       typename std::remove_cvref_t<decltype(_info)>::declaring_type;
   _state_internal().new_usertype<declaring_type_t>(
@@ -18,7 +18,7 @@ void sol_visitor::visit_type_begin(const rttr::visitor::type_info<T> & _info) {
 }
 
 template <class T, class... BaseClasses>
-void sol_visitor::visit_type_end(const rttr::visitor::type_info<T> & _info) {
+void sol_visitor::visit_type_end(rttr::visitor::type_info<T> const & _info) {
   using declaring_type_t =
       typename std::remove_cvref_t<decltype(_info)>::declaring_type;
   auto usertype =
@@ -29,7 +29,7 @@ void sol_visitor::visit_type_end(const rttr::visitor::type_info<T> & _info) {
 #ifdef HEDLEY_GCC_VERSION
   HEDLEY_PRAGMA(GCC diagnostic ignored "-Wnonnull")
 #endif
-  usertype["__tostring"] = [](const declaring_type_t & _obj) {
+  usertype["__tostring"] = [](declaring_type_t const & _obj) {
     return fmt::format(
         "<{} object at {} with {} byte(s)>",
         rttr::type::get<declaring_type_t>().get_name().to_string(),
@@ -41,7 +41,7 @@ void sol_visitor::visit_type_end(const rttr::visitor::type_info<T> & _info) {
 
 template <class T, class... CtorArgs>
 void sol_visitor::visit_constructor(
-    const rttr::visitor::constructor_info<T> & _info) {
+    rttr::visitor::constructor_info<T> const & _info) {
   using declaring_type_t =
       typename std::remove_cvref_t<decltype(_info)>::declaring_type;
   auto usertype =
@@ -53,7 +53,7 @@ void sol_visitor::visit_constructor(
   HEDLEY_PRAGMA(GCC diagnostic ignored "-Wnonnull")
 #endif
   usertype[fmt::format("new{}", _constructor_counter_next_internal())] =
-      [](const CtorArgs &... _args) {
+      [](CtorArgs const &... _args) {
         return std::make_unique<declaring_type_t>(_args...);
       };
   HEDLEY_DIAGNOSTIC_POP
@@ -61,7 +61,7 @@ void sol_visitor::visit_constructor(
 
 template <class T>
 void sol_visitor::visit_constructor_function(
-    const rttr::visitor::constructor_function_info<T> & _info) {
+    rttr::visitor::constructor_function_info<T> const & _info) {
   using declaring_type_t =
       typename std::remove_cvref_t<decltype(_info)>::declaring_type;
   auto usertype =
@@ -73,7 +73,7 @@ void sol_visitor::visit_constructor_function(
 }
 
 template <class T>
-void sol_visitor::visit_method(const rttr::visitor::method_info<T> & _info) {
+void sol_visitor::visit_method(rttr::visitor::method_info<T> const & _info) {
   using declaring_type_t =
       typename std::remove_cvref_t<decltype(_info)>::declaring_type;
   auto usertype =
@@ -85,13 +85,13 @@ void sol_visitor::visit_method(const rttr::visitor::method_info<T> & _info) {
 
 template <class T>
 void sol_visitor::visit_global_method(
-    const rttr::visitor::method_info<T> & _info) {
+    rttr::visitor::method_info<T> const & _info) {
   visit_method(_info);
 }
 
 template <class T>
 void sol_visitor::visit_property(
-    const rttr::visitor::property_info<T> & _info) {
+    rttr::visitor::property_info<T> const & _info) {
   using declaring_type_t =
       typename std::remove_cvref_t<decltype(_info)>::declaring_type;
   auto usertype =
@@ -110,7 +110,7 @@ void sol_visitor::visit_property(
 
 template <class T>
 void sol_visitor::visit_getter_setter_property(
-    const rttr::visitor::property_getter_setter_info<T> & _info) {
+    rttr::visitor::property_getter_setter_info<T> const & _info) {
   using declaring_type_t =
       typename std::remove_cvref_t<decltype(_info)>::declaring_type;
   auto usertype =
@@ -123,19 +123,19 @@ void sol_visitor::visit_getter_setter_property(
 
 template <class T>
 void sol_visitor::visit_global_property(
-    const rttr::visitor::property_info<T> & _info) {
+    rttr::visitor::property_info<T> const & _info) {
   visit_property(_info);
 }
 
 template <class T>
 void sol_visitor::visit_global_getter_setter_property(
-    const rttr::visitor::property_getter_setter_info<T> & _info) {
+    rttr::visitor::property_getter_setter_info<T> const & _info) {
   visit_getter_setter_property(_info);
 }
 
 template <class T>
 void sol_visitor::visit_readonly_property(
-    const rttr::visitor::property_info<T> & _info) {
+    rttr::visitor::property_info<T> const & _info) {
   using declaring_type_t =
       typename std::remove_cvref_t<decltype(_info)>::declaring_type;
   auto usertype =
@@ -158,12 +158,12 @@ void sol_visitor::visit_readonly_property(
 
 template <class T>
 void sol_visitor::visit_global_readonly_property(
-    const rttr::visitor::property_info<T> & _info) {
+    rttr::visitor::property_info<T> const & _info) {
   visit_readonly_property(_info);
 }
 
 template <class T>
-void sol_visitor::visit(const rttr::type & _type) {
+void sol_visitor::visit(rttr::type const & _type) {
   if constexpr (std::is_enum_v<T>) {
     PH_ASSERT(_type.is_enumeration());
 
@@ -171,7 +171,7 @@ void sol_visitor::visit(const rttr::type & _type) {
         rttr::type::get<T>().get_name().to_string(), sol::no_constructor);
 
     auto enumeration = _type.get_enumeration();
-    for (const auto & name : enumeration.get_names()) {
+    for (auto const & name : enumeration.get_names()) {
       bool ok                    = false;
       usertype[name.to_string()] = sol::var(
           static_cast<T>(enumeration.name_to_value(name).to_int64(&ok)));

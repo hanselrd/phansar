@@ -5,9 +5,9 @@
 #include <rttr/type>
 
 namespace rttr {
-void to_json(nlohmann::json & _json, const instance & _obj);
+void to_json(nlohmann::json & _json, instance const & _obj);
 
-void from_json(const nlohmann::json & _json, instance & _obj);
+void from_json(nlohmann::json const & _json, instance & _obj);
 } // namespace rttr
 
 #endif

@@ -11,11 +11,11 @@ executor_fixture<T>::executor_fixture() {
 }
 
 template <class T>
-executor_fixture<T>::executor_fixture(const executor_fixture & _other) =
+executor_fixture<T>::executor_fixture(executor_fixture const & _other) =
     default;
 
 template <class T>
-auto executor_fixture<T>::operator=(const executor_fixture & _other)
+auto executor_fixture<T>::operator=(executor_fixture const & _other)
     -> executor_fixture<T> & = default;
 
 template <class T>

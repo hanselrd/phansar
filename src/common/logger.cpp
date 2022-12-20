@@ -17,8 +17,8 @@ using namespace phansar::common;
 
 class flag_formatter : public spdlog::custom_flag_formatter {
 public:
-  void format(const spdlog::details::log_msg & _msg,
-              const std::tm &                  _tm_time,
+  void format(spdlog::details::log_msg const & _msg,
+              std::tm const &                  _tm_time,
               spdlog::memory_buf_t &           _dest) override {
     PH_UNUSED_FREESTANDING(_msg);
     PH_UNUSED_FREESTANDING(_tm_time);
@@ -87,9 +87,9 @@ logger::logger(std::string_view _name,
   m_impl->logger->set_formatter(std::move(formatter));
 }
 
-logger::logger(const logger & _other)                         = default;
+logger::logger(logger const & _other)                         = default;
 
-auto logger::operator=(const logger & _other) -> logger &     = default;
+auto logger::operator=(logger const & _other) -> logger &     = default;
 
 logger::logger(logger && _other) noexcept                     = default;
 

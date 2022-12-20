@@ -18,9 +18,9 @@ struct socket::impl {
 
 socket::socket(type _type) : m_impl{_type} {}
 
-socket::socket(const socket & _other)                         = default;
+socket::socket(socket const & _other)                         = default;
 
-auto socket::operator=(const socket & _other) -> socket &     = default;
+auto socket::operator=(socket const & _other) -> socket &     = default;
 
 socket::socket(socket && _other) noexcept                     = default;
 
@@ -137,7 +137,7 @@ void socket::poll(std::uint32_t _timeout) {
 
 void socket::send(std::uint16_t        _client_id,
                   channel              _channel,
-                  const std::uint8_t * _ptr,
+                  std::uint8_t const * _ptr,
                   std::size_t          _size) {
   PH_ASSERT(m_impl->host);
   PH_ASSERT(m_impl->peers.contains(_client_id));
@@ -153,7 +153,7 @@ void socket::send(std::uint16_t        _client_id,
 }
 
 void socket::broadcast(channel              _channel,
-                       const std::uint8_t * _ptr,
+                       std::uint8_t const * _ptr,
                        std::size_t          _size) {
   PH_ASSERT(m_impl->host);
   PH_ASSERT(m_impl->peers.empty() == false);
@@ -173,7 +173,7 @@ auto socket::receive(std::uint16_t _client_id, channel _channel)
     return std::nullopt;
   }
 
-  if (const auto & [client_id, data] = m_impl->queues[_channel].front();
+  if (auto const & [client_id, data] = m_impl->queues[_channel].front();
       client_id == _client_id) {
     m_impl->queues[_channel].pop();
 

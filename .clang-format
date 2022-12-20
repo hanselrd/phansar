@@ -129,7 +129,7 @@ PenaltyExcessCharacter: 1000000
 PenaltyIndentedWhitespace: 0
 PenaltyReturnTypeOnItsOwnLine: 60
 PointerAlignment: Middle
-QualifierAlignment: Left
+QualifierAlignment: Right
 ReferenceAlignment: Pointer
 ReflowComments:  true
 RemoveBracesLLVM: false
