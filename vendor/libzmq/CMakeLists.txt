@@ -1,7 +1,7 @@
 CPMAddPackage(
   NAME libzmq
   GITHUB_REPOSITORY zeromq/libzmq # master
-  GIT_TAG dfbfc59c3fe4e782d1640f32af1056a2e74f9aaa
+  GIT_TAG bdd471fa17100fe84f64da348951dab3ee4780bb
   OPTIONS "BUILD_SHARED OFF"
           "BUILD_STATIC ON"
           "BUILD_TESTS OFF"

@@ -269,39 +269,6 @@ if(ENABLE_BLACK)
   endif()
 endif()
 
-if(ENABLE_PRETTIER)
-  find_program(NPX_EXECUTABLE npx)
-  if(NPX_EXECUTABLE)
-    ph_add_file_pass(
-      NAME check-format-prettier-0
-      GROUPS check-format check-format-prettier
-      COMMANDS "${NPX_EXECUTABLE} prettier --check @INPUT_FILE@"
-      GLOBS "src/*.ts"
-      FILES "${CMAKE_SOURCE_DIR}/package.json"
-            "${CMAKE_SOURCE_DIR}/tsconfig.json")
-
-    ph_add_file_pass(
-      NAME check-format-prettier-1
-      GROUPS check-format check-format-prettier
-      COMMANDS "${NPX_EXECUTABLE} prettier --parser json --check @INPUT_FILE@"
-      FILES "${CMAKE_SOURCE_DIR}/.prettierrc")
-
-    ph_add_file_pass(
-      NAME fix-format-prettier-0
-      GROUPS fix-format fix-format-prettier
-      COMMANDS "${NPX_EXECUTABLE} prettier --write @INPUT_FILE@"
-      GLOBS "src/*.ts"
-      FILES "${CMAKE_SOURCE_DIR}/package.json"
-            "${CMAKE_SOURCE_DIR}/tsconfig.json")
-
-    ph_add_file_pass(
-      NAME fix-format-prettier-1
-      GROUPS fix-format fix-format-prettier
-      COMMANDS "${NPX_EXECUTABLE} prettier --parser json --write @INPUT_FILE@"
-      FILES "${CMAKE_SOURCE_DIR}/.prettierrc")
-  endif()
-endif()
-
 if(ENABLE_CLANG_FORMAT)
   find_program(CLANG_FORMAT_EXECUTABLE clang-format)
   if(CLANG_FORMAT_EXECUTABLE)

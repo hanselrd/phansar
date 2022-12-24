@@ -42,18 +42,12 @@ ph_add_file_pass(
   GLOBS "shaders/cs_*.sc"
   SEQUENTIAL)
 
-add_custom_target(
-  assets-scripts
-  COMMAND ${NPX_EXECUTABLE} tstl -p ${CMAKE_SOURCE_DIR}/tsconfig.json
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  COMMENT "Compiling script source(s) ...")
-add_dependencies(assets assets-scripts)
-
 foreach(
   asset_type
   "fonts"
   "maps"
   "models"
+  "scripts"
   "textures"
   "tilesets")
   ph_add_file_pass(

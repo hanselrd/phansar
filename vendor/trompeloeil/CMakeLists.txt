@@ -1,7 +1,7 @@
 CPMAddPackage(
   NAME trompeloeil
   GITHUB_REPOSITORY rollbear/trompeloeil # main
-  GIT_TAG dd2c8d7fe62ec735fd892150382c467c816aa0ca
+  GIT_TAG 45772aefc1929d389b204a77562afd45661c0d35
   EXCLUDE_FROM_ALL YES)
 
 ph_add_library(
